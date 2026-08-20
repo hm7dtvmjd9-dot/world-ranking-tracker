@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import time
 import requests
 from bs4 import BeautifulSoup
 
@@ -15,7 +16,7 @@ HEADERS = {
 }
 
 def get_athlete_details(athlete_id, event_group="long-jump"):
-    """Fragt die 5 gewerteten Wettkämpfe eines Athleten über die GraphQL-Schnittstelle ab."""
+    """Fragt die 5 gewerteten Wettkämpfe eines Athleten über GraphQL ab."""
     if not athlete_id:
         return []
         
@@ -69,7 +70,7 @@ def scrape_rankings():
         return []
 
     athletes = []
-    rows = table.find_all("tr")[1:] # Header ignorieren
+    rows = table.find_all("tr")[1:] # Header überspringen
     
     for idx, row in enumerate(rows):
         cols = row.find_all("td")
@@ -81,41 +82,39 @@ def scrape_rankings():
         link_elem = cols[1].find("a")
         name = link_elem.text.strip() if link_elem else cols[1].text.strip()
         
-        # 2. Athleten-ID & URL auslesen
+        # 2. Athleten-ID & URL
         athlete_href = link_elem["href"] if (link_elem and "href" in link_elem.attrs) else ""
-        # Extrahiere die Ziffern-ID aus der URL (z.B. /athletes/_/14845012)
         id_match = re.search(r'(\d+)', athlete_href)
         athlete_id = id_match.group(1) if id_match else row.get("data-athlete-id", "")
         
-        # 3. Geburtsdatum & Land sauber parsen
+        # 3. Nation & Geburtsdatum parsen
         col_texts = [c.text.strip() for c in cols if c.text.strip()]
         
-        # Suche nach 3-stelligem Ländercode (z.B. GER, ITA, GRE, USA)
         country = ""
         for val in col_texts:
             if re.match(r'^[A-Z]{3}$', val):
                 country = val
                 break
                 
-        # Suche nach Geburtsdatum (Format: DD MMM YYYY oder YYYY)
         dob = ""
         for val in col_texts:
             if re.search(r'\d{2}\s+[A-Z]{3}\s+\d{4}|\d{4}', val) and val != country:
                 dob = val
                 break
 
-        # 4. Punktestand finden (die letzte 3- bis 4-stellige Zahl der Zeile)
+        # 4. Punktestand finden
         score = ""
         for val in reversed(col_texts):
             if val.isdigit() and 500 <= int(val) <= 2000:
                 score = val
                 break
                 
-        # 5. Detail-Meetings für Top 40 + alle Deutschen laden
+        # 5. Detail-Meetings für alle Top 100 Athleten laden
         competitions = []
-        if (idx < 40 or country == "GER") and athlete_id:
-            print(f"Lade Meetings für [{rank}] {name} ({country}) - ID: {athlete_id}")
+        if idx < 100 and athlete_id:
+            print(f"[{idx+1}/100] Lade Meetings: {name} ({country}) - ID {athlete_id}")
             competitions = get_athlete_details(athlete_id)
+            time.sleep(0.4) # Schont die World Athletics API vor Rate-Limits
             
         athletes.append({
             "rank": rank,
@@ -142,4 +141,4 @@ if __name__ == "__main__":
             "athletes": ranking_data
         }, f, ensure_ascii=False, indent=2)
         
-    print(f"\nErfolgreich abgeschlossen: {len(ranking_data)} Athleten in {output_path} gesichert.")
+    print(f"\nFertig! Alle {len(ranking_data)} Athleten inklusive Meetings in {output_path} gespeichert.")
