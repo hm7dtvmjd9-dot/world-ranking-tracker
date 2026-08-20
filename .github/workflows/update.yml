@@ -2,7 +2,6 @@ name: Update World Athletics Rankings
 
 on:
   schedule:
-    # Jeden Mittwoch um 18:30 UTC
     - cron: '30 18 * * 3'
   workflow_dispatch:
 
@@ -16,8 +15,6 @@ jobs:
     steps:
       - name: Code auschecken
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
       - name: Python einrichten
         uses: actions/setup-python@v5
@@ -25,15 +22,16 @@ jobs:
           python-version: '3.11'
 
       - name: Abhängigkeiten installieren
-        run: pip install requests
+        run: |
+          pip install requests beautifulsoup4
 
       - name: Ranking-Scraper ausführen
-        run: python scraper.py
+        run: |
+          python scraper.py
 
       - name: Neue Daten committen und pushen
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ranking_latest.json
-          git diff-index --quiet HEAD || git commit -m "Automatisches Ranking-Update [skip ci]"
-          git push
+          git add data/
+          git diff --staged --quiet || (git commit -m "Automatisches Ranking-Update" && git push)
