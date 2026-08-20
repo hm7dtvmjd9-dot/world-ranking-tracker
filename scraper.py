@@ -12,13 +12,11 @@ HEADERS = {
 }
 
 def fetch_score_calculation(athlete_url):
-    """Ruft die 5 zählenden Meetings ab und parst auch geschachtelte JSON-Strings."""
+    """Ruft die 5 zählenden Meetings ab und entpackt den rohen Text-String."""
     if not athlete_url:
         return None
         
-    # Slug extrahieren (z. B. 'italy/mattia-furlani-14905216')
     clean_slug = athlete_url.replace("/athletes/", "").strip().strip("/")
-    
     url = "https://worldathletics.org/world-rankings/RankingScoreCalculation"
     params = {
         "eventGroup": "Men's Long Jump",
@@ -31,15 +29,16 @@ def fetch_score_calculation(athlete_url):
             print(f"  -> HTTP Fehler {res.status_code} für {clean_slug}")
             return None
 
-        raw_data = res.json()
+        text = res.text.strip()
         
-        # Falls World Athletics den JSON-Body als String liefert (Double-Encoded)
-        if isinstance(raw_data, str):
-            raw_data = json.loads(raw_data)
+        # World Athletics gibt diesen Endpunkt als in Anführungszeichen verpackten String zurück
+        if text.startswith('"') and text.endswith('"'):
+            text = json.loads(text)
             
-        return raw_data
+        data = json.loads(text)
+        return data
     except Exception as e:
-        print(f"  -> Exception bei {clean_slug}: {e}")
+        print(f"  -> Parsing-Fehler bei {clean_slug}: {e}")
         return None
 
 def scrape_world_rankings():
@@ -53,7 +52,6 @@ def scrape_world_rankings():
     soup = BeautifulSoup(res.text, "html.parser")
     rows = soup.find_all("tr", attrs={"data-athlete-url": True})
     
-    # Fallback Suche nach allen Zeilen mit Attribut
     if not rows:
         rows = [r for r in soup.find_all("tr") if r.has_attr("data-ctx-click")]
 
