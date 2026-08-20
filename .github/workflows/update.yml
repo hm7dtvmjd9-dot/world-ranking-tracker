@@ -2,12 +2,12 @@ name: Update World Athletics Rankings
 
 on:
   schedule:
-    # Läuft jeden Mittwoch um 18:30 Uhr UTC (ca. 19:30 bzw. 20:30 Uhr deutscher Zeit)
+    # Jeden Mittwoch um 18:30 UTC
     - cron: '30 18 * * 3'
-  workflow_dispatch: # Ermöglicht dir, das Skript jederzeit manuell per Klick zu testen
+  workflow_dispatch:
 
 permissions:
-  contents: write # Erlaubt GitHub Actions, die neue JSON-Datei ins Repo zu pushen
+  contents: write
 
 jobs:
   fetch-data:
@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Code auschecken
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Python einrichten
         uses: actions/setup-python@v5
@@ -23,17 +25,15 @@ jobs:
           python-version: '3.11'
 
       - name: Abhängigkeiten installieren
-        run: |
-          pip install requests
+        run: pip install requests
 
       - name: Ranking-Scraper ausführen
-        run: |
-          python scraper.py
+        run: python scraper.py
 
       - name: Neue Daten committen und pushen
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data/ranking_latest.json
-          git commit -m "Automatisches Ranking-Update [skip ci]" || exit 0
+          git diff-index --quiet HEAD || git commit -m "Automatisches Ranking-Update [skip ci]"
           git push
