@@ -6,48 +6,61 @@ from bs4 import BeautifulSoup
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept": "application/json, text/plain, */*",
     "Accept-Language": "en-US,en;q=0.9",
     "Referer": "https://worldathletics.org/world-rankings/long-jump/men"
 }
 
-def fetch_score_calculation(slug):
-    """Ruft die 5 zählenden Meetings für einen Athleten ab."""
-    if not slug:
+def fetch_score_calculation(athlete_url):
+    """Ruft die 5 zählenden Meetings ab und parst auch geschachtelte JSON-Strings."""
+    if not athlete_url:
         return None
-    # Bereinige den Slug (entferne führendes '/athletes/')
-    clean_slug = slug.replace("/athletes/", "").strip()
-    url = f"https://worldathletics.org/world-rankings/RankingScoreCalculation?eventGroup=Men%27s%20Long%20Jump&athleteUrlSlug={clean_slug}"
+        
+    # Slug extrahieren (z. B. 'italy/mattia-furlani-14905216')
+    clean_slug = athlete_url.replace("/athletes/", "").strip().strip("/")
+    
+    url = "https://worldathletics.org/world-rankings/RankingScoreCalculation"
+    params = {
+        "eventGroup": "Men's Long Jump",
+        "athleteUrlSlug": clean_slug
+    }
     
     try:
-        res = requests.get(url, headers=HEADERS, timeout=10)
-        if res.status_code == 200:
-            return res.json()
+        res = requests.get(url, params=params, headers=HEADERS, timeout=10)
+        if res.status_code != 200:
+            print(f"  -> HTTP Fehler {res.status_code} für {clean_slug}")
+            return None
+
+        raw_data = res.json()
+        
+        # Falls World Athletics den JSON-Body als String liefert (Double-Encoded)
+        if isinstance(raw_data, str):
+            raw_data = json.loads(raw_data)
+            
+        return raw_data
     except Exception as e:
-        print(f"Fehler beim Laden von {clean_slug}: {e}")
-    return None
+        print(f"  -> Exception bei {clean_slug}: {e}")
+        return None
 
 def scrape_world_rankings():
     url = "https://worldathletics.org/world-rankings/long-jump/men?regionType=world&page=1&limitByCountry=0"
     res = requests.get(url, headers=HEADERS)
     
     if res.status_code != 200:
-        print(f"Fehler beim Laden der Hauptseite: {res.status_code}")
+        print(f"Fehler beim Laden der Übersichtsseite: Status {res.status_code}")
         return []
         
     soup = BeautifulSoup(res.text, "html.parser")
-    rows = soup.find_all("tr", attrs={"data-ctx-click": "toplists.rankingScoreCalculationModal"})
+    rows = soup.find_all("tr", attrs={"data-athlete-url": True})
     
-    # Fallback falls data-ctx-click variiert
+    # Fallback Suche nach allen Zeilen mit Attribut
     if not rows:
-        rows = [r for r in soup.find_all("tr") if r.has_attr("data-athlete-url")]
+        rows = [r for r in soup.find_all("tr") if r.has_attr("data-ctx-click")]
 
-    print(f"Gefundene Athleten-Zeilen: {len(rows)}")
-    
+    print(f"Gefundene Athleten auf Seite 1: {len(rows)}")
     athletes_data = []
     
-    for idx, row in enumerate(rows[:100]): # Top 100
-        # Präzises Auslesen über data-th Attribute
+    for idx, row in enumerate(rows[:100]):
         rank_td = row.find("td", attrs={"data-th": "Rank"})
         name_td = row.find("td", attrs={"data-th": "Competitor"})
         dob_td = row.find("td", attrs={"data-th": "DOB"})
@@ -67,11 +80,13 @@ def scrape_world_rankings():
         counted_meetings = []
         if athlete_url:
             calc_data = fetch_score_calculation(athlete_url)
-            if calc_data and "results" in calc_data:
-                for r in calc_data["results"]:
+            if calc_data and isinstance(calc_data, dict):
+                results_list = calc_data.get("results", [])
+                for r in results_list:
                     counted_meetings.append({
                         "date": r.get("date"),
                         "competition": r.get("competition"),
+                        "venue": r.get("venue", ""),
                         "category": r.get("category"),
                         "mark": r.get("mark"),
                         "wind": r.get("wind"),
@@ -81,7 +96,7 @@ def scrape_world_rankings():
                         "performance_score": r.get("performanceScore"),
                         "indoor": r.get("indoor", False)
                     })
-            time.sleep(0.2) # Schont die API
+            time.sleep(0.25)
             
         athletes_data.append({
             "rank": rank,
@@ -107,4 +122,4 @@ if __name__ == "__main__":
             "athletes": rankings
         }, f, ensure_ascii=False, indent=2)
         
-    print(f"\nErfolgreich! {len(rankings)} Athleten mit allen Meetings in {output_path} gespeichert.")
+    print(f"\nFertig! {len(rankings)} Athleten erfolgreich in '{output_path}' gespeichert.")
