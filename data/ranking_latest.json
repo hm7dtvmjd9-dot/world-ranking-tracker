@@ -9,7 +9,73 @@
       "dob": "07 FEB 2005",
       "ranking_score": "1362",
       "profile_url": "https://worldathletics.org/athletes/italy/mattia-furlani-14905216",
-      "counted_competitions": []
+      "counted_competitions": [
+        {
+          "date": "17 SEP 2025",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "venue": "",
+          "category": "OW",
+          "mark": "8.39",
+          "wind": "+2.0",
+          "place": "1.",
+          "result_score": 1223,
+          "placing_score": 260,
+          "performance_score": 1483,
+          "indoor": false
+        },
+        {
+          "date": "27 AUG 2025",
+          "competition": "Weltklasse Zürich, Sechseläutenplatz, Zürich",
+          "venue": "",
+          "category": "DF",
+          "mark": "8.30",
+          "wind": "+7.0",
+          "place": "2.",
+          "result_score": 1203,
+          "placing_score": 150,
+          "performance_score": 1353,
+          "indoor": false
+        },
+        {
+          "date": "22 MAR 2026",
+          "competition": "World Athletics Indoor Championships, Kujawsko-Pomorska Arena, Toruń (i)",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.39",
+          "wind": null,
+          "place": "2.",
+          "result_score": 1223,
+          "placing_score": 120,
+          "performance_score": 1343,
+          "indoor": false
+        },
+        {
+          "date": "16 MAY 2026",
+          "competition": "Wanda Diamond League, China Textile City Sports Centre, Shaoxing/Keqiao",
+          "venue": "",
+          "category": "A",
+          "mark": "8.43",
+          "wind": "+4.0",
+          "place": "1.",
+          "result_score": 1232,
+          "placing_score": 100,
+          "performance_score": 1332,
+          "indoor": false
+        },
+        {
+          "date": "03 FEB 2026",
+          "competition": "Czech Indoor Gala, Atletická hala, Ostrava (i)",
+          "venue": "",
+          "category": "A",
+          "mark": "8.30",
+          "wind": null,
+          "place": "1.",
+          "result_score": 1203,
+          "placing_score": 100,
+          "performance_score": 1303,
+          "indoor": false
+        }
+      ]
     },
     {
       "rank": "2",
@@ -18,7 +84,73 @@
       "dob": "18 MAR 1998",
       "ranking_score": "1362",
       "profile_url": "https://worldathletics.org/athletes/greece/miltiadis-tentoglou-14669734",
-      "counted_competitions": []
+      "counted_competitions": [
+        {
+          "date": "10 JUL 2026",
+          "competition": "Meeting International d’Athlétisme Herculis EBS, Stade Louis II, Monaco",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.61",
+          "wind": "0.0",
+          "place": "1.",
+          "result_score": 1271,
+          "placing_score": 140,
+          "performance_score": 1411,
+          "indoor": false
+        },
+        {
+          "date": "23 MAY 2026",
+          "competition": "Wanda Diamond League Xiamen, Egret Stadium, Xiamen",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.46",
+          "wind": "0.0",
+          "place": "1.",
+          "result_score": 1238,
+          "placing_score": 140,
+          "performance_score": 1378,
+          "indoor": false
+        },
+        {
+          "date": "11 AUG 2026",
+          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
+          "venue": "",
+          "category": "GL",
+          "mark": "8.44",
+          "wind": "-11.0",
+          "place": "1.",
+          "result_score": 1240,
+          "placing_score": 120,
+          "performance_score": 1360,
+          "indoor": false
+        },
+        {
+          "date": "26 JUL 2026",
+          "competition": "Greek Championships, Panthessaliko Stadium, Volos",
+          "venue": "",
+          "category": "B",
+          "mark": "8.66",
+          "wind": "+10.0",
+          "place": "1.",
+          "result_score": 1282,
+          "placing_score": 70,
+          "performance_score": 1352,
+          "indoor": false
+        },
+        {
+          "date": "04 JUN 2026",
+          "competition": "Golden Gala Pietro Mennea, Stadio Olimpico, Roma",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.24",
+          "wind": "-4.0",
+          "place": "2.",
+          "result_score": 1192,
+          "placing_score": 120,
+          "performance_score": 1312,
+          "indoor": false
+        }
+      ]
     },
     {
       "rank": "3",
