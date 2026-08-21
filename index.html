@@ -758,7 +758,7 @@
       });
     }
 
-    async function handleSync() {
+  async function handleSync() {
       const waUrl = document.getElementById('inputWaUrl').value.trim();
       const sheetsUrl = document.getElementById('inputSheetsUrl').value.trim();
       const spinner = document.getElementById('syncSpinner');
@@ -767,52 +767,82 @@
       if (waUrl) localStorage.setItem('wa_url_key', waUrl);
       if (sheetsUrl) localStorage.setItem('sheets_url_key', sheetsUrl);
 
-      // 1. WA JSON laden & aufbereiten
+      // 1. World Athletics JSON Import
       if (waUrl) {
         try {
-          const res = await fetch(waUrl);
+          // Cache-Buster verhindert GitHub CDN Caching
+          const fetchUrl = waUrl.includes('raw.githubusercontent.com') ? waUrl + '?t=' + Date.now() : waUrl;
+          const res = await fetch(fetchUrl);
+          
           if (res.ok) {
-            const data = await res.json();
-            const rawList = Array.isArray(data) ? data : data.athletes || [];
-            
-            state.athletes = rawList.map((ath, idx) => {
-              const meetings = ath.counted_competitions || ath.countingMeetings || [];
-              let sb = 0;
-              meetings.forEach(m => {
-                const markVal = parseFloat(m.mark);
-                if (!isNaN(markVal) && markVal > sb) sb = markVal;
+            const rawJson = await res.json();
+            const athleteList = rawJson.athletes || (Array.isArray(rawJson) ? rawJson : []);
+
+            if (athleteList.length > 0) {
+              state.athletes = athleteList.map((ath, idx) => {
+                const competitions = ath.counted_competitions || ath.countingMeetings || [];
+                
+                // Höchste gültige Weite als SB ermitteln
+                let bestMark = 0;
+                competitions.forEach(m => {
+                  const val = parseFloat(m.mark);
+                  if (!isNaN(val) && val > bestMark) {
+                    bestMark = val;
+                  }
+                });
+
+                return {
+                  id: ath.athlete_id || ath.profile_url || 'ath-' + idx,
+                  originalRank: parseInt(ath.rank) || (idx + 1),
+                  name: ath.name,
+                  nation: ath.country || ath.nation || '',
+                  dob: ath.dob || '',
+                  sb: bestMark > 0 ? bestMark : null,
+                  totalScore: parseInt(ath.ranking_score || ath.total_score) || 0,
+                  profileUrl: ath.profile_url,
+                  countingMeetings: competitions.map(c => {
+                    // Windwert formatieren (+10.0 / -11.0 von WA korrekt in +1.0 / -1.1 m/s umrechnen)
+                    let cleanWind = c.wind;
+                    if (cleanWind !== null && cleanWind !== undefined) {
+                      const numWind = parseFloat(cleanWind);
+                      if (!isNaN(numWind) && Math.abs(numWind) >= 10) {
+                        cleanWind = (numWind / 10).toFixed(1);
+                      }
+                    }
+                    return {
+                      ...c,
+                      wind: cleanWind
+                    };
+                  })
+                };
               });
 
-              return {
-                id: ath.athlete_id || 'ath-' + idx,
-                originalRank: parseInt(ath.rank) || idx + 1,
-                name: ath.name,
-                nation: ath.country || ath.nation || '',
-                dob: ath.dob || '',
-                sb: sb > 0 ? sb : null,
-                totalScore: parseInt(ath.ranking_score || ath.total_score || 0),
-                countingMeetings: meetings
-              };
-            });
-
-            document.getElementById('jsonStatusBadge').textContent = 'Live WA (' + state.athletes.length + ')';
+              document.getElementById('jsonStatusBadge').textContent = `Live WA (${state.athletes.length})`;
+              document.getElementById('jsonStatusBadge').className = 'font-mono font-medium text-emerald-400';
+            }
           }
         } catch (e) {
-          console.warn('WA Fetch Error', e);
+          console.error('WA Fetch Error:', e);
+          document.getElementById('jsonStatusBadge').textContent = 'Error WA';
+          document.getElementById('jsonStatusBadge').className = 'font-mono font-medium text-rose-400';
         }
       }
 
-      // 2. Sheets CSV laden & aufbereiten
+      // 2. Google Sheets CSV Import
       if (sheetsUrl) {
         try {
-          const res = await fetch(sheetsUrl);
+          const fetchUrl = sheetsUrl + (sheetsUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+          const res = await fetch(fetchUrl);
           if (res.ok) {
             const csvText = await res.text();
             parseAndSetTrainingLogs(csvText);
             document.getElementById('sheetsStatusBadge').textContent = 'Live Sheets';
+            document.getElementById('sheetsStatusBadge').className = 'font-mono font-medium text-emerald-400';
           }
         } catch (e) {
-          console.warn('Sheets CSV Fetch Error', e);
+          console.error('Sheets Fetch Error:', e);
+          document.getElementById('sheetsStatusBadge').textContent = 'Error Sheets';
+          document.getElementById('sheetsStatusBadge').className = 'font-mono font-medium text-rose-400';
         }
       }
 
@@ -830,7 +860,8 @@
 
       const parsed = [];
       for (let i = 1; i < lines.length; i++) {
-        const parts = lines[i].split(',').map(p => p.trim());
+        // Regex parst CSVs auch sauber, wenn Kommas in Notizen stehen
+        const parts = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(p => p.replace(/^"|"$/g, '').trim());
         if (parts.length >= 4) {
           parsed.push({
             date: parts[0] || '',
