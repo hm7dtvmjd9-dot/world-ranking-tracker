@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Athletics Performance & World Ranking Dashboard</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              750: '#293548',
+              850: '#172033',
+              950: '#020617',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* Custom Scrollbars & Monospace Density */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #020617; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-200 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
+
+  <!-- ================= TOP NAVIGATION / HEADER ================= -->
+  <header class="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+      <div class="py-2.5 flex flex-col md:flex-row md:items-center md:justify-between gap-2.5">
+        <!-- Logo & Title -->
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 bg-cyan-600 rounded flex items-center justify-center font-black text-white text-xs shadow-sm shadow-cyan-600/30">
+            A
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-sm font-black tracking-tight text-white flex items-center">
+                ATHLETICS<span class="text-cyan-400">CORE</span>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v2.4 PRO</span>
+              </h1>
+              <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                MEN'S LONG JUMP
+              </div>
+            </div>
+            <p class="text-[10px] text-slate-400 font-medium hidden sm:block">
+              World Athletics Score Engine • Meeting Radar • Google Sheets Readiness
+            </p>
+          </div>
+        </div>
+
+        <!-- Sync Inputs & Controls -->
+        <div class="flex items-center flex-wrap gap-1.5">
+          <div class="flex items-center gap-1.5 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px]">
+            <span class="text-slate-500 font-bold uppercase text-[9px]">Feed:</span>
+            <span id="jsonStatusBadge" class="font-mono font-medium text-cyan-400">Sample WA</span>
+            <span class="text-slate-700">|</span>
+            <span id="sheetsStatusBadge" class="font-mono font-medium text-amber-400">Sample Training</span>
+          </div>
+
+          <button id="toggleConfigBtn" class="px-2.5 py-1 text-[10px] rounded font-bold uppercase tracking-wider border transition-all flex items-center gap-1 bg-slate-950 text-slate-400 border-slate-800 hover:bg-slate-800 hover:text-slate-200">
+            ⚙️ Config
+          </button>
+
+          <button id="syncDataBtn" class="bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold px-3 py-1 rounded uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm active:scale-95">
+            <span id="syncSpinner" class="inline-block">🔄</span>
+            Sync Data
+          </button>
+        </div>
+      </div>
+
+      <!-- Config Drawer -->
+      <div id="configDrawer" class="hidden pb-3 pt-2 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-2.5">
+        <div class="space-y-1">
+          <div class="flex items-between justify-between text-[10px]">
+            <span class="text-slate-400 font-bold uppercase">🌐 WA Rankings JSON API URL</span>
+            <span class="text-[9px] text-slate-500 font-mono">auto-persisted</span>
+          </div>
+          <input id="inputWaUrl" type="url" placeholder="https://api.worldathletics.org/rankings/men/longjump.json" class="w-full bg-slate-950 border border-slate-700 text-[10px] px-2.5 py-1 rounded text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
+        </div>
+        <div class="space-y-1">
+          <div class="flex items-between justify-between text-[10px]">
+            <span class="text-slate-400 font-bold uppercase">📊 Google Sheets CSV Feed URL</span>
+            <span class="text-[9px] text-slate-500 font-mono">pub?output=csv</span>
+          </div>
+          <input id="inputSheetsUrl" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" class="w-full bg-slate-950 border border-slate-700 text-[10px] px-2.5 py-1 rounded text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono" />
+        </div>
+        <div class="md:col-span-2 flex items-center justify-between pt-1 text-[10px] text-slate-400 border-t border-slate-800/60">
+          <button id="resetDemoBtn" class="text-cyan-400 hover:text-cyan-300 underline flex items-center gap-1 font-medium">
+            ⚡ Reset / Load Sample Benchmark Data
+          </button>
+          <span id="lastUpdatedLabel" class="text-[9px] text-slate-500 font-mono">Sync: Live</span>
+        </div>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex space-x-1 border-t border-slate-800 pt-1.5 pb-1 overflow-x-auto no-scrollbar">
+        <button id="tabBtnRankings" class="tab-btn active flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap bg-slate-800 text-cyan-400 border-b-2 border-cyan-500">
+          🌍 World Rankings & Quota
+        </button>
+        <button id="tabBtnScouting" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40">
+          📡 Meeting & Venue Radar
+        </button>
+        <button id="tabBtnTraining" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40">
+          ⚡ Training Readiness & Sheets
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-2.5 sm:px-4 py-3">
+
+    <!-- ================= TAB 1: WORLD RANKINGS & QUOTA ================= -->
+    <div id="tabContentRankings" class="space-y-3">
+      <!-- KPI Metric Strip -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
+            <span>World #1 Leader</span>
+            <span class="text-amber-400 text-[9px] font-mono">1482 PTS</span>
+          </div>
+          <div class="text-base font-black text-white truncate">M. TENTOGLOU</div>
+          <div class="text-[10px] text-emerald-400 font-mono">GRE • SB 8.65m (PB 8.65m)</div>
+          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
+            <div class="h-full bg-cyan-500 w-full"></div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
+            <span>Road to Major Cutoff</span>
+            <span id="cutoffBadgeText" class="text-cyan-400 text-[9px] font-mono">TOP 32</span>
+          </div>
+          <div class="text-base font-black text-amber-400 font-mono">1248 PKT</div>
+          <div class="text-[10px] text-slate-400 font-mono truncate">Target Score for Direct Entry</div>
+          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
+            <div class="h-full bg-amber-500 w-[84%]"></div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
+            <span>DLV Focus (GER)</span>
+            <span class="text-emerald-400 text-[9px] font-mono">QUALIFIED</span>
+          </div>
+          <div class="text-base font-black text-white truncate flex items-center gap-1.5">
+            <span>L. HERDEN</span>
+            <span class="text-xs text-cyan-400 font-mono font-bold">#21</span>
+          </div>
+          <div class="text-[10px] text-slate-400 font-mono">1318 Pkt • SB 8.14m (+0.12m)</div>
+          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
+            <div class="h-full bg-emerald-500 w-[91%]"></div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
+            <span>Active Athletes</span>
+            <span class="text-slate-500 text-[9px] font-mono">M/LJ</span>
+          </div>
+          <div class="text-base font-black text-white font-mono" id="activeAthletesCount">24</div>
+          <div class="text-[10px] text-cyan-400 font-mono" id="filterStatusLabel">Global Top Roster</div>
+          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
+            <div class="h-full bg-cyan-600 w-[75%]"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls & Filter Bar -->
+      <div class="bg-slate-900 border border-slate-800 rounded p-2.5 shadow-sm space-y-2">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
+          <!-- Modes -->
+          <div class="flex flex-wrap items-center gap-1 p-0.5 bg-slate-950 rounded border border-slate-800">
+            <button id="modeStandardBtn" class="mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-cyan-400 border border-slate-700">
+              1. Gesamtranking
+            </button>
+            <button id="modeRoadToMajorsBtn" class="mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200">
+              🏆 2. Road to Major (Max 3/Nat)
+            </button>
+            <button id="modeEuropeanToplistBtn" class="mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200">
+              ⭐ 3. European Toplist (SB)
+            </button>
+          </div>
+
+          <!-- Cutoff Toggles (Visible in Road to Majors) -->
+          <div id="cutoffToggleContainer" class="hidden flex items-center gap-1.5 text-[10px] bg-slate-950 px-2 py-1 rounded border border-slate-800 font-mono">
+            <span class="text-slate-400 font-bold uppercase text-[9px]">Cutoff:</span>
+            <button id="cutoff32Btn" class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-600 text-white">Top 32 (WM)</button>
+            <button id="cutoff36Btn" class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold text-slate-400 hover:text-white">Top 36 (OG/EM)</button>
+          </div>
+        </div>
+
+        <!-- Search & Nation Filters -->
+        <div class="pt-2 border-t border-slate-800/80 grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
+          <div class="md:col-span-6 relative">
+            <input id="athleteSearchInput" type="text" placeholder="Search athlete (Tentoglou, Herden, Furlani, Batz)..." class="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-[11px] text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
+          </div>
+          <div class="md:col-span-6 flex flex-wrap items-center gap-1 font-mono">
+            <span class="text-[10px] text-slate-400 font-bold uppercase mr-0.5">Nat:</span>
+            <button data-nation="ALL" class="nat-filter-btn px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-white">ALL</button>
+            <button data-nation="GER" class="nat-filter-btn px-2 py-0.5 rounded text-[10px] font-black text-cyan-400 border border-cyan-800/60 bg-slate-950 hover:bg-slate-800">GER</button>
+            <button data-nation="GRE" class="nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">GRE</button>
+            <button data-nation="ITA" class="nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">ITA</button>
+            <button data-nation="SUI" class="nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">SUI</button>
+            <button data-nation="JAM" class="nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">JAM</button>
+            <button data-nation="USA" class="nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">USA</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Road to Majors Alert Banner -->
+      <div id="roadToMajorsBanner" class="hidden p-2 bg-amber-500/10 border border-amber-500/20 rounded text-[10px] text-amber-300 flex items-center gap-2 font-mono">
+        <div class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0"></div>
+        <span><strong>Road to Major Quota Engine:</strong> Max 3 Athleten pro Nation bereinigt. Startplätze innerhalb der Cutoff-Linie erhalten das Einladungsrecht.</span>
+      </div>
+
+      <!-- Main Ranking Table -->
+      <div class="bg-slate-900 border border-slate-800 rounded overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead>
+              <tr class="sticky top-0 bg-slate-950 text-slate-400 font-bold border-b border-slate-800 text-[10px] uppercase tracking-wider">
+                <th class="py-2 px-3 w-12 text-center">Rank</th>
+                <th id="quotaHeaderCol" class="hidden py-2 px-3 w-20 text-center text-cyan-400">Quota</th>
+                <th class="py-2 px-3">Athlete</th>
+                <th class="py-2 px-3">Nation</th>
+                <th class="py-2 px-3">Age / DOB</th>
+                <th class="py-2 px-3 text-right">SB</th>
+                <th class="py-2 px-3 text-right">PB</th>
+                <th class="py-2 px-3 text-right font-bold text-white">Score</th>
+                <th class="py-2 px-3 text-center">Status</th>
+                <th class="py-2 px-3 w-10 text-center">Details</th>
+              </tr>
+            </thead>
+            <tbody id="rankingTableBody" class="divide-y divide-slate-800/60 font-mono">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB 2: MEETING & VENUE RADAR ================= -->
+    <div id="tabContentScouting" class="hidden space-y-4">
+      <div class="space-y-2.5">
+        <div class="bg-slate-900 border border-slate-800 rounded p-2.5 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider font-mono">
+              📡 Meeting & Track Scouting Radar
+            </h2>
+            <p class="text-[10px] text-slate-400 font-mono mt-0.5">
+              Identified fast tracks, wooden street facilities & high-altitude venues for optimal scoring.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1 font-mono">
+            <span class="text-[10px] text-slate-400 uppercase font-bold mr-0.5">Type:</span>
+            <button data-type="ALL" class="venue-type-btn px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-500 text-slate-950">ALL</button>
+            <button data-type="Steganlage / City-Event" class="venue-type-btn px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-950 text-slate-400 border border-slate-800">STEG / CITY</button>
+            <button data-type="Stadion Mondo" class="venue-type-btn px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-950 text-slate-400 border border-slate-800">MONDO</button>
+            <button data-type="Höhenlage / Fast Track" class="venue-type-btn px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-950 text-slate-400 border border-slate-800">ALTITUDE</button>
+          </div>
+        </div>
+
+        <!-- Venue Cards Grid -->
+        <div id="venuesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Recent Competition Marks Feed -->
+      <div class="bg-slate-900 border border-slate-800 rounded p-2.5 shadow-sm space-y-2.5">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
+          <div>
+            <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+              ⚡ Recent Global Marks (Live Feed)
+            </h3>
+            <p class="text-[10px] text-slate-400 font-mono mt-0.5">
+              Live results from all World Athletics counting events
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1 font-mono">
+            <span class="text-[10px] text-slate-400 uppercase font-bold mr-0.5">Filter:</span>
+            <button data-minmark="0" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-white">ALL</button>
+            <button data-minmark="8.0" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-cyan-400 border border-cyan-800/50 bg-slate-950">&gt; 8.00m</button>
+            <button data-minmark="8.15" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-amber-400 border border-amber-800/50 bg-slate-950">&gt; 8.15m</button>
+            <button data-minmark="8.3" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-emerald-400 border border-emerald-800/50 bg-slate-950">&gt; 8.30m</button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-800 rounded bg-slate-950">
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead>
+              <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 font-bold uppercase tracking-wider text-[10px]">
+                <th class="py-1.5 px-3">Mark</th>
+                <th class="py-1.5 px-3">Wind</th>
+                <th class="py-1.5 px-3">Athlete</th>
+                <th class="py-1.5 px-3">Nation</th>
+                <th class="py-1.5 px-3">Meeting</th>
+                <th class="py-1.5 px-3">Venue</th>
+                <th class="py-1.5 px-3">Date</th>
+                <th class="py-1.5 px-3 text-center">Place</th>
+                <th class="py-1.5 px-3 text-right font-bold text-white">Score</th>
+              </tr>
+            </thead>
+            <tbody id="recentMarksTableBody" class="divide-y divide-slate-800/60 font-mono">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB 3: ATHLETIC TRAINING & READINESS ================= -->
+    <div id="tabContentTraining" class="hidden space-y-3">
+      <!-- Top Metrics Strip -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+        <div class="bg-slate-900 border border-slate-800 rounded p-2.5">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between font-mono">
+            <span>Season Best (SB)</span>
+            <span class="text-emerald-400 text-[9px]">PB 8.14m</span>
+          </div>
+          <div class="text-base font-black text-white font-mono" id="kpiSeasonBest">8.14m</div>
+          <div class="text-[10px] text-slate-500 font-mono truncate">Essen (+1.2m/s) • Holzsteg</div>
+          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
+            <div class="h-full bg-cyan-500 w-[98%]"></div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded p-2.5">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between font-mono">
+            <span>Rel. Strength (Squat/BW)</span>
+            <span class="text-slate-400 text-[9px]">77.5kg</span>
+          </div>
+          <div class="text-base font-black text-amber-400 font-mono" id="kpiRelativeStrength">2.48x <span class="text-xs font-normal text-slate-400 font-mono">(192kg)</span></div>
+          <div class="text-[10px] text-slate-500 font-mono truncate">Target &gt;8.00m: &gt;2.30x</div>
+          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
+            <div class="h-full bg-amber-500 w-[88%]"></div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded p-2.5">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between font-mono">
+            <span>Avg Meet Whoop</span>
+            <span class="text-emerald-400 text-[9px]">GREEN</span>
+          </div>
+          <div class="text-base font-black text-emerald-400 font-mono" id="kpiAvgWhoop">87%</div>
+          <div class="text-[10px] text-slate-500 font-mono truncate">Readiness Corr: r=0.82</div>
+          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
+            <div class="h-full bg-emerald-500 w-[87%]"></div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded p-2.5 flex flex-col justify-between">
+          <div>
+            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between font-mono">
+              <span>Google Sheets Sync</span>
+              <span class="text-cyan-400 text-[9px]">CONNECTED</span>
+            </div>
+            <div class="text-xs font-bold text-white truncate font-mono">Sample Benchmark Log</div>
+          </div>
+          <button id="toggleCsvPasteBtn" class="text-[10px] font-mono text-cyan-400 hover:text-cyan-300 underline text-left mt-1">
+            Manual CSV paste / test
+          </button>
+        </div>
+      </div>
+
+      <!-- Collapsible CSV Input -->
+      <div id="csvPasteContainer" class="hidden bg-slate-900 border border-slate-800 rounded p-2.5 space-y-2">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-white font-mono uppercase">📊 Google Sheets CSV Raw Data Input</h4>
+          <span class="text-[9px] text-slate-500 font-mono">Header: Datum, Typ, Ort, Weite, Wind, Körpergewicht, Kniebeuge, Umsetzen, Whoop, Schlaf, Notiz</span>
+        </div>
+        <textarea id="rawCsvTextarea" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-[11px] text-white font-mono placeholder-slate-600 focus:outline-none focus:border-cyan-500"></textarea>
+        <div class="flex justify-end gap-1.5 font-mono text-[10px]">
+          <button id="closeCsvPasteBtn" class="px-2 py-1 rounded bg-slate-950 text-slate-400 border border-slate-800">Cancel</button>
+          <button id="applyCsvBtn" class="px-2.5 py-1 rounded font-bold bg-cyan-600 text-white shadow-sm">Parse CSV & Update Charts</button>
+        </div>
+      </div>
+
+      <!-- Chart 1: Performance Curve -->
+      <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+          <div>
+            <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+              📈 Performance Curve (Competition Marks & Wind Correlation)
+            </h3>
+            <p class="text-[10px] text-slate-400 font-mono mt-0.5">
+              Trajectory of jump marks across season phases with PB / SB gold highlights.
+            </p>
+          </div>
+          <div class="flex items-center gap-2.5 text-[10px] font-mono text-slate-300">
+            <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-amber-400"></span> PB (8.14m)</span>
+            <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-emerald-400"></span> SB Mark</span>
+          </div>
+        </div>
+        <div class="h-64 w-full pt-1">
+          <canvas id="compMarksChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Charts 2 & 3: Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <!-- Chart 2: Strength & Weight -->
+        <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2">
+          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            🏋️ Strength & Body Weight Progression
+          </h3>
+          <p class="text-[10px] text-slate-400 font-mono mt-0.5">
+            Body Weight (kg, left) vs 1RM Squat & Power Clean (kg, right)
+          </p>
+          <div class="h-56 w-full pt-1">
+            <canvas id="strengthChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: Readiness & Sleep -->
+        <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2">
+          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            💤 Readiness & Biometrics (Whoop / Sleep)
+          </h3>
+          <p class="text-[10px] text-slate-400 font-mono mt-0.5">
+            Whoop Recovery % and Sleep Duration prior to tests and competitions
+          </p>
+          <div class="h-56 w-full pt-1">
+            <canvas id="readinessChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-slate-800 bg-slate-950 py-2.5 text-center text-[10px] font-mono text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-1">
+      <div>TRACK & FIELD INTELLIGENCE • WORLD ATHLETICS SCORING SYSTEM</div>
+      <div class="flex items-center gap-3 text-[9px] uppercase tracking-wider text-slate-400">
+        <span>Men's Long Jump Elite</span>
+        <span>•</span>
+        <span>DLV / European Athletics</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= LOGIC & JAVASCRIPT ================= -->
+  <script>
+    /* -------------------------------------------------------------
+       1. INITIAL BENCHMARK DATA (World Rankings, Venues, Training)
+    ------------------------------------------------------------- */
+    const INITIAL_ATHLETES = [
+      {
+        id: 'tentoglou-miltiadis',
+        originalRank: 1,
+        name: 'Miltiadis Tentoglou',
+        nation: 'GRE',
+        isEuropean: true,
+        age: 26,
+        dob: '1998-03-18',
+        sb: 8.65,
+        pb: 8.65,
+        totalScore: 1482,
+        countingMeetings: [
+          { id: 'm1', meeting: 'Olympic Games Final', date: '2024-08-06', location: 'Paris, FRA', category: 'OW', mark: 8.48, wind: 0.1, placing: 1, resultScore: 1248, placingScore: 240, performanceScore: 1488, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'm2', meeting: 'European Athletics Championships', date: '2024-06-08', location: 'Rom, ITA', category: 'GL', mark: 8.65, wind: -0.3, placing: 1, resultScore: 1285, placingScore: 200, performanceScore: 1485, isSteg: false, isIndoor: false, isPB: true },
+          { id: 'm3', meeting: 'World Athletics Indoor Championships', date: '2024-03-02', location: 'Glasgow, GBR', category: 'GW', mark: 8.22, wind: null, placing: 1, resultScore: 1192, placingScore: 220, performanceScore: 1412, isSteg: false, isIndoor: true, isPB: false },
+          { id: 'm4', meeting: 'Herculis EBS Diamond League', date: '2024-07-12', location: 'Monaco, MON', category: 'DF', mark: 8.35, wind: 0.8, placing: 1, resultScore: 1220, placingScore: 240, performanceScore: 1460, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'm5', meeting: 'Pireaus Street Long Jump', date: '2024-05-22', location: 'Athen, GRE', category: 'B', mark: 8.40, wind: 1.4, placing: 1, resultScore: 1231, placingScore: 100, performanceScore: 1331, isSteg: true, isIndoor: false, isPB: false }
+        ]
+      },
+      {
+        id: 'furlani-mattia',
+        originalRank: 2,
+        name: 'Mattia Furlani',
+        nation: 'ITA',
+        isEuropean: true,
+        age: 20,
+        dob: '2005-02-07',
+        sb: 8.38,
+        pb: 8.38,
+        totalScore: 1412,
+        countingMeetings: [
+          { id: 'mf1', meeting: 'Olympic Games Final', date: '2024-08-06', location: 'Paris, FRA', category: 'OW', mark: 8.34, wind: -0.1, placing: 3, resultScore: 1218, placingScore: 190, performanceScore: 1408, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'mf2', meeting: 'European Athletics Championships', date: '2024-06-08', location: 'Rom, ITA', category: 'GL', mark: 8.38, wind: 0.9, placing: 2, resultScore: 1227, placingScore: 170, performanceScore: 1397, isSteg: false, isIndoor: false, isPB: true },
+          { id: 'mf3', meeting: 'World Indoor Tour Gold', date: '2024-02-23', location: 'Madrid, ESP', category: 'A', mark: 8.34, wind: null, placing: 1, resultScore: 1218, placingScore: 140, performanceScore: 1358, isSteg: false, isIndoor: true, isPB: false },
+          { id: 'mf4', meeting: 'FBK Games Hengelo', date: '2024-07-07', location: 'Hengelo, NED', category: 'A', mark: 8.28, wind: 1.1, placing: 1, resultScore: 1205, placingScore: 140, performanceScore: 1345, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'mf5', meeting: 'Golden Spike Ostrava', date: '2024-05-28', location: 'Ostrava, CZE', category: 'A', mark: 8.18, wind: -0.2, placing: 2, resultScore: 1184, placingScore: 120, performanceScore: 1304, isSteg: false, isIndoor: false, isPB: false }
+        ]
+      },
+      {
+        id: 'ehammer-simon',
+        originalRank: 3,
+        name: 'Simon Ehammer',
+        nation: 'SUI',
+        isEuropean: true,
+        age: 24,
+        dob: '2000-02-07',
+        sb: 8.41,
+        pb: 8.45,
+        totalScore: 1398,
+        countingMeetings: [
+          { id: 'se1', meeting: 'European Athletics Championships', date: '2024-06-08', location: 'Rom, ITA', category: 'GL', mark: 8.31, wind: -0.4, placing: 3, resultScore: 1212, placingScore: 150, performanceScore: 1362, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'se2', meeting: 'Hypomeeting Götzis', date: '2024-05-18', location: 'Götzis, AUT', category: 'GL', mark: 8.41, wind: 0.7, placing: 1, resultScore: 1233, placingScore: 200, performanceScore: 1433, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'se3', meeting: 'Diamond League Bislett Games', date: '2024-05-30', location: 'Oslo, NOR', category: 'DF', mark: 8.25, wind: 0.2, placing: 1, resultScore: 1199, placingScore: 240, performanceScore: 1439, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'se4', meeting: 'Olympic Games Final', date: '2024-08-06', location: 'Paris, FRA', category: 'OW', mark: 8.20, wind: 0.1, placing: 4, resultScore: 1188, placingScore: 170, performanceScore: 1358, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'se5', meeting: 'Athletissima', date: '2024-08-22', location: 'Lausanne, SUI', category: 'DF', mark: 8.15, wind: 1.3, placing: 3, resultScore: 1177, placingScore: 190, performanceScore: 1367, isSteg: false, isIndoor: false, isPB: false }
+        ]
+      },
+      {
+        id: 'pinnock-wayne',
+        originalRank: 4,
+        name: 'Wayne Pinnock',
+        nation: 'JAM',
+        isEuropean: false,
+        age: 24,
+        dob: '2000-10-24',
+        sb: 8.40,
+        pb: 8.54,
+        totalScore: 1386,
+        countingMeetings: [
+          { id: 'wp1', meeting: 'Olympic Games Final', date: '2024-08-06', location: 'Paris, FRA', category: 'OW', mark: 8.36, wind: 0.2, placing: 2, resultScore: 1223, placingScore: 210, performanceScore: 1433, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'wp2', meeting: 'NCAA Division I Championships', date: '2024-06-05', location: 'Eugene, USA', category: 'A', mark: 8.40, wind: 0.6, placing: 1, resultScore: 1231, placingScore: 140, performanceScore: 1371, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'wp3', meeting: 'Jamaican Championships', date: '2024-06-28', location: 'Kingston, JAM', category: 'B', mark: 8.27, wind: -0.1, placing: 2, resultScore: 1203, placingScore: 80, performanceScore: 1283, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'wp4', meeting: 'Tom Jones Memorial', date: '2024-04-12', location: 'Gainesville, USA', category: 'C', mark: 8.28, wind: 1.8, placing: 1, resultScore: 1205, placingScore: 60, performanceScore: 1265, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'wp5', meeting: 'SEC Indoor Championships', date: '2024-02-23', location: 'Fayetteville, USA', category: 'C', mark: 8.34, wind: null, placing: 1, resultScore: 1218, placingScore: 60, performanceScore: 1278, isSteg: false, isIndoor: true, isPB: false }
+        ]
+      },
+      {
+        id: 'herden-luka',
+        originalRank: 21,
+        name: 'Luka Herden',
+        nation: 'GER',
+        isEuropean: true,
+        age: 24,
+        dob: '2000-04-20',
+        sb: 8.14,
+        pb: 8.14,
+        totalScore: 1318,
+        countingMeetings: [
+          { id: 'lh1', meeting: 'Tag der Überflieger (Holzsteg)', date: '2024-05-18', location: 'Essen, GER', category: 'C', mark: 8.14, wind: 1.2, placing: 1, resultScore: 1175, placingScore: 60, performanceScore: 1235, isSteg: true, isIndoor: false, isPB: true },
+          { id: 'lh2', meeting: 'European Athletics Championships Finale', date: '2024-06-08', location: 'Rom, ITA', category: 'GL', mark: 8.01, wind: 0.3, placing: 8, resultScore: 1147, placingScore: 110, performanceScore: 1257, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'lh3', meeting: 'DM Braunschweig', date: '2024-06-29', location: 'Braunschweig, GER', category: 'B', mark: 8.08, wind: 1.5, placing: 1, resultScore: 1162, placingScore: 100, performanceScore: 1262, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'lh4', meeting: 'Anhalt Meeting Dessau', date: '2024-05-24', location: 'Dessau, GER', category: 'B', mark: 8.02, wind: 0.4, placing: 2, resultScore: 1149, placingScore: 80, performanceScore: 1229, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'lh5', meeting: 'Indoor Meeting Dortmund', date: '2024-01-20', location: 'Dortmund, GER', category: 'C', mark: 7.93, wind: null, placing: 1, resultScore: 1130, placingScore: 60, performanceScore: 1190, isSteg: false, isIndoor: true, isPB: false }
+        ]
+      },
+      {
+        id: 'batz-simon',
+        originalRank: 24,
+        name: 'Simon Batz',
+        nation: 'GER',
+        isEuropean: true,
+        age: 22,
+        dob: '2002-12-01',
+        sb: 8.18,
+        pb: 8.18,
+        totalScore: 1308,
+        countingMeetings: [
+          { id: 'sb1', meeting: 'World Athletics Indoor Championships', date: '2024-03-02', location: 'Glasgow, GBR', category: 'GW', mark: 8.06, wind: null, placing: 4, resultScore: 1158, placingScore: 170, performanceScore: 1328, isSteg: false, isIndoor: true, isPB: false },
+          { id: 'sb2', meeting: 'European Athletics Championships', date: '2024-06-08', location: 'Rom, ITA', category: 'GL', mark: 8.06, wind: 0.2, placing: 6, resultScore: 1158, placingScore: 120, performanceScore: 1278, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'sb3', meeting: 'Indoor Lyon', date: '2024-02-09', location: 'Lyon, FRA', category: 'B', mark: 8.18, wind: null, placing: 1, resultScore: 1184, placingScore: 100, performanceScore: 1284, isSteg: false, isIndoor: true, isPB: true },
+          { id: 'sb4', meeting: 'DM Braunschweig', date: '2024-06-29', location: 'Braunschweig, GER', category: 'B', mark: 7.95, wind: 0.8, placing: 2, resultScore: 1134, placingScore: 80, performanceScore: 1214, isSteg: false, isIndoor: false, isPB: false },
+          { id: 'sb5', meeting: 'Golden Roof Challenge', date: '2024-05-18', location: 'Innsbruck, AUT', category: 'C', mark: 7.98, wind: 0.9, placing: 2, resultScore: 1141, placingScore: 50, performanceScore: 1191, isSteg: true, isIndoor: false, isPB: false }
+        ]
+      }
+    ];
+
+    const INITIAL_VENUES = [
+      { id: 'v1', name: 'Tag der Überflieger', location: 'Essen', country: 'GER', facilityType: 'Steganlage / City-Event', avgTop8Mark: 8.05, maxMark: 8.35, pbRatePercent: 44, windTendency: '+1.0 bis +1.8 m/s (Gleichmäßiger Rückenwind)', topHighlights: ['Erhöhte Holzsteganlage', 'Extremer Katapulteffekt', 'Direkte Fannähe'], recommendationTag: 'Top Pick 2026/2027', description: 'Hochgeschwindigkeits-Holzsteganlage im Herzen von Essen. Durch den kontrollierten Federeffekt und die Windschneise zwischen den Gebäuden extrem hohe PB-Dichte.' },
+      { id: 'v2', name: 'Papaflessia / Kifisia Sprint & Jump', location: 'Kifisia / Athen', country: 'GRE', facilityType: 'Höhenlage / Fast Track', avgTop8Mark: 8.18, maxMark: 8.65, pbRatePercent: 52, windTendency: '+0.8 bis +2.0 m/s', topHighlights: ['Heimanlage Tentoglou', 'Sehr harter Mondo-Belag', 'Optimale Thermik'], recommendationTag: 'Top Pick 2026/2027', description: 'Legendäre Anlage in Griechenland mit optimalen Windfenstern und hoher Anlaufgeschwindigkeit.' },
+      { id: 'v3', name: 'Möslestadion Götzis', location: 'Götzis', country: 'AUT', facilityType: 'Stadion Mondo', avgTop8Mark: 8.12, maxMark: 8.45, pbRatePercent: 38, windTendency: '+0.5 bis +1.6 m/s', topHighlights: ['Hypomeeting Atmosphäre', 'Windmessung immer im Plus', 'World Athletics GL Bonus'], recommendationTag: 'Hohe Bonuspunkte', description: 'Traditionell schnelle Anlaufbahn im Rheintal mit Kategorie GL Bonuspunkten.' },
+      { id: 'v4', name: 'Golden Roof Challenge', location: 'Innsbruck', country: 'AUT', facilityType: 'Steganlage / City-Event', avgTop8Mark: 8.02, maxMark: 8.28, pbRatePercent: 41, windTendency: 'Leicht wechselnd (-0.5 bis +1.2)', topHighlights: ['Mobiler "The FlySwat" Steg', 'Große Zuschauermenge', 'Kategorie C Bonuspunkte'], recommendationTag: 'Solide PB-Chance', description: 'Traditionelles City-Event vor dem Goldenen Dachl.' }
+    ];
+
+    const INITIAL_TRAINING = [
+      { date: '2025-05-10', type: 'Test', location: 'Münster', mark: 7.92, wind: 0.4, bw: 77.2, squat: 185, clean: 135, whoop: 78, sleep: 7.6, note: 'Guter Saisoneinstieg' },
+      { date: '2025-05-18', type: 'Wettkampf', location: 'Essen', mark: 8.14, wind: 1.2, bw: 77.5, squat: 192, clean: 142, whoop: 94, sleep: 8.8, note: 'PB auf Holzsteg' },
+      { date: '2025-05-24', type: 'Wettkampf', location: 'Dessau', mark: 8.02, wind: 0.4, bw: 77.3, squat: 190, clean: 140, whoop: 86, sleep: 8.0, note: 'Stabiler Sprung' },
+      { date: '2025-06-08', type: 'Wettkampf', location: 'Rom', mark: 8.01, wind: 0.3, bw: 77.4, squat: 190, clean: 140, whoop: 82, sleep: 8.1, note: 'EM Finale Platz 8' },
+      { date: '2025-06-29', type: 'Wettkampf', location: 'Braunschweig', mark: 8.08, wind: 1.5, bw: 77.6, squat: 192, clean: 142, whoop: 91, sleep: 8.4, note: 'DM Gold' }
+    ];
+
+    /* -------------------------------------------------------------
+       2. APPLICATION STATE
+    ------------------------------------------------------------- */
+    let state = {
+      activeTab: 'rankings',
+      athletes: [...INITIAL_ATHLETES],
+      venues: [...INITIAL_VENUES],
+      trainingLogs: [...INITIAL_TRAINING],
+      rankingMode: 'standard', // 'standard' | 'roadToMajors' | 'europeanToplist'
+      cutoffSpots: 32,
+      selectedNation: 'ALL',
+      searchQuery: '',
+      expandedRowId: null,
+      venueTypeFilter: 'ALL',
+      minMarkFilter: 0,
+      recentMarksSearch: '',
+      showConfig: false,
+      showCsvPaste: false
+    };
+
+    let compChartInstance = null;
+    let strengthChartInstance = null;
+    let readinessChartInstance = null;
+
+    /* -------------------------------------------------------------
+       3. DOM ELEMENTS & INITIALIZATION
+    ------------------------------------------------------------- */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load URLs from storage
+      const savedWaUrl = localStorage.getItem('wa_url_key') || '';
+      const savedSheetsUrl = localStorage.getItem('sheets_url_key') || '';
+      document.getElementById('inputWaUrl').value = savedWaUrl;
+      document.getElementById('inputSheetsUrl').value = savedSheetsUrl;
+
+      // Event Listeners
+      setupNavigation();
+      setupFilters();
+      renderAll();
+    });
+
+    function setupNavigation() {
+      document.getElementById('tabBtnRankings').onclick = () => switchTab('rankings');
+      document.getElementById('tabBtnScouting').onclick = () => switchTab('scouting');
+      document.getElementById('tabBtnTraining').onclick = () => switchTab('training');
+
+      document.getElementById('toggleConfigBtn').onclick = () => {
+        state.showConfig = !state.showConfig;
+        document.getElementById('configDrawer').classList.toggle('hidden', !state.showConfig);
+      };
+
+      document.getElementById('syncDataBtn').onclick = handleSync;
+      document.getElementById('resetDemoBtn').onclick = () => {
+        state.athletes = [...INITIAL_ATHLETES];
+        state.trainingLogs = [...INITIAL_TRAINING];
+        document.getElementById('jsonStatusBadge').textContent = 'Sample WA';
+        document.getElementById('sheetsStatusBadge').textContent = 'Sample Training';
+        renderAll();
+      };
+
+      document.getElementById('toggleCsvPasteBtn').onclick = () => {
+        state.showCsvPaste = !state.showCsvPaste;
+        document.getElementById('csvPasteContainer').classList.toggle('hidden', !state.showCsvPaste);
+      };
+      document.getElementById('closeCsvPasteBtn').onclick = () => {
+        state.showCsvPaste = false;
+        document.getElementById('csvPasteContainer').classList.add('hidden');
+      };
+      document.getElementById('applyCsvBtn').onclick = handleApplyCsv;
+    }
+
+    function switchTab(tab) {
+      state.activeTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.className = 'tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40';
+      });
+
+      document.getElementById('tabContentRankings').classList.toggle('hidden', tab !== 'rankings');
+      document.getElementById('tabContentScouting').classList.toggle('hidden', tab !== 'scouting');
+      document.getElementById('tabContentTraining').classList.toggle('hidden', tab !== 'training');
+
+      const activeBtn = tab === 'rankings' ? document.getElementById('tabBtnRankings')
+                      : tab === 'scouting' ? document.getElementById('tabBtnScouting')
+                      : document.getElementById('tabBtnTraining');
+      
+      activeBtn.className = 'tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap bg-slate-800 text-cyan-400 border-b-2 border-cyan-500';
+
+      if (tab === 'training') {
+        setTimeout(renderCharts, 100);
+      }
+    }
+
+    function setupFilters() {
+      // Mode buttons
+      document.getElementById('modeStandardBtn').onclick = () => setRankingMode('standard');
+      document.getElementById('modeRoadToMajorsBtn').onclick = () => setRankingMode('roadToMajors');
+      document.getElementById('modeEuropeanToplistBtn').onclick = () => setRankingMode('europeanToplist');
+
+      // Cutoff buttons
+      document.getElementById('cutoff32Btn').onclick = () => { state.cutoffSpots = 32; updateCutoffButtons(); renderRankings(); };
+      document.getElementById('cutoff36Btn').onclick = () => { state.cutoffSpots = 36; updateCutoffButtons(); renderRankings(); };
+
+      // Search input
+      document.getElementById('athleteSearchInput').oninput = (e) => {
+        state.searchQuery = e.target.value.toLowerCase();
+        renderRankings();
+      };
+
+      // Nation buttons
+      document.querySelectorAll('.nat-filter-btn').forEach(btn => {
+        btn.onclick = () => {
+          document.querySelectorAll('.nat-filter-btn').forEach(b => {
+            b.className = 'nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950';
+          });
+          btn.className = 'nat-filter-btn px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-white';
+          state.selectedNation = btn.getAttribute('data-nation');
+          renderRankings();
+        };
+      });
+
+      // Venue filter buttons
+      document.querySelectorAll('.venue-type-btn').forEach(btn => {
+        btn.onclick = () => {
+          document.querySelectorAll('.venue-type-btn').forEach(b => {
+            b.className = 'venue-type-btn px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-950 text-slate-400 border border-slate-800';
+          });
+          btn.className = 'venue-type-btn px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-500 text-slate-950';
+          state.venueTypeFilter = btn.getAttribute('data-type');
+          renderVenues();
+        };
+      });
+
+      // Min mark filter buttons
+      document.querySelectorAll('.mark-filter-btn').forEach(btn => {
+        btn.onclick = () => {
+          document.querySelectorAll('.mark-filter-btn').forEach(b => {
+            b.className = 'mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-slate-400 border border-slate-800 bg-slate-950';
+          });
+          btn.className = 'mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-white';
+          state.minMarkFilter = parseFloat(btn.getAttribute('data-minmark'));
+          renderRecentMarks();
+        };
+      });
+    }
+
+    function setRankingMode(mode) {
+      state.rankingMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(b => {
+        b.className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200';
+      });
+
+      if (mode === 'standard') {
+        document.getElementById('modeStandardBtn').className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-cyan-400 border border-slate-700';
+        document.getElementById('cutoffToggleContainer').classList.add('hidden');
+        document.getElementById('roadToMajorsBanner').classList.add('hidden');
+        document.getElementById('quotaHeaderCol').classList.add('hidden');
+      } else if (mode === 'roadToMajors') {
+        document.getElementById('modeRoadToMajorsBtn').className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-cyan-600 text-white font-black shadow-sm';
+        document.getElementById('cutoffToggleContainer').classList.remove('hidden');
+        document.getElementById('roadToMajorsBanner').classList.remove('hidden');
+        document.getElementById('quotaHeaderCol').classList.remove('hidden');
+      } else {
+        document.getElementById('modeEuropeanToplistBtn').className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500 text-slate-950 font-black shadow-sm';
+        document.getElementById('cutoffToggleContainer').classList.add('hidden');
+        document.getElementById('roadToMajorsBanner').classList.add('hidden');
+        document.getElementById('quotaHeaderCol').classList.add('hidden');
+      }
+      renderRankings();
+    }
+
+    function updateCutoffButtons() {
+      document.getElementById('cutoffBadgeText').textContent = 'TOP ' + state.cutoffSpots;
+      document.getElementById('cutoff32Btn').className = state.cutoffSpots === 32 ? 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-600 text-white' : 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold text-slate-400 hover:text-white';
+      document.getElementById('cutoff36Btn').className = state.cutoffSpots === 36 ? 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-600 text-white' : 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold text-slate-400 hover:text-white';
+    }
+
+    /* -------------------------------------------------------------
+       4. COMPUTATIONS & RENDERING
+    ------------------------------------------------------------- */
+    function getProcessedRankings() {
+      let list = [...state.athletes];
+
+      // Road to Majors 3-per-nation logic
+      const nationCounts = {};
+      let quotaIndex = 1;
+
+      list = list.map((ath, idx) => {
+        const nat = ath.nation;
+        nationCounts[nat] = (nationCounts[nat] || 0) + 1;
+        const slot = nationCounts[nat];
+
+        let quotaRank = null;
+        let quotaStatus = 'outside';
+
+        if (slot <= 3) {
+          quotaRank = quotaIndex++;
+          quotaStatus = quotaRank <= state.cutoffSpots ? 'qualified' : (quotaRank <= state.cutoffSpots + 4 ? 'bubble' : 'outside');
+        } else {
+          quotaStatus = 'quota_full';
+        }
+
+        return { ...ath, originalRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot };
+      });
+
+      if (state.rankingMode === 'europeanToplist') {
+        list = list.filter(a => a.isEuropean).sort((a, b) => b.sb - a.sb);
+      }
+
+      if (state.selectedNation !== 'ALL') {
+        list = list.filter(a => a.nation === state.selectedNation);
+      }
+
+      if (state.searchQuery) {
+        list = list.filter(a => a.name.toLowerCase().includes(state.searchQuery) || a.nation.toLowerCase().includes(state.searchQuery));
+      }
+
+      return list;
+    }
+
+    function renderRankings() {
+      const data = getProcessedRankings();
+      document.getElementById('activeAthletesCount').textContent = data.length + ' / ' + state.athletes.length;
+      document.getElementById('filterStatusLabel').textContent = state.selectedNation === 'ALL' ? 'Global Top Roster' : 'Filter: ' + state.selectedNation;
+
+      const tbody = document.getElementById('rankingTableBody');
+      tbody.innerHTML = '';
+
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="py-6 text-center text-slate-500 text-xs font-sans">Keine Athleten gefunden für diesen Filter.</td></tr>';
+        return;
+      }
+
+      data.forEach((ath, idx) => {
+        const isCutoff = state.rankingMode === 'roadToMajors' && ath.quotaRank === state.cutoffSpots;
+        const isExpanded = state.expandedRowId === ath.id;
+        const isGerman = ath.nation === 'GER';
+
+        const tr = document.createElement('tr');
+        tr.className = `cursor-pointer transition-colors ${isExpanded ? 'bg-slate-800/90' : isGerman ? 'bg-cyan-950/20 hover:bg-cyan-950/30 border-l-2 border-l-cyan-500' : 'hover:bg-slate-800/50'}`;
+        tr.onclick = () => {
+          state.expandedRowId = state.expandedRowId === ath.id ? null : ath.id;
+          renderRankings();
+        };
+
+        let statusBadge = '';
+        if (state.rankingMode === 'roadToMajors') {
+          if (ath.quotaStatus === 'qualified') {
+            statusBadge = '<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold uppercase">QUALIFIED</span>';
+          } else if (ath.quotaStatus === 'bubble') {
+            statusBadge = `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[9px] font-bold uppercase">BUBBLE</span>`;
+          } else if (ath.quotaStatus === 'quota_full') {
+            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 border border-slate-800 text-[9px] uppercase">MAX 3 NATION</span>';
+          } else {
+            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-rose-950/30 text-rose-400 border border-rose-900/40 text-[9px] uppercase">OUTSIDE</span>';
+          }
+        } else {
+          statusBadge = '<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px] uppercase">RANKED</span>';
+        }
+
+        tr.innerHTML = `
+          <td class="py-1.5 px-3 text-center font-bold text-slate-300">${state.rankingMode === 'europeanToplist' ? idx + 1 : ath.originalRank}</td>
+          ${state.rankingMode === 'roadToMajors' ? `<td class="py-1.5 px-3 text-center">${ath.quotaRank ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded font-bold text-[10px] ${ath.quotaRank <= state.cutoffSpots ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">#${ath.quotaRank}</span>` : `<span class="text-[9px] text-slate-500 italic">Max 3</span>`}</td>` : ''}
+          <td class="py-1.5 px-3 font-semibold text-white font-sans">
+            <div class="flex items-center gap-1.5">
+              <span class="uppercase font-bold tracking-tight">${ath.name}</span>
+              ${isGerman ? '<span class="text-[8px] px-1 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold font-mono">GER</span>' : ''}
+            </div>
+          </td>
+          <td class="py-1.5 px-3"><span class="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${ath.nation}</span></td>
+          <td class="py-1.5 px-3 text-slate-400 text-[10px]">${ath.age}y <span class="text-slate-600">(${ath.dob.substring(0,4)})</span></td>
+          <td class="py-1.5 px-3 text-right font-bold text-cyan-400">${ath.sb.toFixed(2)}m</td>
+          <td class="py-1.5 px-3 text-right text-slate-400">${ath.pb.toFixed(2)}m</td>
+          <td class="py-1.5 px-3 text-right font-bold text-amber-400">${ath.totalScore}</td>
+          <td class="py-1.5 px-3 text-center">${statusBadge}</td>
+          <td class="py-1.5 px-3 text-center text-slate-500">${isExpanded ? '▲' : '▼'}</td>
+        `;
+        tbody.appendChild(tr);
+
+        // Cutoff separator
+        if (isCutoff) {
+          const cutTr = document.createElement('tr');
+          cutTr.className = 'border-t-2 border-b-2 border-amber-500/60 bg-amber-500/10';
+          cutTr.innerHTML = `<td colspan="10" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">ROAD TO MAJOR CUT-OFF (RANK ${state.cutoffSpots}) — DIRECT INVITATION THRESHOLD</td>`;
+          tbody.appendChild(cutTr);
+        }
+
+        // Accordion Row
+        if (isExpanded) {
+          const accTr = document.createElement('tr');
+          accTr.className = 'bg-slate-950 border-b border-slate-800';
+          
+          let meetingsHtml = ath.countingMeetings.map(m => `
+            <tr class="hover:bg-slate-800/40 ${m.isSteg ? 'bg-cyan-950/20' : m.isIndoor ? 'bg-purple-950/20' : ''}">
+              <td class="py-1 px-2 text-slate-400 whitespace-nowrap">${m.date}</td>
+              <td class="py-1 px-2 font-sans font-medium text-slate-200">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span>${m.meeting}</span>
+                  ${m.isSteg ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[8px] font-bold">STEG</span>' : ''}
+                  ${m.isIndoor ? '<span class="px-1 py-0.2 rounded bg-purple-950 text-purple-300 border border-purple-800 text-[8px] font-bold">INDOOR</span>' : ''}
+                  ${m.isPB ? '<span class="px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 text-[8px] font-bold">PB</span>' : ''}
+                </div>
+              </td>
+              <td class="py-1 px-2 text-slate-400 font-sans">${m.location}</td>
+              <td class="py-1 px-2 text-center"><span class="px-1 py-0.2 rounded border text-[8px] font-bold bg-slate-800 border-slate-700 text-cyan-300">${m.category}</span></td>
+              <td class="py-1 px-2 text-right font-bold text-cyan-400">${m.mark.toFixed(2)}m</td>
+              <td class="py-1 px-2 text-right">${m.wind !== null ? `<span class="${m.wind > 2 ? 'text-rose-400' : 'text-slate-300'}">${m.wind > 0 ? '+'+m.wind : m.wind} m/s</span>` : '<span class="text-slate-500">NWI</span>'}</td>
+              <td class="py-1 px-2 text-center text-slate-300">${m.placing}.</td>
+              <td class="py-1 px-2 text-right text-slate-400">${m.resultScore}</td>
+              <td class="py-1 px-2 text-right text-amber-400">+${m.placingScore}</td>
+              <td class="py-1 px-2 text-right font-bold text-cyan-300">${m.performanceScore}</td>
+            </tr>
+          `).join('');
+
+          accTr.innerHTML = `
+            <td colspan="10" class="p-2.5">
+              <div class="bg-slate-900 rounded border border-slate-800 p-2.5 shadow-sm">
+                <div class="flex items-center justify-between gap-1 mb-2">
+                  <h4 class="font-bold text-white text-[11px] uppercase tracking-wide font-sans">
+                    🏆 5 Counting Meetings: ${ath.name} (Total: ${ath.totalScore} Pkt)
+                  </h4>
+                  <div class="text-[9px] text-slate-400 flex items-center gap-2">
+                    <span class="flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-cyan-400"></span> City / Steg</span>
+                    <span class="flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-purple-400"></span> Indoor</span>
+                  </div>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-left border-collapse text-[10px] font-mono">
+                    <thead>
+                      <tr class="bg-slate-950 text-slate-500 border-b border-slate-800 uppercase font-bold text-[9px]">
+                        <th class="py-1.5 px-2">Date</th>
+                        <th class="py-1.5 px-2">Meeting</th>
+                        <th class="py-1.5 px-2">Venue</th>
+                        <th class="py-1.5 px-2 text-center">Cat</th>
+                        <th class="py-1.5 px-2 text-right">Mark</th>
+                        <th class="py-1.5 px-2 text-right">Wind</th>
+                        <th class="py-1.5 px-2 text-center">Place</th>
+                        <th class="py-1.5 px-2 text-right">Result</th>
+                        <th class="py-1.5 px-2 text-right">Bonus</th>
+                        <th class="py-1.5 px-2 text-right font-bold text-white">Perf. Pts</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/50">
+                      ${meetingsHtml}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(accTr);
+        }
+      });
+    }
+
+    function renderVenues() {
+      const container = document.getElementById('venuesGrid');
+      let filtered = state.venues;
+      if (state.venueTypeFilter !== 'ALL') {
+        filtered = filtered.filter(v => v.facilityType === state.venueTypeFilter);
+      }
+
+      container.innerHTML = filtered.map(v => `
+        <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm hover:border-amber-500/40 transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <div>
+                <span class="text-[9px] uppercase font-bold tracking-wider text-slate-500 font-mono">${v.country} • ${v.location}</span>
+                <h3 class="font-bold text-white text-xs uppercase tracking-tight">${v.name}</h3>
+              </div>
+              <span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-black uppercase bg-amber-500/10 text-amber-400 border border-amber-500/30">${v.recommendationTag}</span>
+            </div>
+            <p class="text-[11px] text-slate-300 mb-2.5 leading-relaxed line-clamp-2">${v.description}</p>
+            <div class="grid grid-cols-3 gap-1.5 p-2 bg-slate-950 rounded border border-slate-800/80 mb-2.5 font-mono text-center">
+              <div><div class="text-[8px] uppercase text-slate-500 font-bold">Avg Top 8</div><div class="text-xs font-black text-cyan-400">${v.avgTop8Mark.toFixed(2)}m</div></div>
+              <div><div class="text-[8px] uppercase text-slate-500 font-bold">Venue Rec</div><div class="text-xs font-black text-amber-400">${v.maxMark.toFixed(2)}m</div></div>
+              <div><div class="text-[8px] uppercase text-slate-500 font-bold">PB Rate</div><div class="text-xs font-black text-emerald-400">${v.pbRatePercent}%</div></div>
+            </div>
+            <div class="space-y-1 mb-2.5">
+              ${v.topHighlights.map(hl => `<div class="flex items-center gap-1.5 text-[10px] text-slate-300"><span class="text-amber-400">✔</span><span class="truncate">${hl}</span></div>`).join('')}
+            </div>
+          </div>
+          <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
+            <span class="text-slate-300">💨 ${v.windTendency}</span>
+            <span class="px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 text-[9px] text-slate-400 uppercase">${v.facilityType}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderRecentMarks() {
+      const tbody = document.getElementById('recentMarksTableBody');
+      const allMeetings = [];
+      state.athletes.forEach(ath => {
+        ath.countingMeetings.forEach(m => {
+          allMeetings.push({ ...m, athleteName: ath.name, athleteNation: ath.nation });
+        });
+      });
+
+      let filtered = allMeetings.sort((a, b) => b.mark - a.mark);
+      if (state.minMarkFilter > 0) {
+        filtered = filtered.filter(m => m.mark >= state.minMarkFilter);
+      }
+
+      tbody.innerHTML = filtered.slice(0, 15).map(m => `
+        <tr class="hover:bg-slate-850/80 transition-colors ${m.mark >= 8.3 ? 'bg-emerald-950/20' : m.mark >= 8.15 ? 'bg-amber-950/10' : ''}">
+          <td class="py-1.5 px-3 font-extrabold text-cyan-400">${m.mark.toFixed(2)}m ${m.isPB ? '<span class="px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 text-[8px] font-bold">PB</span>' : ''}</td>
+          <td class="py-1.5 px-3">${m.wind !== null ? `<span class="${m.wind > 2 ? 'text-rose-400' : 'text-slate-300'}">${m.wind > 0 ? '+'+m.wind : m.wind} m/s</span>` : '<span class="text-slate-500">NWI</span>'}</td>
+          <td class="py-1.5 px-3 font-semibold text-white font-sans">${m.athleteName}</td>
+          <td class="py-1.5 px-3"><span class="px-1.5 py-0.2 rounded bg-slate-900 border border-slate-800 text-slate-300 font-bold text-[10px]">${m.athleteNation}</span></td>
+          <td class="py-1.5 px-3 text-slate-300 font-sans">${m.meeting} ${m.isSteg ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[8px]">STEG</span>' : ''}</td>
+          <td class="py-1.5 px-3 text-slate-400 font-sans">${m.location}</td>
+          <td class="py-1.5 px-3 text-slate-400 whitespace-nowrap">${m.date}</td>
+          <td class="py-1.5 px-3 text-center text-slate-300">${m.placing}.</td>
+          <td class="py-1.5 px-3 text-right font-bold text-amber-400">${m.performanceScore}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderCharts() {
+      const logs = state.trainingLogs;
+      if (!logs || logs.length === 0) return;
+
+      const labels = logs.map(l => l.date);
+      const marks = logs.map(l => l.mark || null);
+      const squats = logs.map(l => l.squat || null);
+      const cleans = logs.map(l => l.clean || null);
+      const bws = logs.map(l => l.bw || null);
+      const whoops = logs.map(l => l.whoop || null);
+      const sleeps = logs.map(l => l.sleep || null);
+
+      // Destroy old charts
+      if (compChartInstance) compChartInstance.destroy();
+      if (strengthChartInstance) strengthChartInstance.destroy();
+      if (readinessChartInstance) readinessChartInstance.destroy();
+
+      // Chart 1: Performance Curve
+      const ctx1 = document.getElementById('compMarksChart').getContext('2d');
+      compChartInstance = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Sprungweite (m)',
+            data: marks,
+            borderColor: '#06b6d4',
+            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+            borderWidth: 2.5,
+            pointRadius: 5,
+            pointBackgroundColor: '#06b6d4',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { min: 7.7, max: 8.4, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { family: 'monospace', size: 10 } } },
+            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { family: 'monospace', size: 10 } } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      // Chart 2: Strength vs BW
+      const ctx2 = document.getElementById('strengthChart').getContext('2d');
+      strengthChartInstance = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { type: 'line', label: 'Körpergewicht (kg)', data: bws, borderColor: '#38bdf8', borderWidth: 2, yAxisID: 'yBW', pointRadius: 3 },
+            { type: 'bar', label: '1RM Squat (kg)', data: squats, backgroundColor: '#f59e0b', yAxisID: 'yStrength', borderRadius: 3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            yStrength: { position: 'left', min: 160, max: 210, grid: { color: '#1e293b' }, ticks: { color: '#f59e0b', font: { family: 'monospace', size: 10 } } },
+            yBW: { position: 'right', min: 75, max: 80, grid: { display: false }, ticks: { color: '#38bdf8', font: { family: 'monospace', size: 10 } } },
+            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { family: 'monospace', size: 9 } } }
+          },
+          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } } }
+        }
+      });
+
+      // Chart 3: Readiness vs Sleep
+      const ctx3 = document.getElementById('readinessChart').getContext('2d');
+      readinessChartInstance = new Chart(ctx3, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { type: 'line', label: 'Schlaf (h)', data: sleeps, borderColor: '#a855f7', borderWidth: 2, yAxisID: 'ySleep', pointRadius: 3 },
+            { type: 'bar', label: 'Whoop Recovery (%)', data: whoops, backgroundColor: '#10b981', yAxisID: 'yWhoop', borderRadius: 3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            yWhoop: { position: 'left', min: 50, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#10b981', font: { family: 'monospace', size: 10 } } },
+            ySleep: { position: 'right', min: 6, max: 10, grid: { display: false }, ticks: { color: '#a855f7', font: { family: 'monospace', size: 10 } } },
+            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { family: 'monospace', size: 9 } } }
+          },
+          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } } }
+        }
+      });
+    }
+
+    function renderAll() {
+      renderRankings();
+      renderVenues();
+      renderRecentMarks();
+      if (state.activeTab === 'training') {
+        renderCharts();
+      }
+    }
+
+    /* -------------------------------------------------------------
+       5. ASYNC SYNC & GOOGLE SHEETS PARSER
+    ------------------------------------------------------------- */
+    async function handleSync() {
+      const waUrl = document.getElementById('inputWaUrl').value.trim();
+      const sheetsUrl = document.getElementById('inputSheetsUrl').value.trim();
+      const spinner = document.getElementById('syncSpinner');
+
+      spinner.classList.add('animate-spin');
+      if (waUrl) localStorage.setItem('wa_url_key', waUrl);
+      if (sheetsUrl) localStorage.setItem('sheets_url_key', sheetsUrl);
+
+      // Fetch WA Rankings JSON
+      if (waUrl) {
+        try {
+          const res = await fetch(waUrl);
+          if (res.ok) {
+            const data = await res.json();
+            const list = Array.isArray(data) ? data : data.athletes || data.rankings || [];
+            if (list.length > 0) {
+              state.athletes = list;
+              document.getElementById('jsonStatusBadge').textContent = 'Live WA';
+            }
+          }
+        } catch (e) {
+          console.warn('WA JSON Fetch Error', e);
+        }
+      }
+
+      // Fetch Sheets CSV
+      if (sheetsUrl) {
+        try {
+          const res = await fetch(sheetsUrl);
+          if (res.ok) {
+            const csvText = await res.text();
+            parseAndSetTrainingLogs(csvText);
+            document.getElementById('sheetsStatusBadge').textContent = 'Live Sheets';
+          }
+        } catch (e) {
+          console.warn('Sheets CSV Fetch Error', e);
+        }
+      }
+
+      spinner.classList.remove('animate-spin');
+      document.getElementById('lastUpdatedLabel').textContent = 'Sync: ' + new Date().toLocaleTimeString('de-DE');
+      renderAll();
+    }
+
+    function handleApplyCsv() {
+      const text = document.getElementById('rawCsvTextarea').value;
+      if (text) {
+        parseAndSetTrainingLogs(text);
+        state.showCsvPaste = false;
+        document.getElementById('csvPasteContainer').classList.add('hidden');
+        renderAll();
+      }
+    }
+
+    function parseAndSetTrainingLogs(csvText) {
+      const lines = csvText.split('\n').map(l => l.trim()).filter(Boolean);
+      if (lines.length <= 1) return;
+
+      const parsed = [];
+      for (let i = 1; i < lines.length; i++) {
+        const parts = lines[i].split(',').map(p => p.trim());
+        if (parts.length >= 4) {
+          parsed.push({
+            date: parts[0] || '2025-05-01',
+            type: parts[1] || 'Wettkampf',
+            location: parts[2] || '',
+            mark: parseFloat(parts[3]) || null,
+            wind: parts[4] ? parseFloat(parts[4]) : null,
+            bw: parts[5] ? parseFloat(parts[5]) : null,
+            squat: parts[6] ? parseFloat(parts[6]) : null,
+            clean: parts[7] ? parseFloat(parts[7]) : null,
+            whoop: parts[8] ? parseFloat(parts[8]) : null,
+            sleep: parts[9] ? parseFloat(parts[9]) : null,
+            note: parts[10] || ''
+          });
+        }
+      }
+      if (parsed.length > 0) {
+        state.trainingLogs = parsed;
+      }
+    }
+  </script>
+</body>
+</html>
