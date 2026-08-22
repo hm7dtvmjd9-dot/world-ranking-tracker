@@ -84,73 +84,7 @@
       "dob": "18 MAR 1998",
       "ranking_score": "1362",
       "profile_url": "https://worldathletics.org/athletes/greece/miltiadis-tentoglou-14669734",
-      "counted_competitions": [
-        {
-          "date": "10 JUL 2026",
-          "competition": "Meeting International d’Athlétisme Herculis EBS, Stade Louis II, Monaco",
-          "venue": "",
-          "category": "GW",
-          "mark": "8.61",
-          "wind": "0.0",
-          "place": "1.",
-          "result_score": 1271,
-          "placing_score": 140,
-          "performance_score": 1411,
-          "indoor": false
-        },
-        {
-          "date": "23 MAY 2026",
-          "competition": "Wanda Diamond League Xiamen, Egret Stadium, Xiamen",
-          "venue": "",
-          "category": "GW",
-          "mark": "8.46",
-          "wind": "0.0",
-          "place": "1.",
-          "result_score": 1238,
-          "placing_score": 140,
-          "performance_score": 1378,
-          "indoor": false
-        },
-        {
-          "date": "11 AUG 2026",
-          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
-          "venue": "",
-          "category": "GL",
-          "mark": "8.44",
-          "wind": "-11.0",
-          "place": "1.",
-          "result_score": 1240,
-          "placing_score": 120,
-          "performance_score": 1360,
-          "indoor": false
-        },
-        {
-          "date": "26 JUL 2026",
-          "competition": "Greek Championships, Panthessaliko Stadium, Volos",
-          "venue": "",
-          "category": "B",
-          "mark": "8.66",
-          "wind": "+10.0",
-          "place": "1.",
-          "result_score": 1282,
-          "placing_score": 70,
-          "performance_score": 1352,
-          "indoor": false
-        },
-        {
-          "date": "04 JUN 2026",
-          "competition": "Golden Gala Pietro Mennea, Stadio Olimpico, Roma",
-          "venue": "",
-          "category": "GW",
-          "mark": "8.24",
-          "wind": "-4.0",
-          "place": "2.",
-          "result_score": 1192,
-          "placing_score": 120,
-          "performance_score": 1312,
-          "indoor": false
-        }
-      ]
+      "counted_competitions": []
     },
     {
       "rank": "3",
@@ -249,7 +183,73 @@
       "dob": "26 SEP 1998",
       "ranking_score": "1236",
       "profile_url": "https://worldathletics.org/athletes/pr-of-china/yuhao-shi-14714402",
-      "counted_competitions": []
+      "counted_competitions": [
+        {
+          "date": "17 SEP 2025",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "venue": "",
+          "category": "OW",
+          "mark": "8.33",
+          "wind": "0.0",
+          "place": "3.",
+          "result_score": 1210,
+          "placing_score": 210,
+          "performance_score": 1420,
+          "indoor": false
+        },
+        {
+          "date": "15 SEP 2025",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "venue": "",
+          "category": "OW",
+          "mark": "8.08",
+          "wind": "+2.0",
+          "place": "8.",
+          "result_score": 1155,
+          "placing_score": 70,
+          "performance_score": 1225,
+          "indoor": false
+        },
+        {
+          "date": "08 MAR 2026",
+          "competition": "National Indoor Athletics Grand Prix 1, Shanxi Athletics Administrative Center, Xi'an (i)",
+          "venue": "",
+          "category": "D",
+          "mark": "8.06",
+          "wind": null,
+          "place": "1.",
+          "result_score": 1151,
+          "placing_score": 28,
+          "performance_score": 1179,
+          "indoor": false
+        },
+        {
+          "date": "09 MAY 2026",
+          "competition": "Chinese Athletics Street Tour 1, Nanjing",
+          "venue": "",
+          "category": "F",
+          "mark": "8.14",
+          "wind": "-13.0",
+          "place": "3.",
+          "result_score": 1175,
+          "placing_score": 4,
+          "performance_score": 1179,
+          "indoor": false
+        },
+        {
+          "date": "27 FEB 2026",
+          "competition": "National Indoor Athletics Grand Prix - Jumping Events, Indoor Athletics Stadium in Training Center of GAS, Beijing (i)",
+          "venue": "",
+          "category": "D",
+          "mark": "8.05",
+          "wind": null,
+          "place": "1.",
+          "result_score": 1149,
+          "placing_score": 28,
+          "performance_score": 1177,
+          "indoor": false
+        }
+      ]
     },
     {
       "rank": "14",
@@ -357,7 +357,73 @@
       "dob": "01 DEC 2002",
       "ranking_score": "1208",
       "profile_url": "https://worldathletics.org/athletes/germany/simon-batz-14845074",
-      "counted_competitions": []
+      "counted_competitions": [
+        {
+          "date": "25 JUL 2026",
+          "competition": "German Championships, Lohrheidestadion, Wattenscheid, Bochum",
+          "venue": "",
+          "category": "B",
+          "mark": "8.29",
+          "wind": "+13.0",
+          "place": "1.",
+          "result_score": 1201,
+          "placing_score": 70,
+          "performance_score": 1271,
+          "indoor": false
+        },
+        {
+          "date": "14 JUL 2026",
+          "competition": "Gyulai István Memorial - Hungarian Athletics Grand Prix, Nemzeti Atlétikai Központ, Budapest",
+          "venue": "",
+          "category": "A",
+          "mark": "8.12",
+          "wind": "+2.0",
+          "place": "3.",
+          "result_score": 1164,
+          "placing_score": 77,
+          "performance_score": 1241,
+          "indoor": false
+        },
+        {
+          "date": "03 JUL 2026",
+          "competition": "Meeting Stanislas Nancy, Stade Raymond Petit, Tomblaine",
+          "venue": "",
+          "category": "B",
+          "mark": "8.00",
+          "wind": "+13.0",
+          "place": "3.",
+          "result_score": 1138,
+          "placing_score": 49,
+          "performance_score": 1187,
+          "indoor": false
+        },
+        {
+          "date": "28 FEB 2026",
+          "competition": "German Indoor Championships, Helmut-Körnig-Halle, Dortmund (i)",
+          "venue": "",
+          "category": "D",
+          "mark": "8.09",
+          "wind": null,
+          "place": "1.",
+          "result_score": 1157,
+          "placing_score": 28,
+          "performance_score": 1185,
+          "indoor": false
+        },
+        {
+          "date": "28 JUN 2026",
+          "competition": "Piraeus Street Long Jump, Municipal Theatre Of Piraeus, Piraeus",
+          "venue": "",
+          "category": "B",
+          "mark": "7.94",
+          "wind": "-3.0",
+          "place": "6.",
+          "result_score": 1126,
+          "placing_score": 34,
+          "performance_score": 1160,
+          "indoor": false
+        }
+      ]
     },
     {
       "rank": "26",
@@ -465,7 +531,73 @@
       "dob": "26 DEC 2001",
       "ranking_score": "1183",
       "profile_url": "https://worldathletics.org/athletes/norway/henrik-flatnes-14762156",
-      "counted_competitions": []
+      "counted_competitions": [
+        {
+          "date": "28 JUN 2026",
+          "competition": "Piraeus Street Long Jump, Municipal Theatre Of Piraeus, Piraeus",
+          "venue": "",
+          "category": "B",
+          "mark": "8.10",
+          "wind": "+9.0",
+          "place": "5.",
+          "result_score": 1160,
+          "placing_score": 38,
+          "performance_score": 1198,
+          "indoor": false
+        },
+        {
+          "date": "07 SEP 2025",
+          "competition": "World Athletics Continental Tour - Beijing, National Stadium, Beijing",
+          "venue": "",
+          "category": "A",
+          "mark": "7.88",
+          "wind": "+7.0",
+          "place": "2.",
+          "result_score": 1112,
+          "placing_score": 84,
+          "performance_score": 1196,
+          "indoor": false
+        },
+        {
+          "date": "24 JUL 2026",
+          "competition": "Norwegian Championships, Trondheim Stadion, Trondheim",
+          "venue": "",
+          "category": "B",
+          "mark": "7.91",
+          "wind": "+8.0",
+          "place": "1.",
+          "result_score": 1118,
+          "placing_score": 70,
+          "performance_score": 1188,
+          "indoor": false
+        },
+        {
+          "date": "14 JUN 2026",
+          "competition": "Folksam Grand Prix Sollentuna, Sollentunavallen, Sollentuna",
+          "venue": "",
+          "category": "C",
+          "mark": "8.03",
+          "wind": "+18.0",
+          "place": "2.",
+          "result_score": 1144,
+          "placing_score": 35,
+          "performance_score": 1179,
+          "indoor": false
+        },
+        {
+          "date": "31 MAY 2026",
+          "competition": "Nordic Senior Championships, Østerbro Stadium, Copenhagen",
+          "venue": "",
+          "category": "C",
+          "mark": "7.89",
+          "wind": "+10.0",
+          "place": "1.",
+          "result_score": 1114,
+          "placing_score": 42,
+          "performance_score": 1156,
+          "indoor": false
+        }
+      ]
     },
     {
       "rank": "38",
@@ -573,7 +705,73 @@
       "dob": "02 SEP 1994",
       "ranking_score": "1166",
       "profile_url": "https://worldathletics.org/athletes/finland/kristian-pulli-14432960",
-      "counted_competitions": []
+      "counted_competitions": [
+        {
+          "date": "11 FEB 2026",
+          "competition": "Belgrade Indoor Meeting, Atletska dvorana, Beograd (i)",
+          "venue": "",
+          "category": "A",
+          "mark": "8.08",
+          "wind": null,
+          "place": "4.",
+          "result_score": 1155,
+          "placing_score": 70,
+          "performance_score": 1225,
+          "indoor": false
+        },
+        {
+          "date": "24 JUL 2026",
+          "competition": "Finnish Championships, Harjun stadion, Jyväskylä",
+          "venue": "",
+          "category": "B",
+          "mark": "7.84",
+          "wind": "+3.0",
+          "place": "1.",
+          "result_score": 1103,
+          "placing_score": 70,
+          "performance_score": 1173,
+          "indoor": false
+        },
+        {
+          "date": "21 JAN 2026",
+          "competition": "Tampere Indoor Meeting, TESC, Tampere (i)",
+          "venue": "",
+          "category": "B",
+          "mark": "7.82",
+          "wind": null,
+          "place": "2.",
+          "result_score": 1099,
+          "placing_score": 56,
+          "performance_score": 1155,
+          "indoor": false
+        },
+        {
+          "date": "29 MAY 2026",
+          "competition": "Cyprus International Athletics Meeting, Tsirio Stadium, Limassol",
+          "venue": "",
+          "category": "C",
+          "mark": "7.90",
+          "wind": "-2.0",
+          "place": "4.",
+          "result_score": 1117,
+          "placing_score": 28,
+          "performance_score": 1145,
+          "indoor": false
+        },
+        {
+          "date": "28 FEB 2026",
+          "competition": "Finnish Indoor Championships, Kameleonten Sports Hall, Espoo (i)",
+          "venue": "",
+          "category": "D",
+          "mark": "7.86",
+          "wind": null,
+          "place": "1.",
+          "result_score": 1107,
+          "placing_score": 28,
+          "performance_score": 1135,
+          "indoor": false
+        }
+      ]
     },
     {
       "rank": "50",
@@ -681,7 +879,73 @@
       "dob": "28 MAR 2006",
       "ranking_score": "1149",
       "profile_url": "https://worldathletics.org/athletes/pr-of-china/zhuofan-xu-15096794",
-      "counted_competitions": []
+      "counted_competitions": [
+        {
+          "date": "08 MAR 2026",
+          "competition": "National Indoor Athletics Grand Prix 1, Shanxi Athletics Administrative Center, Xi'an (i)",
+          "venue": "",
+          "category": "D",
+          "mark": "8.00",
+          "wind": null,
+          "place": "2.",
+          "result_score": 1138,
+          "placing_score": 24,
+          "performance_score": 1162,
+          "indoor": false
+        },
+        {
+          "date": "15 AUG 2026",
+          "competition": "Chinese Championships, Sports Center, Quzhou",
+          "venue": "",
+          "category": "B",
+          "mark": "7.86",
+          "wind": "-3.0",
+          "place": "3.",
+          "result_score": 1108,
+          "placing_score": 49,
+          "performance_score": 1157,
+          "indoor": false
+        },
+        {
+          "date": "11 JUL 2026",
+          "competition": "Asian U23 Athletics Championships, Sport Development Center Stadium, Ordos",
+          "venue": "",
+          "category": "C",
+          "mark": "7.87",
+          "wind": "-5.0",
+          "place": "1.",
+          "result_score": 1112,
+          "placing_score": 42,
+          "performance_score": 1154,
+          "indoor": false
+        },
+        {
+          "date": "28 MAR 2026",
+          "competition": "Chinese Indoor Championships, Shandong Sports Training Center, Jinan (i)",
+          "venue": "",
+          "category": "D",
+          "mark": "7.91",
+          "wind": null,
+          "place": "1.",
+          "result_score": 1118,
+          "placing_score": 28,
+          "performance_score": 1146,
+          "indoor": false
+        },
+        {
+          "date": "09 MAY 2026",
+          "competition": "Chinese Athletics Street Tour 1, Nanjing",
+          "venue": "",
+          "category": "F",
+          "mark": "7.94",
+          "wind": "-2.0",
+          "place": "5.",
+          "result_score": 1126,
+          "placing_score": 0,
+          "performance_score": 1126,
+          "indoor": false
+        }
+      ]
     },
     {
       "rank": "62",
@@ -789,7 +1053,73 @@
       "dob": "22 JUL 2002",
       "ranking_score": "1140",
       "profile_url": "https://worldathletics.org/athletes/brazil/breno-barbosa-14862465",
-      "counted_competitions": []
+      "counted_competitions": [
+        {
+          "date": "31 JAN 2026",
+          "competition": "Brazilian Short Track Championships, CNDA, Bragança Paulista",
+          "venue": "",
+          "category": "D",
+          "mark": "8.11",
+          "wind": "+43.0",
+          "place": "1.",
+          "result_score": 1137,
+          "placing_score": 28,
+          "performance_score": 1165,
+          "indoor": false
+        },
+        {
+          "date": "24 JUL 2026",
+          "competition": "Brazilian Championships - XLV Troféu Brasil Interclubes Loterias Caixa de Atletismo, Estádio Olímpico do Ibirapuera - Ícaro de Castro Melo, São Paulo",
+          "venue": "",
+          "category": "B",
+          "mark": "7.71",
+          "wind": "+8.0",
+          "place": "1.",
+          "result_score": 1075,
+          "placing_score": 70,
+          "performance_score": 1145,
+          "indoor": false
+        },
+        {
+          "date": "17 MAY 2026",
+          "competition": "Coqui International Cup, Paseo de los Artistas, Caguas",
+          "venue": "",
+          "category": "B",
+          "mark": "7.73",
+          "wind": "-3.0",
+          "place": "2.",
+          "result_score": 1080,
+          "placing_score": 56,
+          "performance_score": 1136,
+          "indoor": false
+        },
+        {
+          "date": "12 APR 2026",
+          "competition": "Troféu São Paulo, CNDA, Bragança Paulista",
+          "venue": "",
+          "category": "F",
+          "mark": "7.93",
+          "wind": "+3.0",
+          "place": "1.",
+          "result_score": 1123,
+          "placing_score": 11,
+          "performance_score": 1134,
+          "indoor": false
+        },
+        {
+          "date": "25 APR 2026",
+          "competition": "Troféu Adhemar Ferreira da Silva Loterias Caixa de Atletismo, CNDA, Bragança Paulista",
+          "venue": "",
+          "category": "F",
+          "mark": "7.87",
+          "wind": "+20.0",
+          "place": "1.",
+          "result_score": 1109,
+          "placing_score": 11,
+          "performance_score": 1120,
+          "indoor": false
+        }
+      ]
     },
     {
       "rank": "74",
@@ -897,7 +1227,73 @@
       "dob": "17 MAR 2002",
       "ranking_score": "1131",
       "profile_url": "https://worldathletics.org/athletes/india/david-patturaj-solomon-14918515",
-      "counted_competitions": []
+      "counted_competitions": [
+        {
+          "date": "28 JUN 2026",
+          "competition": "65th Indian Championships, Kalinga Stadium, Bhubaneshwar",
+          "venue": "",
+          "category": "B",
+          "mark": "8.06",
+          "wind": "-3.0",
+          "place": "3.",
+          "result_score": 1152,
+          "placing_score": 49,
+          "performance_score": 1201,
+          "indoor": false
+        },
+        {
+          "date": "14 JUN 2026",
+          "competition": "Indian Athletics Series-10, LNCPE, Trivandrum",
+          "venue": "",
+          "category": "F",
+          "mark": "8.22",
+          "wind": "+14.0",
+          "place": "1.",
+          "result_score": 1186,
+          "placing_score": 11,
+          "performance_score": 1197,
+          "indoor": false
+        },
+        {
+          "date": "10 MAY 2026",
+          "competition": "Indian Open Athletics Series - 6, Jawaharlal Nehru Stadium, Chennai",
+          "venue": "",
+          "category": "F",
+          "mark": "7.77",
+          "wind": "+5.0",
+          "place": "2.",
+          "result_score": 1088,
+          "placing_score": 7,
+          "performance_score": 1095,
+          "indoor": false
+        },
+        {
+          "date": "24 MAR 2026",
+          "competition": "Indian Indoor Championships, Kalinga Indoor Stadium, Bhubaneshwar (i)",
+          "venue": "",
+          "category": "D",
+          "mark": "7.69",
+          "wind": null,
+          "place": "3.",
+          "result_score": 1070,
+          "placing_score": 21,
+          "performance_score": 1091,
+          "indoor": false
+        },
+        {
+          "date": "24 MAY 2026",
+          "competition": "29th National Senior Athletics Federation Competition, Birsa Munda Foot Ball Stadium, Morabadi, Ranchi",
+          "venue": "",
+          "category": "F",
+          "mark": "7.70",
+          "wind": "+1.0",
+          "place": "7.",
+          "result_score": 1073,
+          "placing_score": 0,
+          "performance_score": 1073,
+          "indoor": false
+        }
+      ]
     },
     {
       "rank": "86",
@@ -1005,7 +1401,73 @@
       "dob": "18 AUG 1994",
       "ranking_score": "1121",
       "profile_url": "https://worldathletics.org/athletes/germany/maximilian-entholzner-14454258",
-      "counted_competitions": []
+      "counted_competitions": [
+        {
+          "date": "01 JUL 2026",
+          "competition": "GP Diputacion Castellon - Memorial Jose Antonio Cansino, Pistes d'atletisme Gaetà Huguet, Castellón",
+          "venue": "",
+          "category": "D",
+          "mark": "8.04",
+          "wind": "+19.0",
+          "place": "5.",
+          "result_score": 1146,
+          "placing_score": 15,
+          "performance_score": 1161,
+          "indoor": false
+        },
+        {
+          "date": "11 JUL 2026",
+          "competition": "Meeting of Braga, Estádio 1o de Maio, Braga",
+          "venue": "",
+          "category": "C",
+          "mark": "7.87",
+          "wind": "+11.0",
+          "place": "2.",
+          "result_score": 1109,
+          "placing_score": 35,
+          "performance_score": 1144,
+          "indoor": false
+        },
+        {
+          "date": "25 JUL 2026",
+          "competition": "German Championships, Lohrheidestadion, Wattenscheid, Bochum",
+          "venue": "",
+          "category": "B",
+          "mark": "7.76",
+          "wind": "+9.0",
+          "place": "6.",
+          "result_score": 1086,
+          "placing_score": 34,
+          "performance_score": 1120,
+          "indoor": false
+        },
+        {
+          "date": "03 JUN 2026",
+          "competition": "Granada Challenger, Estadio de la Juventud de Granada, Granada",
+          "venue": "",
+          "category": "D",
+          "mark": "7.77",
+          "wind": "+14.0",
+          "place": "2.",
+          "result_score": 1088,
+          "placing_score": 24,
+          "performance_score": 1112,
+          "indoor": false
+        },
+        {
+          "date": "14 JUN 2026",
+          "competition": "Spanish Clubs Championships Division Honor Liga Joma-Final, Estadio de Larrabide, Pamplona",
+          "venue": "",
+          "category": "F",
+          "mark": "7.66",
+          "wind": "+9.0",
+          "place": "2.",
+          "result_score": 1064,
+          "placing_score": 7,
+          "performance_score": 1071,
+          "indoor": false
+        }
+      ]
     },
     {
       "rank": "98",
