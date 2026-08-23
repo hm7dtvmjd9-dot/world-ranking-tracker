@@ -361,10 +361,9 @@
       expandedRowId: null,
       minMarkFilter: 0,
       showConfig: false,
-      replacementScores: {} // Athletenspezifische Ersatz-Meeting Scores
+      replacementScores: {}
     };
 
-    // Chart Instanzen
     let chartJump = null, chartSpeed = null, chartStrength = null, chartWhoop = null, chartPlyo = null;
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -378,6 +377,8 @@
       
       if (savedWaUrl || savedSheetsUrl) {
         handleSync();
+      } else {
+        renderRankings();
       }
     });
 
@@ -479,47 +480,50 @@
       document.getElementById('cutoff36Btn').className = state.cutoffSpots === 36 ? 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-600 text-white' : 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold text-slate-400 hover:text-white';
     }
 
-    /* ================= 365-DAY DROP-OFF LOGIC ================= */
     function calculateDropOffInfo(meetings) {
-      if (!meetings || meetings.length === 0) {
-        return { earliestDate: null, dropDate: null, dropScore: 0, scoreWithoutDrop: 0 };
+      if (!meetings || !Array.isArray(meetings) || meetings.length === 0) {
+        return { earliestDateStr: '-', dropDateStr: '-', dropDateObj: null, dropScore: 0, scoreWithoutDrop: 0, oldestMeetingName: '' };
       }
 
-      // Sortiere Meetings chronologisch (ältestes zuerst)
-      const sorted = [...meetings].map(m => {
-        const d = new Date(m.date);
-        return { ...m, parsedDate: isNaN(d) ? new Date('2099-01-01') : d };
+      const parsedMeetings = meetings.map(m => {
+        let d = m.date ? new Date(m.date) : new Date('2099-01-01');
+        if (isNaN(d.getTime())) d = new Date('2099-01-01');
+        return { ...m, parsedDate: d };
       }).sort((a, b) => a.parsedDate - b.parsedDate);
 
-      const oldest = sorted[0];
-      const dropDate = new Date(oldest.parsedDate);
-      dropDate.setFullYear(dropDate.getFullYear() + 1); // 12 Monate Gültigkeit
+      const oldest = parsedMeetings[0];
+      let dropDateStr = '-';
+      let dropDateObj = null;
+
+      if (oldest.parsedDate.getFullYear() !== 2099) {
+        dropDateObj = new Date(oldest.parsedDate);
+        dropDateObj.setFullYear(dropDateObj.getFullYear() + 1);
+        dropDateStr = dropDateObj.toLocaleDateString('de-DE', { day: '2-digit', month: 'short', year: 'numeric' });
+      }
 
       const dropScore = parseInt(oldest.performance_score) || 0;
-      
-      // Berechne Durchschnitt der verbleibenden 4 Meetings
-      const remainingScores = sorted.slice(1).map(m => parseInt(m.performance_score) || 0);
-      const sumRemaining = remainingScores.reduce((a, b) => a + b, 0);
-      const scoreWithoutDrop = remainingScores.length > 0 ? Math.round(sumRemaining / remainingScores.length) : 0;
+      const remaining = parsedMeetings.slice(1).map(m => parseInt(m.performance_score) || 0);
+      const scoreWithoutDrop = remaining.length > 0 ? Math.round(remaining.reduce((a, b) => a + b, 0) / remaining.length) : 0;
 
       return {
-        earliestDateStr: oldest.date,
-        dropDateStr: dropDate.toLocaleDateString('de-DE', { day: '2-digit', month: 'short', year: 'numeric' }),
-        dropDateObj: dropDate,
+        earliestDateStr: oldest.date || '-',
+        dropDateStr: dropDateStr,
+        dropDateObj: dropDateObj,
         dropScore: dropScore,
         scoreWithoutDrop: scoreWithoutDrop,
-        oldestMeetingName: oldest.competition
+        oldestMeetingName: oldest.competition || ''
       };
     }
 
     function getProcessedRankings() {
+      if (!state.athletes || state.athletes.length === 0) return [];
+
       let list = state.athletes.map((ath, idx) => {
         const dropInfo = calculateDropOffInfo(ath.countingMeetings);
         const replacement = state.replacementScores[ath.id] || null;
         
         let simulatedScore = ath.totalScore;
-        if (replacement !== null && ath.countingMeetings.length >= 5) {
-          // Ersetze ältestes Meeting durch das simulierte 6. Meeting
+        if (replacement !== null && ath.countingMeetings && ath.countingMeetings.length >= 5) {
           const sorted = [...ath.countingMeetings].map(m => ({ ...m, p: parseInt(m.performance_score)||0 })).sort((a,b) => new Date(a.date) - new Date(b.date));
           const rem = sorted.slice(1).map(m => m.p);
           rem.push(parseInt(replacement));
@@ -533,19 +537,21 @@
         };
       });
 
-      // Sortierung je nach Modus
       if (state.rankingMode === 'dropOff') {
-        list.sort((a, b) => (a.dropInfo.dropDateObj || 0) - (b.dropInfo.dropDateObj || 0));
+        list.sort((a, b) => {
+          if (!a.dropInfo.dropDateObj) return 1;
+          if (!b.dropInfo.dropDateObj) return -1;
+          return a.dropInfo.dropDateObj - b.dropInfo.dropDateObj;
+        });
       } else {
         list.sort((a, b) => b.simulatedScore - a.simulatedScore);
       }
 
-      // Quota Berechnung
       const nationCounts = {};
       let quotaIndex = 1;
 
       list = list.map((ath, idx) => {
-        const nat = ath.nation;
+        const nat = ath.nation || 'UNK';
         nationCounts[nat] = (nationCounts[nat] || 0) + 1;
         const slot = nationCounts[nat];
 
@@ -567,7 +573,7 @@
       }
 
       if (state.searchQuery) {
-        list = list.filter(a => a.name.toLowerCase().includes(state.searchQuery) || a.nation.toLowerCase().includes(state.searchQuery));
+        list = list.filter(a => (a.name && a.name.toLowerCase().includes(state.searchQuery)) || (a.nation && a.nation.toLowerCase().includes(state.searchQuery)));
       }
 
       return list;
@@ -578,7 +584,7 @@
 
       if (state.athletes.length > 0) {
         const top1 = state.athletes[0];
-        document.getElementById('kpiLeaderName').textContent = top1.name.toUpperCase();
+        document.getElementById('kpiLeaderName').textContent = (top1.name || '-').toUpperCase();
         document.getElementById('kpiLeaderScore').textContent = top1.totalScore + ' PTS';
         document.getElementById('kpiLeaderSub').textContent = `${top1.nation} • SB ${top1.sb ? top1.sb.toFixed(2) : '-'}m`;
 
@@ -593,7 +599,6 @@
           document.getElementById('kpiGerScore').textContent = `${gerLeader.totalScore} Pkt (SB ${gerLeader.sb ? gerLeader.sb.toFixed(2) : '-'}m)`;
         }
 
-        // Finde das am nächsten liegende Verfallsdatum
         const sortedByDate = [...state.athletes].map(a => a.dropInfo).filter(d => d.dropDateObj).sort((a,b) => a.dropDateObj - b.dropDateObj);
         if (sortedByDate.length > 0) {
           document.getElementById('kpiNextDropSummary').textContent = sortedByDate[0].dropDateStr;
@@ -604,7 +609,7 @@
       tbody.innerHTML = '';
 
       if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" class="py-6 text-center text-slate-500 text-xs">Keine Daten verfügbar.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" class="py-8 text-center text-slate-500 text-xs font-mono">Keine Athleten geladen. Klicke oben auf "⚙️ Feed URLs", trage die Raw GitHub JSON URL ein und klicke "Sync All Data".</td></tr>';
         return;
       }
 
@@ -648,18 +653,17 @@
           tbody.appendChild(cutTr);
         }
 
-        // Aufklappbares Akkordeon
         if (isExpanded && ath.countingMeetings && ath.countingMeetings.length > 0) {
           const accTr = document.createElement('tr');
           accTr.className = 'bg-slate-950 border-b border-slate-800';
 
           const currentRepl = state.replacementScores[ath.id] || '';
           
-          let meetingsHtml = ath.countingMeetings.map((m, mIdx) => {
+          let meetingsHtml = ath.countingMeetings.map((m) => {
             const isOldest = m.date === dInfo.earliestDateStr;
             return `
               <tr class="hover:bg-slate-800/40 ${isOldest ? 'bg-rose-950/20 border-l-2 border-rose-500' : ''}">
-                <td class="py-1 px-2 whitespace-nowrap ${isOldest ? 'text-rose-400 font-bold' : 'text-slate-400'}">${m.date} ${isOldest ? '(Fliegt raus)' : ''}</td>
+                <td class="py-1 px-2 whitespace-nowrap ${isOldest ? 'text-rose-400 font-bold' : 'text-slate-400'}">${m.date || '-'} ${isOldest ? '(Fliegt raus)' : ''}</td>
                 <td class="py-1 px-2 font-sans font-medium text-slate-200">${m.competition || '-'}</td>
                 <td class="py-1 px-2 text-center"><span class="px-1 py-0.2 rounded border text-[8px] font-bold bg-slate-800 border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
                 <td class="py-1 px-2 text-right font-bold text-cyan-400">${m.mark}m</td>
@@ -675,25 +679,21 @@
           accTr.innerHTML = `
             <td colspan="10" class="p-3">
               <div class="bg-slate-900 rounded border border-slate-800 p-3 shadow-sm space-y-3">
-                
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
                   <div>
                     <h4 class="font-bold text-white text-xs uppercase font-sans">
                       🏆 5 gewertete Meetings: ${ath.name}
                     </h4>
                     <p class="text-[10px] text-rose-400 font-mono">
-                      ⏳ Nächster Punkteverfall am <strong>${dInfo.dropDateStr}</strong>: -${dInfo.dropScore} Pkt (${dInfo.oldestMeetingName})
+                      ⏳ Nächster Verfall: <strong>${dInfo.dropDateStr}</strong> (-${dInfo.dropScore} Pkt)
                     </p>
                   </div>
-
-                  <!-- 6th Meeting Replacement Simulator -->
                   <div class="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1 rounded border border-slate-800 font-mono text-[10px]">
                     <span class="text-slate-400 uppercase font-bold text-[9px]">Simuliere 6. Meeting:</span>
-                    <input type="number" placeholder="z.B. 1240" value="${currentRepl}" onchange="updateReplacementScore('${ath.id}', this.value)" class="w-16 bg-slate-900 border border-slate-700 px-1.5 py-0.5 text-center text-white rounded focus:outline-none focus:border-cyan-500 font-mono text-[10px]" />
+                    <input type="number" id="replInput-${idx}" placeholder="z.B. 1240" value="${currentRepl}" class="w-16 bg-slate-900 border border-slate-700 px-1.5 py-0.5 text-center text-white rounded focus:outline-none focus:border-cyan-500 font-mono text-[10px]" />
                     <span class="text-slate-500">Pkt</span>
                   </div>
                 </div>
-
                 <div class="overflow-x-auto">
                   <table class="w-full text-left border-collapse text-[10px] font-mono">
                     <thead>
@@ -714,22 +714,27 @@
                     </tbody>
                   </table>
                 </div>
-
               </div>
             </td>
           `;
           tbody.appendChild(accTr);
+
+          setTimeout(() => {
+            const inp = document.getElementById(`replInput-${idx}`);
+            if (inp) {
+              inp.onchange = (e) => {
+                const val = e.target.value;
+                if (!val || isNaN(val)) {
+                  delete state.replacementScores[ath.id];
+                } else {
+                  state.replacementScores[ath.id] = parseInt(val);
+                }
+                renderRankings();
+              };
+            }
+          }, 0);
         }
       });
-    }
-
-    function updateReplacementScore(athleteId, value) {
-      if (!value || isNaN(value)) {
-        delete state.replacementScores[athleteId];
-      } else {
-        state.replacementScores[athleteId] = parseInt(value);
-      }
-      renderRankings();
     }
 
     function renderRecentMarks() {
@@ -769,12 +774,10 @@
       `).join('');
     }
 
-    /* ================= GOOGLE SHEETS CSV PARSER & CHARTS ================= */
     function parseAndSetTrainingLogs(csvText) {
       const lines = csvText.split('\n').map(l => l.trim()).filter(Boolean);
       if (lines.length <= 1) return;
 
-      // Header Zeile einlesen für dynamisches Spalten-Mapping
       const header = lines[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
       
       const getIndex = (keys) => {
@@ -785,7 +788,7 @@
         return -1;
       };
 
-      const colDate = getIndex(['name', 'datum', 'tag']); // In deinem Sheet steht oft das Datum in Spalte 'Name' oder 'Datum'
+      const colDate = getIndex(['name', 'datum', 'tag']);
       const colMark = getIndex(['weitsprung wk', 'sprungweite']);
       const colEffMark = getIndex(['weite effektiv']);
       const colWind = getIndex(['wind']);
@@ -843,11 +846,9 @@
 
       document.getElementById('kpiTrainCount').textContent = logs.length + ' Logs';
 
-      // KPI Aggregation
       const validMarks = logs.map(l => l.mark).filter(m => m !== null);
       if (validMarks.length > 0) {
-        const maxM = Math.max(...validMarks);
-        document.getElementById('kpiTrainMaxMark').textContent = maxM.toFixed(2) + ' m';
+        document.getElementById('kpiTrainMaxMark').textContent = Math.max(...validMarks).toFixed(2) + ' m';
       }
 
       const validVmax = logs.map(l => l.vmax).filter(v => v !== null);
@@ -860,11 +861,9 @@
         document.getElementById('kpiTrainStrength').textContent = Math.max(...validTrap).toFixed(0) + ' kg';
       }
 
-      // Daten filtern (z.B. letzte 60 Einträge für übersichtliche Diagramme)
       const chartData = logs.slice(-60);
       const labels = chartData.map(l => l.date);
 
-      // Chart 1: Weitsprung WK & Weite Effektiv
       if (chartJump) chartJump.destroy();
       const ctxJump = document.getElementById('jumpPerformanceChart').getContext('2d');
       chartJump = new Chart(ctxJump, {
@@ -883,7 +882,6 @@
         }
       });
 
-      // Chart 2: Vmax Sprint & 30m Flying
       if (chartSpeed) chartSpeed.destroy();
       const ctxSpeed = document.getElementById('speedChart').getContext('2d');
       chartSpeed = new Chart(ctxSpeed, {
@@ -906,7 +904,6 @@
         }
       });
 
-      // Chart 3: Kraftwerte (e1RM)
       if (chartStrength) chartStrength.destroy();
       const ctxStrength = document.getElementById('strengthProgressionChart').getContext('2d');
       chartStrength = new Chart(ctxStrength, {
@@ -926,7 +923,6 @@
         }
       });
 
-      // Chart 4: Whoop Recovery & Strain
       if (chartWhoop) chartWhoop.destroy();
       const ctxWhoop = document.getElementById('whoopReadinessChart').getContext('2d');
       chartWhoop = new Chart(ctxWhoop, {
@@ -945,7 +941,6 @@
         }
       });
 
-      // Chart 5: CMJ & Achilles Stiffness
       if (chartPlyo) chartPlyo.destroy();
       const ctxPlyo = document.getElementById('plyoChart').getContext('2d');
       chartPlyo = new Chart(ctxPlyo, {
@@ -969,7 +964,6 @@
       });
     }
 
-    /* ================= ASYNC DATA SYNC ================= */
     async function handleSync() {
       const waUrl = document.getElementById('inputWaUrl').value.trim();
       const sheetsUrl = document.getElementById('inputSheetsUrl').value.trim();
@@ -979,7 +973,6 @@
       if (waUrl) localStorage.setItem('wa_url_key', waUrl);
       if (sheetsUrl) localStorage.setItem('sheets_url_key', sheetsUrl);
 
-      // 1. WA Rankings Import
       if (waUrl) {
         try {
           const fetchUrl = waUrl.includes('raw.githubusercontent.com') ? waUrl + '?t=' + Date.now() : waUrl;
@@ -997,9 +990,9 @@
               });
 
               return {
-                id: ath.athlete_id || ath.profile_url || 'ath-' + idx,
+                id: ath.profile_url || ath.athlete_id || 'ath-' + idx,
                 originalRank: parseInt(ath.rank) || (idx + 1),
-                name: ath.name,
+                name: ath.name || '',
                 nation: ath.country || '',
                 dob: ath.dob || '',
                 sb: sb > 0 ? sb : null,
@@ -1023,7 +1016,6 @@
         }
       }
 
-      // 2. Google Sheets CSV Import
       if (sheetsUrl) {
         try {
           const fetchUrl = sheetsUrl + (sheetsUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
