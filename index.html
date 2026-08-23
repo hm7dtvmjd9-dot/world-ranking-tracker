@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Athletics Performance & World Ranking Dashboard</title>
+  <title>Athletics Intelligence & Performance Hub</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -13,8 +13,8 @@
         extend: {
           colors: {
             slate: {
-              750: '#293548',
-              850: '#172033',
+              750: '#243044',
+              850: '#151e2e',
               950: '#020617',
             }
           }
@@ -36,46 +36,48 @@
 </head>
 <body class="bg-slate-950 text-slate-200 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
 
-  <!-- TOP NAVIGATION / HEADER -->
-  <header class="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
+  <!-- ================= HEADER ================= -->
+  <header class="bg-slate-900/95 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
       <div class="py-2.5 flex flex-col md:flex-row md:items-center md:justify-between gap-2.5">
+        
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 bg-cyan-600 rounded flex items-center justify-center font-black text-white text-xs shadow-sm shadow-cyan-600/30">
-            A
+          <div class="w-8 h-8 bg-cyan-600 rounded flex items-center justify-center font-black text-white text-xs shadow-md shadow-cyan-600/30">
+            LJ
           </div>
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
-                ATHLETICS<span class="text-cyan-400">CORE</span>
-                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v2.5 PRO</span>
+                ATHLETICS<span class="text-cyan-400">INTELLIGENCE</span>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v3.0 PRO</span>
               </h1>
               <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                MEN'S LONG JUMP
+                LIVE SIMULATOR
               </div>
             </div>
             <p class="text-[10px] text-slate-400 font-medium hidden sm:block">
-              World Athletics Score Engine • Meeting Radar • Google Sheets Readiness
+              World Rankings • 365-Day Expiration Forecaster • Diagnostics & Training Log Engine
             </p>
           </div>
         </div>
 
+        <!-- Sync Controls -->
         <div class="flex items-center flex-wrap gap-1.5">
           <div class="flex items-center gap-1.5 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px]">
-            <span class="text-slate-500 font-bold uppercase text-[9px]">Feed:</span>
-            <span id="jsonStatusBadge" class="font-mono font-medium text-cyan-400">Sample WA</span>
+            <span class="text-slate-500 font-bold uppercase text-[9px]">Status:</span>
+            <span id="jsonStatusBadge" class="font-mono font-medium text-slate-400">WA: Ready</span>
             <span class="text-slate-700">|</span>
-            <span id="sheetsStatusBadge" class="font-mono font-medium text-amber-400">Sample Training</span>
+            <span id="sheetsStatusBadge" class="font-mono font-medium text-slate-400">Sheets: Ready</span>
           </div>
 
           <button id="toggleConfigBtn" class="px-2.5 py-1 text-[10px] rounded font-bold uppercase tracking-wider border transition-all flex items-center gap-1 bg-slate-950 text-slate-400 border-slate-800 hover:bg-slate-800 hover:text-slate-200">
-            ⚙️ Config
+            ⚙️ Feed URLs
           </button>
 
           <button id="syncDataBtn" class="bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold px-3 py-1 rounded uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm active:scale-95">
             <span id="syncSpinner" class="inline-block">🔄</span>
-            Sync Data
+            Sync All Data
           </button>
         </div>
       </div>
@@ -83,53 +85,45 @@
       <!-- Config Drawer -->
       <div id="configDrawer" class="hidden pb-3 pt-2 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-2.5">
         <div class="space-y-1">
-          <div class="flex items-between justify-between text-[10px]">
-            <span class="text-slate-400 font-bold uppercase">🌐 WA Rankings JSON URL (Raw GitHub)</span>
-          </div>
+          <span class="text-[10px] text-slate-400 font-bold uppercase">🌐 Raw GitHub JSON URL (`ranking_latest.json`)</span>
           <input id="inputWaUrl" type="url" placeholder="https://raw.githubusercontent.com/.../data/ranking_latest.json" class="w-full bg-slate-950 border border-slate-700 text-[10px] px-2.5 py-1 rounded text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
         </div>
         <div class="space-y-1">
-          <div class="flex items-between justify-between text-[10px]">
-            <span class="text-slate-400 font-bold uppercase">📊 Google Sheets CSV Feed URL</span>
-          </div>
+          <span class="text-[10px] text-slate-400 font-bold uppercase">📊 Google Sheets CSV Feed URL</span>
           <input id="inputSheetsUrl" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" class="w-full bg-slate-950 border border-slate-700 text-[10px] px-2.5 py-1 rounded text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono" />
-        </div>
-        <div class="md:col-span-2 flex items-center justify-between pt-1 text-[10px] text-slate-400 border-t border-slate-800/60">
-          <span id="lastUpdatedLabel" class="text-[9px] text-slate-500 font-mono">Sync: Live</span>
         </div>
       </div>
 
-      <!-- Tab Buttons -->
+      <!-- Navigation Tabs -->
       <div class="flex space-x-1 border-t border-slate-800 pt-1.5 pb-1 overflow-x-auto no-scrollbar">
         <button id="tabBtnRankings" class="tab-btn active flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap bg-slate-800 text-cyan-400 border-b-2 border-cyan-500">
-          🌍 World Rankings & Quota
+          🌍 World Rankings & Expiration Forecaster
         </button>
         <button id="tabBtnScouting" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40">
-          📡 Meeting & Venue Radar
+          📡 Venue & Wind Radar
         </button>
         <button id="tabBtnTraining" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40">
-          ⚡ Training Readiness & Sheets
+          ⚡ Training, Biometrics & Speed Log
         </button>
       </div>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
+  <!-- ================= MAIN CONTAINER ================= -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-2.5 sm:px-4 py-3">
 
-    <!-- TAB 1: WORLD RANKINGS & QUOTA -->
+    <!-- ================= TAB 1: WORLD RANKINGS & EXPIRATION FORECASTER ================= -->
     <div id="tabContentRankings" class="space-y-3">
+      
+      <!-- Top Metrics -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
         <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
           <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>World #1 Leader</span>
-            <span id="kpiLeaderScore" class="text-amber-400 text-[9px] font-mono">-</span>
+            <span>World Leader</span>
+            <span id="kpiLeaderScore" class="text-amber-400 text-[9px] font-mono">- PTS</span>
           </div>
           <div id="kpiLeaderName" class="text-base font-black text-white truncate">-</div>
           <div id="kpiLeaderSub" class="text-[10px] text-emerald-400 font-mono">-</div>
-          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
-            <div class="h-full bg-cyan-500 w-full"></div>
-          </div>
         </div>
 
         <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
@@ -138,43 +132,32 @@
             <span id="cutoffBadgeText" class="text-cyan-400 text-[9px] font-mono">TOP 32</span>
           </div>
           <div id="kpiCutoffScore" class="text-base font-black text-amber-400 font-mono">- PKT</div>
-          <div class="text-[10px] text-slate-400 font-mono truncate">Target Score for Direct Entry</div>
-          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
-            <div class="h-full bg-amber-500 w-[84%]"></div>
-          </div>
+          <div class="text-[10px] text-slate-400 font-mono truncate">Direct Entry Threshold</div>
         </div>
 
         <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
           <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
             <span>DLV Focus (GER)</span>
-            <span id="kpiGerStatus" class="text-emerald-400 text-[9px] font-mono">TRACKED</span>
+            <span class="text-emerald-400 text-[9px] font-mono">TRACKED</span>
           </div>
-          <div class="text-base font-black text-white truncate flex items-center gap-1.5">
-            <span id="kpiGerName">L. HERDEN</span>
-            <span id="kpiGerRank" class="text-xs text-cyan-400 font-mono font-bold">#--</span>
-          </div>
+          <div id="kpiGerName" class="text-base font-black text-white truncate">-</div>
           <div id="kpiGerScore" class="text-[10px] text-slate-400 font-mono">- Pkt</div>
-          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
-            <div class="h-full bg-emerald-500 w-[91%]"></div>
-          </div>
         </div>
 
         <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
           <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>Active Athletes</span>
-            <span class="text-slate-500 text-[9px] font-mono">M/LJ</span>
+            <span>Next Drop-Off Window</span>
+            <span class="text-rose-400 text-[9px] font-mono font-bold">12M RULE</span>
           </div>
-          <div class="text-base font-black text-white font-mono" id="activeAthletesCount">0</div>
-          <div class="text-[10px] text-cyan-400 font-mono" id="filterStatusLabel">Global Top Roster</div>
-          <div class="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
-            <div class="h-full bg-cyan-600 w-[75%]"></div>
-          </div>
+          <div id="kpiNextDropSummary" class="text-base font-black text-rose-400 font-mono">-</div>
+          <div class="text-[10px] text-slate-400 font-mono">Earliest points expiration</div>
         </div>
       </div>
 
       <!-- Controls & Filter Bar -->
       <div class="bg-slate-900 border border-slate-800 rounded p-2.5 shadow-sm space-y-2">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
+          
           <div class="flex flex-wrap items-center gap-1 p-0.5 bg-slate-950 rounded border border-slate-800">
             <button id="modeStandardBtn" class="mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-cyan-400 border border-slate-700">
               1. Gesamtranking
@@ -182,8 +165,8 @@
             <button id="modeRoadToMajorsBtn" class="mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200">
               🏆 2. Road to Major (Max 3/Nat)
             </button>
-            <button id="modeEuropeanToplistBtn" class="mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200">
-              ⭐ 3. European Toplist (SB)
+            <button id="modeDropOffBtn" class="mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200">
+              ⏳ 3. Drop-Off & Verfalls-Radar
             </button>
           </div>
 
@@ -196,7 +179,7 @@
 
         <div class="pt-2 border-t border-slate-800/80 grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
           <div class="md:col-span-6 relative">
-            <input id="athleteSearchInput" type="text" placeholder="Search athlete (Tentoglou, Herden, Furlani, Batz)..." class="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-[11px] text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
+            <input id="athleteSearchInput" type="text" placeholder="Suche Athlet (z. B. Tentoglou, Furlani, Ehammer, Herden, Batz)..." class="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-[11px] text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
           </div>
           <div class="md:col-span-6 flex flex-wrap items-center gap-1 font-mono">
             <span class="text-[10px] text-slate-400 font-bold uppercase mr-0.5">Nat:</span>
@@ -211,7 +194,7 @@
         </div>
       </div>
 
-      <!-- Main Ranking Table -->
+      <!-- Ranking Table -->
       <div class="bg-slate-900 border border-slate-800 rounded overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-[11px]">
@@ -220,11 +203,12 @@
                 <th class="py-2 px-3 w-12 text-center">Rank</th>
                 <th id="quotaHeaderCol" class="hidden py-2 px-3 w-20 text-center text-cyan-400">Quota</th>
                 <th class="py-2 px-3">Athlete</th>
-                <th class="py-2 px-3">Nation</th>
+                <th class="py-2 px-3">Nat</th>
                 <th class="py-2 px-3">DOB</th>
                 <th class="py-2 px-3 text-right">SB</th>
                 <th class="py-2 px-3 text-right font-bold text-white">Score</th>
-                <th class="py-2 px-3 text-center">Status</th>
+                <th class="py-2 px-3 text-center text-rose-400">Nächstes Verfallsdatum (12M)</th>
+                <th class="py-2 px-3 text-right text-rose-300">Score ohne Drop</th>
                 <th class="py-2 px-3 w-10 text-center">Details</th>
               </tr>
             </thead>
@@ -234,23 +218,23 @@
       </div>
     </div>
 
-    <!-- TAB 2: MEETING & VENUE RADAR -->
-    <div id="tabContentScouting" class="hidden space-y-4">
+    <!-- ================= TAB 2: VENUE & WIND RADAR ================= -->
+    <div id="tabContentScouting" class="hidden space-y-3">
       <div class="bg-slate-900 border border-slate-800 rounded p-2.5 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <div>
           <h2 class="text-sm font-bold text-white uppercase tracking-wider font-mono">
-            📡 Meeting & Track Scouting Radar
+            📡 Meeting & Fast-Track Scouting Radar
           </h2>
           <p class="text-[10px] text-slate-400 font-mono mt-0.5">
-            Automatische Erkennung schneller Anlagen, Stege & Rückenwind-Meetings der Top 100 Konkurrenz
+            Automatische Identifikation schneller Holzstege, Höhenlagen und Rückenwind-Meetings aus allen Top 100 Ergebnissen
           </p>
         </div>
         <div class="flex flex-wrap items-center gap-1 font-mono">
           <span class="text-[10px] text-slate-400 uppercase font-bold mr-0.5">Min Weite:</span>
           <button data-minmark="0" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-white">ALL</button>
           <button data-minmark="8.0" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-cyan-400 border border-cyan-800/50 bg-slate-950">&gt; 8.00m</button>
-          <button data-minmark="8.15" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-amber-400 border border-amber-800/50 bg-slate-950">&gt; 8.15m</button>
-          <button data-minmark="8.3" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-emerald-400 border border-emerald-800/50 bg-slate-950">&gt; 8.30m</button>
+          <button data-minmark="8.2" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-amber-400 border border-amber-800/50 bg-slate-950">&gt; 8.20m</button>
+          <button data-minmark="8.4" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-emerald-400 border border-emerald-800/50 bg-slate-950">&gt; 8.40m</button>
         </div>
       </div>
 
@@ -261,9 +245,9 @@
               <th class="py-1.5 px-3">Mark</th>
               <th class="py-1.5 px-3">Wind</th>
               <th class="py-1.5 px-3">Athlete</th>
-              <th class="py-1.5 px-3">Nation</th>
+              <th class="py-1.5 px-3">Nat</th>
               <th class="py-1.5 px-3">Meeting</th>
-              <th class="py-1.5 px-3">Venue</th>
+              <th class="py-1.5 px-3">Category</th>
               <th class="py-1.5 px-3">Date</th>
               <th class="py-1.5 px-3 text-center">Place</th>
               <th class="py-1.5 px-3 text-right font-bold text-white">Score</th>
@@ -274,43 +258,97 @@
       </div>
     </div>
 
-    <!-- TAB 3: ATHLETIC TRAINING & READINESS -->
+    <!-- ================= TAB 3: TRAINING, BIOMETRICS & SPEED LOG ================= -->
     <div id="tabContentTraining" class="hidden space-y-3">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
-        <!-- Chart 1 -->
-        <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2 lg:col-span-3">
-          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
-            📈 Wettkampf- & Formkurve (Sprungweiten & Wind)
-          </h3>
-          <div class="h-64 w-full pt-1">
-            <canvas id="compMarksChart"></canvas>
-          </div>
+      
+      <!-- Training Metric Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded font-mono">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">Max Weitsprung WK</div>
+          <div id="kpiTrainMaxMark" class="text-base font-black text-cyan-400">- m</div>
+          <div id="kpiTrainMaxSub" class="text-[10px] text-slate-500 truncate">-</div>
         </div>
 
-        <!-- Chart 2 -->
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded font-mono">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">Top Speed (Sprint)</div>
+          <div id="kpiTrainVmax" class="text-base font-black text-amber-400">- m/s</div>
+          <div id="kpiTrainFly" class="text-[10px] text-slate-500 truncate">30m Fliegend: - s</div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded font-mono">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">Kraft-Peak (e1RM)</div>
+          <div id="kpiTrainStrength" class="text-base font-black text-emerald-400">- kg</div>
+          <div class="text-[10px] text-slate-500 truncate">Trapbar / Umsetzen</div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded font-mono">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">Einträge Geladen</div>
+          <div id="kpiTrainCount" class="text-base font-black text-white">0 Logs</div>
+          <div class="text-[10px] text-cyan-400 truncate">Google Sheets Live Connected</div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        
+        <!-- Chart 1: Long Jump & Effective Distance -->
         <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2 lg:col-span-2">
-          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
-            🏋️ Kraftwerte vs. Körpergewicht
-          </h3>
-          <div class="h-56 w-full pt-1">
-            <canvas id="strengthChart"></canvas>
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+              📈 Weitsprung Wettkampf & Effektive Weite (m)
+            </h3>
+            <span class="text-[10px] font-mono text-cyan-400">Verlauf über die Jahre</span>
+          </div>
+          <div class="h-64 w-full pt-1">
+            <canvas id="jumpPerformanceChart"></canvas>
           </div>
         </div>
 
-        <!-- Chart 3 -->
+        <!-- Chart 2: Sprint Velocity & 30m Flying -->
         <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2">
           <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
-            💤 Whoop Recovery & Schlaf
+            🏃 Vmax Sprint & 30m Fliegend
           </h3>
           <div class="h-56 w-full pt-1">
-            <canvas id="readinessChart"></canvas>
+            <canvas id="speedChart"></canvas>
           </div>
         </div>
+
+        <!-- Chart 3: Kraftwerte (e1RM) -->
+        <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2">
+          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            🏋️ e1RM Kraftprogression (Trapbar, Umsetzen, Hip-Thrust)
+          </h3>
+          <div class="h-56 w-full pt-1">
+            <canvas id="strengthProgressionChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 4: Whoop Readiness & Strain -->
+        <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2">
+          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            💤 Whoop Recovery %, Sleep & Strain
+          </h3>
+          <div class="h-56 w-full pt-1">
+            <canvas id="whoopReadinessChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 5: Reactive Strength & Achilles Stiffness -->
+        <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2">
+          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            ⚡ CMJ & Reaktivkraft / Achilles Stiffness
+          </h3>
+          <div class="h-56 w-full pt-1">
+            <canvas id="plyoChart"></canvas>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
 
-  <!-- LOGIC & DATA ENGINE -->
+  <!-- ================= JAVASCRIPT ENGINE ================= -->
   <script>
     let state = {
       activeTab: 'rankings',
@@ -322,12 +360,12 @@
       searchQuery: '',
       expandedRowId: null,
       minMarkFilter: 0,
-      showConfig: false
+      showConfig: false,
+      replacementScores: {} // Athletenspezifische Ersatz-Meeting Scores
     };
 
-    let compChartInstance = null;
-    let strengthChartInstance = null;
-    let readinessChartInstance = null;
+    // Chart Instanzen
+    let chartJump = null, chartSpeed = null, chartStrength = null, chartWhoop = null, chartPlyo = null;
 
     document.addEventListener('DOMContentLoaded', () => {
       const savedWaUrl = localStorage.getItem('wa_url_key') || '';
@@ -338,7 +376,6 @@
       setupNavigation();
       setupFilters();
       
-      // Auto-Sync falls URLs gespeichert sind
       if (savedWaUrl || savedSheetsUrl) {
         handleSync();
       }
@@ -374,14 +411,14 @@
       activeBtn.className = 'tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap bg-slate-800 text-cyan-400 border-b-2 border-cyan-500';
 
       if (tab === 'training') {
-        setTimeout(renderCharts, 50);
+        setTimeout(renderTrainingCharts, 50);
       }
     }
 
     function setupFilters() {
       document.getElementById('modeStandardBtn').onclick = () => setRankingMode('standard');
       document.getElementById('modeRoadToMajorsBtn').onclick = () => setRankingMode('roadToMajors');
-      document.getElementById('modeEuropeanToplistBtn').onclick = () => setRankingMode('europeanToplist');
+      document.getElementById('modeDropOffBtn').onclick = () => setRankingMode('dropOff');
 
       document.getElementById('cutoff32Btn').onclick = () => { state.cutoffSpots = 32; updateCutoffButtons(); renderRankings(); };
       document.getElementById('cutoff36Btn').onclick = () => { state.cutoffSpots = 36; updateCutoffButtons(); renderRankings(); };
@@ -428,8 +465,8 @@
         document.getElementById('modeRoadToMajorsBtn').className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-cyan-600 text-white font-black shadow-sm';
         document.getElementById('cutoffToggleContainer').classList.remove('hidden');
         document.getElementById('quotaHeaderCol').classList.remove('hidden');
-      } else {
-        document.getElementById('modeEuropeanToplistBtn').className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500 text-slate-950 font-black shadow-sm';
+      } else if (mode === 'dropOff') {
+        document.getElementById('modeDropOffBtn').className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-rose-600 text-white font-black shadow-sm';
         document.getElementById('cutoffToggleContainer').classList.add('hidden');
         document.getElementById('quotaHeaderCol').classList.add('hidden');
       }
@@ -442,9 +479,68 @@
       document.getElementById('cutoff36Btn').className = state.cutoffSpots === 36 ? 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-600 text-white' : 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold text-slate-400 hover:text-white';
     }
 
-    function getProcessedRankings() {
-      let list = [...state.athletes];
+    /* ================= 365-DAY DROP-OFF LOGIC ================= */
+    function calculateDropOffInfo(meetings) {
+      if (!meetings || meetings.length === 0) {
+        return { earliestDate: null, dropDate: null, dropScore: 0, scoreWithoutDrop: 0 };
+      }
 
+      // Sortiere Meetings chronologisch (ältestes zuerst)
+      const sorted = [...meetings].map(m => {
+        const d = new Date(m.date);
+        return { ...m, parsedDate: isNaN(d) ? new Date('2099-01-01') : d };
+      }).sort((a, b) => a.parsedDate - b.parsedDate);
+
+      const oldest = sorted[0];
+      const dropDate = new Date(oldest.parsedDate);
+      dropDate.setFullYear(dropDate.getFullYear() + 1); // 12 Monate Gültigkeit
+
+      const dropScore = parseInt(oldest.performance_score) || 0;
+      
+      // Berechne Durchschnitt der verbleibenden 4 Meetings
+      const remainingScores = sorted.slice(1).map(m => parseInt(m.performance_score) || 0);
+      const sumRemaining = remainingScores.reduce((a, b) => a + b, 0);
+      const scoreWithoutDrop = remainingScores.length > 0 ? Math.round(sumRemaining / remainingScores.length) : 0;
+
+      return {
+        earliestDateStr: oldest.date,
+        dropDateStr: dropDate.toLocaleDateString('de-DE', { day: '2-digit', month: 'short', year: 'numeric' }),
+        dropDateObj: dropDate,
+        dropScore: dropScore,
+        scoreWithoutDrop: scoreWithoutDrop,
+        oldestMeetingName: oldest.competition
+      };
+    }
+
+    function getProcessedRankings() {
+      let list = state.athletes.map((ath, idx) => {
+        const dropInfo = calculateDropOffInfo(ath.countingMeetings);
+        const replacement = state.replacementScores[ath.id] || null;
+        
+        let simulatedScore = ath.totalScore;
+        if (replacement !== null && ath.countingMeetings.length >= 5) {
+          // Ersetze ältestes Meeting durch das simulierte 6. Meeting
+          const sorted = [...ath.countingMeetings].map(m => ({ ...m, p: parseInt(m.performance_score)||0 })).sort((a,b) => new Date(a.date) - new Date(b.date));
+          const rem = sorted.slice(1).map(m => m.p);
+          rem.push(parseInt(replacement));
+          simulatedScore = Math.round(rem.reduce((a,b)=>a+b,0) / rem.length);
+        }
+
+        return {
+          ...ath,
+          dropInfo,
+          simulatedScore
+        };
+      });
+
+      // Sortierung je nach Modus
+      if (state.rankingMode === 'dropOff') {
+        list.sort((a, b) => (a.dropInfo.dropDateObj || 0) - (b.dropInfo.dropDateObj || 0));
+      } else {
+        list.sort((a, b) => b.simulatedScore - a.simulatedScore);
+      }
+
+      // Quota Berechnung
       const nationCounts = {};
       let quotaIndex = 1;
 
@@ -463,12 +559,8 @@
           quotaStatus = 'quota_full';
         }
 
-        return { ...ath, calculatedRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot };
+        return { ...ath, currentRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot };
       });
-
-      if (state.rankingMode === 'europeanToplist') {
-        list = list.filter(a => isEuropeanCountry(a.nation)).sort((a, b) => b.sb - a.sb);
-      }
 
       if (state.selectedNation !== 'ALL') {
         list = list.filter(a => a.nation === state.selectedNation);
@@ -481,33 +573,30 @@
       return list;
     }
 
-    function isEuropeanCountry(code) {
-      const europe = ['GER', 'GRE', 'ITA', 'SUI', 'ESP', 'SWE', 'FRA', 'GBR', 'POR', 'CZE', 'NED', 'POL', 'FIN', 'NOR', 'AUT', 'CRO', 'SRB'];
-      return europe.includes(code);
-    }
-
     function renderRankings() {
       const data = getProcessedRankings();
-      document.getElementById('activeAthletesCount').textContent = data.length + ' / ' + state.athletes.length;
-      document.getElementById('filterStatusLabel').textContent = state.selectedNation === 'ALL' ? 'Global Top Roster' : 'Filter: ' + state.selectedNation;
 
-      // Update KPI Header Strip
       if (state.athletes.length > 0) {
         const top1 = state.athletes[0];
         document.getElementById('kpiLeaderName').textContent = top1.name.toUpperCase();
         document.getElementById('kpiLeaderScore').textContent = top1.totalScore + ' PTS';
         document.getElementById('kpiLeaderSub').textContent = `${top1.nation} • SB ${top1.sb ? top1.sb.toFixed(2) : '-'}m`;
 
-        const cutoffAth = state.athletes.find(a => a.quotaRank === state.cutoffSpots) || state.athletes[Math.min(state.cutoffSpots - 1, state.athletes.length - 1)];
+        const cutoffAth = data.find(a => a.quotaRank === state.cutoffSpots);
         if (cutoffAth) {
-          document.getElementById('kpiCutoffScore').textContent = cutoffAth.totalScore + ' PKT';
+          document.getElementById('kpiCutoffScore').textContent = cutoffAth.simulatedScore + ' PKT';
         }
 
         const gerLeader = state.athletes.find(a => a.nation === 'GER');
         if (gerLeader) {
-          document.getElementById('kpiGerName').textContent = gerLeader.name.toUpperCase();
-          document.getElementById('kpiGerRank').textContent = '#' + gerLeader.originalRank;
+          document.getElementById('kpiGerName').textContent = `${gerLeader.name.toUpperCase()} (#${gerLeader.originalRank})`;
           document.getElementById('kpiGerScore').textContent = `${gerLeader.totalScore} Pkt (SB ${gerLeader.sb ? gerLeader.sb.toFixed(2) : '-'}m)`;
+        }
+
+        // Finde das am nächsten liegende Verfallsdatum
+        const sortedByDate = [...state.athletes].map(a => a.dropInfo).filter(d => d.dropDateObj).sort((a,b) => a.dropDateObj - b.dropDateObj);
+        if (sortedByDate.length > 0) {
+          document.getElementById('kpiNextDropSummary').textContent = sortedByDate[0].dropDateStr;
         }
       }
 
@@ -515,7 +604,7 @@
       tbody.innerHTML = '';
 
       if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="py-6 text-center text-slate-500 text-xs font-sans">Keine Ranking-Daten geladen. Trage die Raw GitHub JSON URL unter Config ein und klicke Sync Data.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" class="py-6 text-center text-slate-500 text-xs">Keine Daten verfügbar.</td></tr>';
         return;
       }
 
@@ -523,31 +612,18 @@
         const isCutoff = state.rankingMode === 'roadToMajors' && ath.quotaRank === state.cutoffSpots;
         const isExpanded = state.expandedRowId === ath.id;
         const isGerman = ath.nation === 'GER';
+        const dInfo = ath.dropInfo;
 
         const tr = document.createElement('tr');
         tr.className = `cursor-pointer transition-colors ${isExpanded ? 'bg-slate-800/90' : isGerman ? 'bg-cyan-950/20 hover:bg-cyan-950/30 border-l-2 border-l-cyan-500' : 'hover:bg-slate-800/50'}`;
-        tr.onclick = () => {
+        tr.onclick = (e) => {
+          if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
           state.expandedRowId = state.expandedRowId === ath.id ? null : ath.id;
           renderRankings();
         };
 
-        let statusBadge = '';
-        if (state.rankingMode === 'roadToMajors') {
-          if (ath.quotaStatus === 'qualified') {
-            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold">QUALIFIED</span>';
-          } else if (ath.quotaStatus === 'bubble') {
-            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[9px] font-bold">BUBBLE</span>';
-          } else if (ath.quotaStatus === 'quota_full') {
-            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 border border-slate-800 text-[9px]">MAX 3 NAT</span>';
-          } else {
-            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-rose-950/30 text-rose-400 border border-rose-900/40 text-[9px]">OUTSIDE</span>';
-          }
-        } else {
-          statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">RANKED</span>';
-        }
-
         tr.innerHTML = `
-          <td class="py-1.5 px-3 text-center font-bold text-slate-300">${state.rankingMode === 'europeanToplist' ? idx + 1 : ath.originalRank}</td>
+          <td class="py-1.5 px-3 text-center font-bold text-slate-300">${ath.currentRank}</td>
           ${state.rankingMode === 'roadToMajors' ? `<td class="py-1.5 px-3 text-center">${ath.quotaRank ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded font-bold text-[10px] ${ath.quotaRank <= state.cutoffSpots ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">#${ath.quotaRank}</span>` : `<span class="text-[9px] text-slate-500 italic">Max 3</span>`}</td>` : ''}
           <td class="py-1.5 px-3 font-semibold text-white font-sans">
             <div class="flex items-center gap-1.5">
@@ -558,8 +634,9 @@
           <td class="py-1.5 px-3"><span class="inline-flex items-center px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${ath.nation}</span></td>
           <td class="py-1.5 px-3 text-slate-400 text-[10px]">${ath.dob || '-'}</td>
           <td class="py-1.5 px-3 text-right font-bold text-cyan-400">${ath.sb ? ath.sb.toFixed(2) + 'm' : '-'}</td>
-          <td class="py-1.5 px-3 text-right font-bold text-amber-400">${ath.totalScore}</td>
-          <td class="py-1.5 px-3 text-center">${statusBadge}</td>
+          <td class="py-1.5 px-3 text-right font-bold text-amber-400">${ath.simulatedScore}</td>
+          <td class="py-1.5 px-3 text-center text-rose-400 font-mono text-[10px]">${dInfo.dropDateStr || '-'}</td>
+          <td class="py-1.5 px-3 text-right font-mono text-slate-400">${dInfo.scoreWithoutDrop > 0 ? dInfo.scoreWithoutDrop + ' Pkt' : '-'}</td>
           <td class="py-1.5 px-3 text-center text-slate-500">${isExpanded ? '▲' : '▼'}</td>
         `;
         tbody.appendChild(tr);
@@ -567,28 +644,26 @@
         if (isCutoff) {
           const cutTr = document.createElement('tr');
           cutTr.className = 'border-t-2 border-b-2 border-amber-500/60 bg-amber-500/10';
-          cutTr.innerHTML = `<td colspan="9" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">ROAD TO MAJOR CUT-OFF (RANK ${state.cutoffSpots}) — DIRECT INVITATION THRESHOLD</td>`;
+          cutTr.innerHTML = `<td colspan="10" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">ROAD TO MAJOR CUT-OFF (RANK ${state.cutoffSpots})</td>`;
           tbody.appendChild(cutTr);
         }
 
+        // Aufklappbares Akkordeon
         if (isExpanded && ath.countingMeetings && ath.countingMeetings.length > 0) {
           const accTr = document.createElement('tr');
           accTr.className = 'bg-slate-950 border-b border-slate-800';
+
+          const currentRepl = state.replacementScores[ath.id] || '';
           
-          let meetingsHtml = ath.countingMeetings.map(m => {
-            const isSteg = (m.competition && m.competition.toLowerCase().includes('überflieger')) || (m.venue && m.venue.toLowerCase().includes('steg'));
+          let meetingsHtml = ath.countingMeetings.map((m, mIdx) => {
+            const isOldest = m.date === dInfo.earliestDateStr;
             return `
-              <tr class="hover:bg-slate-800/40">
-                <td class="py-1 px-2 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
-                <td class="py-1 px-2 font-sans font-medium text-slate-200">
-                  <span>${m.competition || '-'}</span>
-                  ${isSteg ? '<span class="ml-1 px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[8px] font-bold">STEG</span>' : ''}
-                  ${m.indoor ? '<span class="ml-1 px-1 py-0.2 rounded bg-purple-950 text-purple-300 border border-purple-800 text-[8px] font-bold">INDOOR</span>' : ''}
-                </td>
-                <td class="py-1 px-2 text-slate-400 font-sans">${m.venue || '-'}</td>
+              <tr class="hover:bg-slate-800/40 ${isOldest ? 'bg-rose-950/20 border-l-2 border-rose-500' : ''}">
+                <td class="py-1 px-2 whitespace-nowrap ${isOldest ? 'text-rose-400 font-bold' : 'text-slate-400'}">${m.date} ${isOldest ? '(Fliegt raus)' : ''}</td>
+                <td class="py-1 px-2 font-sans font-medium text-slate-200">${m.competition || '-'}</td>
                 <td class="py-1 px-2 text-center"><span class="px-1 py-0.2 rounded border text-[8px] font-bold bg-slate-800 border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
                 <td class="py-1 px-2 text-right font-bold text-cyan-400">${m.mark}m</td>
-                <td class="py-1 px-2 text-right">${m.wind ? m.wind + ' m/s' : '<span class="text-slate-600">-</span>'}</td>
+                <td class="py-1 px-2 text-right text-slate-400">${m.wind ? m.wind + ' m/s' : '-'}</td>
                 <td class="py-1 px-2 text-center text-slate-300">${m.place || '-'}</td>
                 <td class="py-1 px-2 text-right text-slate-400">${m.result_score || '-'}</td>
                 <td class="py-1 px-2 text-right text-amber-400">+${m.placing_score || 0}</td>
@@ -598,25 +673,40 @@
           }).join('');
 
           accTr.innerHTML = `
-            <td colspan="9" class="p-2.5">
-              <div class="bg-slate-900 rounded border border-slate-800 p-2.5 shadow-sm">
-                <h4 class="font-bold text-white text-[11px] uppercase tracking-wide font-sans mb-2">
-                  🏆 5 gewertete Meetings: ${ath.name} (Score: ${ath.totalScore})
-                </h4>
+            <td colspan="10" class="p-3">
+              <div class="bg-slate-900 rounded border border-slate-800 p-3 shadow-sm space-y-3">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                  <div>
+                    <h4 class="font-bold text-white text-xs uppercase font-sans">
+                      🏆 5 gewertete Meetings: ${ath.name}
+                    </h4>
+                    <p class="text-[10px] text-rose-400 font-mono">
+                      ⏳ Nächster Punkteverfall am <strong>${dInfo.dropDateStr}</strong>: -${dInfo.dropScore} Pkt (${dInfo.oldestMeetingName})
+                    </p>
+                  </div>
+
+                  <!-- 6th Meeting Replacement Simulator -->
+                  <div class="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1 rounded border border-slate-800 font-mono text-[10px]">
+                    <span class="text-slate-400 uppercase font-bold text-[9px]">Simuliere 6. Meeting:</span>
+                    <input type="number" placeholder="z.B. 1240" value="${currentRepl}" onchange="updateReplacementScore('${ath.id}', this.value)" class="w-16 bg-slate-900 border border-slate-700 px-1.5 py-0.5 text-center text-white rounded focus:outline-none focus:border-cyan-500 font-mono text-[10px]" />
+                    <span class="text-slate-500">Pkt</span>
+                  </div>
+                </div>
+
                 <div class="overflow-x-auto">
                   <table class="w-full text-left border-collapse text-[10px] font-mono">
                     <thead>
                       <tr class="bg-slate-950 text-slate-500 border-b border-slate-800 uppercase font-bold text-[9px]">
-                        <th class="py-1.5 px-2">Date</th>
-                        <th class="py-1.5 px-2">Competition</th>
-                        <th class="py-1.5 px-2">Venue</th>
-                        <th class="py-1.5 px-2 text-center">Cat</th>
-                        <th class="py-1.5 px-2 text-right">Mark</th>
+                        <th class="py-1.5 px-2">Datum</th>
+                        <th class="py-1.5 px-2">Wettkampf</th>
+                        <th class="py-1.5 px-2 text-center">Kat</th>
+                        <th class="py-1.5 px-2 text-right">Weite</th>
                         <th class="py-1.5 px-2 text-right">Wind</th>
-                        <th class="py-1.5 px-2 text-center">Place</th>
+                        <th class="py-1.5 px-2 text-center">Platz</th>
                         <th class="py-1.5 px-2 text-right">Result</th>
                         <th class="py-1.5 px-2 text-right">Placing</th>
-                        <th class="py-1.5 px-2 text-right font-bold text-white">Perf. Score</th>
+                        <th class="py-1.5 px-2 text-right font-bold text-white">Perf. Pkt</th>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800/50">
@@ -624,12 +714,22 @@
                     </tbody>
                   </table>
                 </div>
+
               </div>
             </td>
           `;
           tbody.appendChild(accTr);
         }
       });
+    }
+
+    function updateReplacementScore(athleteId, value) {
+      if (!value || isNaN(value)) {
+        delete state.replacementScores[athleteId];
+      } else {
+        state.replacementScores[athleteId] = parseInt(value);
+      }
+      renderRankings();
     }
 
     function renderRecentMarks() {
@@ -650,115 +750,227 @@
       }
 
       if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="py-4 text-center text-slate-500 text-xs">Keine Meetings für diesen Filter gefunden.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="py-4 text-center text-slate-500 text-xs">Keine Meetings gefunden.</td></tr>';
         return;
       }
 
-      tbody.innerHTML = filtered.slice(0, 25).map(m => {
-        const isSteg = (m.competition && m.competition.toLowerCase().includes('überflieger')) || (m.venue && m.venue.toLowerCase().includes('steg'));
-        return `
-          <tr class="hover:bg-slate-850/80 transition-colors">
-            <td class="py-1.5 px-3 font-extrabold text-cyan-400">${m.mark}m</td>
-            <td class="py-1.5 px-3">${m.wind ? m.wind + ' m/s' : '<span class="text-slate-600">-</span>'}</td>
-            <td class="py-1.5 px-3 font-semibold text-white font-sans">${m.athleteName}</td>
-            <td class="py-1.5 px-3"><span class="px-1.5 py-0.2 rounded bg-slate-900 border border-slate-800 text-slate-300 font-bold text-[10px]">${m.athleteNation}</span></td>
-            <td class="py-1.5 px-3 text-slate-300 font-sans">${m.competition || '-'} ${isSteg ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[8px]">STEG</span>' : ''}</td>
-            <td class="py-1.5 px-3 text-slate-400 font-sans">${m.venue || '-'}</td>
-            <td class="py-1.5 px-3 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
-            <td class="py-1.5 px-3 text-center text-slate-300">${m.place || '-'}</td>
-            <td class="py-1.5 px-3 text-right font-bold text-amber-400">${m.performance_score || '-'}</td>
-          </tr>
-        `;
-      }).join('');
+      tbody.innerHTML = filtered.slice(0, 30).map(m => `
+        <tr class="hover:bg-slate-850/80 transition-colors">
+          <td class="py-1.5 px-3 font-extrabold text-cyan-400">${m.mark}m</td>
+          <td class="py-1.5 px-3 text-slate-400">${m.wind ? m.wind + ' m/s' : '-'}</td>
+          <td class="py-1.5 px-3 font-semibold text-white font-sans">${m.athleteName}</td>
+          <td class="py-1.5 px-3"><span class="px-1.5 py-0.2 rounded bg-slate-900 border border-slate-800 text-slate-300 font-bold text-[10px]">${m.athleteNation}</span></td>
+          <td class="py-1.5 px-3 text-slate-300 font-sans">${m.competition || '-'}</td>
+          <td class="py-1.5 px-3 text-center"><span class="px-1 py-0.2 rounded bg-slate-800 text-cyan-300 text-[8px] font-bold">${m.category || '-'}</span></td>
+          <td class="py-1.5 px-3 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
+          <td class="py-1.5 px-3 text-center text-slate-300">${m.place || '-'}</td>
+          <td class="py-1.5 px-3 text-right font-bold text-amber-400">${m.performance_score || '-'}</td>
+        </tr>
+      `).join('');
     }
 
-    function renderCharts() {
+    /* ================= GOOGLE SHEETS CSV PARSER & CHARTS ================= */
+    function parseAndSetTrainingLogs(csvText) {
+      const lines = csvText.split('\n').map(l => l.trim()).filter(Boolean);
+      if (lines.length <= 1) return;
+
+      // Header Zeile einlesen für dynamisches Spalten-Mapping
+      const header = lines[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
+      
+      const getIndex = (keys) => {
+        for (const k of keys) {
+          const idx = header.findIndex(h => h.includes(k.toLowerCase()));
+          if (idx !== -1) return idx;
+        }
+        return -1;
+      };
+
+      const colDate = getIndex(['name', 'datum', 'tag']); // In deinem Sheet steht oft das Datum in Spalte 'Name' oder 'Datum'
+      const colMark = getIndex(['weitsprung wk', 'sprungweite']);
+      const colEffMark = getIndex(['weite effektiv']);
+      const colWind = getIndex(['wind']);
+      const colVmax = getIndex(['vmax_sprint']);
+      const colFly30 = getIndex(['30m fliegend']);
+      const colTrap = getIndex(['e1rm trapbar']);
+      const colClean = getIndex(['e1rm umsetzen']);
+      const colHip = getIndex(['e1rm hip-thrust']);
+      const colStep = getIndex(['e1rm aufsteiger']);
+      const colRecovery = getIndex(['recovery']);
+      const colSleep = getIndex(['sleep']);
+      const colStrain = getIndex(['strain']);
+      const colCMJ = getIndex(['cmj mit armen', 'cmj ohne arme']);
+      const colStiffness = getIndex(['achilles r stiffness', 'achilles l stiffness']);
+
+      const parsed = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const row = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(p => p.replace(/^"|"$/g, '').trim());
+        
+        const parseNum = (idx) => {
+          if (idx === -1 || !row[idx]) return null;
+          const val = parseFloat(row[idx].replace(',', '.'));
+          return isNaN(val) ? null : val;
+        };
+
+        const dateVal = colDate !== -1 ? row[colDate] : `Eintrag ${i}`;
+
+        parsed.push({
+          date: dateVal,
+          mark: parseNum(colMark),
+          effMark: parseNum(colEffMark),
+          wind: parseNum(colWind),
+          vmax: parseNum(colVmax),
+          fly30: parseNum(colFly30),
+          trapbar: parseNum(colTrap),
+          clean: parseNum(colClean),
+          hipThrust: parseNum(colHip),
+          aufsteiger: parseNum(colStep),
+          recovery: parseNum(colRecovery),
+          sleep: parseNum(colSleep),
+          strain: parseNum(colStrain),
+          cmj: parseNum(colCMJ),
+          stiffness: parseNum(colStiffness)
+        });
+      }
+
+      state.trainingLogs = parsed;
+      renderTrainingCharts();
+    }
+
+    function renderTrainingCharts() {
       const logs = state.trainingLogs;
       if (!logs || logs.length === 0) return;
 
-      const labels = logs.map(l => l.date);
-      const marks = logs.map(l => l.mark || null);
-      const squats = logs.map(l => l.squat || null);
-      const bws = logs.map(l => l.bw || null);
-      const whoops = logs.map(l => l.whoop || null);
-      const sleeps = logs.map(l => l.sleep || null);
+      document.getElementById('kpiTrainCount').textContent = logs.length + ' Logs';
 
-      if (compChartInstance) compChartInstance.destroy();
-      if (strengthChartInstance) strengthChartInstance.destroy();
-      if (readinessChartInstance) readinessChartInstance.destroy();
+      // KPI Aggregation
+      const validMarks = logs.map(l => l.mark).filter(m => m !== null);
+      if (validMarks.length > 0) {
+        const maxM = Math.max(...validMarks);
+        document.getElementById('kpiTrainMaxMark').textContent = maxM.toFixed(2) + ' m';
+      }
 
-      const ctx1 = document.getElementById('compMarksChart').getContext('2d');
-      compChartInstance = new Chart(ctx1, {
+      const validVmax = logs.map(l => l.vmax).filter(v => v !== null);
+      if (validVmax.length > 0) {
+        document.getElementById('kpiTrainVmax').textContent = Math.max(...validVmax).toFixed(2) + ' m/s';
+      }
+
+      const validTrap = logs.map(l => l.trapbar).filter(t => t !== null);
+      if (validTrap.length > 0) {
+        document.getElementById('kpiTrainStrength').textContent = Math.max(...validTrap).toFixed(0) + ' kg';
+      }
+
+      // Daten filtern (z.B. letzte 60 Einträge für übersichtliche Diagramme)
+      const chartData = logs.slice(-60);
+      const labels = chartData.map(l => l.date);
+
+      // Chart 1: Weitsprung WK & Weite Effektiv
+      if (chartJump) chartJump.destroy();
+      const ctxJump = document.getElementById('jumpPerformanceChart').getContext('2d');
+      chartJump = new Chart(ctxJump, {
         type: 'line',
         data: {
           labels,
-          datasets: [{
-            label: 'Sprungweite (m)',
-            data: marks,
-            borderColor: '#06b6d4',
-            backgroundColor: 'rgba(6, 182, 212, 0.1)',
-            borderWidth: 2.5,
-            pointRadius: 5,
-            pointBackgroundColor: '#06b6d4',
-            fill: true,
-            tension: 0.3
-          }]
+          datasets: [
+            { label: 'Weitsprung WK (m)', data: chartData.map(l => l.mark), borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.15)', borderWidth: 2.5, pointRadius: 5, fill: true, spanGaps: true },
+            { label: 'Weite Effektiv (m)', data: chartData.map(l => l.effMark), borderColor: '#f59e0b', borderWidth: 1.5, borderDash: [4,4], pointRadius: 3, spanGaps: true }
+          ]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
+          responsive: true, maintainAspectRatio: false,
+          scales: { y: { min: 7.0, max: 8.5, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }, x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } } },
+          plugins: { legend: { labels: { color: '#cbd5e1' } } }
+        }
+      });
+
+      // Chart 2: Vmax Sprint & 30m Flying
+      if (chartSpeed) chartSpeed.destroy();
+      const ctxSpeed = document.getElementById('speedChart').getContext('2d');
+      chartSpeed = new Chart(ctxSpeed, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Vmax Sprint (m/s)', data: chartData.map(l => l.vmax), borderColor: '#10b981', yAxisID: 'yVmax', borderWidth: 2, spanGaps: true },
+            { label: '30m Fliegend (s)', data: chartData.map(l => l.fly30), borderColor: '#a855f7', yAxisID: 'yFly', borderWidth: 2, spanGaps: true }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
           scales: {
-            y: { min: 7.7, max: 8.4, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+            yVmax: { position: 'left', grid: { color: '#1e293b' }, ticks: { color: '#10b981' } },
+            yFly: { position: 'right', reverse: true, grid: { display: false }, ticks: { color: '#a855f7' } },
             x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
           },
-          plugins: { legend: { display: false } }
+          plugins: { legend: { labels: { color: '#cbd5e1' } } }
         }
       });
 
-      const ctx2 = document.getElementById('strengthChart').getContext('2d');
-      strengthChartInstance = new Chart(ctx2, {
+      // Chart 3: Kraftwerte (e1RM)
+      if (chartStrength) chartStrength.destroy();
+      const ctxStrength = document.getElementById('strengthProgressionChart').getContext('2d');
+      chartStrength = new Chart(ctxStrength, {
         type: 'bar',
         data: {
           labels,
           datasets: [
-            { type: 'line', label: 'Körpergewicht (kg)', data: bws, borderColor: '#38bdf8', borderWidth: 2, yAxisID: 'yBW' },
-            { type: 'bar', label: '1RM Squat (kg)', data: squats, backgroundColor: '#f59e0b', yAxisID: 'yStrength', borderRadius: 3 }
+            { label: 'e1RM Trapbar (kg)', data: chartData.map(l => l.trapbar), backgroundColor: '#f59e0b', borderRadius: 2 },
+            { label: 'e1RM Umsetzen (kg)', data: chartData.map(l => l.clean), backgroundColor: '#06b6d4', borderRadius: 2 },
+            { label: 'e1RM Hip-Thrust (kg)', data: chartData.map(l => l.hipThrust), backgroundColor: '#ec4899', borderRadius: 2 }
           ]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            yStrength: { position: 'left', min: 160, max: 220, grid: { color: '#1e293b' }, ticks: { color: '#f59e0b' } },
-            yBW: { position: 'right', min: 74, max: 82, grid: { display: false }, ticks: { color: '#38bdf8' } },
-            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
-          }
+          responsive: true, maintainAspectRatio: false,
+          scales: { y: { min: 100, max: 280, grid: { color: '#1e293b' }, ticks: { color: '#cbd5e1' } }, x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } } },
+          plugins: { legend: { labels: { color: '#cbd5e1' } } }
         }
       });
 
-      const ctx3 = document.getElementById('readinessChart').getContext('2d');
-      readinessChartInstance = new Chart(ctx3, {
-        type: 'bar',
+      // Chart 4: Whoop Recovery & Strain
+      if (chartWhoop) chartWhoop.destroy();
+      const ctxWhoop = document.getElementById('whoopReadinessChart').getContext('2d');
+      chartWhoop = new Chart(ctxWhoop, {
+        type: 'line',
         data: {
           labels,
           datasets: [
-            { type: 'line', label: 'Schlaf (h)', data: sleeps, borderColor: '#a855f7', borderWidth: 2, yAxisID: 'ySleep' },
-            { type: 'bar', label: 'Whoop Recovery (%)', data: whoops, backgroundColor: '#10b981', yAxisID: 'yWhoop', borderRadius: 3 }
+            { label: 'Recovery (%)', data: chartData.map(l => l.recovery), borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, borderWidth: 2, spanGaps: true },
+            { label: 'Strain', data: chartData.map(l => l.strain), borderColor: '#3b82f6', borderWidth: 2, spanGaps: true }
           ]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
+          responsive: true, maintainAspectRatio: false,
+          scales: { y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#cbd5e1' } }, x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } } },
+          plugins: { legend: { labels: { color: '#cbd5e1' } } }
+        }
+      });
+
+      // Chart 5: CMJ & Achilles Stiffness
+      if (chartPlyo) chartPlyo.destroy();
+      const ctxPlyo = document.getElementById('plyoChart').getContext('2d');
+      chartPlyo = new Chart(ctxPlyo, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'CMJ (cm)', data: chartData.map(l => l.cmj), borderColor: '#eab308', yAxisID: 'yCMJ', borderWidth: 2, spanGaps: true },
+            { label: 'Achilles Stiffness (Nm/%)', data: chartData.map(l => l.stiffness), borderColor: '#06b6d4', yAxisID: 'yStiff', borderWidth: 2, spanGaps: true }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
           scales: {
-            yWhoop: { position: 'left', min: 50, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#10b981' } },
-            ySleep: { position: 'right', min: 5, max: 10, grid: { display: false }, ticks: { color: '#a855f7' } },
+            yCMJ: { position: 'left', grid: { color: '#1e293b' }, ticks: { color: '#eab308' } },
+            yStiff: { position: 'right', grid: { display: false }, ticks: { color: '#06b6d4' } },
             x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
-          }
+          },
+          plugins: { legend: { labels: { color: '#cbd5e1' } } }
         }
       });
     }
 
-  async function handleSync() {
+    /* ================= ASYNC DATA SYNC ================= */
+    async function handleSync() {
       const waUrl = document.getElementById('inputWaUrl').value.trim();
       const sheetsUrl = document.getElementById('inputSheetsUrl').value.trim();
       const spinner = document.getElementById('syncSpinner');
@@ -767,64 +979,47 @@
       if (waUrl) localStorage.setItem('wa_url_key', waUrl);
       if (sheetsUrl) localStorage.setItem('sheets_url_key', sheetsUrl);
 
-      // 1. World Athletics JSON Import
+      // 1. WA Rankings Import
       if (waUrl) {
         try {
-          // Cache-Buster verhindert GitHub CDN Caching
           const fetchUrl = waUrl.includes('raw.githubusercontent.com') ? waUrl + '?t=' + Date.now() : waUrl;
           const res = await fetch(fetchUrl);
-          
           if (res.ok) {
             const rawJson = await res.json();
-            const athleteList = rawJson.athletes || (Array.isArray(rawJson) ? rawJson : []);
+            const list = rawJson.athletes || (Array.isArray(rawJson) ? rawJson : []);
 
-            if (athleteList.length > 0) {
-              state.athletes = athleteList.map((ath, idx) => {
-                const competitions = ath.counted_competitions || ath.countingMeetings || [];
-                
-                // Höchste gültige Weite als SB ermitteln
-                let bestMark = 0;
-                competitions.forEach(m => {
-                  const val = parseFloat(m.mark);
-                  if (!isNaN(val) && val > bestMark) {
-                    bestMark = val;
-                  }
-                });
-
-                return {
-                  id: ath.athlete_id || ath.profile_url || 'ath-' + idx,
-                  originalRank: parseInt(ath.rank) || (idx + 1),
-                  name: ath.name,
-                  nation: ath.country || ath.nation || '',
-                  dob: ath.dob || '',
-                  sb: bestMark > 0 ? bestMark : null,
-                  totalScore: parseInt(ath.ranking_score || ath.total_score) || 0,
-                  profileUrl: ath.profile_url,
-                  countingMeetings: competitions.map(c => {
-                    // Windwert formatieren (+10.0 / -11.0 von WA korrekt in +1.0 / -1.1 m/s umrechnen)
-                    let cleanWind = c.wind;
-                    if (cleanWind !== null && cleanWind !== undefined) {
-                      const numWind = parseFloat(cleanWind);
-                      if (!isNaN(numWind) && Math.abs(numWind) >= 10) {
-                        cleanWind = (numWind / 10).toFixed(1);
-                      }
-                    }
-                    return {
-                      ...c,
-                      wind: cleanWind
-                    };
-                  })
-                };
+            state.athletes = list.map((ath, idx) => {
+              const competitions = ath.counted_competitions || [];
+              let sb = 0;
+              competitions.forEach(m => {
+                const v = parseFloat(m.mark);
+                if (!isNaN(v) && v > sb) sb = v;
               });
 
-              document.getElementById('jsonStatusBadge').textContent = `Live WA (${state.athletes.length})`;
-              document.getElementById('jsonStatusBadge').className = 'font-mono font-medium text-emerald-400';
-            }
+              return {
+                id: ath.athlete_id || ath.profile_url || 'ath-' + idx,
+                originalRank: parseInt(ath.rank) || (idx + 1),
+                name: ath.name,
+                nation: ath.country || '',
+                dob: ath.dob || '',
+                sb: sb > 0 ? sb : null,
+                totalScore: parseInt(ath.ranking_score) || 0,
+                countingMeetings: competitions.map(c => {
+                  let cleanWind = c.wind;
+                  if (cleanWind !== null && cleanWind !== undefined) {
+                    const nw = parseFloat(cleanWind);
+                    if (!isNaN(nw) && Math.abs(nw) >= 10) cleanWind = (nw / 10).toFixed(1);
+                  }
+                  return { ...c, wind: cleanWind };
+                })
+              };
+            });
+
+            document.getElementById('jsonStatusBadge').textContent = `Live WA (${state.athletes.length})`;
+            document.getElementById('jsonStatusBadge').className = 'font-mono font-medium text-emerald-400';
           }
         } catch (e) {
-          console.error('WA Fetch Error:', e);
-          document.getElementById('jsonStatusBadge').textContent = 'Error WA';
-          document.getElementById('jsonStatusBadge').className = 'font-mono font-medium text-rose-400';
+          console.error('WA Fetch Error', e);
         }
       }
 
@@ -840,47 +1035,13 @@
             document.getElementById('sheetsStatusBadge').className = 'font-mono font-medium text-emerald-400';
           }
         } catch (e) {
-          console.error('Sheets Fetch Error:', e);
-          document.getElementById('sheetsStatusBadge').textContent = 'Error Sheets';
-          document.getElementById('sheetsStatusBadge').className = 'font-mono font-medium text-rose-400';
+          console.error('Sheets Fetch Error', e);
         }
       }
 
       spinner.classList.remove('animate-spin');
-      document.getElementById('lastUpdatedLabel').textContent = 'Sync: ' + new Date().toLocaleTimeString('de-DE');
-      
       renderRankings();
       renderRecentMarks();
-      if (state.activeTab === 'training') renderCharts();
-    }
-
-    function parseAndSetTrainingLogs(csvText) {
-      const lines = csvText.split('\n').map(l => l.trim()).filter(Boolean);
-      if (lines.length <= 1) return;
-
-      const parsed = [];
-      for (let i = 1; i < lines.length; i++) {
-        // Regex parst CSVs auch sauber, wenn Kommas in Notizen stehen
-        const parts = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(p => p.replace(/^"|"$/g, '').trim());
-        if (parts.length >= 4) {
-          parsed.push({
-            date: parts[0] || '',
-            type: parts[1] || 'Wettkampf',
-            location: parts[2] || '',
-            mark: parseFloat(parts[3]) || null,
-            wind: parts[4] ? parseFloat(parts[4]) : null,
-            bw: parts[5] ? parseFloat(parts[5]) : null,
-            squat: parts[6] ? parseFloat(parts[6]) : null,
-            clean: parts[7] ? parseFloat(parts[7]) : null,
-            whoop: parts[8] ? parseFloat(parts[8]) : null,
-            sleep: parts[9] ? parseFloat(parts[9]) : null,
-            note: parts[10] || ''
-          });
-        }
-      }
-      if (parsed.length > 0) {
-        state.trainingLogs = parsed;
-      }
     }
   </script>
 </body>
