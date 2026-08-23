@@ -49,15 +49,15 @@
             <div class="flex items-center gap-2">
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
                 ATHLETICS<span class="text-cyan-400">INTELLIGENCE</span>
-                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v3.0 PRO</span>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v3.1 PRO</span>
               </h1>
               <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                LIVE SIMULATOR
+                MEN'S LONG JUMP
               </div>
             </div>
             <p class="text-[10px] text-slate-400 font-medium hidden sm:block">
-              World Rankings • 365-Day Expiration Forecaster • Diagnostics & Training Log Engine
+              World Rankings • 365-Day Expiration Forecaster • Diagnostics & Training Engine
             </p>
           </div>
         </div>
@@ -582,8 +582,8 @@
     function renderRankings() {
       const data = getProcessedRankings();
 
-      if (state.athletes.length > 0) {
-        const top1 = state.athletes[0];
+      if (data.length > 0) {
+        const top1 = data[0];
         document.getElementById('kpiLeaderName').textContent = (top1.name || '-').toUpperCase();
         document.getElementById('kpiLeaderScore').textContent = top1.totalScore + ' PTS';
         document.getElementById('kpiLeaderSub').textContent = `${top1.nation} • SB ${top1.sb ? top1.sb.toFixed(2) : '-'}m`;
@@ -593,13 +593,13 @@
           document.getElementById('kpiCutoffScore').textContent = cutoffAth.simulatedScore + ' PKT';
         }
 
-        const gerLeader = state.athletes.find(a => a.nation === 'GER');
+        const gerLeader = data.find(a => a.nation === 'GER');
         if (gerLeader) {
           document.getElementById('kpiGerName').textContent = `${gerLeader.name.toUpperCase()} (#${gerLeader.originalRank})`;
           document.getElementById('kpiGerScore').textContent = `${gerLeader.totalScore} Pkt (SB ${gerLeader.sb ? gerLeader.sb.toFixed(2) : '-'}m)`;
         }
 
-        const sortedByDate = [...state.athletes].map(a => a.dropInfo).filter(d => d.dropDateObj).sort((a,b) => a.dropDateObj - b.dropDateObj);
+        const sortedByDate = data.map(a => a.dropInfo).filter(d => d && d.dropDateObj).sort((a,b) => a.dropDateObj - b.dropDateObj);
         if (sortedByDate.length > 0) {
           document.getElementById('kpiNextDropSummary').textContent = sortedByDate[0].dropDateStr;
         }
@@ -617,7 +617,7 @@
         const isCutoff = state.rankingMode === 'roadToMajors' && ath.quotaRank === state.cutoffSpots;
         const isExpanded = state.expandedRowId === ath.id;
         const isGerman = ath.nation === 'GER';
-        const dInfo = ath.dropInfo;
+        const dInfo = ath.dropInfo || {};
 
         const tr = document.createElement('tr');
         tr.className = `cursor-pointer transition-colors ${isExpanded ? 'bg-slate-800/90' : isGerman ? 'bg-cyan-950/20 hover:bg-cyan-950/30 border-l-2 border-l-cyan-500' : 'hover:bg-slate-800/50'}`;
