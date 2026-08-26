@@ -125,22 +125,30 @@ def scrape_rankings_with_retry():
         browser.close()
     return athletes_data
 
+import shutil
+
 if __name__ == "__main__":
     os.makedirs("data", exist_ok=True)
+    latest_path = "data/ranking_latest.json"
+    prev_path = "data/ranking_previous.json"
+
+    # 1. Bisherigen Stand als Vorwoche sichern
+    if os.path.exists(latest_path):
+        try:
+            shutil.copy(latest_path, prev_path)
+            print(f"Bisheriger Stand erfolgreich nach '{prev_path}' gesichert.")
+        except Exception as e:
+            print(f"Hinweis beim Sichern der Vorwoche: {e}")
+
+    # 2. Neues Ranking scrapen
     rankings = scrape_rankings_with_retry()
 
-    output_path = "data/ranking_latest.json"
-    with open(output_path, "w", encoding="utf-8") as f:
+    # 3. Neues Ranking speichern
+    with open(latest_path, "w", encoding="utf-8") as f:
         json.dump({
             "event": "Men's Long Jump",
             "athletes_count": len(rankings),
             "athletes": rankings
         }, f, ensure_ascii=False, indent=2)
 
-    print(f"\nFertig! {len(rankings)} Athleten erfolgreich in '{output_path}' gespeichert.")
-
-import shutil
-
-# Falls schon ein altes Ranking existiert -> als Vorwoche sichern
-if os.path.exists("data/ranking_latest.json"):
-    shutil.copy("data/ranking_latest.json", "data/ranking_previous.json")
+    print(f"\nErfolgreich! {len(rankings)} Athleten in '{latest_path}' gespeichert.")
