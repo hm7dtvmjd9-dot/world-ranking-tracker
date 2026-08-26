@@ -138,3 +138,9 @@ if __name__ == "__main__":
         }, f, ensure_ascii=False, indent=2)
 
     print(f"\nFertig! {len(rankings)} Athleten erfolgreich in '{output_path}' gespeichert.")
+
+import shutil
+
+# Falls schon ein altes Ranking existiert -> als Vorwoche sichern
+if os.path.exists("data/ranking_latest.json"):
+    shutil.copy("data/ranking_latest.json", "data/ranking_previous.json")
