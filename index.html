@@ -49,7 +49,7 @@
             <div class="flex items-center gap-2">
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
                 ATHLETICS<span class="text-cyan-400">CORE</span>
-                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v2.8 TREND</span>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v3.2 INTEL</span>
               </h1>
               <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -57,7 +57,7 @@
               </div>
             </div>
             <p class="text-[10px] text-slate-400 font-medium hidden sm:block">
-              World Athletics Score Engine • WoW Trend Tracking • Google Sheets Readiness
+              World Athletics Score Engine • WoW Trend Tracking • Expiration Radar
             </p>
           </div>
         </div>
@@ -100,7 +100,7 @@
       <!-- Navigation Tabs -->
       <div class="flex space-x-1 border-t border-slate-800 pt-1.5 pb-1 overflow-x-auto no-scrollbar">
         <button id="tabBtnRankings" class="tab-btn active flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap bg-slate-800 text-cyan-400 border-b-2 border-cyan-500">
-          🌍 World Rankings & Trend (WoW)
+          🌍 World Rankings, Trend & Expiration
         </button>
         <button id="tabBtnScouting" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40">
           📡 Meeting & Venue Radar
@@ -221,6 +221,7 @@
                 <th class="py-2 px-3">DOB</th>
                 <th class="py-2 px-3 text-right">SB</th>
                 <th class="py-2 px-3 text-right font-bold text-white">Score (WoW)</th>
+                <th class="py-2 px-3 text-center text-rose-400">Nächster Punkteverfall</th>
                 <th class="py-2 px-3 text-center">Status</th>
                 <th class="py-2 px-3 w-10 text-center">Details</th>
               </tr>
@@ -309,7 +310,7 @@
     let state = {
       activeTab: 'rankings',
       athletes: [],
-      previousAthletesMap: {}, // Map für schnellen Vorwochen-Vergleich
+      previousAthletesMap: {},
       trainingLogs: [],
       rankingMode: 'standard',
       cutoffSpots: 32,
@@ -443,6 +444,55 @@
       return europe.includes(code);
     }
 
+    /* ================= WORLD ATHLETICS EXPIRATION CALCULATION ================= */
+    function calculateExpiration(meeting) {
+      if (!meeting || !meeting.date) return null;
+      const d = new Date(meeting.date);
+      if (isNaN(d.getTime())) return null;
+
+      const cat = (meeting.category || '').toUpperCase();
+      const comp = (meeting.competition || '').toLowerCase();
+      
+      // Area Championships (EM, African, Asian, NACAC) & OW/GL haben 2 Jahre (bis zur nächsten Austragung)
+      const isBiennialMajor = cat === 'OW' || cat === 'GL' || comp.includes('championships') || comp.includes('meisterschaften') || comp.includes('games');
+      
+      const expDate = new Date(d);
+      if (isBiennialMajor) {
+        expDate.setFullYear(expDate.getFullYear() + 2);
+      } else {
+        expDate.setFullYear(expDate.getFullYear() + 1); // 12-Monate-Standard
+      }
+
+      return {
+        expDate,
+        expDateStr: expDate.toLocaleDateString('de-DE', { day: '2-digit', month: 'short', year: 'numeric' }),
+        isMajor: isBiennialMajor
+      };
+    }
+
+    function getAthleteNextDrop(meetings) {
+      if (!meetings || meetings.length === 0) return { str: '-', score: 0, meetingName: '', dateObj: null };
+
+      const validExpirations = meetings.map(m => {
+        const exp = calculateExpiration(m);
+        return {
+          ...m,
+          expDate: exp ? exp.expDate : new Date('2099-01-01'),
+          expDateStr: exp ? exp.expDateStr : '-',
+          isMajor: exp ? exp.isMajor : false
+        };
+      }).sort((a, b) => a.expDate - b.expDate);
+
+      const next = validExpirations[0];
+      return {
+        str: next.expDateStr,
+        score: parseInt(next.performance_score) || 0,
+        meetingName: next.competition || '-',
+        dateObj: next.expDate,
+        isMajor: next.isMajor
+      };
+    }
+
     function getProcessedRankings() {
       let list = [...state.athletes];
 
@@ -474,7 +524,9 @@
           scoreDelta = ath.totalScore - prev.score;
         }
 
-        return { ...ath, calculatedRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot, rankDelta, scoreDelta, isNew: !prev };
+        const nextDrop = getAthleteNextDrop(ath.countingMeetings);
+
+        return { ...ath, calculatedRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot, rankDelta, scoreDelta, isNew: !prev, nextDrop };
       });
 
       if (state.rankingMode === 'europeanToplist') {
@@ -511,6 +563,7 @@
         const gerLeader = state.athletes.find(a => a.nation === 'GER');
         if (gerLeader) {
           document.getElementById('kpiGerName').textContent = gerLeader.name.toUpperCase();
+          document.getElementById('kpiGerRank').textContent = '#' + gerLeader.originalRank;
           document.getElementById('kpiGerScore').textContent = `${gerLeader.totalScore} Pkt (SB ${gerLeader.sb ? gerLeader.sb.toFixed(2) : '-'}m)`;
         }
       }
@@ -519,7 +572,7 @@
       tbody.innerHTML = '';
 
       if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="py-6 text-center text-slate-500 text-xs font-sans">Keine Ranking-Daten geladen. Trage die Raw GitHub JSON URL unter Config ein und klicke Sync Data.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" class="py-6 text-center text-slate-500 text-xs font-sans">Keine Ranking-Daten geladen. Trage die Raw GitHub JSON URL unter Config ein und klicke Sync Data.</td></tr>';
         return;
       }
 
@@ -534,7 +587,7 @@
           if (ath.rankDelta > 0) {
             rankBadge = `<span class="text-emerald-400 text-[9px] font-bold">▲+${ath.rankDelta}</span>`;
           } else if (ath.rankDelta < 0) {
-            rankBadge = `<span class="text-rose-400 text-[9px] font-bold">▼${ath.rankDelta}</span>`;
+            rankBadge = `<span class="text-rose-400 text-[9px] font-bold">▼${Math.abs(ath.rankDelta)}</span>`;
           } else {
             rankBadge = `<span class="text-slate-600 text-[8px]">NC</span>`;
           }
@@ -589,6 +642,7 @@
           <td class="py-1.5 px-3 text-slate-400 text-[10px]">${ath.dob || '-'}</td>
           <td class="py-1.5 px-3 text-right font-bold text-cyan-400">${ath.sb ? ath.sb.toFixed(2) + 'm' : '-'}</td>
           <td class="py-1.5 px-3 text-right font-bold text-amber-400">${ath.totalScore} ${scoreDeltaBadge}</td>
+          <td class="py-1.5 px-3 text-center text-rose-400 font-mono text-[10px]">${ath.nextDrop.str}</td>
           <td class="py-1.5 px-3 text-center">${statusBadge}</td>
           <td class="py-1.5 px-3 text-center text-slate-500">${isExpanded ? '▲' : '▼'}</td>
         `;
@@ -597,7 +651,7 @@
         if (isCutoff) {
           const cutTr = document.createElement('tr');
           cutTr.className = 'border-t-2 border-b-2 border-amber-500/60 bg-amber-500/10';
-          cutTr.innerHTML = `<td colspan="9" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">ROAD TO MAJOR CUT-OFF (RANK ${state.cutoffSpots}) — DIRECT INVITATION THRESHOLD</td>`;
+          cutTr.innerHTML = `<td colspan="10" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">ROAD TO MAJOR CUT-OFF (RANK ${state.cutoffSpots}) — DIRECT INVITATION THRESHOLD</td>`;
           tbody.appendChild(cutTr);
         }
 
@@ -606,16 +660,18 @@
           accTr.className = 'bg-slate-950 border-b border-slate-800';
           
           let meetingsHtml = ath.countingMeetings.map(m => {
+            const exp = calculateExpiration(m);
+            const isNextDrop = ath.nextDrop.meetingName === m.competition;
             const isSteg = (m.competition && m.competition.toLowerCase().includes('überflieger')) || (m.venue && m.venue.toLowerCase().includes('steg'));
+
             return `
-              <tr class="hover:bg-slate-800/40">
+              <tr class="hover:bg-slate-800/40 ${isNextDrop ? 'bg-rose-950/20 border-l-2 border-rose-500' : ''}">
                 <td class="py-1 px-2 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
                 <td class="py-1 px-2 font-sans font-medium text-slate-200">
                   <span>${m.competition || '-'}</span>
                   ${isSteg ? '<span class="ml-1 px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[8px] font-bold">STEG</span>' : ''}
                   ${m.indoor ? '<span class="ml-1 px-1 py-0.2 rounded bg-purple-950 text-purple-300 border border-purple-800 text-[8px] font-bold">INDOOR</span>' : ''}
                 </td>
-                <td class="py-1 px-2 text-slate-400 font-sans">${m.venue || '-'}</td>
                 <td class="py-1 px-2 text-center"><span class="px-1 py-0.2 rounded border text-[8px] font-bold bg-slate-800 border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
                 <td class="py-1 px-2 text-right font-bold text-cyan-400">${m.mark}m</td>
                 <td class="py-1 px-2 text-right text-slate-400">${m.wind ? m.wind + ' m/s' : '-'}</td>
@@ -623,30 +679,36 @@
                 <td class="py-1 px-2 text-right text-slate-400">${m.result_score || '-'}</td>
                 <td class="py-1 px-2 text-right text-amber-400">+${m.placing_score || 0}</td>
                 <td class="py-1 px-2 text-right font-bold text-cyan-300">${m.performance_score || '-'}</td>
+                <td class="py-1 px-2 text-right ${isNextDrop ? 'text-rose-400 font-bold' : 'text-slate-500'} font-mono text-[9px]">${exp ? exp.expDateStr : '-'}</td>
               </tr>
             `;
           }).join('');
 
           accTr.innerHTML = `
-            <td colspan="9" class="p-2.5">
-              <div class="bg-slate-900 rounded border border-slate-800 p-2.5 shadow-sm">
-                <h4 class="font-bold text-white text-[11px] uppercase tracking-wide font-sans mb-2">
-                  🏆 5 gewertete Meetings: ${ath.name} (Score: ${ath.totalScore})
-                </h4>
+            <td colspan="10" class="p-2.5">
+              <div class="bg-slate-900 rounded border border-slate-800 p-2.5 shadow-sm space-y-2">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <h4 class="font-bold text-white text-[11px] uppercase tracking-wide font-sans">
+                    🏆 5 gewertete Meetings: ${ath.name} (Score: ${ath.totalScore})
+                  </h4>
+                  <div class="text-[10px] text-rose-400 font-mono">
+                    ⏳ Nächster Verfall am <strong>${ath.nextDrop.str}</strong>: -${ath.nextDrop.score} Pkt
+                  </div>
+                </div>
                 <div class="overflow-x-auto">
                   <table class="w-full text-left border-collapse text-[10px] font-mono">
                     <thead>
                       <tr class="bg-slate-950 text-slate-500 border-b border-slate-800 uppercase font-bold text-[9px]">
-                        <th class="py-1.5 px-2">Date</th>
-                        <th class="py-1.5 px-2">Competition</th>
-                        <th class="py-1.5 px-2">Venue</th>
-                        <th class="py-1.5 px-2 text-center">Cat</th>
-                        <th class="py-1.5 px-2 text-right">Mark</th>
+                        <th class="py-1.5 px-2">Datum</th>
+                        <th class="py-1.5 px-2">Meeting</th>
+                        <th class="py-1.5 px-2 text-center">Kat</th>
+                        <th class="py-1.5 px-2 text-right">Weite</th>
                         <th class="py-1.5 px-2 text-right">Wind</th>
-                        <th class="py-1.5 px-2 text-center">Place</th>
+                        <th class="py-1.5 px-2 text-center">Platz</th>
                         <th class="py-1.5 px-2 text-right">Result</th>
                         <th class="py-1.5 px-2 text-right">Placing</th>
                         <th class="py-1.5 px-2 text-right font-bold text-white">Perf. Score</th>
+                        <th class="py-1.5 px-2 text-right text-rose-400 font-bold">Verfällt am</th>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800/50">
