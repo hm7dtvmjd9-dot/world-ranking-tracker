@@ -43,13 +43,13 @@
         
         <div class="flex items-center gap-2.5">
           <div class="w-7 h-7 bg-cyan-600 rounded flex items-center justify-center font-black text-white text-xs shadow-sm shadow-cyan-600/30">
-            LH
+            LJ
           </div>
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
                 ATHLETICS<span class="text-cyan-400">CORE</span>
-                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v3.3 INTEL</span>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v3.4 STABLE</span>
               </h1>
               <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -221,7 +221,7 @@
                 <th class="py-2 px-3">DOB</th>
                 <th class="py-2 px-3 text-right">SB</th>
                 <th class="py-2 px-3 text-right font-bold text-white">Score (WoW)</th>
-                <th class="py-2 px-3 text-center text-rose-400">Nächster Punkteverfall</th>
+                <th class="py-2 px-3 text-center text-rose-400">Nächster Verfall</th>
                 <th class="py-2 px-3 text-center">Status</th>
                 <th class="py-2 px-3 w-10 text-center">Details</th>
               </tr>
@@ -325,35 +325,28 @@
     let strengthChartInstance = null;
     let readinessChartInstance = null;
 
-    // Robuster Date Parser für alle Browser (inklusive "17 SEP 2025" in Safari)
+    // Robuste Datums-Erkennung (auch bei "17 SEP 2025" oder "2025-09-17")
     function parseSafeDate(dateStr) {
       if (!dateStr || typeof dateStr !== 'string') return null;
       const clean = dateStr.trim();
-      
       const months = {
         'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'jun': 5,
         'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
       };
-
       const parts = clean.split(/[\s\.\-\/]+/);
       if (parts.length === 3) {
-        // Fall A: "17 SEP 2025"
         const mKey = parts[1].toLowerCase().substring(0, 3);
         if (months[mKey] !== undefined) {
           const day = parseInt(parts[0]);
           const year = parseInt(parts[2]);
-          if (!isNaN(day) && !isNaN(year)) {
-            return new Date(year, months[mKey], day);
-          }
+          if (!isNaN(day) && !isNaN(year)) return new Date(year, months[mKey], day);
         }
-        // Fall B: "2025-09-17"
         if (parts[0].length === 4) {
           return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
         }
       }
-
-      const standard = new Date(clean);
-      return isNaN(standard.getTime()) ? null : standard;
+      const d = new Date(clean);
+      return isNaN(d.getTime()) ? null : d;
     }
 
     function calculateExpiration(meeting) {
@@ -363,8 +356,6 @@
 
       const cat = (meeting.category || '').toUpperCase();
       const comp = (meeting.competition || '').toLowerCase();
-      
-      // Area Championships (EM, African, Asian, NACAC) & OW/GL haben 2 Jahre (bis zur nächsten Austragung)
       const isBiennialMajor = cat === 'OW' || cat === 'GL' || comp.includes('championships') || comp.includes('meisterschaften') || comp.includes('games');
       
       const expDate = new Date(d);
@@ -617,154 +608,150 @@
       }
 
       data.forEach((ath, idx) => {
-        try {
-          const isCutoff = state.rankingMode === 'roadToMajors' && ath.quotaRank === state.cutoffSpots;
-          const isExpanded = state.expandedRowId === ath.id;
-          const isGerman = ath.nation === 'GER';
+        const isCutoff = state.rankingMode === 'roadToMajors' && ath.quotaRank === state.cutoffSpots;
+        const isExpanded = state.expandedRowId === ath.id;
+        const isGerman = ath.nation === 'GER';
 
-          let rankBadge = '';
-          if (ath.rankDelta !== null) {
-            if (ath.rankDelta > 0) {
-              rankBadge = `<span class="text-emerald-400 text-[9px] font-bold">▲+${ath.rankDelta}</span>`;
-            } else if (ath.rankDelta < 0) {
-              rankBadge = `<span class="text-rose-400 text-[9px] font-bold">▼${Math.abs(ath.rankDelta)}</span>`;
-            } else {
-              rankBadge = `<span class="text-slate-600 text-[8px]">NC</span>`;
-            }
-          } else if (Object.keys(state.previousAthletesMap).length > 0) {
-            rankBadge = `<span class="text-amber-400 text-[8px] font-bold">NEW</span>`;
-          }
-
-          let scoreDeltaBadge = '';
-          if (ath.scoreDelta !== null && ath.scoreDelta !== 0) {
-            scoreDeltaBadge = ath.scoreDelta > 0 
-              ? `<span class="text-[9px] text-emerald-400 font-mono ml-1">(+${ath.scoreDelta})</span>` 
-              : `<span class="text-[9px] text-rose-400 font-mono ml-1">(${ath.scoreDelta})</span>`;
-          }
-
-          const tr = document.createElement('tr');
-          tr.className = `cursor-pointer transition-colors ${isExpanded ? 'bg-slate-800/90' : isGerman ? 'bg-cyan-950/20 hover:bg-cyan-950/30 border-l-2 border-l-cyan-500' : 'hover:bg-slate-800/50'}`;
-          tr.onclick = () => {
-            state.expandedRowId = state.expandedRowId === ath.id ? null : ath.id;
-            renderRankings();
-          };
-
-          let statusBadge = '';
-          if (state.rankingMode === 'roadToMajors') {
-            if (ath.quotaStatus === 'qualified') {
-              statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold">QUALIFIED</span>';
-            } else if (ath.quotaStatus === 'bubble') {
-              statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[9px] font-bold">BUBBLE</span>';
-            } else if (ath.quotaStatus === 'quota_full') {
-              statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 border border-slate-800 text-[9px]">MAX 3 NAT</span>';
-            } else {
-              statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-rose-950/30 text-rose-400 border border-rose-900/40 text-[9px]">OUTSIDE</span>';
-            }
+        let rankBadge = '';
+        if (ath.rankDelta !== null) {
+          if (ath.rankDelta > 0) {
+            rankBadge = `<span class="text-emerald-400 text-[9px] font-bold">▲+${ath.rankDelta}</span>`;
+          } else if (ath.rankDelta < 0) {
+            rankBadge = `<span class="text-rose-400 text-[9px] font-bold">▼${Math.abs(ath.rankDelta)}</span>`;
           } else {
-            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">RANKED</span>';
+            rankBadge = `<span class="text-slate-600 text-[8px]">NC</span>`;
           }
+        } else if (Object.keys(state.previousAthletesMap).length > 0) {
+          rankBadge = `<span class="text-amber-400 text-[8px] font-bold">NEW</span>`;
+        }
 
-          const dropStr = (ath.nextDrop && ath.nextDrop.str) ? ath.nextDrop.str : '-';
+        let scoreDeltaBadge = '';
+        if (ath.scoreDelta !== null && ath.scoreDelta !== 0) {
+          scoreDeltaBadge = ath.scoreDelta > 0 
+            ? `<span class="text-[9px] text-emerald-400 font-mono ml-1">(+${ath.scoreDelta})</span>` 
+            : `<span class="text-[9px] text-rose-400 font-mono ml-1">(${ath.scoreDelta})</span>`;
+        }
 
-          tr.innerHTML = `
-            <td class="py-1.5 px-3 text-center font-bold text-slate-300">
-              <div class="flex items-center justify-center gap-1">
-                <span>${state.rankingMode === 'europeanToplist' ? idx + 1 : ath.originalRank}</span>
-                ${rankBadge}
-              </div>
-            </td>
-            ${state.rankingMode === 'roadToMajors' ? `<td class="py-1.5 px-3 text-center">${ath.quotaRank ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded font-bold text-[10px] ${ath.quotaRank <= state.cutoffSpots ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">#${ath.quotaRank}</span>` : `<span class="text-[9px] text-slate-500 italic">Max 3</span>`}</td>` : ''}
-            <td class="py-1.5 px-3 font-semibold text-white font-sans">
-              <div class="flex items-center gap-1.5">
-                <span class="uppercase font-bold tracking-tight">${ath.name}</span>
-                ${isGerman ? '<span class="text-[8px] px-1 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold font-mono">GER</span>' : ''}
-              </div>
-            </td>
-            <td class="py-1.5 px-3"><span class="inline-flex items-center px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${ath.nation}</span></td>
-            <td class="py-1.5 px-3 text-slate-400 text-[10px]">${ath.dob || '-'}</td>
-            <td class="py-1.5 px-3 text-right font-bold text-cyan-400">${ath.sb ? ath.sb.toFixed(2) + 'm' : '-'}</td>
-            <td class="py-1.5 px-3 text-right font-bold text-amber-400">${ath.totalScore} ${scoreDeltaBadge}</td>
-            <td class="py-1.5 px-3 text-center text-rose-400 font-mono text-[10px]">${dropStr}</td>
-            <td class="py-1.5 px-3 text-center">${statusBadge}</td>
-            <td class="py-1.5 px-3 text-center text-slate-500">${isExpanded ? '▲' : '▼'}</td>
-          `;
-          tbody.appendChild(tr);
+        const tr = document.createElement('tr');
+        tr.className = `cursor-pointer transition-colors ${isExpanded ? 'bg-slate-800/90' : isGerman ? 'bg-cyan-950/20 hover:bg-cyan-950/30 border-l-2 border-l-cyan-500' : 'hover:bg-slate-800/50'}`;
+        tr.onclick = () => {
+          state.expandedRowId = state.expandedRowId === ath.id ? null : ath.id;
+          renderRankings();
+        };
 
-          if (isCutoff) {
-            const cutTr = document.createElement('tr');
-            cutTr.className = 'border-t-2 border-b-2 border-amber-500/60 bg-amber-500/10';
-            cutTr.innerHTML = `<td colspan="10" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">ROAD TO MAJOR CUT-OFF (RANK ${state.cutoffSpots}) — DIRECT INVITATION THRESHOLD</td>`;
-            tbody.appendChild(cutTr);
+        let statusBadge = '';
+        if (state.rankingMode === 'roadToMajors') {
+          if (ath.quotaStatus === 'qualified') {
+            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold">QUALIFIED</span>';
+          } else if (ath.quotaStatus === 'bubble') {
+            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[9px] font-bold">BUBBLE</span>';
+          } else if (ath.quotaStatus === 'quota_full') {
+            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 border border-slate-800 text-[9px]">MAX 3 NAT</span>';
+          } else {
+            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-rose-950/30 text-rose-400 border border-rose-900/40 text-[9px]">OUTSIDE</span>';
           }
+        } else {
+          statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">RANKED</span>';
+        }
 
-          if (isExpanded && ath.countingMeetings && ath.countingMeetings.length > 0) {
-            const accTr = document.createElement('tr');
-            accTr.className = 'bg-slate-950 border-b border-slate-800';
-            
-            let meetingsHtml = ath.countingMeetings.map(m => {
-              const exp = calculateExpiration(m);
-              const isNextDrop = (ath.nextDrop && ath.nextDrop.meetingName && ath.nextDrop.meetingName === m.competition);
-              const isSteg = (m.competition && m.competition.toLowerCase().includes('überflieger')) || (m.venue && m.venue.toLowerCase().includes('steg'));
+        const dropStr = (ath.nextDrop && ath.nextDrop.str) ? ath.nextDrop.str : '-';
 
-              return `
-                <tr class="hover:bg-slate-800/40 ${isNextDrop ? 'bg-rose-950/20 border-l-2 border-rose-500' : ''}">
-                  <td class="py-1 px-2 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
-                  <td class="py-1 px-2 font-sans font-medium text-slate-200">
-                    <span>${m.competition || '-'}</span>
-                    ${isSteg ? '<span class="ml-1 px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[8px] font-bold">STEG</span>' : ''}
-                    ${m.indoor ? '<span class="ml-1 px-1 py-0.2 rounded bg-purple-950 text-purple-300 border border-purple-800 text-[8px] font-bold">INDOOR</span>' : ''}
-                  </td>
-                  <td class="py-1 px-2 text-center"><span class="px-1 py-0.2 rounded border text-[8px] font-bold bg-slate-800 border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
-                  <td class="py-1 px-2 text-right font-bold text-cyan-400">${m.mark}m</td>
-                  <td class="py-1 px-2 text-right text-slate-400">${m.wind ? m.wind + ' m/s' : '-'}</td>
-                  <td class="py-1 px-2 text-center text-slate-300">${m.place || '-'}</td>
-                  <td class="py-1 px-2 text-right text-slate-400">${m.result_score || '-'}</td>
-                  <td class="py-1 px-2 text-right text-amber-400">+${m.placing_score || 0}</td>
-                  <td class="py-1 px-2 text-right font-bold text-cyan-300">${m.performance_score || '-'}</td>
-                  <td class="py-1 px-2 text-right ${isNextDrop ? 'text-rose-400 font-bold' : 'text-slate-500'} font-mono text-[9px]">${exp ? exp.expDateStr : '-'}</td>
-                </tr>
-              `;
-            }).join('');
+        tr.innerHTML = `
+          <td class="py-1.5 px-3 text-center font-bold text-slate-300">
+            <div class="flex items-center justify-center gap-1">
+              <span>${state.rankingMode === 'europeanToplist' ? idx + 1 : ath.originalRank}</span>
+              ${rankBadge}
+            </div>
+          </td>
+          ${state.rankingMode === 'roadToMajors' ? `<td class="py-1.5 px-3 text-center">${ath.quotaRank ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded font-bold text-[10px] ${ath.quotaRank <= state.cutoffSpots ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">#${ath.quotaRank}</span>` : `<span class="text-[9px] text-slate-500 italic">Max 3</span>`}</td>` : ''}
+          <td class="py-1.5 px-3 font-semibold text-white font-sans">
+            <div class="flex items-center gap-1.5">
+              <span class="uppercase font-bold tracking-tight">${ath.name}</span>
+              ${isGerman ? '<span class="text-[8px] px-1 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold font-mono">GER</span>' : ''}
+            </div>
+          </td>
+          <td class="py-1.5 px-3"><span class="inline-flex items-center px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${ath.nation}</span></td>
+          <td class="py-1.5 px-3 text-slate-400 text-[10px]">${ath.dob || '-'}</td>
+          <td class="py-1.5 px-3 text-right font-bold text-cyan-400">${ath.sb ? ath.sb.toFixed(2) + 'm' : '-'}</td>
+          <td class="py-1.5 px-3 text-right font-bold text-amber-400">${ath.totalScore} ${scoreDeltaBadge}</td>
+          <td class="py-1.5 px-3 text-center text-rose-400 font-mono text-[10px]">${dropStr}</td>
+          <td class="py-1.5 px-3 text-center">${statusBadge}</td>
+          <td class="py-1.5 px-3 text-center text-slate-500">${isExpanded ? '▲' : '▼'}</td>
+        `;
+        tbody.appendChild(tr);
 
-            accTr.innerHTML = `
-              <td colspan="10" class="p-2.5">
-                <div class="bg-slate-900 rounded border border-slate-800 p-2.5 shadow-sm space-y-2">
-                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                    <h4 class="font-bold text-white text-[11px] uppercase tracking-wide font-sans">
-                      🏆 5 gewertete Meetings: ${ath.name} (Score: ${ath.totalScore})
-                    </h4>
-                    <div class="text-[10px] text-rose-400 font-mono">
-                      ⏳ Nächster Verfall am <strong>${dropStr}</strong>: -${(ath.nextDrop ? ath.nextDrop.score : 0)} Pkt
-                    </div>
-                  </div>
-                  <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-[10px] font-mono">
-                      <thead>
-                        <tr class="bg-slate-950 text-slate-500 border-b border-slate-800 uppercase font-bold text-[9px]">
-                          <th class="py-1.5 px-2">Datum</th>
-                          <th class="py-1.5 px-2">Meeting</th>
-                          <th class="py-1.5 px-2 text-center">Kat</th>
-                          <th class="py-1.5 px-2 text-right">Weite</th>
-                          <th class="py-1.5 px-2 text-right">Wind</th>
-                          <th class="py-1.5 px-2 text-center">Platz</th>
-                          <th class="py-1.5 px-2 text-right">Result</th>
-                          <th class="py-1.5 px-2 text-right">Placing</th>
-                          <th class="py-1.5 px-2 text-right font-bold text-white">Perf. Score</th>
-                          <th class="py-1.5 px-2 text-right text-rose-400 font-bold">Verfällt am</th>
-                        </tr>
-                      </thead>
-                      <tbody class="divide-y divide-slate-800/50">
-                        ${meetingsHtml}
-                      </tbody>
-                    </table>
+        if (isCutoff) {
+          const cutTr = document.createElement('tr');
+          cutTr.className = 'border-t-2 border-b-2 border-amber-500/60 bg-amber-500/10';
+          cutTr.innerHTML = `<td colspan="10" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">ROAD TO MAJOR CUT-OFF (RANK ${state.cutoffSpots}) — DIRECT INVITATION THRESHOLD</td>`;
+          tbody.appendChild(cutTr);
+        }
+
+        if (isExpanded && ath.countingMeetings && ath.countingMeetings.length > 0) {
+          const accTr = document.createElement('tr');
+          accTr.className = 'bg-slate-950 border-b border-slate-800';
+          
+          let meetingsHtml = ath.countingMeetings.map(m => {
+            const exp = calculateExpiration(m);
+            const isNextDrop = (ath.nextDrop && ath.nextDrop.meetingName && ath.nextDrop.meetingName === m.competition);
+            const isSteg = (m.competition && m.competition.toLowerCase().includes('überflieger')) || (m.venue && m.venue.toLowerCase().includes('steg'));
+
+            return `
+              <tr class="hover:bg-slate-800/40 ${isNextDrop ? 'bg-rose-950/20 border-l-2 border-rose-500' : ''}">
+                <td class="py-1 px-2 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
+                <td class="py-1 px-2 font-sans font-medium text-slate-200">
+                  <span>${m.competition || '-'}</span>
+                  ${isSteg ? '<span class="ml-1 px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[8px] font-bold">STEG</span>' : ''}
+                  ${m.indoor ? '<span class="ml-1 px-1 py-0.2 rounded bg-purple-950 text-purple-300 border border-purple-800 text-[8px] font-bold">INDOOR</span>' : ''}
+                </td>
+                <td class="py-1 px-2 text-center"><span class="px-1 py-0.2 rounded border text-[8px] font-bold bg-slate-800 border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
+                <td class="py-1 px-2 text-right font-bold text-cyan-400">${m.mark}m</td>
+                <td class="py-1 px-2 text-right text-slate-400">${m.wind ? m.wind + ' m/s' : '-'}</td>
+                <td class="py-1 px-2 text-center text-slate-300">${m.place || '-'}</td>
+                <td class="py-1 px-2 text-right text-slate-400">${m.result_score || '-'}</td>
+                <td class="py-1 px-2 text-right text-amber-400">+${m.placing_score || 0}</td>
+                <td class="py-1 px-2 text-right font-bold text-cyan-300">${m.performance_score || '-'}</td>
+                <td class="py-1 px-2 text-right ${isNextDrop ? 'text-rose-400 font-bold' : 'text-slate-500'} font-mono text-[9px]">${exp ? exp.expDateStr : '-'}</td>
+              </tr>
+            `;
+          }).join('');
+
+          accTr.innerHTML = `
+            <td colspan="10" class="p-2.5">
+              <div class="bg-slate-900 rounded border border-slate-800 p-2.5 shadow-sm space-y-2">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <h4 class="font-bold text-white text-[11px] uppercase tracking-wide font-sans">
+                    🏆 5 gewertete Meetings: ${ath.name} (Score: ${ath.totalScore})
+                  </h4>
+                  <div class="text-[10px] text-rose-400 font-mono">
+                    ⏳ Nächster Verfall am <strong>${dropStr}</strong>: -${(ath.nextDrop ? ath.nextDrop.score : 0)} Pkt
                   </div>
                 </div>
-              </td>
-            `;
-            tbody.appendChild(accTr);
-          }
-        } catch (err) {
-          console.error('Error rendering row:', err);
+                <div class="overflow-x-auto">
+                  <table class="w-full text-left border-collapse text-[10px] font-mono">
+                    <thead>
+                      <tr class="bg-slate-950 text-slate-500 border-b border-slate-800 uppercase font-bold text-[9px]">
+                        <th class="py-1.5 px-2">Datum</th>
+                        <th class="py-1.5 px-2">Meeting</th>
+                        <th class="py-1.5 px-2 text-center">Kat</th>
+                        <th class="py-1.5 px-2 text-right">Weite</th>
+                        <th class="py-1.5 px-2 text-right">Wind</th>
+                        <th class="py-1.5 px-2 text-center">Platz</th>
+                        <th class="py-1.5 px-2 text-right">Result</th>
+                        <th class="py-1.5 px-2 text-right">Placing</th>
+                        <th class="py-1.5 px-2 text-right font-bold text-white">Perf. Score</th>
+                        <th class="py-1.5 px-2 text-right text-rose-400 font-bold">Verfällt am</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/50">
+                      ${meetingsHtml}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(accTr);
         }
       });
     }
@@ -948,7 +935,7 @@
       if (waUrl) localStorage.setItem('wa_url_key', waUrl);
       if (sheetsUrl) localStorage.setItem('sheets_url_key', sheetsUrl);
 
-      // 1. WA Rankings Import (Aktuell)
+      // 1. WA Rankings Import
       if (waUrl) {
         try {
           const fetchUrl = waUrl.includes('raw.githubusercontent.com') ? waUrl + '?t=' + Date.now() : waUrl;
@@ -992,7 +979,7 @@
           console.warn('WA Fetch Error', e);
         }
 
-        // Vorwoche separat und non-blocking abrufen
+        // Vorwoche parallel laden (Fehler leise ignorieren)
         try {
           const prevUrl = waUrl.replace('ranking_latest.json', 'ranking_previous.json') + '?t=' + Date.now();
           const resPrev = await fetch(prevUrl);
@@ -1011,7 +998,7 @@
             });
           }
         } catch (e) {
-          // Vorwoche noch nicht vorhanden -> ignoriere leise
+          // Ignorieren falls ranking_previous.json noch nicht existiert
         }
       }
 
