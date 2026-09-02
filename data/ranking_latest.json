@@ -7,7 +7,7 @@
       "name": "Miltiadis TENTOGLOU",
       "country": "GRE",
       "dob": "18 MAR 1998",
-      "ranking_score": "1363",
+      "ranking_score": "1375",
       "profile_url": "https://worldathletics.org/athletes/greece/miltiadis-tentoglou-14669734",
       "counted_competitions": [
         {
@@ -37,6 +37,19 @@
           "indoor": false
         },
         {
+          "date": "27 AUG 2026",
+          "competition": "Weltklasse Zürich, Letzigrund, Zürich",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.45",
+          "wind": "+4.0",
+          "place": "1.",
+          "result_score": 1236,
+          "placing_score": 140,
+          "performance_score": 1376,
+          "indoor": false
+        },
+        {
           "date": "11 AUG 2026",
           "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
           "venue": "",
@@ -61,19 +74,6 @@
           "placing_score": 70,
           "performance_score": 1352,
           "indoor": false
-        },
-        {
-          "date": "21 AUG 2026",
-          "competition": "Athletissima Lausanne, Stade Olympique de la Pontaise, Lausanne",
-          "venue": "",
-          "category": "GW",
-          "mark": "8.24",
-          "wind": "+21.0",
-          "place": "1.",
-          "result_score": 1178,
-          "placing_score": 140,
-          "performance_score": 1318,
-          "indoor": false
         }
       ]
     },
@@ -82,7 +82,7 @@
       "name": "Mattia FURLANI",
       "country": "ITA",
       "dob": "07 FEB 2005",
-      "ranking_score": "1362",
+      "ranking_score": "1352",
       "profile_url": "https://worldathletics.org/athletes/italy/mattia-furlani-14905216",
       "counted_competitions": [
         {
@@ -96,19 +96,6 @@
           "result_score": 1223,
           "placing_score": 260,
           "performance_score": 1483,
-          "indoor": false
-        },
-        {
-          "date": "27 AUG 2025",
-          "competition": "Weltklasse Zürich, Sechseläutenplatz, Zürich",
-          "venue": "",
-          "category": "DF",
-          "mark": "8.30",
-          "wind": "+7.0",
-          "place": "2.",
-          "result_score": 1203,
-          "placing_score": 150,
-          "performance_score": 1353,
           "indoor": false
         },
         {
@@ -149,80 +136,93 @@
           "placing_score": 100,
           "performance_score": 1303,
           "indoor": false
+        },
+        {
+          "date": "23 MAY 2026",
+          "competition": "Wanda Diamond League Xiamen, Egret Stadium, Xiamen",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.28",
+          "wind": "+1.0",
+          "place": "4.",
+          "result_score": 1199,
+          "placing_score": 100,
+          "performance_score": 1299,
+          "indoor": false
         }
       ]
     },
     {
       "rank": "3",
-      "name": "Simon EHAMMER",
-      "country": "SUI",
-      "dob": "07 FEB 2000",
+      "name": "Tajay GAYLE",
+      "country": "JAM",
+      "dob": "02 AUG 1996",
       "ranking_score": "1336",
-      "profile_url": "https://worldathletics.org/athletes/switzerland/simon-ehammer-14730721",
+      "profile_url": "https://worldathletics.org/athletes/jamaica/tajay-gayle-14631861",
       "counted_competitions": [
         {
           "date": "17 SEP 2025",
           "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
           "venue": "",
           "category": "OW",
-          "mark": "8.30",
-          "wind": "-2.0",
-          "place": "4.",
-          "result_score": 1204,
-          "placing_score": 190,
-          "performance_score": 1394,
-          "indoor": false
-        },
-        {
-          "date": "27 AUG 2025",
-          "competition": "Weltklasse Zürich, Sechseläutenplatz, Zürich",
-          "venue": "",
-          "category": "DF",
-          "mark": "8.32",
-          "wind": "-6.0",
-          "place": "1.",
-          "result_score": 1211,
-          "placing_score": 170,
-          "performance_score": 1381,
-          "indoor": false
-        },
-        {
-          "date": "11 AUG 2026",
-          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
-          "venue": "",
-          "category": "GL",
-          "mark": "8.29",
-          "wind": "-27.0",
+          "mark": "8.34",
+          "wind": "-1.0",
           "place": "2.",
-          "result_score": 1217,
-          "placing_score": 105,
-          "performance_score": 1322,
+          "result_score": 1212,
+          "placing_score": 230,
+          "performance_score": 1442,
           "indoor": false
         },
         {
-          "date": "10 JUL 2026",
-          "competition": "Meeting International d’Athlétisme Herculis EBS, Stade Louis II, Monaco",
+          "date": "27 AUG 2026",
+          "competition": "Weltklasse Zürich, Letzigrund, Zürich",
           "venue": "",
           "category": "GW",
-          "mark": "8.32",
-          "wind": "+9.0",
-          "place": "5.",
-          "result_score": 1208,
-          "placing_score": 90,
-          "performance_score": 1298,
-          "indoor": false
-        },
-        {
-          "date": "21 AUG 2026",
-          "competition": "Athletissima Lausanne, Stade Olympique de la Pontaise, Lausanne",
-          "venue": "",
-          "category": "GW",
-          "mark": "8.13",
-          "wind": "+13.0",
+          "mark": "8.43",
+          "wind": "-3.0",
           "place": "2.",
-          "result_score": 1166,
+          "result_score": 1233,
           "placing_score": 120,
-          "performance_score": 1286,
+          "performance_score": 1353,
+          "indoor": false
+        },
+        {
+          "date": "23 MAY 2026",
+          "competition": "Wanda Diamond League Xiamen, Egret Stadium, Xiamen",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.32",
+          "wind": "+2.0",
+          "place": "2.",
+          "result_score": 1208,
+          "placing_score": 120,
+          "performance_score": 1328,
+          "indoor": false
+        },
+        {
+          "date": "20 JUN 2026",
+          "competition": "Jamaican Championships, National Stadium, Kingston",
+          "venue": "",
+          "category": "B",
+          "mark": "8.37",
+          "wind": "+16.0",
+          "place": "1.",
+          "result_score": 1219,
+          "placing_score": 70,
+          "performance_score": 1289,
+          "indoor": false
+        },
+        {
+          "date": "29 JUL 2026",
+          "competition": "XXIII Commonwealth Games, Scotstoun Stadium, Glasgow",
+          "venue": "",
+          "category": "A",
+          "mark": "8.15",
+          "wind": "+15.0",
+          "place": "1.",
+          "result_score": 1170,
+          "placing_score": 100,
+          "performance_score": 1270,
           "indoor": false
         }
       ]
@@ -304,75 +304,75 @@
     },
     {
       "rank": "5",
-      "name": "Tajay GAYLE",
-      "country": "JAM",
-      "dob": "02 AUG 1996",
-      "ranking_score": "1319",
-      "profile_url": "https://worldathletics.org/athletes/jamaica/tajay-gayle-14631861",
+      "name": "Simon EHAMMER",
+      "country": "SUI",
+      "dob": "07 FEB 2000",
+      "ranking_score": "1309",
+      "profile_url": "https://worldathletics.org/athletes/switzerland/simon-ehammer-14730721",
       "counted_competitions": [
         {
           "date": "17 SEP 2025",
           "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
           "venue": "",
           "category": "OW",
-          "mark": "8.34",
-          "wind": "-1.0",
-          "place": "2.",
-          "result_score": 1212,
-          "placing_score": 230,
-          "performance_score": 1442,
+          "mark": "8.30",
+          "wind": "-2.0",
+          "place": "4.",
+          "result_score": 1204,
+          "placing_score": 190,
+          "performance_score": 1394,
           "indoor": false
         },
         {
-          "date": "23 MAY 2026",
-          "competition": "Wanda Diamond League Xiamen, Egret Stadium, Xiamen",
+          "date": "11 AUG 2026",
+          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
+          "venue": "",
+          "category": "GL",
+          "mark": "8.29",
+          "wind": "-27.0",
+          "place": "2.",
+          "result_score": 1217,
+          "placing_score": 105,
+          "performance_score": 1322,
+          "indoor": false
+        },
+        {
+          "date": "10 JUL 2026",
+          "competition": "Meeting International d’Athlétisme Herculis EBS, Stade Louis II, Monaco",
           "venue": "",
           "category": "GW",
           "mark": "8.32",
-          "wind": "+2.0",
-          "place": "2.",
+          "wind": "+9.0",
+          "place": "5.",
           "result_score": 1208,
+          "placing_score": 90,
+          "performance_score": 1298,
+          "indoor": false
+        },
+        {
+          "date": "21 AUG 2026",
+          "competition": "Athletissima Lausanne, Stade Olympique de la Pontaise, Lausanne",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.13",
+          "wind": "+13.0",
+          "place": "2.",
+          "result_score": 1166,
           "placing_score": 120,
-          "performance_score": 1328,
+          "performance_score": 1286,
           "indoor": false
         },
         {
-          "date": "20 JUN 2026",
-          "competition": "Jamaican Championships, National Stadium, Kingston",
+          "date": "30 MAY 2026",
+          "competition": "Hypomeeting, Mösle-Stadium, Götzis",
           "venue": "",
-          "category": "B",
-          "mark": "8.37",
-          "wind": "+16.0",
+          "category": "GL",
+          "mark": "8.51",
+          "wind": "+10.0",
           "place": "1.",
-          "result_score": 1219,
-          "placing_score": 70,
-          "performance_score": 1289,
-          "indoor": false
-        },
-        {
-          "date": "29 JUL 2026",
-          "competition": "XXIII Commonwealth Games, Scotstoun Stadium, Glasgow",
-          "venue": "",
-          "category": "A",
-          "mark": "8.15",
-          "wind": "+15.0",
-          "place": "1.",
-          "result_score": 1170,
-          "placing_score": 100,
-          "performance_score": 1270,
-          "indoor": false
-        },
-        {
-          "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
-          "venue": "",
-          "category": "OW",
-          "mark": "8.28",
-          "wind": "+4.0",
-          "place": "1.",
-          "result_score": 1199,
-          "placing_score": 70,
-          "performance_score": 1269,
+          "result_score": 1249,
+          "placing_score": 0,
+          "performance_score": 1249,
           "indoor": false
         }
       ]
@@ -382,7 +382,7 @@
       "name": "Jorge A. HODELÍN",
       "country": "CUB",
       "dob": "16 MAY 2007",
-      "ranking_score": "1288",
+      "ranking_score": "1297",
       "profile_url": "https://worldathletics.org/athletes/cuba/jorge-a-hodelin-15111238",
       "counted_competitions": [
         {
@@ -396,6 +396,19 @@
           "result_score": 1221,
           "placing_score": 110,
           "performance_score": 1331,
+          "indoor": false
+        },
+        {
+          "date": "27 AUG 2026",
+          "competition": "Weltklasse Zürich, Letzigrund, Zürich",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.32",
+          "wind": "+3.0",
+          "place": "4.",
+          "result_score": 1208,
+          "placing_score": 100,
+          "performance_score": 1308,
           "indoor": false
         },
         {
@@ -434,19 +447,6 @@
           "place": "1.",
           "result_score": 1238,
           "placing_score": 28,
-          "performance_score": 1266,
-          "indoor": false
-        },
-        {
-          "date": "04 AUG 2026",
-          "competition": "CAC Games, Estadio Olimpico Juan Pablo Duarte, Santo Domingo",
-          "venue": "",
-          "category": "B",
-          "mark": "8.23",
-          "wind": "-14.0",
-          "place": "1.",
-          "result_score": 1196,
-          "placing_score": 70,
           "performance_score": 1266,
           "indoor": false
         }
@@ -529,6 +529,81 @@
     },
     {
       "rank": "8",
+      "name": "Wayne PINNOCK",
+      "country": "JAM",
+      "dob": "24 OCT 2000",
+      "ranking_score": "1262",
+      "profile_url": "https://worldathletics.org/athletes/jamaica/wayne-pinnock-14693852",
+      "counted_competitions": [
+        {
+          "date": "10 JUL 2026",
+          "competition": "Meeting International d’Athlétisme Herculis EBS, Stade Louis II, Monaco",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.39",
+          "wind": "+3.0",
+          "place": "2.",
+          "result_score": 1223,
+          "placing_score": 120,
+          "performance_score": 1343,
+          "indoor": false
+        },
+        {
+          "date": "27 AUG 2026",
+          "competition": "Weltklasse Zürich, Letzigrund, Zürich",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.33",
+          "wind": "+4.0",
+          "place": "3.",
+          "result_score": 1210,
+          "placing_score": 110,
+          "performance_score": 1320,
+          "indoor": false
+        },
+        {
+          "date": "14 JUL 2026",
+          "competition": "Gyulai István Memorial - Hungarian Athletics Grand Prix, Nemzeti Atlétikai Központ, Budapest",
+          "venue": "",
+          "category": "A",
+          "mark": "8.08",
+          "wind": "-5.0",
+          "place": "4.",
+          "result_score": 1158,
+          "placing_score": 70,
+          "performance_score": 1228,
+          "indoor": false
+        },
+        {
+          "date": "21 AUG 2026",
+          "competition": "Athletissima Lausanne, Stade Olympique de la Pontaise, Lausanne",
+          "venue": "",
+          "category": "GW",
+          "mark": "8.01",
+          "wind": "+16.0",
+          "place": "6.",
+          "result_score": 1140,
+          "placing_score": 80,
+          "performance_score": 1220,
+          "indoor": false
+        },
+        {
+          "date": "23 MAY 2026",
+          "competition": "Wanda Diamond League Xiamen, Egret Stadium, Xiamen",
+          "venue": "",
+          "category": "GW",
+          "mark": "7.93",
+          "wind": "+5.0",
+          "place": "6.",
+          "result_score": 1123,
+          "placing_score": 80,
+          "performance_score": 1203,
+          "indoor": false
+        }
+      ]
+    },
+    {
+      "rank": "9",
       "name": "Mingkun ZHANG",
       "country": "CHN",
       "dob": "20 OCT 2000",
@@ -598,81 +673,6 @@
           "result_score": 1194,
           "placing_score": 7,
           "performance_score": 1201,
-          "indoor": false
-        }
-      ]
-    },
-    {
-      "rank": "9",
-      "name": "Wayne PINNOCK",
-      "country": "JAM",
-      "dob": "24 OCT 2000",
-      "ranking_score": "1250",
-      "profile_url": "https://worldathletics.org/athletes/jamaica/wayne-pinnock-14693852",
-      "counted_competitions": [
-        {
-          "date": "10 JUL 2026",
-          "competition": "Meeting International d’Athlétisme Herculis EBS, Stade Louis II, Monaco",
-          "venue": "",
-          "category": "GW",
-          "mark": "8.39",
-          "wind": "+3.0",
-          "place": "2.",
-          "result_score": 1223,
-          "placing_score": 120,
-          "performance_score": 1343,
-          "indoor": false
-        },
-        {
-          "date": "27 AUG 2025",
-          "competition": "Weltklasse Zürich, Sechseläutenplatz, Zürich",
-          "venue": "",
-          "category": "DF",
-          "mark": "8.15",
-          "wind": "NWI",
-          "place": "4.",
-          "result_score": 1140,
-          "placing_score": 120,
-          "performance_score": 1260,
-          "indoor": false
-        },
-        {
-          "date": "14 JUL 2026",
-          "competition": "Gyulai István Memorial - Hungarian Athletics Grand Prix, Nemzeti Atlétikai Központ, Budapest",
-          "venue": "",
-          "category": "A",
-          "mark": "8.08",
-          "wind": "-5.0",
-          "place": "4.",
-          "result_score": 1158,
-          "placing_score": 70,
-          "performance_score": 1228,
-          "indoor": false
-        },
-        {
-          "date": "21 AUG 2026",
-          "competition": "Athletissima Lausanne, Stade Olympique de la Pontaise, Lausanne",
-          "venue": "",
-          "category": "GW",
-          "mark": "8.01",
-          "wind": "+16.0",
-          "place": "6.",
-          "result_score": 1140,
-          "placing_score": 80,
-          "performance_score": 1220,
-          "indoor": false
-        },
-        {
-          "date": "23 MAY 2026",
-          "competition": "Wanda Diamond League Xiamen, Egret Stadium, Xiamen",
-          "venue": "",
-          "category": "GW",
-          "mark": "7.93",
-          "wind": "+5.0",
-          "place": "6.",
-          "result_score": 1123,
-          "placing_score": 80,
-          "performance_score": 1203,
           "indoor": false
         }
       ]
@@ -757,7 +757,7 @@
       "name": "Luka BOŠKOVIĆ",
       "country": "SRB",
       "dob": "06 JUL 2006",
-      "ranking_score": "1246",
+      "ranking_score": "1248",
       "profile_url": "https://worldathletics.org/athletes/serbia/luka-boskovic-15037455",
       "counted_competitions": [
         {
@@ -813,16 +813,16 @@
           "indoor": false
         },
         {
-          "date": "10 AUG 2026",
-          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
+          "date": "27 AUG 2026",
+          "competition": "Weltklasse Zürich, Letzigrund, Zürich",
           "venue": "",
-          "category": "GL",
-          "mark": "8.33",
-          "wind": "+24.0",
-          "place": "2.",
-          "result_score": 1196,
-          "placing_score": 28,
-          "performance_score": 1224,
+          "category": "GW",
+          "mark": "8.09",
+          "wind": "-4.0",
+          "place": "7.",
+          "result_score": 1159,
+          "placing_score": 75,
+          "performance_score": 1234,
           "indoor": false
         }
       ]
@@ -904,81 +904,6 @@
     },
     {
       "rank": "13",
-      "name": "Liam ADCOCK",
-      "country": "AUS",
-      "dob": "21 JUN 1996",
-      "ranking_score": "1241",
-      "profile_url": "https://worldathletics.org/athletes/australia/liam-adcock-14572123",
-      "counted_competitions": [
-        {
-          "date": "27 AUG 2025",
-          "competition": "Weltklasse Zürich, Sechseläutenplatz, Zürich",
-          "venue": "",
-          "category": "DF",
-          "mark": "8.24",
-          "wind": "-3.0",
-          "place": "3.",
-          "result_score": 1191,
-          "placing_score": 130,
-          "performance_score": 1321,
-          "indoor": false
-        },
-        {
-          "date": "12 APR 2026",
-          "competition": "Australian Championships, Olympic Park, Sydney",
-          "venue": "",
-          "category": "B",
-          "mark": "8.26",
-          "wind": "+1.0",
-          "place": "1.",
-          "result_score": 1194,
-          "placing_score": 70,
-          "performance_score": 1264,
-          "indoor": false
-        },
-        {
-          "date": "28 MAR 2026",
-          "competition": "Maurie Plant Meet, Lakeside Stadium, Melbourne",
-          "venue": "",
-          "category": "A",
-          "mark": "7.94",
-          "wind": "-13.0",
-          "place": "2.",
-          "result_score": 1132,
-          "placing_score": 84,
-          "performance_score": 1216,
-          "indoor": false
-        },
-        {
-          "date": "16 MAY 2026",
-          "competition": "Wanda Diamond League, China Textile City Sports Centre, Shaoxing/Keqiao",
-          "venue": "",
-          "category": "A",
-          "mark": "8.00",
-          "wind": "-1.0",
-          "place": "4.",
-          "result_score": 1138,
-          "placing_score": 70,
-          "performance_score": 1208,
-          "indoor": false
-        },
-        {
-          "date": "07 MAR 2026",
-          "competition": "Cathy Freeman Shield, QSAC State Athletics Facility, Nathan, Brisbane",
-          "venue": "",
-          "category": "F",
-          "mark": "8.23",
-          "wind": "+5.0",
-          "place": "1.",
-          "result_score": 1188,
-          "placing_score": 11,
-          "performance_score": 1199,
-          "indoor": false
-        }
-      ]
-    },
-    {
-      "rank": "14",
       "name": "Yuhao SHI",
       "country": "CHN",
       "dob": "26 SEP 1998",
@@ -1053,7 +978,7 @@
       ]
     },
     {
-      "rank": "15",
+      "rank": "14",
       "name": "SREESHANKAR",
       "country": "IND",
       "dob": "27 MAR 1999",
@@ -1128,7 +1053,7 @@
       ]
     },
     {
-      "rank": "16",
+      "rank": "15",
       "name": "Thobias MONTLER",
       "country": "SWE",
       "dob": "15 FEB 1996",
@@ -1203,7 +1128,7 @@
       ]
     },
     {
-      "rank": "17",
+      "rank": "16",
       "name": "Luvo MANYONGA",
       "country": "RSA",
       "dob": "08 JAN 1991",
@@ -1278,7 +1203,7 @@
       ]
     },
     {
-      "rank": "18",
+      "rank": "17",
       "name": "Jeremiah DAVIS",
       "country": "USA",
       "dob": "31 AUG 2001",
@@ -1353,7 +1278,7 @@
       ]
     },
     {
-      "rank": "19",
+      "rank": "18",
       "name": "Lester LESCAY",
       "country": "ESP",
       "dob": "15 OCT 2001",
@@ -1423,6 +1348,81 @@
           "result_score": 1149,
           "placing_score": 49,
           "performance_score": 1198,
+          "indoor": false
+        }
+      ]
+    },
+    {
+      "rank": "19",
+      "name": "Francesco Ettore INZOLI",
+      "country": "ITA",
+      "dob": "26 FEB 2005",
+      "ranking_score": "1224",
+      "profile_url": "https://worldathletics.org/athletes/italy/francesco-ettore-inzoli-14918764",
+      "counted_competitions": [
+        {
+          "date": "26 JUL 2026",
+          "competition": "Italian Championships, Stadio Luigi Ridolfi, Firenze",
+          "venue": "",
+          "category": "B",
+          "mark": "8.27",
+          "wind": "+15.0",
+          "place": "1.",
+          "result_score": 1197,
+          "placing_score": 70,
+          "performance_score": 1267,
+          "indoor": false
+        },
+        {
+          "date": "11 AUG 2026",
+          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
+          "venue": "",
+          "category": "GL",
+          "mark": "8.04",
+          "wind": "-15.0",
+          "place": "6.",
+          "result_score": 1155,
+          "placing_score": 70,
+          "performance_score": 1225,
+          "indoor": false
+        },
+        {
+          "date": "10 AUG 2026",
+          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
+          "venue": "",
+          "category": "GL",
+          "mark": "8.34",
+          "wind": "+31.0",
+          "place": "1.",
+          "result_score": 1194,
+          "placing_score": 28,
+          "performance_score": 1222,
+          "indoor": false
+        },
+        {
+          "date": "30 AUG 2026",
+          "competition": "XX Mediterranean Games, Stadio Giuseppe Valente, Taranto",
+          "venue": "",
+          "category": "C",
+          "mark": "8.19",
+          "wind": "+24.0",
+          "place": "1.",
+          "result_score": 1165,
+          "placing_score": 42,
+          "performance_score": 1207,
+          "indoor": false
+        },
+        {
+          "date": "12 JUL 2026",
+          "competition": "Italian U23 Championships, Stadio M.S. Cozzoli, Molfetta",
+          "venue": "",
+          "category": "F",
+          "mark": "8.25",
+          "wind": "+20.0",
+          "place": "1.",
+          "result_score": 1192,
+          "placing_score": 11,
+          "performance_score": 1203,
           "indoor": false
         }
       ]
@@ -1504,75 +1504,75 @@
     },
     {
       "rank": "21",
-      "name": "Francesco Ettore INZOLI",
-      "country": "ITA",
-      "dob": "26 FEB 2005",
-      "ranking_score": "1214",
-      "profile_url": "https://worldathletics.org/athletes/italy/francesco-ettore-inzoli-14918764",
+      "name": "Liam ADCOCK",
+      "country": "AUS",
+      "dob": "21 JUN 1996",
+      "ranking_score": "1213",
+      "profile_url": "https://worldathletics.org/athletes/australia/liam-adcock-14572123",
       "counted_competitions": [
         {
-          "date": "26 JUL 2026",
-          "competition": "Italian Championships, Stadio Luigi Ridolfi, Firenze",
+          "date": "12 APR 2026",
+          "competition": "Australian Championships, Olympic Park, Sydney",
           "venue": "",
           "category": "B",
-          "mark": "8.27",
-          "wind": "+15.0",
-          "place": "1.",
-          "result_score": 1197,
-          "placing_score": 70,
-          "performance_score": 1267,
-          "indoor": false
-        },
-        {
-          "date": "11 AUG 2026",
-          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
-          "venue": "",
-          "category": "GL",
-          "mark": "8.04",
-          "wind": "-15.0",
-          "place": "6.",
-          "result_score": 1155,
-          "placing_score": 70,
-          "performance_score": 1225,
-          "indoor": false
-        },
-        {
-          "date": "10 AUG 2026",
-          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
-          "venue": "",
-          "category": "GL",
-          "mark": "8.34",
-          "wind": "+31.0",
+          "mark": "8.26",
+          "wind": "+1.0",
           "place": "1.",
           "result_score": 1194,
-          "placing_score": 28,
-          "performance_score": 1222,
+          "placing_score": 70,
+          "performance_score": 1264,
           "indoor": false
         },
         {
-          "date": "12 JUL 2026",
-          "competition": "Italian U23 Championships, Stadio M.S. Cozzoli, Molfetta",
+          "date": "28 MAR 2026",
+          "competition": "Maurie Plant Meet, Lakeside Stadium, Melbourne",
           "venue": "",
-          "category": "F",
-          "mark": "8.25",
-          "wind": "+20.0",
-          "place": "1.",
-          "result_score": 1192,
-          "placing_score": 11,
-          "performance_score": 1203,
-          "indoor": false
-        },
-        {
-          "date": "22 MAY 2026",
-          "competition": "Fiamme Gialle invitational, Centro Sportivo della Guardia di Finanza, Castelporziano",
-          "venue": "",
-          "category": "F",
-          "mark": "8.11",
-          "wind": "+25.0",
+          "category": "A",
+          "mark": "7.94",
+          "wind": "-13.0",
           "place": "2.",
-          "result_score": 1147,
-          "placing_score": 7,
-          "performance_score": 1154,
+          "result_score": 1132,
+          "placing_score": 84,
+          "performance_score": 1216,
+          "indoor": false
+        },
+        {
+          "date": "16 MAY 2026",
+          "competition": "Wanda Diamond League, China Textile City Sports Centre, Shaoxing/Keqiao",
+          "venue": "",
+          "category": "A",
+          "mark": "8.00",
+          "wind": "-1.0",
+          "place": "4.",
+          "result_score": 1138,
+          "placing_score": 70,
+          "performance_score": 1208,
+          "indoor": false
+        },
+        {
+          "date": "07 MAR 2026",
+          "competition": "Cathy Freeman Shield, QSAC State Athletics Facility, Nathan, Brisbane",
+          "venue": "",
+          "category": "F",
+          "mark": "8.23",
+          "wind": "+5.0",
+          "place": "1.",
+          "result_score": 1188,
+          "placing_score": 11,
+          "performance_score": 1199,
+          "indoor": false
+        },
+        {
+          "date": "15 SEP 2025",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "venue": "",
+          "category": "OW",
+          "mark": "7.94",
+          "wind": "+11.0",
+          "place": "14.",
+          "result_score": 1125,
+          "placing_score": 56,
+          "performance_score": 1181,
           "indoor": false
         }
       ]
@@ -2257,7 +2257,7 @@
       "name": "Filip PRAVDICA",
       "country": "CRO",
       "dob": "28 JUL 1995",
-      "ranking_score": "1190",
+      "ranking_score": "1191",
       "profile_url": "https://worldathletics.org/athletes/croatia/filip-pravdica-14436507",
       "counted_competitions": [
         {
@@ -2300,16 +2300,16 @@
           "indoor": false
         },
         {
-          "date": "26 AUG 2025",
-          "competition": "International Athletics Meeting Maribor and the Memorial of Iztok Ciglarič in the 1500m run, Atletski stadion Poljane, Maribor",
+          "date": "30 AUG 2026",
+          "competition": "XX Mediterranean Games, Stadio Giuseppe Valente, Taranto",
           "venue": "",
-          "category": "E",
-          "mark": "8.08",
-          "wind": "+7.0",
-          "place": "1.",
-          "result_score": 1155,
-          "placing_score": 18,
-          "performance_score": 1173,
+          "category": "C",
+          "mark": "8.14",
+          "wind": "+47.0",
+          "place": "2.",
+          "result_score": 1140,
+          "placing_score": 35,
+          "performance_score": 1175,
           "indoor": false
         },
         {
@@ -5329,6 +5329,81 @@
     },
     {
       "rank": "72",
+      "name": "Tarek HOCINE",
+      "country": "ALG",
+      "dob": "09 NOV 1996",
+      "ranking_score": "1141",
+      "profile_url": "https://worldathletics.org/athletes/algeria/tarek-hocine-14694306",
+      "counted_competitions": [
+        {
+          "date": "13 MAY 2026",
+          "competition": "African Athletics Championships, University of Ghana Sports Stadium, Accra",
+          "venue": "",
+          "category": "GL",
+          "mark": "7.98",
+          "wind": "+31.0",
+          "place": "4.",
+          "result_score": 1115,
+          "placing_score": 85,
+          "performance_score": 1200,
+          "indoor": false
+        },
+        {
+          "date": "30 AUG 2026",
+          "competition": "XX Mediterranean Games, Stadio Giuseppe Valente, Taranto",
+          "venue": "",
+          "category": "C",
+          "mark": "8.03",
+          "wind": "+19.0",
+          "place": "3.",
+          "result_score": 1144,
+          "placing_score": 31,
+          "performance_score": 1175,
+          "indoor": false
+        },
+        {
+          "date": "13 JUN 2026",
+          "competition": "Meeting Internazionale Città di Pergine, Stadio Comunale, Pergine Valsugana",
+          "venue": "",
+          "category": "F",
+          "mark": "7.84",
+          "wind": "+10.0",
+          "place": "1.",
+          "result_score": 1103,
+          "placing_score": 11,
+          "performance_score": 1114,
+          "indoor": false
+        },
+        {
+          "date": "12 MAY 2026",
+          "competition": "African Athletics Championships, University of Ghana Sports Stadium, Accra",
+          "venue": "",
+          "category": "GL",
+          "mark": "7.75",
+          "wind": "+13.0",
+          "place": "5.",
+          "result_score": 1083,
+          "placing_score": 28,
+          "performance_score": 1111,
+          "indoor": false
+        },
+        {
+          "date": "25 APR 2026",
+          "competition": "Algeria Athletics One Day, Complexe Olympique Mohamed Boudiaf, Algiers",
+          "venue": "",
+          "category": "F",
+          "mark": "7.81",
+          "wind": "+20.0",
+          "place": "1.",
+          "result_score": 1096,
+          "placing_score": 11,
+          "performance_score": 1107,
+          "indoor": false
+        }
+      ]
+    },
+    {
+      "rank": "73",
       "name": "Niklas WALL",
       "country": "SWE",
       "dob": "03 JAN 2003",
@@ -5403,7 +5478,7 @@
       ]
     },
     {
-      "rank": "73",
+      "rank": "74",
       "name": "Breno BARBOSA",
       "country": "BRA",
       "dob": "22 JUL 2002",
@@ -5478,7 +5553,7 @@
       ]
     },
     {
-      "rank": "74",
+      "rank": "75",
       "name": "Charles GODFRED",
       "country": "NGR",
       "dob": "17 APR 2004",
@@ -5553,7 +5628,7 @@
       ]
     },
     {
-      "rank": "75",
+      "rank": "76",
       "name": "Nikolaos STAMATONIKOLOS",
       "country": "GRE",
       "dob": "28 FEB 2003",
@@ -5628,7 +5703,7 @@
       ]
     },
     {
-      "rank": "76",
+      "rank": "77",
       "name": "Zhao LI",
       "country": "CHN",
       "dob": "11 DEC 2002",
@@ -5703,7 +5778,7 @@
       ]
     },
     {
-      "rank": "77",
+      "rank": "78",
       "name": "Kristóf PAP",
       "country": "HUN",
       "dob": "16 SEP 1998",
@@ -5778,7 +5853,7 @@
       ]
     },
     {
-      "rank": "78",
+      "rank": "79",
       "name": "Gabriele CHILA'",
       "country": "ITA",
       "dob": "17 SEP 1997",
@@ -5853,7 +5928,7 @@
       ]
     },
     {
-      "rank": "79",
+      "rank": "80",
       "name": "Takuma SEKINE",
       "country": "JPN",
       "dob": "11 NOV 2004",
@@ -5928,7 +6003,7 @@
       ]
     },
     {
-      "rank": "80",
+      "rank": "81",
       "name": "Rodion SEVASTYANOV",
       "country": "RUS",
       "dob": "06 DEC 2005",
@@ -6003,7 +6078,7 @@
       ]
     },
     {
-      "rank": "81",
+      "rank": "82",
       "name": "Chenoult Lionel COETZEE",
       "country": "NAM",
       "dob": "06 MAY 1997",
@@ -6078,7 +6153,7 @@
       ]
     },
     {
-      "rank": "82",
+      "rank": "83",
       "name": "Aniel MOLINA",
       "country": "CUB",
       "dob": "01 APR 2004",
@@ -6153,7 +6228,7 @@
       ]
     },
     {
-      "rank": "83",
+      "rank": "84",
       "name": "Natsuki YAMAKAWA",
       "country": "JPN",
       "dob": "24 JUL 1995",
@@ -6228,7 +6303,7 @@
       ]
     },
     {
-      "rank": "84",
+      "rank": "85",
       "name": "Alexsandro MELO",
       "country": "BRA",
       "dob": "26 SEP 1995",
@@ -6303,7 +6378,7 @@
       ]
     },
     {
-      "rank": "85",
+      "rank": "86",
       "name": "Samuel KHOGALI",
       "country": "GBR",
       "dob": "15 JUL 1997",
@@ -6378,7 +6453,7 @@
       ]
     },
     {
-      "rank": "86",
+      "rank": "87",
       "name": "Peiqi GAO",
       "country": "CHN",
       "dob": "19 AUG 2004",
@@ -6453,7 +6528,7 @@
       ]
     },
     {
-      "rank": "87",
+      "rank": "88",
       "name": "Juriad HUGHES",
       "country": "USA",
       "dob": "27 SEP 2005",
@@ -6528,7 +6603,7 @@
       ]
     },
     {
-      "rank": "88",
+      "rank": "89",
       "name": "Jason SMITH",
       "country": "USA",
       "dob": "19 DEC 1998",
@@ -6598,81 +6673,6 @@
           "result_score": 1057,
           "placing_score": 38,
           "performance_score": 1095,
-          "indoor": false
-        }
-      ]
-    },
-    {
-      "rank": "89",
-      "name": "Tarek HOCINE",
-      "country": "ALG",
-      "dob": "09 NOV 1996",
-      "ranking_score": "1127",
-      "profile_url": "https://worldathletics.org/athletes/algeria/tarek-hocine-14694306",
-      "counted_competitions": [
-        {
-          "date": "13 MAY 2026",
-          "competition": "African Athletics Championships, University of Ghana Sports Stadium, Accra",
-          "venue": "",
-          "category": "GL",
-          "mark": "7.98",
-          "wind": "+31.0",
-          "place": "4.",
-          "result_score": 1115,
-          "placing_score": 85,
-          "performance_score": 1200,
-          "indoor": false
-        },
-        {
-          "date": "13 JUN 2026",
-          "competition": "Meeting Internazionale Città di Pergine, Stadio Comunale, Pergine Valsugana",
-          "venue": "",
-          "category": "F",
-          "mark": "7.84",
-          "wind": "+10.0",
-          "place": "1.",
-          "result_score": 1103,
-          "placing_score": 11,
-          "performance_score": 1114,
-          "indoor": false
-        },
-        {
-          "date": "12 MAY 2026",
-          "competition": "African Athletics Championships, University of Ghana Sports Stadium, Accra",
-          "venue": "",
-          "category": "GL",
-          "mark": "7.75",
-          "wind": "+13.0",
-          "place": "5.",
-          "result_score": 1083,
-          "placing_score": 28,
-          "performance_score": 1111,
-          "indoor": false
-        },
-        {
-          "date": "25 APR 2026",
-          "competition": "Algeria Athletics One Day, Complexe Olympique Mohamed Boudiaf, Algiers",
-          "venue": "",
-          "category": "F",
-          "mark": "7.81",
-          "wind": "+20.0",
-          "place": "1.",
-          "result_score": 1096,
-          "placing_score": 11,
-          "performance_score": 1107,
-          "indoor": false
-        },
-        {
-          "date": "01 JUN 2026",
-          "competition": "Josef Odlozil Memorial, Stadion Juliska, Praha",
-          "venue": "",
-          "category": "C",
-          "mark": "7.69",
-          "wind": "-2.0",
-          "place": "2.",
-          "result_score": 1071,
-          "placing_score": 35,
-          "performance_score": 1106,
           "indoor": false
         }
       ]
@@ -7054,6 +7054,81 @@
     },
     {
       "rank": "95",
+      "name": "Samuel EKELUND",
+      "country": "SWE",
+      "dob": "30 DEC 2003",
+      "ranking_score": "1122",
+      "profile_url": "https://worldathletics.org/athletes/sweden/samuel-ekelund-14993035",
+      "counted_competitions": [
+        {
+          "date": "08 JUL 2026",
+          "competition": "Folksam Grand Prix Karlstad, Sola Arena, Karlstad",
+          "venue": "",
+          "category": "C",
+          "mark": "8.04",
+          "wind": "+29.0",
+          "place": "2.",
+          "result_score": 1129,
+          "placing_score": 35,
+          "performance_score": 1164,
+          "indoor": false
+        },
+        {
+          "date": "30 AUG 2026",
+          "competition": "Finnkampen, Olympiastadion, Helsinki",
+          "venue": "",
+          "category": "D",
+          "mark": "7.90",
+          "wind": "+9.0",
+          "place": "1.",
+          "result_score": 1116,
+          "placing_score": 28,
+          "performance_score": 1144,
+          "indoor": false
+        },
+        {
+          "date": "03 JUN 2026",
+          "competition": "Granada Challenger, Estadio de la Juventud de Granada, Granada",
+          "venue": "",
+          "category": "D",
+          "mark": "7.74",
+          "wind": "+8.0",
+          "place": "3.",
+          "result_score": 1081,
+          "placing_score": 21,
+          "performance_score": 1102,
+          "indoor": false
+        },
+        {
+          "date": "24 JUN 2026",
+          "competition": "Boysen Memorial, Bislett Stadion, Oslo",
+          "venue": "",
+          "category": "C",
+          "mark": "7.69",
+          "wind": "+9.0",
+          "place": "3.",
+          "result_score": 1070,
+          "placing_score": 31,
+          "performance_score": 1101,
+          "indoor": false
+        },
+        {
+          "date": "25 JUL 2026",
+          "competition": "Swedish Championships, Uppsala Friidrottsarena, Uppsala",
+          "venue": "",
+          "category": "B",
+          "mark": "7.63",
+          "wind": "+19.0",
+          "place": "4.",
+          "result_score": 1057,
+          "placing_score": 42,
+          "performance_score": 1099,
+          "indoor": false
+        }
+      ]
+    },
+    {
+      "rank": "96",
       "name": "Jayden KEYS",
       "country": "USA",
       "dob": "21 APR 2006",
@@ -7128,7 +7203,7 @@
       ]
     },
     {
-      "rank": "96",
+      "rank": "97",
       "name": "Kemonie BRIGGS",
       "country": "USA",
       "dob": "21 MAY 1996",
@@ -7203,7 +7278,7 @@
       ]
     },
     {
-      "rank": "97",
+      "rank": "98",
       "name": "Daniele Leonardo INZOLI",
       "country": "ITA",
       "dob": "12 AUG 2008",
@@ -7278,7 +7353,7 @@
       ]
     },
     {
-      "rank": "98",
+      "rank": "99",
       "name": "Koki FUJIHARA",
       "country": "JPN",
       "dob": "31 MAY 2002",
@@ -7353,7 +7428,7 @@
       ]
     },
     {
-      "rank": "99",
+      "rank": "100",
       "name": "Quincy ISAAC",
       "country": "USA",
       "dob": "29 OCT 2007",
@@ -7423,81 +7498,6 @@
           "result_score": 1114,
           "placing_score": 0,
           "performance_score": 1114,
-          "indoor": false
-        }
-      ]
-    },
-    {
-      "rank": "100",
-      "name": "Petr MEINDLSCHMID",
-      "country": "CZE",
-      "dob": "15 JAN 2006",
-      "ranking_score": "1118",
-      "profile_url": "https://worldathletics.org/athletes/czechia/petr-meindlschmid-15003256",
-      "counted_competitions": [
-        {
-          "date": "11 AUG 2026",
-          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
-          "venue": "",
-          "category": "GL",
-          "mark": "7.81",
-          "wind": "-13.0",
-          "place": "8.",
-          "result_score": 1103,
-          "placing_score": 60,
-          "performance_score": 1163,
-          "indoor": false
-        },
-        {
-          "date": "10 AUG 2026",
-          "competition": "European Athletics Championships, Alexander Stadium, Birmingham",
-          "venue": "",
-          "category": "GL",
-          "mark": "7.91",
-          "wind": "+20.0",
-          "place": "12.",
-          "result_score": 1118,
-          "placing_score": 28,
-          "performance_score": 1146,
-          "indoor": false
-        },
-        {
-          "date": "28 FEB 2026",
-          "competition": "Czech Indoor Championships, Atletická hala, Ostrava (i)",
-          "venue": "",
-          "category": "D",
-          "mark": "7.72",
-          "wind": null,
-          "place": "2.",
-          "result_score": 1077,
-          "placing_score": 24,
-          "performance_score": 1101,
-          "indoor": false
-        },
-        {
-          "date": "01 JUN 2026",
-          "competition": "Josef Odlozil Memorial, Stadion Juliska, Praha",
-          "venue": "",
-          "category": "C",
-          "mark": "7.66",
-          "wind": "+13.0",
-          "place": "3.",
-          "result_score": 1064,
-          "placing_score": 31,
-          "performance_score": 1095,
-          "indoor": false
-        },
-        {
-          "date": "05 SEP 2025",
-          "competition": "Velká cena Chebu, Stadion v Poohří, Cheb",
-          "venue": "",
-          "category": "D",
-          "mark": "7.60",
-          "wind": "-11.0",
-          "place": "1.",
-          "result_score": 1057,
-          "placing_score": 28,
-          "performance_score": 1085,
           "indoor": false
         }
       ]
