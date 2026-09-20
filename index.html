@@ -48,7 +48,7 @@
             <div class="flex items-center gap-2">
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
                 <span class="text-cyan-400">DASHBOARD</span>
-                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v2.7 NOMINATION</span>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v3.0 SELECTION HUB</span>
               </h1>
               <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -98,10 +98,10 @@
       <!-- Navigation Tabs -->
       <div class="flex space-x-1 border-t border-slate-800 pt-1.5 pb-1 overflow-x-auto no-scrollbar">
         <button id="tabBtnRankings" class="tab-btn active flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap bg-slate-800 text-cyan-400 border-b-2 border-cyan-500">
-          🌍 World Rankings & Quota
+          🌍 Gesamtranking & Details
         </button>
         <button id="tabBtnPeriod" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40">
-          ⏱️ Nominierungs-Zeitraum (WA 2.8)
+          ⏱️ Nominierungs- & Qualifikations-Hub
         </button>
         <button id="tabBtnScouting" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40">
           📡 Meeting & Venue Radar
@@ -116,12 +116,11 @@
   <!-- ================= MAIN CONTAINER ================= -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-2.5 sm:px-4 py-3">
 
-    <!-- ================= TAB 1: WORLD RANKINGS & QUOTA ================= -->
+    <!-- ================= TAB 1: GESAMTRANKING ================= -->
     <div id="tabContentRankings" class="space-y-3">
       
       <!-- 4 REFINED KPI TILES (STANDARD VIEW) -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5">
-        
         <!-- Tile 1: Luka Herden Focus -->
         <div class="bg-slate-900 border-2 border-cyan-500/50 p-2.5 rounded shadow-sm shadow-cyan-950/40">
           <div class="text-[10px] text-cyan-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
@@ -173,23 +172,9 @@
         </div>
       </div>
 
-      <!-- Controls & Filter Bar -->
+      <!-- Filter Bar -->
       <div class="bg-slate-900 border border-slate-800 rounded p-2.5 shadow-sm space-y-2">
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
-          <div class="flex flex-wrap items-center gap-1 p-0.5 bg-slate-950 rounded border border-slate-800">
-            <button id="modeStandardBtn" class="mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-cyan-400 border border-slate-700">
-              1. Gesamtranking
-            </button>
-            <button id="modeRoadToMajorsBtn" class="mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200">
-              🏆 2. Road to Major (Max 3/Nat)
-            </button>
-            <button id="modeEuropeanToplistBtn" class="mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200">
-              ⭐ 3. European Toplist (SB)
-            </button>
-          </div>
-        </div>
-
-        <div class="pt-2 border-t border-slate-800/80 grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
           <div class="md:col-span-6 relative">
             <input id="athleteSearchInput" type="text" placeholder="Search athlete (Herden, Tentoglou, Furlani, Ehammer)..." class="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-[11px] text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
           </div>
@@ -213,7 +198,6 @@
             <thead>
               <tr class="sticky top-0 bg-slate-950 text-slate-400 font-bold border-b border-slate-800 text-[10px] uppercase tracking-wider">
                 <th class="py-2 px-3 w-16 text-center">Rank (WoW)</th>
-                <th id="quotaHeaderCol" class="hidden py-2 px-3 w-20 text-center text-cyan-400">Quota</th>
                 <th class="py-2 px-3">Athlete</th>
                 <th class="py-2 px-3">Nation</th>
                 <th class="py-2 px-3">DOB</th>
@@ -229,12 +213,11 @@
       </div>
     </div>
 
-    <!-- ================= TAB 2: NOMINIERUNGS-ZEITRAUM (WA 2.8 LOGIK) ================= -->
+    <!-- ================= TAB 2: NOMINIERUNGS- & QUALIFIKATIONS-HUB ================= -->
     <div id="tabContentPeriod" class="hidden space-y-3">
       
       <!-- 4 DEDICATED KPI TILES FOR PERIOD VIEW -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5">
-        
         <!-- Period Tile 1: Luka Herden In Period -->
         <div class="bg-slate-900 border-2 border-cyan-500/50 p-2.5 rounded shadow-sm shadow-cyan-950/40">
           <div class="text-[10px] text-cyan-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
@@ -246,7 +229,7 @@
             <div id="kpiPeriodMeRank" class="text-lg font-black text-cyan-400 font-mono">#--</div>
           </div>
           <div class="text-[10px] text-slate-400 font-mono mt-0.5 flex items-center justify-between">
-            <span>Ø Score: <strong id="kpiPeriodMeScore" class="text-white">--</strong></span>
+            <span>Wert: <strong id="kpiPeriodMeScore" class="text-white">--</strong></span>
             <span id="kpiPeriodMeCount" class="text-cyan-300 font-mono font-bold">- Meets</span>
           </div>
         </div>
@@ -254,11 +237,11 @@
         <!-- Period Tile 2: Cutoff Spot In Period -->
         <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
           <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>Cutoff Schnitt (Zeitraum)</span>
-            <span id="periodCutoffBadge" class="text-cyan-400 text-[9px] font-mono font-bold">TOP 32</span>
+            <span>Cutoff Schwelle</span>
+            <span id="periodCutoffBadge" class="text-cyan-400 text-[9px] font-mono font-bold">TOP 36</span>
           </div>
           <div id="kpiPeriodCutoffScore" class="text-base font-black text-amber-400 font-mono">- PKT</div>
-          <div class="text-[10px] text-slate-400 font-mono truncate" id="kpiPeriodCutoffAthName">Target Direct Entry Score</div>
+          <div class="text-[10px] text-slate-400 font-mono truncate" id="kpiPeriodCutoffAthName">Target Entry Level</div>
         </div>
 
         <!-- Period Tile 3: DLV Squad In Period -->
@@ -283,23 +266,66 @@
         </div>
       </div>
 
-      <!-- Controls Bar -->
-      <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div>
-            <h2 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
-              <span>⏱️ Qualifikations- & Nominierungs-Zeitraum</span>
-              <span class="text-[9px] bg-cyan-950 border border-cyan-800 text-cyan-400 px-1.5 py-0.2 rounded font-mono">WA RULE 2.8.4 & 2.8.5</span>
-            </h2>
-            <p class="text-[10px] text-slate-400 font-mono mt-0.5">
-              Filtert alle Wettkämpfe ab Stichtag. <strong>Strikt regelkonforme Ausnahme:</strong> Vor dem Stichtag bleiben nur <strong>OW</strong> (Olympia/Freiluft-WM) und <strong>GL</strong> (Freiluft-Area Championships wie die EM) bis zur nächsten Austragung aktiv.
-            </p>
+      <!-- Controls & Selection Bar -->
+      <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-3">
+        
+        <!-- Preset Row (1-Click Setup) -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] text-slate-400 font-bold uppercase font-mono">⚡ Schnellauswahl:</span>
+            <button id="presetWm2027Btn" class="px-2.5 py-1 rounded text-[10px] font-bold font-mono bg-cyan-600 text-white hover:bg-cyan-500 transition-all flex items-center gap-1 shadow-sm">
+              🌍 WM 2027 (36 Ath / 3 Nat / Ranking / 12M)
+            </button>
+            <button id="presetHallenEmBtn" class="px-2.5 py-1 rounded text-[10px] font-bold font-mono bg-purple-600 text-white hover:bg-purple-500 transition-all flex items-center gap-1 shadow-sm">
+              🇪🇺 Hallen-EM (16 Ath / 2 Nat / Toplist / 6M)
+            </button>
           </div>
+          <span class="text-[9px] text-cyan-400 font-mono">WA Rule 2.8.4 & 2.8.5 aktiv (OW/GL geschützt)</span>
+        </div>
+
+        <!-- Manual Parameter Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-2.5 items-center font-mono text-[10px]">
           
-          <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded border border-slate-800">
-            <label for="periodStartDate" class="text-[10px] text-slate-400 uppercase font-bold font-mono">Stichtag ab:</label>
-            <input id="periodStartDate" type="date" value="2026-08-23" class="bg-slate-900 border border-slate-700 text-cyan-400 text-xs px-2 py-1 rounded font-mono focus:outline-none focus:border-cyan-500" />
-            <button id="applyPeriodBtn" class="bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider font-mono">Berechnen</button>
+          <!-- Control 1: Total Spots -->
+          <div class="space-y-1">
+            <span class="text-slate-400 font-bold uppercase block">1. Feldgröße (Cutoff):</span>
+            <div class="flex items-center gap-1">
+              <input id="periodFieldSizeInput" type="number" min="1" max="100" value="36" class="w-full bg-slate-950 border border-slate-700 text-cyan-400 font-bold text-center px-2 py-1 rounded focus:outline-none focus:border-cyan-500" />
+              <span class="text-slate-500">Ath</span>
+            </div>
+          </div>
+
+          <!-- Control 2: Max per Nation -->
+          <div class="space-y-1">
+            <span class="text-slate-400 font-bold uppercase block">2. Max / Nation:</span>
+            <div class="flex items-center gap-1 bg-slate-950 p-0.5 rounded border border-slate-700">
+              <button id="periodNatQuota2Btn" class="flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white">2 Nat</button>
+              <button id="periodNatQuota3Btn" class="flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white">3 Nat</button>
+            </div>
+          </div>
+
+          <!-- Control 3: Scope (Global vs Europe) -->
+          <div class="space-y-1">
+            <span class="text-slate-400 font-bold uppercase block">3. Region:</span>
+            <div class="flex items-center gap-1 bg-slate-950 p-0.5 rounded border border-slate-700">
+              <button id="periodScopeGlobalBtn" class="flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white">Weltweit</button>
+              <button id="periodScopeEuropeBtn" class="flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white">Europa</button>
+            </div>
+          </div>
+
+          <!-- Control 4: Mode (Ranking vs Toplist) -->
+          <div class="space-y-1">
+            <span class="text-slate-400 font-bold uppercase block">4. Wertung:</span>
+            <div class="flex items-center gap-1 bg-slate-950 p-0.5 rounded border border-slate-700">
+              <button id="periodModeRankingBtn" class="flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white">Ranking (Ø)</button>
+              <button id="periodModeToplistBtn" class="flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white">Toplist (SB)</button>
+            </div>
+          </div>
+
+          <!-- Control 5: Cutoff Date -->
+          <div class="space-y-1 col-span-2 md:col-span-1">
+            <span class="text-slate-400 font-bold uppercase block">5. Stichtag ab:</span>
+            <input id="periodStartDateInput" type="date" value="2026-08-23" class="w-full bg-slate-950 border border-slate-700 text-cyan-400 px-2 py-1 rounded focus:outline-none focus:border-cyan-500" />
           </div>
         </div>
       </div>
@@ -311,11 +337,12 @@
             <thead>
               <tr class="sticky top-0 bg-slate-950 text-slate-400 font-bold border-b border-slate-800 text-[10px] uppercase tracking-wider">
                 <th class="py-2 px-3 w-12 text-center">Rank</th>
+                <th class="py-2 px-3 w-16 text-center text-cyan-400">Quota</th>
                 <th class="py-2 px-3">Athlete</th>
                 <th class="py-2 px-3">Nation</th>
                 <th class="py-2 px-3 text-center">Gültige Meetings</th>
-                <th class="py-2 px-3 text-right">Bester Wert</th>
-                <th class="py-2 px-3 text-right font-bold text-amber-400">Ø Score (Zeitraum)</th>
+                <th id="periodValueHeaderCol" class="py-2 px-3 text-right font-bold text-amber-400">Ø Score (Zeitraum)</th>
+                <th class="py-2 px-3 text-center">Status</th>
                 <th class="py-2 px-3 w-10 text-center">Details</th>
               </tr>
             </thead>
@@ -405,7 +432,6 @@
       athletes: [],
       previousAthletesMap: {},
       trainingLogs: [],
-      rankingMode: 'standard',
       cutoffSpots: 32,
       selectedNation: 'ALL',
       searchQuery: '',
@@ -413,6 +439,12 @@
       expandedPeriodRowId: null,
       minMarkFilter: 0,
       showConfig: false,
+
+      // Period Tab Settings
+      periodFieldSize: 36,
+      periodMaxPerNation: 3,
+      periodScope: 'global', // 'global' | 'europe'
+      periodMode: 'ranking', // 'ranking' | 'toplist'
       periodStartDate: '2026-08-23'
     };
 
@@ -420,7 +452,6 @@
     let strengthChartInstance = null;
     let readinessChartInstance = null;
 
-    // Robuster Parser für World Athletics Datumsformate
     function parseSafeDate(dateStr) {
       if (!dateStr || typeof dateStr !== 'string') return null;
       const clean = dateStr.trim();
@@ -444,6 +475,11 @@
       return isNaN(d.getTime()) ? null : d;
     }
 
+    function isEuropeanCountry(code) {
+      const europe = ['GER', 'GRE', 'ITA', 'SUI', 'ESP', 'SWE', 'FRA', 'GBR', 'POR', 'CZE', 'NED', 'POL', 'FIN', 'NOR', 'AUT', 'CRO', 'SRB', 'BUL', 'BEL', 'HUN', 'UKR', 'ROU', 'TUR', 'IRL', 'DEN', 'NOR', 'SVK', 'SLO', 'LTU', 'LAT', 'EST'];
+      return europe.includes((code || '').toUpperCase().trim());
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const savedWaUrl = localStorage.getItem('wa_url_key') || '';
       const savedSheetsUrl = localStorage.getItem('sheets_url_key') || '';
@@ -452,6 +488,7 @@
 
       setupNavigation();
       setupFilters();
+      setupPeriodControls();
       
       if (savedWaUrl || savedSheetsUrl) {
         handleSync();
@@ -478,13 +515,86 @@
         if (isNaN(val) || val < 1) val = 32;
         state.cutoffSpots = val;
         renderRankings();
-        if (state.activeTab === 'period') renderPeriodRankings();
+      };
+    }
+
+    function setupPeriodControls() {
+      // Presets
+      document.getElementById('presetWm2027Btn').onclick = () => {
+        setPeriodParams(36, 3, 'global', 'ranking', '2026-08-23');
       };
 
-      document.getElementById('applyPeriodBtn').onclick = () => {
-        state.periodStartDate = document.getElementById('periodStartDate').value;
+      document.getElementById('presetHallenEmBtn').onclick = () => {
+        // 6 Monate zurück ab September 2026 = März 2026
+        setPeriodParams(16, 2, 'europe', 'toplist', '2026-03-20');
+      };
+
+      // Inputs
+      document.getElementById('periodFieldSizeInput').onchange = (e) => {
+        state.periodFieldSize = Math.max(1, parseInt(e.target.value) || 36);
         renderPeriodRankings();
       };
+
+      document.getElementById('periodNatQuota2Btn').onclick = () => setPeriodNatQuota(2);
+      document.getElementById('periodNatQuota3Btn').onclick = () => setPeriodNatQuota(3);
+
+      document.getElementById('periodScopeGlobalBtn').onclick = () => setPeriodScope('global');
+      document.getElementById('periodScopeEuropeBtn').onclick = () => setPeriodScope('europe');
+
+      document.getElementById('periodModeRankingBtn').onclick = () => setPeriodMode('ranking');
+      document.getElementById('periodModeToplistBtn').onclick = () => setPeriodMode('toplist');
+
+      document.getElementById('periodStartDateInput').onchange = (e) => {
+        state.periodStartDate = e.target.value;
+        renderPeriodRankings();
+      };
+    }
+
+    function setPeriodParams(fieldSize, quota, scope, mode, dateStr) {
+      state.periodFieldSize = fieldSize;
+      state.periodMaxPerNation = quota;
+      state.periodScope = scope;
+      state.periodMode = mode;
+      state.periodStartDate = dateStr;
+
+      document.getElementById('periodFieldSizeInput').value = fieldSize;
+      document.getElementById('periodStartDateInput').value = dateStr;
+      updatePeriodButtonStates();
+      renderPeriodRankings();
+    }
+
+    function setPeriodNatQuota(q) {
+      state.periodMaxPerNation = q;
+      updatePeriodButtonStates();
+      renderPeriodRankings();
+    }
+
+    function setPeriodScope(s) {
+      state.periodScope = s;
+      updatePeriodButtonStates();
+      renderPeriodRankings();
+    }
+
+    function setPeriodMode(m) {
+      state.periodMode = m;
+      updatePeriodButtonStates();
+      renderPeriodRankings();
+    }
+
+    function updatePeriodButtonStates() {
+      // Quota Buttons
+      document.getElementById('periodNatQuota2Btn').className = state.periodMaxPerNation === 2 ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
+      document.getElementById('periodNatQuota3Btn').className = state.periodMaxPerNation === 3 ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
+
+      // Scope Buttons
+      document.getElementById('periodScopeGlobalBtn').className = state.periodScope === 'global' ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
+      document.getElementById('periodScopeEuropeBtn').className = state.periodScope === 'europe' ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
+
+      // Mode Buttons
+      document.getElementById('periodModeRankingBtn').className = state.periodMode === 'ranking' ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
+      document.getElementById('periodModeToplistBtn').className = state.periodMode === 'toplist' ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
+
+      document.getElementById('periodValueHeaderCol').textContent = state.periodMode === 'ranking' ? 'Ø Score (Zeitraum)' : 'Beste Weite / SB';
     }
 
     function switchTab(tab) {
@@ -513,10 +623,6 @@
     }
 
     function setupFilters() {
-      document.getElementById('modeStandardBtn').onclick = () => setRankingMode('standard');
-      document.getElementById('modeRoadToMajorsBtn').onclick = () => setRankingMode('roadToMajors');
-      document.getElementById('modeEuropeanToplistBtn').onclick = () => setRankingMode('europeanToplist');
-
       document.getElementById('athleteSearchInput').oninput = (e) => {
         state.searchQuery = (e.target.value || '').toLowerCase();
         renderRankings();
@@ -545,51 +651,10 @@
       });
     }
 
-    function setRankingMode(mode) {
-      state.rankingMode = mode;
-      document.querySelectorAll('.mode-btn').forEach(b => {
-        b.className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200';
-      });
-
-      if (mode === 'standard') {
-        document.getElementById('modeStandardBtn').className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-cyan-400 border border-slate-700';
-        document.getElementById('quotaHeaderCol').classList.add('hidden');
-      } else if (mode === 'roadToMajors') {
-        document.getElementById('modeRoadToMajorsBtn').className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-cyan-600 text-white font-black shadow-sm';
-        document.getElementById('quotaHeaderCol').classList.remove('hidden');
-      } else {
-        document.getElementById('modeEuropeanToplistBtn').className = 'mode-btn px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500 text-slate-950 font-black shadow-sm';
-        document.getElementById('quotaHeaderCol').classList.add('hidden');
-      }
-      renderRankings();
-    }
-
-    function isEuropeanCountry(code) {
-      const europe = ['GER', 'GRE', 'ITA', 'SUI', 'ESP', 'SWE', 'FRA', 'GBR', 'POR', 'CZE', 'NED', 'POL', 'FIN', 'NOR', 'AUT', 'CRO', 'SRB', 'BUL', 'BEL', 'HUN', 'UKR'];
-      return europe.includes((code || '').toUpperCase());
-    }
-
     function getProcessedRankings() {
       let list = [...state.athletes];
 
-      const nationCounts = {};
-      let quotaIndex = 1;
-
       list = list.map((ath, idx) => {
-        const nat = ath.nation || 'UNK';
-        nationCounts[nat] = (nationCounts[nat] || 0) + 1;
-        const slot = nationCounts[nat];
-
-        let quotaRank = null;
-        let quotaStatus = 'outside';
-
-        if (slot <= 3) {
-          quotaRank = quotaIndex++;
-          quotaStatus = quotaRank <= state.cutoffSpots ? 'qualified' : (quotaRank <= state.cutoffSpots + 4 ? 'bubble' : 'outside');
-        } else {
-          quotaStatus = 'quota_full';
-        }
-
         const aName = (ath.name || '').toLowerCase();
         const prev = aName ? state.previousAthletesMap[aName] : null;
         let rankDelta = null;
@@ -600,12 +665,8 @@
           scoreDelta = ath.totalScore - prev.score;
         }
 
-        return { ...ath, calculatedRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot, rankDelta, scoreDelta };
+        return { ...ath, calculatedRank: idx + 1, rankDelta, scoreDelta };
       });
-
-      if (state.rankingMode === 'europeanToplist') {
-        list = list.filter(a => isEuropeanCountry(a.nation)).sort((a, b) => (b.sb || 0) - (a.sb || 0));
-      }
 
       if (state.selectedNation !== 'ALL') {
         list = list.filter(a => a.nation === state.selectedNation);
@@ -622,7 +683,7 @@
       const data = getProcessedRankings();
 
       const me = state.athletes.find(a => a.name.toLowerCase().includes('herden')) || state.athletes.find(a => a.nation === 'GER');
-      const cutoffAth = state.athletes.find(a => a.quotaRank === state.cutoffSpots) || state.athletes[Math.min(state.cutoffSpots - 1, state.athletes.length - 1)];
+      const cutoffAth = state.athletes[Math.min(state.cutoffSpots - 1, state.athletes.length - 1)];
 
       if (me) {
         document.getElementById('kpiMeRank').textContent = '#' + me.originalRank;
@@ -675,12 +736,12 @@
       tbody.innerHTML = '';
 
       if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="py-6 text-center text-slate-500 text-xs font-sans">Keine Ranking-Daten geladen. Trage die Raw GitHub JSON URL unter Config ein und klicke Sync Data.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="py-6 text-center text-slate-500 text-xs font-sans">Keine Ranking-Daten geladen. Trage die Raw GitHub JSON URL unter Config ein und klicke Sync Data.</td></tr>';
         return;
       }
 
       data.forEach((ath, idx) => {
-        const isCutoff = state.rankingMode === 'roadToMajors' && ath.quotaRank === state.cutoffSpots;
+        const isCutoff = (idx + 1) === state.cutoffSpots;
         const isExpanded = state.expandedRowId === ath.id;
         const isGerman = ath.nation === 'GER';
         const isMe = ath.name.toLowerCase().includes('herden');
@@ -712,31 +773,17 @@
           renderRankings();
         };
 
-        let statusBadge = '';
-        if (state.rankingMode === 'roadToMajors') {
-          if (ath.quotaStatus === 'qualified') {
-            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold">QUALIFIED</span>';
-          } else if (ath.quotaStatus === 'bubble') {
-            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[9px] font-bold">BUBBLE</span>';
-          } else if (ath.quotaStatus === 'quota_full') {
-            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 border border-slate-800 text-[9px]">MAX 3 NAT</span>';
-          } else {
-            statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-rose-950/30 text-rose-400 border border-rose-900/40 text-[9px]">OUTSIDE</span>';
-          }
-        } else {
-          statusBadge = isMe 
-            ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-cyan-600 text-white text-[9px] font-bold">LUKA (YOU)</span>'
-            : '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">RANKED</span>';
-        }
+        const statusBadge = isMe 
+          ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-cyan-600 text-white text-[9px] font-bold">LUKA (YOU)</span>'
+          : '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">RANKED</span>';
 
         tr.innerHTML = `
           <td class="py-1.5 px-3 text-center font-bold text-slate-300">
             <div class="flex items-center justify-center gap-1">
-              <span>${state.rankingMode === 'europeanToplist' ? idx + 1 : ath.originalRank}</span>
+              <span>${ath.originalRank}</span>
               ${rankBadge}
             </div>
           </td>
-          ${state.rankingMode === 'roadToMajors' ? `<td class="py-1.5 px-3 text-center">${ath.quotaRank ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded font-bold text-[10px] ${ath.quotaRank <= state.cutoffSpots ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">#${ath.quotaRank}</span>` : `<span class="text-[9px] text-slate-500 italic">Max 3</span>`}</td>` : ''}
           <td class="py-1.5 px-3 font-semibold text-white font-sans">
             <div class="flex items-center gap-1.5">
               <span class="uppercase font-bold tracking-tight">${ath.name}</span>
@@ -755,7 +802,7 @@
         if (isCutoff) {
           const cutTr = document.createElement('tr');
           cutTr.className = 'border-t-2 border-b-2 border-amber-500/60 bg-amber-500/10';
-          cutTr.innerHTML = `<td colspan="9" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">ROAD TO MAJOR CUT-OFF (RANK ${state.cutoffSpots}) — DIRECT INVITATION THRESHOLD</td>`;
+          cutTr.innerHTML = `<td colspan="8" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">CUT-OFF GRENZE (PLATZ ${state.cutoffSpots})</td>`;
           tbody.appendChild(cutTr);
         }
 
@@ -786,7 +833,7 @@
           }).join('');
 
           accTr.innerHTML = `
-            <td colspan="9" class="p-2.5">
+            <td colspan="8" class="p-2.5">
               <div class="bg-slate-900 rounded border border-slate-800 p-2.5 shadow-sm">
                 <h4 class="font-bold text-white text-[11px] uppercase tracking-wide font-sans mb-2">
                   🏆 5 gewertete Meetings: ${ath.name} (Score: ${ath.totalScore})
@@ -820,26 +867,33 @@
       });
     }
 
-    /* ================= TAB 2: NOMINIERUNGS-ZEITRAUM (STRIKTE PRÜFUNG) ================= */
+    /* ================= TAB 2: SELECTION & NOMINATION HUB ENGINE ================= */
     function renderPeriodRankings() {
       const tbody = document.getElementById('periodTableBody');
       const filterDate = new Date(state.periodStartDate);
 
       if (state.athletes.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="py-6 text-center text-slate-500 text-xs">Keine Daten geladen. Bitte Sync Data ausführen.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="py-6 text-center text-slate-500 text-xs">Keine Daten geladen. Bitte Sync Data ausführen.</td></tr>';
         return;
       }
 
-      // Berechne für jeden Athleten die nach WA 2.8.4 & 2.8.5 gültigen Meetings
-      const periodList = state.athletes.map(ath => {
+      // 1. Filtere Pool nach Region (Weltweit vs. Europa)
+      let pool = state.athletes;
+      if (state.periodScope === 'europe') {
+        pool = pool.filter(a => isEuropeanCountry(a.nation));
+      }
+
+      // 2. Berechne gültige Wettkämpfe und den maßgeblichen Wert pro Athlet
+      let processedList = pool.map(ath => {
         const validMeetings = [];
 
         (ath.countingMeetings || []).forEach(m => {
           const mDate = parseSafeDate(m.date);
           const cat = (m.category || '').toUpperCase().trim();
 
-          // STRIKTE REGELPRÜFUNG: Ausschließlich OW und GL bleiben vor dem Stichtag aktiv!
-          const isProtectedMajor = (cat === 'OW' || cat === 'GL');
+          // Bei Ranking-Modus: Exakte WA 2.8 Schutzlogik (nur OW und GL bleiben vor Stichtag aktiv)
+          // Bei Toplist: Ausschließlich Meetings ab Stichtag
+          const isProtectedMajor = (state.periodMode === 'ranking') && (cat === 'OW' || cat === 'GL');
 
           if (mDate && (mDate >= filterDate || isProtectedMajor)) {
             validMeetings.push({ ...m, parsedDate: mDate, isMajorProtected: mDate < filterDate });
@@ -847,72 +901,133 @@
         });
 
         const scores = validMeetings.map(m => parseInt(m.performance_score) || 0);
+        const marks = validMeetings.map(m => parseFloat(m.mark) || 0);
+
         const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+        const maxMark = marks.length > 0 ? Math.max(...marks) : 0;
         const maxScore = scores.length > 0 ? Math.max(...scores) : 0;
 
         return {
           ...ath,
           periodMeetings: validMeetings,
           periodAvgScore: avgScore,
+          periodMaxMark: maxMark,
           periodMaxScore: maxScore
         };
       });
 
-      // Sortieren nach dem berechneten Period-Durchschnittsscore (Tie-Break: Bester Einzelwert)
-      periodList.sort((a, b) => {
-        if (b.periodAvgScore !== a.periodAvgScore) return b.periodAvgScore - a.periodAvgScore;
-        return b.periodMaxScore - a.periodMaxScore;
+      // 3. Sortierung (Ranking-Score vs. Toplist SB)
+      if (state.periodMode === 'ranking') {
+        processedList.sort((a, b) => {
+          if (b.periodAvgScore !== a.periodAvgScore) return b.periodAvgScore - a.periodAvgScore;
+          return b.periodMaxScore - a.periodMaxScore;
+        });
+      } else {
+        // Toplist: Sortieren nach bester Weite (SB im Zeitraum)
+        processedList.sort((a, b) => {
+          if (b.periodMaxMark !== a.periodMaxMark) return b.periodMaxMark - a.periodMaxMark;
+          return b.periodAvgScore - a.periodAvgScore;
+        });
+      }
+
+      // 4. Länderquoten anwenden (Max 2 oder Max 3 pro Nation)
+      const nationCounts = {};
+      let quotaCounter = 1;
+
+      processedList = processedList.map((ath, idx) => {
+        const nat = ath.nation || 'UNK';
+        nationCounts[nat] = (nationCounts[nat] || 0) + 1;
+        const slot = nationCounts[nat];
+
+        let quotaRank = null;
+        let quotaStatus = 'outside';
+
+        if (slot <= state.periodMaxPerNation) {
+          quotaRank = quotaCounter++;
+          quotaStatus = quotaRank <= state.periodFieldSize ? 'qualified' : (quotaRank <= state.periodFieldSize + 3 ? 'bubble' : 'outside');
+        } else {
+          quotaStatus = 'quota_full';
+        }
+
+        return { ...ath, periodRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot };
       });
 
-      // 4 Kacheln für den Stichtag-Tab befüllen
-      document.getElementById('periodCutoffBadge').textContent = 'TOP ' + state.cutoffSpots;
-      const mePeriodIdx = periodList.findIndex(a => a.name.toLowerCase().includes('herden'));
-      const mePeriod = mePeriodIdx !== -1 ? periodList[mePeriodIdx] : null;
-      const cutoffPeriodAth = periodList[Math.min(state.cutoffSpots - 1, periodList.length - 1)];
+      // 5. Update KPI Kacheln für Period-Tab
+      document.getElementById('periodCutoffBadge').textContent = `TOP ${state.periodFieldSize} (MAX ${state.periodMaxPerNation}/NAT)`;
+      
+      const mePeriod = processedList.find(a => a.name.toLowerCase().includes('herden'));
+      const cutoffPeriodAth = processedList.find(a => a.quotaRank === state.periodFieldSize);
 
       if (mePeriod) {
-        document.getElementById('kpiPeriodMeRank').textContent = '#' + (mePeriodIdx + 1);
-        document.getElementById('kpiPeriodMeScore').textContent = mePeriod.periodAvgScore > 0 ? mePeriod.periodAvgScore + ' Pkt' : '-';
+        document.getElementById('kpiPeriodMeRank').textContent = mePeriod.quotaRank ? `#${mePeriod.quotaRank}` : `Slot #${mePeriod.nationSlot}`;
+        document.getElementById('kpiPeriodMeScore').textContent = state.periodMode === 'ranking' 
+          ? (mePeriod.periodAvgScore > 0 ? mePeriod.periodAvgScore + ' Pkt' : '-')
+          : (mePeriod.periodMaxMark > 0 ? mePeriod.periodMaxMark.toFixed(2) + 'm' : '-');
         document.getElementById('kpiPeriodMeCount').textContent = `${mePeriod.periodMeetings.length} Meetings`;
 
         if (cutoffPeriodAth) {
-          const gap = mePeriod.periodAvgScore - cutoffPeriodAth.periodAvgScore;
-          document.getElementById('kpiPeriodMeGap').textContent = (gap >= 0 ? '+' : '') + gap + ' Pkt';
-          document.getElementById('kpiPeriodMeGap').className = gap >= 0 ? 'text-base font-black font-mono text-emerald-400' : 'text-base font-black font-mono text-rose-400';
-          document.getElementById('kpiPeriodMeGapSub').textContent = gap >= 0 ? `Sicher vor Platz #${state.cutoffSpots}` : `Rückstand auf Platz #${state.cutoffSpots}`;
+          if (state.periodMode === 'ranking') {
+            const gap = mePeriod.periodAvgScore - cutoffPeriodAth.periodAvgScore;
+            document.getElementById('kpiPeriodMeGap').textContent = (gap >= 0 ? '+' : '') + gap + ' Pkt';
+            document.getElementById('kpiPeriodMeGap').className = gap >= 0 ? 'text-base font-black font-mono text-emerald-400' : 'text-base font-black font-mono text-rose-400';
+            document.getElementById('kpiPeriodMeGapSub').textContent = gap >= 0 ? `Vorsprung auf Platz #${state.periodFieldSize}` : `Rückstand auf Platz #${state.periodFieldSize}`;
+          } else {
+            const gapM = mePeriod.periodMaxMark - cutoffPeriodAth.periodMaxMark;
+            document.getElementById('kpiPeriodMeGap').textContent = (gapM >= 0 ? '+' : '') + gapM.toFixed(2) + 'm';
+            document.getElementById('kpiPeriodMeGap').className = gapM >= 0 ? 'text-base font-black font-mono text-emerald-400' : 'text-base font-black font-mono text-rose-400';
+            document.getElementById('kpiPeriodMeGapSub').textContent = gapM >= 0 ? `Vorsprung auf Platz #${state.periodFieldSize}` : `Rückstand auf Platz #${state.periodFieldSize}`;
+          }
         }
       }
 
       if (cutoffPeriodAth) {
-        document.getElementById('kpiPeriodCutoffScore').textContent = cutoffPeriodAth.periodAvgScore + ' PKT';
-        document.getElementById('kpiPeriodCutoffAthName').textContent = `#${state.cutoffSpots}: ${cutoffPeriodAth.name} (${cutoffPeriodAth.nation})`;
+        document.getElementById('kpiPeriodCutoffScore').textContent = state.periodMode === 'ranking' 
+          ? `${cutoffPeriodAth.periodAvgScore} PKT`
+          : `${cutoffPeriodAth.periodMaxMark.toFixed(2)}m`;
+        document.getElementById('kpiPeriodCutoffAthName').textContent = `#${state.periodFieldSize}: ${cutoffPeriodAth.name} (${cutoffPeriodAth.nation})`;
       }
 
-      // Deutsche Athleten im Stichtag-Tab
-      const germansPeriod = periodList.filter(a => a.nation === 'GER');
+      // Deutsche Athleten im Period Tab
+      const germansPeriod = processedList.filter(a => a.nation === 'GER');
       document.getElementById('kpiPeriodGerCount').textContent = `${germansPeriod.length} DLV ATHLETEN`;
       const gerListPeriodElem = document.getElementById('kpiPeriodGerList');
       if (germansPeriod.length > 0) {
         gerListPeriodElem.innerHTML = germansPeriod.map((g) => {
-          const rankInPeriod = periodList.findIndex(a => a.id === g.id) + 1;
           const isLuka = g.name.toLowerCase().includes('herden');
+          const valDisplay = state.periodMode === 'ranking' ? `${g.periodAvgScore} Pkt` : `${g.periodMaxMark.toFixed(2)}m`;
           return `
             <div class="flex items-center justify-between py-0.5 border-b border-slate-800/40 ${isLuka ? 'text-cyan-400 font-bold' : ''}">
-              <span class="truncate">#${rankInPeriod} ${g.name} (${g.periodMeetings.length}M)</span>
-              <span class="text-amber-400 font-mono ml-2">${g.periodAvgScore} Pkt</span>
+              <span class="truncate">${g.quotaRank ? `#${g.quotaRank}` : `(Max ${state.periodMaxPerNation})`} ${g.name} (${g.periodMeetings.length}M)</span>
+              <span class="text-amber-400 font-mono ml-2">${valDisplay}</span>
             </div>
           `;
         }).join('');
       } else {
-        gerListPeriodElem.innerHTML = '<span class="text-slate-500 italic">Keine DLV Athleten gefunden</span>';
+        gerListPeriodElem.innerHTML = '<span class="text-slate-500 italic">Keine DLV Athleten in der Auswahl</span>';
       }
 
+      // 6. Tabelle rendern
       tbody.innerHTML = '';
-      periodList.forEach((ath, idx) => {
-        const isCutoff = (idx + 1) === state.cutoffSpots;
+      processedList.forEach((ath, idx) => {
+        const isCutoff = ath.quotaRank === state.periodFieldSize;
         const isExpanded = state.expandedPeriodRowId === ath.id;
         const isGerman = ath.nation === 'GER';
         const isMe = ath.name.toLowerCase().includes('herden');
+
+        let statusBadge = '';
+        if (ath.quotaStatus === 'qualified') {
+          statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold">QUALIFIED</span>';
+        } else if (ath.quotaStatus === 'bubble') {
+          statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[9px] font-bold">BUBBLE</span>';
+        } else if (ath.quotaStatus === 'quota_full') {
+          statusBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 border border-slate-800 text-[9px]">MAX ${state.periodMaxPerNation} NAT</span>`;
+        } else {
+          statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-rose-950/30 text-rose-400 border border-rose-900/40 text-[9px]">OUTSIDE</span>';
+        }
+
+        const displayValue = state.periodMode === 'ranking'
+          ? (ath.periodAvgScore > 0 ? `${ath.periodAvgScore} PKT` : '-')
+          : (ath.periodMaxMark > 0 ? `${ath.periodMaxMark.toFixed(2)}m` : '-');
 
         const tr = document.createElement('tr');
         tr.className = `cursor-pointer transition-colors ${isExpanded ? 'bg-slate-800/90' : isMe ? 'bg-cyan-950/40 hover:bg-cyan-950/60 border-l-4 border-l-cyan-400 font-bold' : isGerman ? 'bg-cyan-950/20 hover:bg-cyan-950/30 border-l-2 border-l-cyan-500' : 'hover:bg-slate-800/50'}`;
@@ -923,6 +1038,9 @@
 
         tr.innerHTML = `
           <td class="py-1.5 px-3 text-center font-bold text-slate-300">#${idx + 1}</td>
+          <td class="py-1.5 px-3 text-center">
+            ${ath.quotaRank ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded font-bold text-[10px] ${ath.quotaRank <= state.periodFieldSize ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">#${ath.quotaRank}</span>` : `<span class="text-[9px] text-slate-500 italic">Slot ${ath.nationSlot}</span>`}
+          </td>
           <td class="py-1.5 px-3 font-semibold text-white font-sans">
             <div class="flex items-center gap-1.5">
               <span class="uppercase font-bold tracking-tight">${ath.name}</span>
@@ -935,8 +1053,8 @@
               ${ath.periodMeetings.length} Meetings
             </span>
           </td>
-          <td class="py-1.5 px-3 text-right font-mono text-slate-400">${ath.periodMaxScore > 0 ? ath.periodMaxScore + ' Pkt' : '-'}</td>
-          <td class="py-1.5 px-3 text-right font-bold text-amber-400 font-mono text-xs">${ath.periodAvgScore > 0 ? ath.periodAvgScore + ' PKT' : '-'}</td>
+          <td class="py-1.5 px-3 text-right font-bold text-amber-400 font-mono text-xs">${displayValue}</td>
+          <td class="py-1.5 px-3 text-center">${statusBadge}</td>
           <td class="py-1.5 px-3 text-center text-slate-500">${isExpanded ? '▲' : '▼'}</td>
         `;
         tbody.appendChild(tr);
@@ -944,7 +1062,7 @@
         if (isCutoff) {
           const cutTr = document.createElement('tr');
           cutTr.className = 'border-t-2 border-b-2 border-amber-500/60 bg-amber-500/10';
-          cutTr.innerHTML = `<td colspan="7" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">NOMINIERUNGS-CUT-OFF (RANK ${state.cutoffSpots})</td>`;
+          cutTr.innerHTML = `<td colspan="8" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">NOMINIERUNGS-CUT-OFF (PLATZ ${state.periodFieldSize} • MAX ${state.periodMaxPerNation}/NAT)</td>`;
           tbody.appendChild(cutTr);
         }
 
@@ -968,10 +1086,10 @@
           `).join('');
 
           accTr.innerHTML = `
-            <td colspan="7" class="p-2.5">
+            <td colspan="8" class="p-2.5">
               <div class="bg-slate-900 rounded border border-slate-800 p-2.5 shadow-sm">
                 <h4 class="font-bold text-white text-[11px] uppercase tracking-wide font-sans mb-1.5">
-                  Gezählte Meetings ab ${state.periodStartDate} für ${ath.name} (Ø ${ath.periodAvgScore} Pkt)
+                  Gezählte Meetings ab ${state.periodStartDate} für ${ath.name} (${displayValue})
                 </h4>
                 <div class="overflow-x-auto">
                   <table class="w-full text-left border-collapse text-[10px] font-mono">
@@ -1241,7 +1359,7 @@
             });
           }
         } catch (e) {
-          // Vorwoche noch nicht vorhanden
+          // Vorwoche nicht vorhanden
         }
       }
 
