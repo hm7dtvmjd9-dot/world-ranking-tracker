@@ -48,7 +48,7 @@
             <div class="flex items-center gap-2">
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
                 LH<span class="text-cyan-400">DASHBOARD</span>
-                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v2.6 WoW PRO</span>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v2.7 NOMINATION</span>
               </h1>
               <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -119,20 +119,20 @@
     <!-- ================= TAB 1: WORLD RANKINGS & QUOTA ================= -->
     <div id="tabContentRankings" class="space-y-3">
       
-      <!-- 4 REFINED KPI TILES -->
+      <!-- 4 REFINED KPI TILES (STANDARD VIEW) -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5">
         
         <!-- Tile 1: Luka Herden Focus -->
         <div class="bg-slate-900 border-2 border-cyan-500/50 p-2.5 rounded shadow-sm shadow-cyan-950/40">
           <div class="text-[10px] text-cyan-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
             <span>Athlete Focus (YOU)</span>
-            <span id="kpiMeBadge" class="text-white text-[9px] font-mono bg-cyan-950 border border-cyan-800 px-1 rounded">GER</span>
+            <span class="text-white text-[9px] font-mono bg-cyan-950 border border-cyan-800 px-1 rounded">GER</span>
           </div>
           <div class="flex items-baseline justify-between">
             <div class="text-base font-black text-white truncate">LUKA HERDEN</div>
             <div id="kpiMeRank" class="text-lg font-black text-cyan-400 font-mono">#--</div>
           </div>
-          <div id="kpiMeSub" class="text-[10px] text-slate-400 font-mono mt-0.5 flex items-center justify-between">
+          <div class="text-[10px] text-slate-400 font-mono mt-0.5 flex items-center justify-between">
             <span>Score: <strong id="kpiMeScore" class="text-white">--</strong></span>
             <span id="kpiMeDelta" class="text-[9px] font-bold">-</span>
           </div>
@@ -231,6 +231,59 @@
 
     <!-- ================= TAB 2: NOMINIERUNGS-ZEITRAUM (WA 2.8 LOGIK) ================= -->
     <div id="tabContentPeriod" class="hidden space-y-3">
+      
+      <!-- 4 DEDICATED KPI TILES FOR PERIOD VIEW -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5">
+        
+        <!-- Period Tile 1: Luka Herden In Period -->
+        <div class="bg-slate-900 border-2 border-cyan-500/50 p-2.5 rounded shadow-sm shadow-cyan-950/40">
+          <div class="text-[10px] text-cyan-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
+            <span>Athlete Focus (YOU)</span>
+            <span class="text-white text-[9px] font-mono bg-cyan-950 border border-cyan-800 px-1 rounded">GER</span>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <div class="text-base font-black text-white truncate">LUKA HERDEN</div>
+            <div id="kpiPeriodMeRank" class="text-lg font-black text-cyan-400 font-mono">#--</div>
+          </div>
+          <div class="text-[10px] text-slate-400 font-mono mt-0.5 flex items-center justify-between">
+            <span>Ø Score: <strong id="kpiPeriodMeScore" class="text-white">--</strong></span>
+            <span id="kpiPeriodMeCount" class="text-cyan-300 font-mono font-bold">- Meets</span>
+          </div>
+        </div>
+
+        <!-- Period Tile 2: Cutoff Spot In Period -->
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
+            <span>Cutoff Schnitt (Zeitraum)</span>
+            <span id="periodCutoffBadge" class="text-cyan-400 text-[9px] font-mono font-bold">TOP 32</span>
+          </div>
+          <div id="kpiPeriodCutoffScore" class="text-base font-black text-amber-400 font-mono">- PKT</div>
+          <div class="text-[10px] text-slate-400 font-mono truncate" id="kpiPeriodCutoffAthName">Target Direct Entry Score</div>
+        </div>
+
+        <!-- Period Tile 3: DLV Squad In Period -->
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
+            <span>DLV Squad (Zeitraum)</span>
+            <span id="kpiPeriodGerCount" class="text-emerald-400 text-[9px] font-mono">0 ATH</span>
+          </div>
+          <div id="kpiPeriodGerList" class="text-[10px] text-slate-300 font-mono space-y-0.5 max-h-12 overflow-y-auto no-scrollbar pt-0.5">
+            <span class="text-slate-500 italic">Noch keine Daten...</span>
+          </div>
+        </div>
+
+        <!-- Period Tile 4: Distance to Cutoff In Period -->
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
+            <span>Delta to Cutoff</span>
+            <span class="text-slate-500 text-[9px] font-mono">GAP</span>
+          </div>
+          <div id="kpiPeriodMeGap" class="text-base font-black font-mono text-white">-</div>
+          <div id="kpiPeriodMeGapSub" class="text-[10px] text-slate-400 font-mono truncate">Abstand im Zeitraum</div>
+        </div>
+      </div>
+
+      <!-- Controls Bar -->
       <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
@@ -239,7 +292,7 @@
               <span class="text-[9px] bg-cyan-950 border border-cyan-800 text-cyan-400 px-1.5 py-0.2 rounded font-mono">WA RULE 2.8.4 & 2.8.5</span>
             </h2>
             <p class="text-[10px] text-slate-400 font-mono mt-0.5">
-              Filtert alle Wettkämpfe ab Stichtag. <strong>Ausnahme:</strong> Die letzte Austragung von OW (WM/Olympia) und GL (EM/Area Champs) bleibt regelkonform aktiv, bis die nächste Austragung beendet ist.
+              Filtert alle Wettkämpfe ab Stichtag. <strong>Strikt regelkonforme Ausnahme:</strong> Vor dem Stichtag bleiben nur <strong>OW</strong> (Olympia/Freiluft-WM) und <strong>GL</strong> (Freiluft-Area Championships wie die EM) bis zur nächsten Austragung aktiv.
             </p>
           </div>
           
@@ -425,6 +478,7 @@
         if (isNaN(val) || val < 1) val = 32;
         state.cutoffSpots = val;
         renderRankings();
+        if (state.activeTab === 'period') renderPeriodRankings();
       };
 
       document.getElementById('applyPeriodBtn').onclick = () => {
@@ -567,7 +621,6 @@
     function renderRankings() {
       const data = getProcessedRankings();
 
-      // 1. Kachel 1 & 4: Luka Herden suchen & befüllen
       const me = state.athletes.find(a => a.name.toLowerCase().includes('herden')) || state.athletes.find(a => a.nation === 'GER');
       const cutoffAth = state.athletes.find(a => a.quotaRank === state.cutoffSpots) || state.athletes[Math.min(state.cutoffSpots - 1, state.athletes.length - 1)];
 
@@ -588,7 +641,6 @@
           document.getElementById('kpiMeDelta').innerHTML = `<span class="text-cyan-400">SB: ${me.sb ? me.sb.toFixed(2) : '-'}m</span>`;
         }
 
-        // Gap to Cutoff
         if (cutoffAth) {
           const gap = me.totalScore - cutoffAth.totalScore;
           document.getElementById('kpiMeGap').textContent = (gap >= 0 ? '+' : '') + gap + ' Pkt';
@@ -597,13 +649,11 @@
         }
       }
 
-      // 2. Kachel 2: Cutoff Score & Athletenname
       if (cutoffAth) {
         document.getElementById('kpiCutoffScore').textContent = cutoffAth.totalScore + ' PKT';
         document.getElementById('kpiCutoffAthName').textContent = `#${state.cutoffSpots}: ${cutoffAth.name} (${cutoffAth.nation})`;
       }
 
-      // 3. Kachel 3: Alle DLV Athleten in Top 100 auflisten
       const germans = state.athletes.filter(a => a.nation === 'GER');
       document.getElementById('kpiGerCountBadge').textContent = `${germans.length} DLV ATHLETEN`;
       const gerListElem = document.getElementById('kpiGerList');
@@ -770,7 +820,7 @@
       });
     }
 
-    /* ================= TAB 2: NOMINIERUNGS-ZEITRAUM BERECHNUNG ================= */
+    /* ================= TAB 2: NOMINIERUNGS-ZEITRAUM (STRIKTE PRÜFUNG) ================= */
     function renderPeriodRankings() {
       const tbody = document.getElementById('periodTableBody');
       const filterDate = new Date(state.periodStartDate);
@@ -786,11 +836,10 @@
 
         (ath.countingMeetings || []).forEach(m => {
           const mDate = parseSafeDate(m.date);
-          const cat = (m.category || '').toUpperCase();
-          const comp = (m.competition || '').toLowerCase();
+          const cat = (m.category || '').toUpperCase().trim();
 
-          // WA Rule 2.8.4 & 2.8.5: OW (Olympics/WM) und GL (EM/Area Champs) bleiben bis zur nächsten Austragung aktiv
-          const isProtectedMajor = cat === 'OW' || cat === 'GL' || comp.includes('championships') || comp.includes('meisterschaften');
+          // STRIKTE REGELPRÜFUNG: Ausschließlich OW und GL bleiben vor dem Stichtag aktiv!
+          const isProtectedMajor = (cat === 'OW' || cat === 'GL');
 
           if (mDate && (mDate >= filterDate || isProtectedMajor)) {
             validMeetings.push({ ...m, parsedDate: mDate, isMajorProtected: mDate < filterDate });
@@ -815,8 +864,52 @@
         return b.periodMaxScore - a.periodMaxScore;
       });
 
+      // 4 Kacheln für den Stichtag-Tab befüllen
+      document.getElementById('periodCutoffBadge').textContent = 'TOP ' + state.cutoffSpots;
+      const mePeriodIdx = periodList.findIndex(a => a.name.toLowerCase().includes('herden'));
+      const mePeriod = mePeriodIdx !== -1 ? periodList[mePeriodIdx] : null;
+      const cutoffPeriodAth = periodList[Math.min(state.cutoffSpots - 1, periodList.length - 1)];
+
+      if (mePeriod) {
+        document.getElementById('kpiPeriodMeRank').textContent = '#' + (mePeriodIdx + 1);
+        document.getElementById('kpiPeriodMeScore').textContent = mePeriod.periodAvgScore > 0 ? mePeriod.periodAvgScore + ' Pkt' : '-';
+        document.getElementById('kpiPeriodMeCount').textContent = `${mePeriod.periodMeetings.length} Meetings`;
+
+        if (cutoffPeriodAth) {
+          const gap = mePeriod.periodAvgScore - cutoffPeriodAth.periodAvgScore;
+          document.getElementById('kpiPeriodMeGap').textContent = (gap >= 0 ? '+' : '') + gap + ' Pkt';
+          document.getElementById('kpiPeriodMeGap').className = gap >= 0 ? 'text-base font-black font-mono text-emerald-400' : 'text-base font-black font-mono text-rose-400';
+          document.getElementById('kpiPeriodMeGapSub').textContent = gap >= 0 ? `Sicher vor Platz #${state.cutoffSpots}` : `Rückstand auf Platz #${state.cutoffSpots}`;
+        }
+      }
+
+      if (cutoffPeriodAth) {
+        document.getElementById('kpiPeriodCutoffScore').textContent = cutoffPeriodAth.periodAvgScore + ' PKT';
+        document.getElementById('kpiPeriodCutoffAthName').textContent = `#${state.cutoffSpots}: ${cutoffPeriodAth.name} (${cutoffPeriodAth.nation})`;
+      }
+
+      // Deutsche Athleten im Stichtag-Tab
+      const germansPeriod = periodList.filter(a => a.nation === 'GER');
+      document.getElementById('kpiPeriodGerCount').textContent = `${germansPeriod.length} DLV ATHLETEN`;
+      const gerListPeriodElem = document.getElementById('kpiPeriodGerList');
+      if (germansPeriod.length > 0) {
+        gerListPeriodElem.innerHTML = germansPeriod.map((g) => {
+          const rankInPeriod = periodList.findIndex(a => a.id === g.id) + 1;
+          const isLuka = g.name.toLowerCase().includes('herden');
+          return `
+            <div class="flex items-center justify-between py-0.5 border-b border-slate-800/40 ${isLuka ? 'text-cyan-400 font-bold' : ''}">
+              <span class="truncate">#${rankInPeriod} ${g.name} (${g.periodMeetings.length}M)</span>
+              <span class="text-amber-400 font-mono ml-2">${g.periodAvgScore} Pkt</span>
+            </div>
+          `;
+        }).join('');
+      } else {
+        gerListPeriodElem.innerHTML = '<span class="text-slate-500 italic">Keine DLV Athleten gefunden</span>';
+      }
+
       tbody.innerHTML = '';
       periodList.forEach((ath, idx) => {
+        const isCutoff = (idx + 1) === state.cutoffSpots;
         const isExpanded = state.expandedPeriodRowId === ath.id;
         const isGerman = ath.nation === 'GER';
         const isMe = ath.name.toLowerCase().includes('herden');
@@ -848,6 +941,13 @@
         `;
         tbody.appendChild(tr);
 
+        if (isCutoff) {
+          const cutTr = document.createElement('tr');
+          cutTr.className = 'border-t-2 border-b-2 border-amber-500/60 bg-amber-500/10';
+          cutTr.innerHTML = `<td colspan="7" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">NOMINIERUNGS-CUT-OFF (RANK ${state.cutoffSpots})</td>`;
+          tbody.appendChild(cutTr);
+        }
+
         if (isExpanded && ath.periodMeetings.length > 0) {
           const accTr = document.createElement('tr');
           accTr.className = 'bg-slate-950 border-b border-slate-800';
@@ -857,7 +957,7 @@
               <td class="py-1 px-2 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
               <td class="py-1 px-2 font-sans font-medium text-slate-200">
                 ${m.competition || '-'}
-                ${m.isMajorProtected ? '<span class="ml-1 text-[8px] bg-purple-950 border border-purple-800 text-purple-300 px-1 py-0.2 rounded font-mono">WA 2.8 PROTECTED</span>' : ''}
+                ${m.isMajorProtected ? '<span class="ml-1 text-[8px] bg-purple-950 border border-purple-800 text-purple-300 px-1 py-0.2 rounded font-mono font-bold">WA 2.8 PROTECTED (' + m.category + ')</span>' : ''}
               </td>
               <td class="py-1 px-2 text-center"><span class="px-1 py-0.2 rounded border text-[8px] font-bold bg-slate-800 border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
               <td class="py-1 px-2 text-right font-bold text-cyan-400">${m.mark}m</td>
