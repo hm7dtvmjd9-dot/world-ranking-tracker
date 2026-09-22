@@ -1,0 +1,1465 @@
+{
+  "event": "Men's Long Jump",
+  "total_weeks": 162,
+  "start_date": "2023-06-20",
+  "weeks": [
+    {
+      "date": "2023-06-20",
+      "label": "20 JUN 2023",
+      "file": "rankings/ranking_2023-06-20.json",
+      "lukaRank": 100,
+      "lukaScore": 1116,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1434
+    },
+    {
+      "date": "2023-06-27",
+      "label": "27 JUN 2023",
+      "file": "rankings/ranking_2023-06-27.json",
+      "lukaRank": 92,
+      "lukaScore": 1116,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1434
+    },
+    {
+      "date": "2023-07-04",
+      "label": "04 JUL 2023",
+      "file": "rankings/ranking_2023-07-04.json",
+      "lukaRank": 99,
+      "lukaScore": 1116,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1434
+    },
+    {
+      "date": "2023-07-11",
+      "label": "11 JUL 2023",
+      "file": "rankings/ranking_2023-07-11.json",
+      "lukaRank": 80,
+      "lukaScore": 1134,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1434
+    },
+    {
+      "date": "2023-07-18",
+      "label": "18 JUL 2023",
+      "file": "rankings/ranking_2023-07-18.json",
+      "lukaRank": 77,
+      "lukaScore": 1134,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1400
+    },
+    {
+      "date": "2023-07-25",
+      "label": "25 JUL 2023",
+      "file": "rankings/ranking_2023-07-25.json",
+      "lukaRank": 81,
+      "lukaScore": 1134,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1400
+    },
+    {
+      "date": "2023-07-30",
+      "label": "30 JUL 2023",
+      "file": "rankings/ranking_2023-07-30.json",
+      "lukaRank": 66,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1400
+    },
+    {
+      "date": "2023-08-08",
+      "label": "08 AUG 2023",
+      "file": "rankings/ranking_2023-08-08.json",
+      "lukaRank": 64,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1400
+    },
+    {
+      "date": "2023-08-29",
+      "label": "29 AUG 2023",
+      "file": "rankings/ranking_2023-08-29.json",
+      "lukaRank": 65,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1450
+    },
+    {
+      "date": "2023-09-05",
+      "label": "05 SEP 2023",
+      "file": "rankings/ranking_2023-09-05.json",
+      "lukaRank": 65,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1453
+    },
+    {
+      "date": "2023-09-12",
+      "label": "12 SEP 2023",
+      "file": "rankings/ranking_2023-09-12.json",
+      "lukaRank": 66,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-09-19",
+      "label": "19 SEP 2023",
+      "file": "rankings/ranking_2023-09-19.json",
+      "lukaRank": 66,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-09-26",
+      "label": "26 SEP 2023",
+      "file": "rankings/ranking_2023-09-26.json",
+      "lukaRank": 66,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-10-03",
+      "label": "03 OCT 2023",
+      "file": "rankings/ranking_2023-10-03.json",
+      "lukaRank": 68,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-10-10",
+      "label": "10 OCT 2023",
+      "file": "rankings/ranking_2023-10-10.json",
+      "lukaRank": 68,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-10-17",
+      "label": "17 OCT 2023",
+      "file": "rankings/ranking_2023-10-17.json",
+      "lukaRank": 66,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-10-24",
+      "label": "24 OCT 2023",
+      "file": "rankings/ranking_2023-10-24.json",
+      "lukaRank": 68,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-10-31",
+      "label": "31 OCT 2023",
+      "file": "rankings/ranking_2023-10-31.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-11-07",
+      "label": "07 NOV 2023",
+      "file": "rankings/ranking_2023-11-07.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-11-14",
+      "label": "14 NOV 2023",
+      "file": "rankings/ranking_2023-11-14.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-11-21",
+      "label": "21 NOV 2023",
+      "file": "rankings/ranking_2023-11-21.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-11-28",
+      "label": "28 NOV 2023",
+      "file": "rankings/ranking_2023-11-28.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-12-05",
+      "label": "05 DEC 2023",
+      "file": "rankings/ranking_2023-12-05.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-12-12",
+      "label": "12 DEC 2023",
+      "file": "rankings/ranking_2023-12-12.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-12-19",
+      "label": "19 DEC 2023",
+      "file": "rankings/ranking_2023-12-19.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2023-12-26",
+      "label": "26 DEC 2023",
+      "file": "rankings/ranking_2023-12-26.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2024-01-02",
+      "label": "02 JAN 2024",
+      "file": "rankings/ranking_2024-01-02.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2024-01-09",
+      "label": "09 JAN 2024",
+      "file": "rankings/ranking_2024-01-09.json",
+      "lukaRank": 69,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2024-01-16",
+      "label": "16 JAN 2024",
+      "file": "rankings/ranking_2024-01-16.json",
+      "lukaRank": 70,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2024-01-23",
+      "label": "23 JAN 2024",
+      "file": "rankings/ranking_2024-01-23.json",
+      "lukaRank": 71,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2024-01-30",
+      "label": "30 JAN 2024",
+      "file": "rankings/ranking_2024-01-30.json",
+      "lukaRank": 70,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2024-02-06",
+      "label": "06 FEB 2024",
+      "file": "rankings/ranking_2024-02-06.json",
+      "lukaRank": 70,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2024-02-13",
+      "label": "13 FEB 2024",
+      "file": "rankings/ranking_2024-02-13.json",
+      "lukaRank": 70,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1433
+    },
+    {
+      "date": "2024-02-18",
+      "label": "18 FEB 2024",
+      "file": "rankings/ranking_2024-02-18.json",
+      "lukaRank": 73,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1428
+    },
+    {
+      "date": "2024-02-27",
+      "label": "27 FEB 2024",
+      "file": "rankings/ranking_2024-02-27.json",
+      "lukaRank": 73,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1428
+    },
+    {
+      "date": "2024-03-05",
+      "label": "05 MAR 2024",
+      "file": "rankings/ranking_2024-03-05.json",
+      "lukaRank": 73,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1436
+    },
+    {
+      "date": "2024-03-12",
+      "label": "12 MAR 2024",
+      "file": "rankings/ranking_2024-03-12.json",
+      "lukaRank": 73,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1436
+    },
+    {
+      "date": "2024-03-19",
+      "label": "19 MAR 2024",
+      "file": "rankings/ranking_2024-03-19.json",
+      "lukaRank": 73,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1436
+    },
+    {
+      "date": "2024-03-26",
+      "label": "26 MAR 2024",
+      "file": "rankings/ranking_2024-03-26.json",
+      "lukaRank": 73,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1436
+    },
+    {
+      "date": "2024-04-02",
+      "label": "02 APR 2024",
+      "file": "rankings/ranking_2024-04-02.json",
+      "lukaRank": 71,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1436
+    },
+    {
+      "date": "2024-04-09",
+      "label": "09 APR 2024",
+      "file": "rankings/ranking_2024-04-09.json",
+      "lukaRank": 73,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1436
+    },
+    {
+      "date": "2024-04-16",
+      "label": "16 APR 2024",
+      "file": "rankings/ranking_2024-04-16.json",
+      "lukaRank": 74,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1436
+    },
+    {
+      "date": "2024-04-23",
+      "label": "23 APR 2024",
+      "file": "rankings/ranking_2024-04-23.json",
+      "lukaRank": 76,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1436
+    },
+    {
+      "date": "2024-04-30",
+      "label": "30 APR 2024",
+      "file": "rankings/ranking_2024-04-30.json",
+      "lukaRank": 76,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1436
+    },
+    {
+      "date": "2024-05-05",
+      "label": "05 MAY 2024",
+      "file": "rankings/ranking_2024-05-05.json",
+      "lukaRank": 75,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1436
+    },
+    {
+      "date": "2024-05-14",
+      "label": "14 MAY 2024",
+      "file": "rankings/ranking_2024-05-14.json",
+      "lukaRank": 75,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1440
+    },
+    {
+      "date": "2024-05-21",
+      "label": "21 MAY 2024",
+      "file": "rankings/ranking_2024-05-21.json",
+      "lukaRank": 77,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1440
+    },
+    {
+      "date": "2024-05-26",
+      "label": "26 MAY 2024",
+      "file": "rankings/ranking_2024-05-26.json",
+      "lukaRank": 77,
+      "lukaScore": 1150,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1440
+    },
+    {
+      "date": "2024-06-04",
+      "label": "04 JUN 2024",
+      "file": "rankings/ranking_2024-06-04.json",
+      "lukaRank": 81,
+      "lukaScore": 1145,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1440
+    },
+    {
+      "date": "2024-06-12",
+      "label": "12 JUN 2024",
+      "file": "rankings/ranking_2024-06-12.json",
+      "lukaRank": 39,
+      "lukaScore": 1186,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1446
+    },
+    {
+      "date": "2024-06-18",
+      "label": "18 JUN 2024",
+      "file": "rankings/ranking_2024-06-18.json",
+      "lukaRank": 43,
+      "lukaScore": 1183,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1446
+    },
+    {
+      "date": "2024-06-25",
+      "label": "25 JUN 2024",
+      "file": "rankings/ranking_2024-06-25.json",
+      "lukaRank": 44,
+      "lukaScore": 1183,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1446
+    },
+    {
+      "date": "2024-06-30",
+      "label": "30 JUN 2024",
+      "file": "rankings/ranking_2024-06-30.json",
+      "lukaRank": 42,
+      "lukaScore": 1195,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1446
+    },
+    {
+      "date": "2024-07-09",
+      "label": "09 JUL 2024",
+      "file": "rankings/ranking_2024-07-09.json",
+      "lukaRank": 53,
+      "lukaScore": 1178,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1446
+    },
+    {
+      "date": "2024-07-16",
+      "label": "16 JUL 2024",
+      "file": "rankings/ranking_2024-07-16.json",
+      "lukaRank": 49,
+      "lukaScore": 1181,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1446
+    },
+    {
+      "date": "2024-07-23",
+      "label": "23 JUL 2024",
+      "file": "rankings/ranking_2024-07-23.json",
+      "lukaRank": 48,
+      "lukaScore": 1181,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1446
+    },
+    {
+      "date": "2024-08-13",
+      "label": "13 AUG 2024",
+      "file": "rankings/ranking_2024-08-13.json",
+      "lukaRank": 56,
+      "lukaScore": 1167,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1445
+    },
+    {
+      "date": "2024-08-20",
+      "label": "20 AUG 2024",
+      "file": "rankings/ranking_2024-08-20.json",
+      "lukaRank": 56,
+      "lukaScore": 1167,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1445
+    },
+    {
+      "date": "2024-08-27",
+      "label": "27 AUG 2024",
+      "file": "rankings/ranking_2024-08-27.json",
+      "lukaRank": 56,
+      "lukaScore": 1167,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1445
+    },
+    {
+      "date": "2024-09-03",
+      "label": "03 SEP 2024",
+      "file": "rankings/ranking_2024-09-03.json",
+      "lukaRank": 48,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1438
+    },
+    {
+      "date": "2024-09-10",
+      "label": "10 SEP 2024",
+      "file": "rankings/ranking_2024-09-10.json",
+      "lukaRank": 47,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1438
+    },
+    {
+      "date": "2024-09-17",
+      "label": "17 SEP 2024",
+      "file": "rankings/ranking_2024-09-17.json",
+      "lukaRank": 46,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-09-24",
+      "label": "24 SEP 2024",
+      "file": "rankings/ranking_2024-09-24.json",
+      "lukaRank": 46,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-10-01",
+      "label": "01 OCT 2024",
+      "file": "rankings/ranking_2024-10-01.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-10-08",
+      "label": "08 OCT 2024",
+      "file": "rankings/ranking_2024-10-08.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-10-15",
+      "label": "15 OCT 2024",
+      "file": "rankings/ranking_2024-10-15.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-10-22",
+      "label": "22 OCT 2024",
+      "file": "rankings/ranking_2024-10-22.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-10-29",
+      "label": "29 OCT 2024",
+      "file": "rankings/ranking_2024-10-29.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-11-05",
+      "label": "05 NOV 2024",
+      "file": "rankings/ranking_2024-11-05.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-11-12",
+      "label": "12 NOV 2024",
+      "file": "rankings/ranking_2024-11-12.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-11-19",
+      "label": "19 NOV 2024",
+      "file": "rankings/ranking_2024-11-19.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-11-26",
+      "label": "26 NOV 2024",
+      "file": "rankings/ranking_2024-11-26.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-12-03",
+      "label": "03 DEC 2024",
+      "file": "rankings/ranking_2024-12-03.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-12-10",
+      "label": "10 DEC 2024",
+      "file": "rankings/ranking_2024-12-10.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-12-17",
+      "label": "17 DEC 2024",
+      "file": "rankings/ranking_2024-12-17.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2024-12-31",
+      "label": "31 DEC 2024",
+      "file": "rankings/ranking_2024-12-31.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2025-01-07",
+      "label": "07 JAN 2025",
+      "file": "rankings/ranking_2025-01-07.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2025-01-14",
+      "label": "14 JAN 2025",
+      "file": "rankings/ranking_2025-01-14.json",
+      "lukaRank": 43,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2025-01-21",
+      "label": "21 JAN 2025",
+      "file": "rankings/ranking_2025-01-21.json",
+      "lukaRank": 44,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2025-01-28",
+      "label": "28 JAN 2025",
+      "file": "rankings/ranking_2025-01-28.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2025-02-04",
+      "label": "04 FEB 2025",
+      "file": "rankings/ranking_2025-02-04.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2025-02-11",
+      "label": "11 FEB 2025",
+      "file": "rankings/ranking_2025-02-11.json",
+      "lukaRank": 46,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2025-02-18",
+      "label": "18 FEB 2025",
+      "file": "rankings/ranking_2025-02-18.json",
+      "lukaRank": 43,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2025-02-23",
+      "label": "23 FEB 2025",
+      "file": "rankings/ranking_2025-02-23.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1439
+    },
+    {
+      "date": "2025-03-04",
+      "label": "04 MAR 2025",
+      "file": "rankings/ranking_2025-03-04.json",
+      "lukaRank": 46,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1432
+    },
+    {
+      "date": "2025-03-09",
+      "label": "09 MAR 2025",
+      "file": "rankings/ranking_2025-03-09.json",
+      "lukaRank": 46,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1432
+    },
+    {
+      "date": "2025-03-18",
+      "label": "18 MAR 2025",
+      "file": "rankings/ranking_2025-03-18.json",
+      "lukaRank": 44,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1432
+    },
+    {
+      "date": "2025-03-25",
+      "label": "25 MAR 2025",
+      "file": "rankings/ranking_2025-03-25.json",
+      "lukaRank": 46,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1432
+    },
+    {
+      "date": "2025-04-01",
+      "label": "01 APR 2025",
+      "file": "rankings/ranking_2025-04-01.json",
+      "lukaRank": 45,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1432
+    },
+    {
+      "date": "2025-04-08",
+      "label": "08 APR 2025",
+      "file": "rankings/ranking_2025-04-08.json",
+      "lukaRank": 43,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1432
+    },
+    {
+      "date": "2025-04-15",
+      "label": "15 APR 2025",
+      "file": "rankings/ranking_2025-04-15.json",
+      "lukaRank": 44,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1432
+    },
+    {
+      "date": "2025-04-22",
+      "label": "22 APR 2025",
+      "file": "rankings/ranking_2025-04-22.json",
+      "lukaRank": 43,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1432
+    },
+    {
+      "date": "2025-04-29",
+      "label": "29 APR 2025",
+      "file": "rankings/ranking_2025-04-29.json",
+      "lukaRank": 41,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1432
+    },
+    {
+      "date": "2025-05-04",
+      "label": "04 MAY 2025",
+      "file": "rankings/ranking_2025-05-04.json",
+      "lukaRank": 41,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1432
+    },
+    {
+      "date": "2025-05-13",
+      "label": "13 MAY 2025",
+      "file": "rankings/ranking_2025-05-13.json",
+      "lukaRank": 41,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1421
+    },
+    {
+      "date": "2025-05-20",
+      "label": "20 MAY 2025",
+      "file": "rankings/ranking_2025-05-20.json",
+      "lukaRank": 43,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1421
+    },
+    {
+      "date": "2025-05-27",
+      "label": "27 MAY 2025",
+      "file": "rankings/ranking_2025-05-27.json",
+      "lukaRank": 41,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1421
+    },
+    {
+      "date": "2025-06-03",
+      "label": "03 JUN 2025",
+      "file": "rankings/ranking_2025-06-03.json",
+      "lukaRank": 38,
+      "lukaScore": 1183,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1421
+    },
+    {
+      "date": "2025-06-10",
+      "label": "10 JUN 2025",
+      "file": "rankings/ranking_2025-06-10.json",
+      "lukaRank": 39,
+      "lukaScore": 1183,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1421
+    },
+    {
+      "date": "2025-06-17",
+      "label": "17 JUN 2025",
+      "file": "rankings/ranking_2025-06-17.json",
+      "lukaRank": 38,
+      "lukaScore": 1183,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1421
+    },
+    {
+      "date": "2025-06-24",
+      "label": "24 JUN 2025",
+      "file": "rankings/ranking_2025-06-24.json",
+      "lukaRank": 38,
+      "lukaScore": 1186,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1421
+    },
+    {
+      "date": "2025-07-01",
+      "label": "01 JUL 2025",
+      "file": "rankings/ranking_2025-07-01.json",
+      "lukaRank": 38,
+      "lukaScore": 1182,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1422
+    },
+    {
+      "date": "2025-07-08",
+      "label": "08 JUL 2025",
+      "file": "rankings/ranking_2025-07-08.json",
+      "lukaRank": 39,
+      "lukaScore": 1182,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1422
+    },
+    {
+      "date": "2025-07-15",
+      "label": "15 JUL 2025",
+      "file": "rankings/ranking_2025-07-15.json",
+      "lukaRank": 40,
+      "lukaScore": 1182,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1422
+    },
+    {
+      "date": "2025-07-22",
+      "label": "22 JUL 2025",
+      "file": "rankings/ranking_2025-07-22.json",
+      "lukaRank": 39,
+      "lukaScore": 1182,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1424
+    },
+    {
+      "date": "2025-07-29",
+      "label": "29 JUL 2025",
+      "file": "rankings/ranking_2025-07-29.json",
+      "lukaRank": 35,
+      "lukaScore": 1192,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1424
+    },
+    {
+      "date": "2025-08-05",
+      "label": "05 AUG 2025",
+      "file": "rankings/ranking_2025-08-05.json",
+      "lukaRank": 40,
+      "lukaScore": 1192,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1424
+    },
+    {
+      "date": "2025-08-12",
+      "label": "12 AUG 2025",
+      "file": "rankings/ranking_2025-08-12.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1424
+    },
+    {
+      "date": "2025-08-19",
+      "label": "19 AUG 2025",
+      "file": "rankings/ranking_2025-08-19.json",
+      "lukaRank": 43,
+      "lukaScore": 1192,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1424
+    },
+    {
+      "date": "2025-08-24",
+      "label": "24 AUG 2025",
+      "file": "rankings/ranking_2025-08-24.json",
+      "lukaRank": 45,
+      "lukaScore": 1192,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1422
+    },
+    {
+      "date": "2025-09-02",
+      "label": "02 SEP 2025",
+      "file": "rankings/ranking_2025-09-02.json",
+      "lukaRank": 44,
+      "lukaScore": 1192,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1415
+    },
+    {
+      "date": "2025-09-23",
+      "label": "23 SEP 2025",
+      "file": "rankings/ranking_2025-09-23.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-09-30",
+      "label": "30 SEP 2025",
+      "file": "rankings/ranking_2025-09-30.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-10-07",
+      "label": "07 OCT 2025",
+      "file": "rankings/ranking_2025-10-07.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-10-14",
+      "label": "14 OCT 2025",
+      "file": "rankings/ranking_2025-10-14.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-10-21",
+      "label": "21 OCT 2025",
+      "file": "rankings/ranking_2025-10-21.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-10-28",
+      "label": "28 OCT 2025",
+      "file": "rankings/ranking_2025-10-28.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-11-04",
+      "label": "04 NOV 2025",
+      "file": "rankings/ranking_2025-11-04.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-11-11",
+      "label": "11 NOV 2025",
+      "file": "rankings/ranking_2025-11-11.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-11-18",
+      "label": "18 NOV 2025",
+      "file": "rankings/ranking_2025-11-18.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-11-25",
+      "label": "25 NOV 2025",
+      "file": "rankings/ranking_2025-11-25.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-12-02",
+      "label": "02 DEC 2025",
+      "file": "rankings/ranking_2025-12-02.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-12-09",
+      "label": "09 DEC 2025",
+      "file": "rankings/ranking_2025-12-09.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-12-16",
+      "label": "16 DEC 2025",
+      "file": "rankings/ranking_2025-12-16.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-12-23",
+      "label": "23 DEC 2025",
+      "file": "rankings/ranking_2025-12-23.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2025-12-30",
+      "label": "30 DEC 2025",
+      "file": "rankings/ranking_2025-12-30.json",
+      "lukaRank": 41,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1428
+    },
+    {
+      "date": "2026-01-06",
+      "label": "06 JAN 2026",
+      "file": "rankings/ranking_2026-01-06.json",
+      "lukaRank": 38,
+      "lukaScore": 1175,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1365
+    },
+    {
+      "date": "2026-01-13",
+      "label": "13 JAN 2026",
+      "file": "rankings/ranking_2026-01-13.json",
+      "lukaRank": 38,
+      "lukaScore": 1175,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1365
+    },
+    {
+      "date": "2026-01-20",
+      "label": "20 JAN 2026",
+      "file": "rankings/ranking_2026-01-20.json",
+      "lukaRank": 38,
+      "lukaScore": 1175,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1365
+    },
+    {
+      "date": "2026-01-27",
+      "label": "27 JAN 2026",
+      "file": "rankings/ranking_2026-01-27.json",
+      "lukaRank": 38,
+      "lukaScore": 1175,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1365
+    },
+    {
+      "date": "2026-02-03",
+      "label": "03 FEB 2026",
+      "file": "rankings/ranking_2026-02-03.json",
+      "lukaRank": 26,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1365
+    },
+    {
+      "date": "2026-02-10",
+      "label": "10 FEB 2026",
+      "file": "rankings/ranking_2026-02-10.json",
+      "lukaRank": 26,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1365
+    },
+    {
+      "date": "2026-02-17",
+      "label": "17 FEB 2026",
+      "file": "rankings/ranking_2026-02-17.json",
+      "lukaRank": 26,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-02-24",
+      "label": "24 FEB 2026",
+      "file": "rankings/ranking_2026-02-24.json",
+      "lukaRank": 25,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-03-03",
+      "label": "03 MAR 2026",
+      "file": "rankings/ranking_2026-03-03.json",
+      "lukaRank": 25,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-03-10",
+      "label": "10 MAR 2026",
+      "file": "rankings/ranking_2026-03-10.json",
+      "lukaRank": 24,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-03-17",
+      "label": "17 MAR 2026",
+      "file": "rankings/ranking_2026-03-17.json",
+      "lukaRank": 24,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-03-24",
+      "label": "24 MAR 2026",
+      "file": "rankings/ranking_2026-03-24.json",
+      "lukaRank": 24,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-03-31",
+      "label": "31 MAR 2026",
+      "file": "rankings/ranking_2026-03-31.json",
+      "lukaRank": 25,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-04-07",
+      "label": "07 APR 2026",
+      "file": "rankings/ranking_2026-04-07.json",
+      "lukaRank": 25,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-04-14",
+      "label": "14 APR 2026",
+      "file": "rankings/ranking_2026-04-14.json",
+      "lukaRank": 24,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-04-21",
+      "label": "21 APR 2026",
+      "file": "rankings/ranking_2026-04-21.json",
+      "lukaRank": 24,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-04-28",
+      "label": "28 APR 2026",
+      "file": "rankings/ranking_2026-04-28.json",
+      "lukaRank": 25,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-05-05",
+      "label": "05 MAY 2026",
+      "file": "rankings/ranking_2026-05-05.json",
+      "lukaRank": 25,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-05-12",
+      "label": "12 MAY 2026",
+      "file": "rankings/ranking_2026-05-12.json",
+      "lukaRank": 24,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-05-19",
+      "label": "19 MAY 2026",
+      "file": "rankings/ranking_2026-05-19.json",
+      "lukaRank": 25,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1368
+    },
+    {
+      "date": "2026-05-26",
+      "label": "26 MAY 2026",
+      "file": "rankings/ranking_2026-05-26.json",
+      "lukaRank": 25,
+      "lukaScore": 1194,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1368
+    },
+    {
+      "date": "2026-06-02",
+      "label": "02 JUN 2026",
+      "file": "rankings/ranking_2026-06-02.json",
+      "lukaRank": 27,
+      "lukaScore": 1193,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1368
+    },
+    {
+      "date": "2026-06-09",
+      "label": "09 JUN 2026",
+      "file": "rankings/ranking_2026-06-09.json",
+      "lukaRank": null,
+      "lukaScore": null,
+      "topAthlete": "",
+      "topScore": 0
+    },
+    {
+      "date": "2026-06-16",
+      "label": "16 JUN 2026",
+      "file": "rankings/ranking_2026-06-16.json",
+      "lukaRank": 28,
+      "lukaScore": 1193,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1368
+    },
+    {
+      "date": "2026-06-23",
+      "label": "23 JUN 2026",
+      "file": "rankings/ranking_2026-06-23.json",
+      "lukaRank": 27,
+      "lukaScore": 1178,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1364
+    },
+    {
+      "date": "2026-06-30",
+      "label": "30 JUN 2026",
+      "file": "rankings/ranking_2026-06-30.json",
+      "lukaRank": 30,
+      "lukaScore": 1192,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1368
+    },
+    {
+      "date": "2026-07-07",
+      "label": "07 JUL 2026",
+      "file": "rankings/ranking_2026-07-07.json",
+      "lukaRank": 36,
+      "lukaScore": 1174,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1360
+    },
+    {
+      "date": "2026-07-14",
+      "label": "14 JUL 2026",
+      "file": "rankings/ranking_2026-07-14.json",
+      "lukaRank": 33,
+      "lukaScore": 1189,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1368
+    },
+    {
+      "date": "2026-07-21",
+      "label": "21 JUL 2026",
+      "file": "rankings/ranking_2026-07-21.json",
+      "lukaRank": 38,
+      "lukaScore": 1174,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-07-26",
+      "label": "26 JUL 2026",
+      "file": "rankings/ranking_2026-07-26.json",
+      "lukaRank": 37,
+      "lukaScore": 1184,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1370
+    },
+    {
+      "date": "2026-08-04",
+      "label": "04 AUG 2026",
+      "file": "rankings/ranking_2026-08-04.json",
+      "lukaRank": 35,
+      "lukaScore": 1180,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1370
+    },
+    {
+      "date": "2026-08-11",
+      "label": "11 AUG 2026",
+      "file": "rankings/ranking_2026-08-11.json",
+      "lukaRank": 61,
+      "lukaScore": 1150,
+      "topAthlete": "Mattia FURLANI",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-08-18",
+      "label": "18 AUG 2026",
+      "file": "rankings/ranking_2026-08-18.json",
+      "lukaRank": 68,
+      "lukaScore": 1144,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1362
+    },
+    {
+      "date": "2026-08-25",
+      "label": "25 AUG 2026",
+      "file": "rankings/ranking_2026-08-25.json",
+      "lukaRank": 69,
+      "lukaScore": 1144,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1363
+    },
+    {
+      "date": "2026-09-01",
+      "label": "01 SEP 2026",
+      "file": "rankings/ranking_2026-09-01.json",
+      "lukaRank": 68,
+      "lukaScore": 1144,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1375
+    },
+    {
+      "date": "2026-09-15",
+      "label": "15 SEP 2026",
+      "file": "rankings/ranking_2026-09-15.json",
+      "lukaRank": 70,
+      "lukaScore": 1144,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1402
+    }
+  ]
+}

@@ -1,0 +1,1144 @@
+{
+  "date": "2024-09-24",
+  "label": "24 SEP 2024",
+  "event": "Men's Long Jump",
+  "athletes_count": 100,
+  "luka_found": true,
+  "luka_rank": 46,
+  "luka_score": 1174,
+  "luka_competitions": [
+    {
+      "date": "08 JUN 2024",
+      "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+      "venue": "",
+      "category": "GL",
+      "mark": "8.01",
+      "wind": "-3.0",
+      "place": "8.",
+      "result_score": 1141,
+      "placing_score": 80,
+      "performance_score": 1221,
+      "indoor": false
+    },
+    {
+      "date": "07 JUN 2024",
+      "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+      "venue": "",
+      "category": "GL",
+      "mark": "8.08",
+      "wind": "-12.0",
+      "place": "6.",
+      "result_score": 1162,
+      "placing_score": 40,
+      "performance_score": 1202,
+      "indoor": false
+    },
+    {
+      "date": "29 JUN 2024",
+      "competition": "German Championships, Eintracht-Stadion, Braunschweig",
+      "venue": "",
+      "category": "B",
+      "mark": "7.79",
+      "wind": "+7.0",
+      "place": "2.",
+      "result_score": 1092,
+      "placing_score": 80,
+      "performance_score": 1172,
+      "indoor": false
+    },
+    {
+      "date": "31 AUG 2024",
+      "competition": "60° Palio Città della Quercia, Stadio Quercia, Rovereto",
+      "venue": "",
+      "category": "B",
+      "mark": "7.78",
+      "wind": "-2.0",
+      "place": "4.",
+      "result_score": 1091,
+      "placing_score": 60,
+      "performance_score": 1151,
+      "indoor": false
+    },
+    {
+      "date": "14 JUL 2024",
+      "competition": "Résisprint International, Stade de La Charrière, La Chaux-de-Fonds",
+      "venue": "",
+      "category": "D",
+      "mark": "7.84",
+      "wind": "+13.0",
+      "place": "4.",
+      "result_score": 1103,
+      "placing_score": 25,
+      "performance_score": 1128,
+      "indoor": false
+    }
+  ],
+  "athletes": [
+    {
+      "rank": 1,
+      "name": "Miltiadis TENTOGLOU",
+      "country": "GRE",
+      "dob": "18 MAR 1998",
+      "ranking_score": 1439,
+      "profile_url": "https://worldathletics.org/athletes/greece/miltiadis-tentoglou-14669734",
+      "data_id": "95388846",
+      "counted_competitions": []
+    },
+    {
+      "rank": 2,
+      "name": "Simon EHAMMER",
+      "country": "SUI",
+      "dob": "07 FEB 2000",
+      "ranking_score": 1361,
+      "profile_url": "https://worldathletics.org/athletes/switzerland/simon-ehammer-14730721",
+      "data_id": "95388847",
+      "counted_competitions": []
+    },
+    {
+      "rank": 3,
+      "name": "Wayne PINNOCK",
+      "country": "JAM",
+      "dob": "24 OCT 2000",
+      "ranking_score": 1360,
+      "profile_url": "https://worldathletics.org/athletes/jamaica/wayne-pinnock-14693852",
+      "data_id": "95388848",
+      "counted_competitions": []
+    },
+    {
+      "rank": 4,
+      "name": "Mattia FURLANI",
+      "country": "ITA",
+      "dob": "07 FEB 2005",
+      "ranking_score": 1360,
+      "profile_url": "https://worldathletics.org/athletes/italy/mattia-furlani-14905216",
+      "data_id": "95388849",
+      "counted_competitions": []
+    },
+    {
+      "rank": 5,
+      "name": "Carey MCLEOD",
+      "country": "JAM",
+      "dob": "14 APR 1998",
+      "ranking_score": 1331,
+      "profile_url": "https://worldathletics.org/athletes/jamaica/carey-mcleod-14693824",
+      "data_id": "95388850",
+      "counted_competitions": []
+    },
+    {
+      "rank": 6,
+      "name": "Simon BATZ",
+      "country": "GER",
+      "dob": "01 DEC 2002",
+      "ranking_score": 1294,
+      "profile_url": "https://worldathletics.org/athletes/germany/simon-batz-14845074",
+      "data_id": "95388851",
+      "counted_competitions": []
+    },
+    {
+      "rank": 7,
+      "name": "Jacob FINCHAM-DUKES",
+      "country": "GBR",
+      "dob": "12 JAN 1997",
+      "ranking_score": 1293,
+      "profile_url": "https://worldathletics.org/athletes/great-britain-ni/jacob-fincham-dukes-14536147",
+      "data_id": "95388852",
+      "counted_competitions": []
+    },
+    {
+      "rank": 8,
+      "name": "Tajay GAYLE",
+      "country": "JAM",
+      "dob": "02 AUG 1996",
+      "ranking_score": 1290,
+      "profile_url": "https://worldathletics.org/athletes/jamaica/tajay-gayle-14631861",
+      "data_id": "95388853",
+      "counted_competitions": []
+    },
+    {
+      "rank": 9,
+      "name": "Mingkun ZHANG",
+      "country": "CHN",
+      "dob": "20 OCT 2000",
+      "ranking_score": 1290,
+      "profile_url": "https://worldathletics.org/athletes/pr-of-china/mingkun-zhang-14884079",
+      "data_id": "95388854",
+      "counted_competitions": []
+    },
+    {
+      "rank": 10,
+      "name": "Jianan WANG",
+      "country": "CHN",
+      "dob": "27 AUG 1996",
+      "ranking_score": 1283,
+      "profile_url": "https://worldathletics.org/athletes/pr-of-china/jianan-wang-14514470",
+      "data_id": "95388855",
+      "counted_competitions": []
+    },
+    {
+      "rank": 11,
+      "name": "Marquis DENDY",
+      "country": "USA",
+      "dob": "17 NOV 1992",
+      "ranking_score": 1258,
+      "profile_url": "https://worldathletics.org/athletes/united-states/marquis-dendy-14374165",
+      "data_id": "95388856",
+      "counted_competitions": []
+    },
+    {
+      "rank": 12,
+      "name": "Arnovis DALMERO",
+      "country": "COL",
+      "dob": "23 SEP 2000",
+      "ranking_score": 1257,
+      "profile_url": "https://worldathletics.org/athletes/colombia/arnovis-dalmero-14768739",
+      "data_id": "95388857",
+      "counted_competitions": []
+    },
+    {
+      "rank": 13,
+      "name": "Anvar ANVAROV",
+      "country": "UZB",
+      "dob": "22 OCT 2000",
+      "ranking_score": 1252,
+      "profile_url": "https://worldathletics.org/athletes/uzbekistan/anvar-anvarov-14934300",
+      "data_id": "95388858",
+      "counted_competitions": []
+    },
+    {
+      "rank": 14,
+      "name": "Emiliano LASA",
+      "country": "URU",
+      "dob": "25 JAN 1990",
+      "ranking_score": 1250,
+      "profile_url": "https://worldathletics.org/athletes/uruguay/emiliano-lasa-14374159",
+      "data_id": "95388859",
+      "counted_competitions": []
+    },
+    {
+      "rank": 15,
+      "name": "Christopher MITREVSKI",
+      "country": "AUS",
+      "dob": "12 JUL 1996",
+      "ranking_score": 1248,
+      "profile_url": "https://worldathletics.org/athletes/australia/christopher-mitrevski-14552175",
+      "data_id": "95388860",
+      "counted_competitions": []
+    },
+    {
+      "rank": 16,
+      "name": "Filip PRAVDICA",
+      "country": "CRO",
+      "dob": "28 JUL 1995",
+      "ranking_score": 1245,
+      "profile_url": "https://worldathletics.org/athletes/croatia/filip-pravdica-14436507",
+      "data_id": "95388861",
+      "counted_competitions": []
+    },
+    {
+      "rank": 17,
+      "name": "Jeremiah DAVIS",
+      "country": "USA",
+      "dob": "31 AUG 2001",
+      "ranking_score": 1238,
+      "profile_url": "https://worldathletics.org/athletes/united-states/jeremiah-davis-14926128",
+      "data_id": "95388862",
+      "counted_competitions": []
+    },
+    {
+      "rank": 18,
+      "name": "Shawn-D THOMPSON",
+      "country": "JAM",
+      "dob": "20 JAN 1997",
+      "ranking_score": 1238,
+      "profile_url": "https://worldathletics.org/athletes/jamaica/shawn-d-thompson-14691402",
+      "data_id": "95388863",
+      "counted_competitions": []
+    },
+    {
+      "rank": 19,
+      "name": "Yu-Tang LIN",
+      "country": "TPE",
+      "dob": "11 MAY 2000",
+      "ranking_score": 1237,
+      "profile_url": "https://worldathletics.org/athletes/chinese-taipei/yu-tang-lin-14831893",
+      "data_id": "95388864",
+      "counted_competitions": []
+    },
+    {
+      "rank": 20,
+      "name": "Bozhidar SAR&#194;BOYUKOV",
+      "country": "BUL",
+      "dob": "06 AUG 2004",
+      "ranking_score": 1234,
+      "profile_url": "https://worldathletics.org/athletes/bulgaria/bozhidar-saraboyukov-14927349",
+      "data_id": "95388865",
+      "counted_competitions": []
+    },
+    {
+      "rank": 21,
+      "name": "Tom CAMPAGNE",
+      "country": "FRA",
+      "dob": "14 NOV 2000",
+      "ranking_score": 1227,
+      "profile_url": "https://worldathletics.org/athletes/france/tom-campagne-14758440",
+      "data_id": "95388866",
+      "counted_competitions": []
+    },
+    {
+      "rank": 22,
+      "name": "Radek JUŠKA",
+      "country": "CZE",
+      "dob": "08 MAR 1993",
+      "ranking_score": 1225,
+      "profile_url": "https://worldathletics.org/athletes/czechia/radek-juska-14403432",
+      "data_id": "95388867",
+      "counted_competitions": []
+    },
+    {
+      "rank": 23,
+      "name": "Liam ADCOCK",
+      "country": "AUS",
+      "dob": "21 JUN 1996",
+      "ranking_score": 1219,
+      "profile_url": "https://worldathletics.org/athletes/australia/liam-adcock-14572123",
+      "data_id": "95388868",
+      "counted_competitions": []
+    },
+    {
+      "rank": 24,
+      "name": "Yuhao SHI",
+      "country": "CHN",
+      "dob": "26 SEP 1998",
+      "ranking_score": 1219,
+      "profile_url": "https://worldathletics.org/athletes/pr-of-china/yuhao-shi-14714402",
+      "data_id": "95388869",
+      "counted_competitions": []
+    },
+    {
+      "rank": 25,
+      "name": "Lucas Marcelino DOS SANTOS",
+      "country": "BRA",
+      "dob": "04 JAN 1995",
+      "ranking_score": 1219,
+      "profile_url": "https://worldathletics.org/athletes/brazil/lucas-marcelino-dos-santos-14520721",
+      "data_id": "95388870",
+      "counted_competitions": []
+    },
+    {
+      "rank": 26,
+      "name": "Jarrion LAWSON",
+      "country": "USA",
+      "dob": "06 MAY 1994",
+      "ranking_score": 1217,
+      "profile_url": "https://worldathletics.org/athletes/united-states/jarrion-lawson-14443773",
+      "data_id": "95388871",
+      "counted_competitions": []
+    },
+    {
+      "rank": 27,
+      "name": "William WILLIAMS",
+      "country": "USA",
+      "dob": "31 JAN 1995",
+      "ranking_score": 1215,
+      "profile_url": "https://worldathletics.org/athletes/united-states/william-williams-14613733",
+      "data_id": "95388872",
+      "counted_competitions": []
+    },
+    {
+      "rank": 28,
+      "name": "Lester LESCAY",
+      "country": "CUB",
+      "dob": "15 OCT 2001",
+      "ranking_score": 1215,
+      "profile_url": "https://worldathletics.org/athletes/spain/lester-lescay-14742125",
+      "data_id": "95388873",
+      "counted_competitions": []
+    },
+    {
+      "rank": 29,
+      "name": "Malcolm CLEMONS",
+      "country": "USA",
+      "dob": "08 MAR 2002",
+      "ranking_score": 1213,
+      "profile_url": "https://worldathletics.org/athletes/united-states/malcolm-clemons-14787637",
+      "data_id": "95388874",
+      "counted_competitions": []
+    },
+    {
+      "rank": 30,
+      "name": "Petr MEINDLSCHMID",
+      "country": "CZE",
+      "dob": "15 JAN 2006",
+      "ranking_score": 1204,
+      "profile_url": "https://worldathletics.org/athletes/czechia/petr-meindlschmid-15003256",
+      "data_id": "95388875",
+      "counted_competitions": []
+    },
+    {
+      "rank": 31,
+      "name": "Johnny BRACKINS",
+      "country": "USA",
+      "dob": "29 JUL 2003",
+      "ranking_score": 1203,
+      "profile_url": "https://worldathletics.org/athletes/united-states/johnny-brackins-14807813",
+      "data_id": "95388876",
+      "counted_competitions": []
+    },
+    {
+      "rank": 32,
+      "name": "Cheswill JOHNSON",
+      "country": "RSA",
+      "dob": "30 SEP 1997",
+      "ranking_score": 1197,
+      "profile_url": "https://worldathletics.org/athletes/south-africa/cheswill-johnson-14741320",
+      "data_id": "95388877",
+      "counted_competitions": []
+    },
+    {
+      "rank": 33,
+      "name": "Isaac GRIMES",
+      "country": "USA",
+      "dob": "07 FEB 1998",
+      "ranking_score": 1196,
+      "profile_url": "https://worldathletics.org/athletes/united-states/isaac-grimes-14820319",
+      "data_id": "95388878",
+      "counted_competitions": []
+    },
+    {
+      "rank": 34,
+      "name": "Heng SHU",
+      "country": "CHN",
+      "dob": "22 MAY 2004",
+      "ranking_score": 1195,
+      "profile_url": "https://worldathletics.org/athletes/pr-of-china/heng-shu-15072915",
+      "data_id": "95388879",
+      "counted_competitions": []
+    },
+    {
+      "rank": 35,
+      "name": "Gerson BALD&#201;",
+      "country": "POR",
+      "dob": "28 JAN 2000",
+      "ranking_score": 1192,
+      "profile_url": "https://worldathletics.org/athletes/portugal/gerson-balde-14849980",
+      "data_id": "95388880",
+      "counted_competitions": []
+    },
+    {
+      "rank": 36,
+      "name": "Thobias MONTLER",
+      "country": "SWE",
+      "dob": "15 FEB 1996",
+      "ranking_score": 1191,
+      "profile_url": "https://worldathletics.org/athletes/sweden/thobias-montler-14487329",
+      "data_id": "95388881",
+      "counted_competitions": []
+    },
+    {
+      "rank": 37,
+      "name": "Charles Edward GODFRED",
+      "country": "NGR",
+      "dob": "17 APR 2004",
+      "ranking_score": 1182,
+      "profile_url": "https://worldathletics.org/athletes/nigeria/charles-godfred-15090505",
+      "data_id": "95388882",
+      "counted_competitions": []
+    },
+    {
+      "rank": 38,
+      "name": "Eusebio C&#193;CERES",
+      "country": "ESP",
+      "dob": "10 SEP 1991",
+      "ranking_score": 1180,
+      "profile_url": "https://worldathletics.org/athletes/spain/eusebio-caceres-14166878",
+      "data_id": "95388883",
+      "counted_competitions": []
+    },
+    {
+      "rank": 39,
+      "name": "Yuki HASHIOKA",
+      "country": "JPN",
+      "dob": "23 JAN 1999",
+      "ranking_score": 1180,
+      "profile_url": "https://worldathletics.org/athletes/japan/yuki-hashioka-14719623",
+      "data_id": "95388884",
+      "counted_competitions": []
+    },
+    {
+      "rank": 40,
+      "name": "Nikithemba HANI",
+      "country": "RSA",
+      "dob": "12 OCT 2000",
+      "ranking_score": 1180,
+      "profile_url": "https://worldathletics.org/athletes/south-africa/nikithemba-hani-14816197",
+      "data_id": "95388885",
+      "counted_competitions": []
+    },
+    {
+      "rank": 41,
+      "name": "Ming Tai CHAN",
+      "country": "HKG",
+      "dob": "30 JAN 1995",
+      "ranking_score": 1179,
+      "profile_url": "https://worldathletics.org/athletes/hong-kong-china/ming-tai-chan-14547439",
+      "data_id": "95388886",
+      "counted_competitions": []
+    },
+    {
+      "rank": 42,
+      "name": "Janry UBAS",
+      "country": "PHI",
+      "dob": "02 JAN 1994",
+      "ranking_score": 1179,
+      "profile_url": "https://worldathletics.org/athletes/philippines/janry-ubas-14530589",
+      "data_id": "95388887",
+      "counted_competitions": []
+    },
+    {
+      "rank": 43,
+      "name": "Strahinja JOVANČEVIĆ",
+      "country": "SRB",
+      "dob": "28 FEB 1993",
+      "ranking_score": 1179,
+      "profile_url": "https://worldathletics.org/athletes/serbia/strahinja-jovancevic-14479218",
+      "data_id": "95388888",
+      "counted_competitions": []
+    },
+    {
+      "rank": 44,
+      "name": "JC STEVENSON",
+      "country": "USA",
+      "dob": "02 JUN 2004",
+      "ranking_score": 1177,
+      "profile_url": "https://worldathletics.org/athletes/united-states/jc-stevenson-15026856",
+      "data_id": "95388889",
+      "counted_competitions": []
+    },
+    {
+      "rank": 45,
+      "name": "Henry FRAYNE",
+      "country": "AUS",
+      "dob": "14 APR 1990",
+      "ranking_score": 1177,
+      "profile_url": "https://worldathletics.org/athletes/australia/henry-frayne-14179673",
+      "data_id": "95388890",
+      "counted_competitions": []
+    },
+    {
+      "rank": 46,
+      "name": "Luka HERDEN",
+      "country": "GER",
+      "dob": "09 FEB 2000",
+      "ranking_score": 1174,
+      "profile_url": "https://worldathletics.org/athletes/germany/luka-herden-14717467",
+      "data_id": "95388891",
+      "counted_competitions": [
+        {
+          "date": "08 JUN 2024",
+          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "venue": "",
+          "category": "GL",
+          "mark": "8.01",
+          "wind": "-3.0",
+          "place": "8.",
+          "result_score": 1141,
+          "placing_score": 80,
+          "performance_score": 1221,
+          "indoor": false
+        },
+        {
+          "date": "07 JUN 2024",
+          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "venue": "",
+          "category": "GL",
+          "mark": "8.08",
+          "wind": "-12.0",
+          "place": "6.",
+          "result_score": 1162,
+          "placing_score": 40,
+          "performance_score": 1202,
+          "indoor": false
+        },
+        {
+          "date": "29 JUN 2024",
+          "competition": "German Championships, Eintracht-Stadion, Braunschweig",
+          "venue": "",
+          "category": "B",
+          "mark": "7.79",
+          "wind": "+7.0",
+          "place": "2.",
+          "result_score": 1092,
+          "placing_score": 80,
+          "performance_score": 1172,
+          "indoor": false
+        },
+        {
+          "date": "31 AUG 2024",
+          "competition": "60° Palio Città della Quercia, Stadio Quercia, Rovereto",
+          "venue": "",
+          "category": "B",
+          "mark": "7.78",
+          "wind": "-2.0",
+          "place": "4.",
+          "result_score": 1091,
+          "placing_score": 60,
+          "performance_score": 1151,
+          "indoor": false
+        },
+        {
+          "date": "14 JUL 2024",
+          "competition": "Résisprint International, Stade de La Charrière, La Chaux-de-Fonds",
+          "venue": "",
+          "category": "D",
+          "mark": "7.84",
+          "wind": "+13.0",
+          "place": "4.",
+          "result_score": 1103,
+          "placing_score": 25,
+          "performance_score": 1128,
+          "indoor": false
+        }
+      ]
+    },
+    {
+      "rank": 47,
+      "name": "Reece ADEMOLA",
+      "country": "IRL",
+      "dob": "01 FEB 2003",
+      "ranking_score": 1172,
+      "profile_url": "https://worldathletics.org/athletes/ireland/reece-ademola-14917766",
+      "data_id": "95388892",
+      "counted_competitions": []
+    },
+    {
+      "rank": 48,
+      "name": "Marko ČEKO",
+      "country": "CRO",
+      "dob": "03 AUG 2000",
+      "ranking_score": 1172,
+      "profile_url": "https://worldathletics.org/athletes/croatia/marko-ceko-14684346",
+      "data_id": "95388893",
+      "counted_competitions": []
+    },
+    {
+      "rank": 49,
+      "name": "Keito YAMAURA",
+      "country": "JPN",
+      "dob": "09 NOV 2000",
+      "ranking_score": 1171,
+      "profile_url": "https://worldathletics.org/athletes/japan/keito-yamaura-14855151",
+      "data_id": "95388894",
+      "counted_competitions": []
+    },
+    {
+      "rank": 50,
+      "name": "Hibiki TSUHA",
+      "country": "JPN",
+      "dob": "21 JAN 1998",
+      "ranking_score": 1171,
+      "profile_url": "https://worldathletics.org/athletes/japan/hibiki-tsuha-14714426",
+      "data_id": "95388895",
+      "counted_competitions": []
+    },
+    {
+      "rank": 51,
+      "name": "Asande MTHEMBU",
+      "country": "RSA",
+      "dob": "04 JUN 2004",
+      "ranking_score": 1170,
+      "profile_url": "https://worldathletics.org/athletes/south-africa/asande-mthembu-14936245",
+      "data_id": "95388896",
+      "counted_competitions": []
+    },
+    {
+      "rank": 52,
+      "name": "Jos&#233; MANDROS",
+      "country": "PER",
+      "dob": "12 NOV 1998",
+      "ranking_score": 1170,
+      "profile_url": "https://worldathletics.org/athletes/peru/jose-mandros-14674295",
+      "data_id": "95388897",
+      "counted_competitions": []
+    },
+    {
+      "rank": 53,
+      "name": "Darcy ROPER",
+      "country": "AUS",
+      "dob": "31 MAR 1998",
+      "ranking_score": 1170,
+      "profile_url": "https://worldathletics.org/athletes/australia/darcy-roper-14550669",
+      "data_id": "95388898",
+      "counted_competitions": []
+    },
+    {
+      "rank": 54,
+      "name": "Goodness IREDIA",
+      "country": "NGR",
+      "dob": "",
+      "ranking_score": 1168,
+      "profile_url": "https://worldathletics.org/athletes/nigeria/goodness-iredia-14960528",
+      "data_id": "95388899",
+      "counted_competitions": []
+    },
+    {
+      "rank": 55,
+      "name": "Yuto TORIUMI",
+      "country": "JPN",
+      "dob": "04 OCT 2001",
+      "ranking_score": 1167,
+      "profile_url": "https://worldathletics.org/athletes/japan/yuto-toriumi-14861084",
+      "data_id": "95388900",
+      "counted_competitions": []
+    },
+    {
+      "rank": 56,
+      "name": "LaQuan NAIRN",
+      "country": "BAH",
+      "dob": "31 JUL 1996",
+      "ranking_score": 1167,
+      "profile_url": "https://worldathletics.org/athletes/bahamas/laquan-nairn-14520404",
+      "data_id": "95388901",
+      "counted_competitions": []
+    },
+    {
+      "rank": 57,
+      "name": "Jeswin ALDRIN",
+      "country": "IND",
+      "dob": "24 DEC 2001",
+      "ranking_score": 1167,
+      "profile_url": "https://worldathletics.org/athletes/india/jeswin-aldrin-14859332",
+      "data_id": "95388902",
+      "counted_competitions": []
+    },
+    {
+      "rank": 58,
+      "name": "Jason SMITH",
+      "country": "USA",
+      "dob": "19 DEC 1998",
+      "ranking_score": 1165,
+      "profile_url": "https://worldathletics.org/athletes/united-states/jason-smith-14780888",
+      "data_id": "95388903",
+      "counted_competitions": []
+    },
+    {
+      "rank": 59,
+      "name": "Gabriel Luiz BOZA",
+      "country": "BRA",
+      "dob": "07 MAR 2003",
+      "ranking_score": 1162,
+      "profile_url": "https://worldathletics.org/athletes/brazil/gabriel-luiz-boza-14862447",
+      "data_id": "95388904",
+      "counted_competitions": []
+    },
+    {
+      "rank": 60,
+      "name": "Emmanuel NJOKU",
+      "country": "NGR",
+      "dob": "04 MAY 2002",
+      "ranking_score": 1162,
+      "profile_url": "https://worldathletics.org/athletes/nigeria/emmanuel-njoku-14888362",
+      "data_id": "95388905",
+      "counted_competitions": []
+    },
+    {
+      "rank": 61,
+      "name": "Tristan JAMES",
+      "country": "DMA",
+      "dob": "28 AUG 1997",
+      "ranking_score": 1162,
+      "profile_url": "https://worldathletics.org/athletes/commonwealth-of-dominica/tristan-james-14607048",
+      "data_id": "95388906",
+      "counted_competitions": []
+    },
+    {
+      "rank": 62,
+      "name": "Damarcus SIMPSON",
+      "country": "USA",
+      "dob": "14 JUL 1993",
+      "ranking_score": 1161,
+      "profile_url": "https://worldathletics.org/athletes/united-states/damarcus-simpson-14475042",
+      "data_id": "95388907",
+      "counted_competitions": []
+    },
+    {
+      "rank": 63,
+      "name": "Alejandro PARADA",
+      "country": "CUB",
+      "dob": "05 JUL 2004",
+      "ranking_score": 1159,
+      "profile_url": "https://worldathletics.org/athletes/cuba/alejandro-parada-14879882",
+      "data_id": "95388908",
+      "counted_competitions": []
+    },
+    {
+      "rank": 64,
+      "name": "Chengliang LI",
+      "country": "CHN",
+      "dob": "05 APR 2006",
+      "ranking_score": 1158,
+      "profile_url": "https://worldathletics.org/athletes/pr-of-china/chengliang-li-15034362",
+      "data_id": "95388909",
+      "counted_competitions": []
+    },
+    {
+      "rank": 65,
+      "name": "Daiki ODA",
+      "country": "JPN",
+      "dob": "15 JAN 1996",
+      "ranking_score": 1156,
+      "profile_url": "https://worldathletics.org/athletes/japan/daiki-oda-14594816",
+      "data_id": "95388910",
+      "counted_competitions": []
+    },
+    {
+      "rank": 66,
+      "name": "Filippo RANDAZZO",
+      "country": "ITA",
+      "dob": "27 APR 1996",
+      "ranking_score": 1156,
+      "profile_url": "https://worldathletics.org/athletes/italy/filippo-randazzo-14514010",
+      "data_id": "95388911",
+      "counted_competitions": []
+    },
+    {
+      "rank": 67,
+      "name": "Roko FARKAŠ",
+      "country": "CRO",
+      "dob": "11 FEB 2005",
+      "ranking_score": 1155,
+      "profile_url": "https://worldathletics.org/athletes/croatia/roko-farkas-14932735",
+      "data_id": "95388912",
+      "counted_competitions": []
+    },
+    {
+      "rank": 68,
+      "name": "Chenoult Lionel COETZEE",
+      "country": "NAM",
+      "dob": "06 MAY 1997",
+      "ranking_score": 1154,
+      "profile_url": "https://worldathletics.org/athletes/namibia/chenoult-lionel-coetzee-14842092",
+      "data_id": "95388913",
+      "counted_competitions": []
+    },
+    {
+      "rank": 69,
+      "name": "Sander SKOTHEIM",
+      "country": "NOR",
+      "dob": "31 MAY 2002",
+      "ranking_score": 1154,
+      "profile_url": "https://worldathletics.org/athletes/norway/sander-skotheim-14834505",
+      "data_id": "95388914",
+      "counted_competitions": []
+    },
+    {
+      "rank": 70,
+      "name": "Changzhou HUANG",
+      "country": "CHN",
+      "dob": "20 AUG 1994",
+      "ranking_score": 1150,
+      "profile_url": "https://worldathletics.org/athletes/pr-of-china/changzhou-huang-14502006",
+      "data_id": "95388915",
+      "counted_competitions": []
+    },
+    {
+      "rank": 71,
+      "name": "Ruswahl SAMAAI",
+      "country": "RSA",
+      "dob": "25 SEP 1991",
+      "ranking_score": 1150,
+      "profile_url": "https://worldathletics.org/athletes/south-africa/ruswahl-samaai-14417696",
+      "data_id": "95388916",
+      "counted_competitions": []
+    },
+    {
+      "rank": 72,
+      "name": "Erwan KONATE",
+      "country": "FRA",
+      "dob": "18 APR 2003",
+      "ranking_score": 1149,
+      "profile_url": "https://worldathletics.org/athletes/france/erwan-konate-14898142",
+      "data_id": "95388917",
+      "counted_competitions": []
+    },
+    {
+      "rank": 73,
+      "name": "Kristian PULLI",
+      "country": "FIN",
+      "dob": "02 SEP 1994",
+      "ranking_score": 1149,
+      "profile_url": "https://worldathletics.org/athletes/finland/kristian-pulli-14432960",
+      "data_id": "95388918",
+      "counted_competitions": []
+    },
+    {
+      "rank": 74,
+      "name": "Lazar ANIĆ",
+      "country": "SRB",
+      "dob": "14 DEC 1991",
+      "ranking_score": 1149,
+      "profile_url": "https://worldathletics.org/athletes/serbia/lazar-anic-14381633",
+      "data_id": "95388919",
+      "counted_competitions": []
+    },
+    {
+      "rank": 75,
+      "name": "Temoso MASIKANE",
+      "country": "RSA",
+      "dob": "26 APR 2006",
+      "ranking_score": 1149,
+      "profile_url": "https://worldathletics.org/athletes/south-africa/temoso-masikane-14974012",
+      "data_id": "95388920",
+      "counted_competitions": []
+    },
+    {
+      "rank": 76,
+      "name": "Jaime GUERRA",
+      "country": "ESP",
+      "dob": "30 OCT 1999",
+      "ranking_score": 1148,
+      "profile_url": "https://worldathletics.org/athletes/spain/jaime-guerra-14734117",
+      "data_id": "95388921",
+      "counted_competitions": []
+    },
+    {
+      "rank": 77,
+      "name": "Emanuel ARCHIBALD",
+      "country": "GUY",
+      "dob": "09 SEP 1994",
+      "ranking_score": 1147,
+      "profile_url": "https://worldathletics.org/athletes/guyana/emanuel-archibald-14747754",
+      "data_id": "95388922",
+      "counted_competitions": []
+    },
+    {
+      "rank": 78,
+      "name": "Luka BOŠKOVIĆ",
+      "country": "SRB",
+      "dob": "06 JUL 2006",
+      "ranking_score": 1146,
+      "profile_url": "https://worldathletics.org/athletes/serbia/luka-boskovic-15037455",
+      "data_id": "95388923",
+      "counted_competitions": []
+    },
+    {
+      "rank": 79,
+      "name": "Jalen SEALS",
+      "country": "USA",
+      "dob": "21 SEP 1998",
+      "ranking_score": 1145,
+      "profile_url": "https://worldathletics.org/athletes/united-states/jalen-seals-14656673",
+      "data_id": "95388924",
+      "counted_competitions": []
+    },
+    {
+      "rank": 80,
+      "name": "Chia-Hsing LIN",
+      "country": "TPE",
+      "dob": "13 JUL 1999",
+      "ranking_score": 1144,
+      "profile_url": "https://worldathletics.org/athletes/chinese-taipei/chia-hsing-lin-14791181",
+      "data_id": "95388925",
+      "counted_competitions": []
+    },
+    {
+      "rank": 81,
+      "name": "Alex FARQUHARSON",
+      "country": "GBR",
+      "dob": "09 JUN 1997",
+      "ranking_score": 1142,
+      "profile_url": "https://worldathletics.org/athletes/great-britain-ni/alex-farquharson-14714721",
+      "data_id": "95388926",
+      "counted_competitions": []
+    },
+    {
+      "rank": 82,
+      "name": "Trumaine JEFFERSON",
+      "country": "USA",
+      "dob": "21 APR 1995",
+      "ranking_score": 1142,
+      "profile_url": "https://worldathletics.org/athletes/united-states/trumaine-jefferson-14621992",
+      "data_id": "95388927",
+      "counted_competitions": []
+    },
+    {
+      "rank": 83,
+      "name": "Cameron CRUMP",
+      "country": "USA",
+      "dob": "03 SEP 1999",
+      "ranking_score": 1141,
+      "profile_url": "https://worldathletics.org/athletes/united-states/cameron-crump-14874269",
+      "data_id": "95388928",
+      "counted_competitions": []
+    },
+    {
+      "rank": 84,
+      "name": "Jingqiang ZHANG",
+      "country": "CHN",
+      "dob": "08 MAY 1996",
+      "ranking_score": 1141,
+      "profile_url": "https://worldathletics.org/athletes/pr-of-china/jingqiang-zhang-14782056",
+      "data_id": "95388929",
+      "counted_competitions": []
+    },
+    {
+      "rank": 85,
+      "name": "Andreas TRAJKOVSKI",
+      "country": "MKD",
+      "dob": "18 MAR 1993",
+      "ranking_score": 1141,
+      "profile_url": "https://worldathletics.org/athletes/north-macedonia/andreas-trajkovski-14361799",
+      "data_id": "95388930",
+      "counted_competitions": []
+    },
+    {
+      "rank": 86,
+      "name": "Maximilian ENTHOLZNER",
+      "country": "GER",
+      "dob": "18 AUG 1994",
+      "ranking_score": 1141,
+      "profile_url": "https://worldathletics.org/athletes/germany/maximilian-entholzner-14454258",
+      "data_id": "95388931",
+      "counted_competitions": []
+    },
+    {
+      "rank": 87,
+      "name": "Koki FUJIHARA",
+      "country": "JPN",
+      "dob": "31 MAY 2002",
+      "ranking_score": 1140,
+      "profile_url": "https://worldathletics.org/athletes/japan/koki-fujihara-14854936",
+      "data_id": "95388932",
+      "counted_competitions": []
+    },
+    {
+      "rank": 88,
+      "name": "Jules POMMERY",
+      "country": "FRA",
+      "dob": "22 JAN 2001",
+      "ranking_score": 1139,
+      "profile_url": "https://worldathletics.org/athletes/france/jules-pommery-14851726",
+      "data_id": "95388933",
+      "counted_competitions": []
+    },
+    {
+      "rank": 89,
+      "name": "Henrik FL&#197;TNES",
+      "country": "NOR",
+      "dob": "26 DEC 2001",
+      "ranking_score": 1139,
+      "profile_url": "https://worldathletics.org/athletes/norway/henrik-flatnes-14762156",
+      "data_id": "95388934",
+      "counted_competitions": []
+    },
+    {
+      "rank": 90,
+      "name": "Artyom CHERMOSHANSKIY",
+      "country": "RUS",
+      "dob": "07 FEB 2001",
+      "ranking_score": 1139,
+      "profile_url": "https://worldathletics.org/athletes/russia/artyom-chermoshanskiy-14807147",
+      "data_id": "95388935",
+      "counted_competitions": []
+    },
+    {
+      "rank": 91,
+      "name": "Danil CHECHELA",
+      "country": "RUS",
+      "dob": "30 MAR 2000",
+      "ranking_score": 1137,
+      "profile_url": "https://worldathletics.org/athletes/russia/danil-chechela-14817579",
+      "data_id": "95388936",
+      "counted_competitions": []
+    },
+    {
+      "rank": 92,
+      "name": "Yaoguang ZHANG",
+      "country": "CHN",
+      "dob": "21 JUN 1993",
+      "ranking_score": 1135,
+      "profile_url": "https://worldathletics.org/athletes/pr-of-china/yaoguang-zhang-014420860",
+      "data_id": "95388937",
+      "counted_competitions": []
+    },
+    {
+      "rank": 93,
+      "name": "Weslley BERALDO",
+      "country": "BRA",
+      "dob": "11 MAR 1999",
+      "ranking_score": 1134,
+      "profile_url": "https://worldathletics.org/athletes/brazil/weslley-beraldo-14717821",
+      "data_id": "95388938",
+      "counted_competitions": []
+    },
+    {
+      "rank": 94,
+      "name": "Jovan VAN VUUREN",
+      "country": "RSA",
+      "dob": "17 JUL 1996",
+      "ranking_score": 1132,
+      "profile_url": "https://worldathletics.org/athletes/south-africa/jovan-van-vuuren-14580816",
+      "data_id": "95388939",
+      "counted_competitions": []
+    },
+    {
+      "rank": 95,
+      "name": "Muhammed Anees YAHIYA",
+      "country": "IND",
+      "dob": "03 DEC 1995",
+      "ranking_score": 1132,
+      "profile_url": "https://worldathletics.org/athletes/india/muhammed-anees-yahiya-14675320",
+      "data_id": "95388940",
+      "counted_competitions": []
+    },
+    {
+      "rank": 96,
+      "name": "S. ARYA",
+      "country": "IND",
+      "dob": "31 DEC 2001",
+      "ranking_score": 1131,
+      "profile_url": "https://worldathletics.org/athletes/india/s-arya-14969709",
+      "data_id": "95388941",
+      "counted_competitions": []
+    },
+    {
+      "rank": 97,
+      "name": "Nazim BABAYEV",
+      "country": "AZE",
+      "dob": "08 OCT 1997",
+      "ranking_score": 1130,
+      "profile_url": "https://worldathletics.org/athletes/azerbaijan/nazim-babayev-14595585",
+      "data_id": "95388942",
+      "counted_competitions": []
+    },
+    {
+      "rank": 98,
+      "name": "Shoutarou SHIROYAMA",
+      "country": "JPN",
+      "dob": "06 MAR 1995",
+      "ranking_score": 1129,
+      "profile_url": "https://worldathletics.org/athletes/japan/shoutarou-shiroyama-14649191",
+      "data_id": "95388943",
+      "counted_competitions": []
+    },
+    {
+      "rank": 99,
+      "name": "Gabriele CHILA&#39;",
+      "country": "ITA",
+      "dob": "17 SEP 1997",
+      "ranking_score": 1129,
+      "profile_url": "https://worldathletics.org/athletes/italy/gabriele-chila-14573610",
+      "data_id": "95388944",
+      "counted_competitions": []
+    },
+    {
+      "rank": 100,
+      "name": "Kareem Hatem MERSAL",
+      "country": "ITA",
+      "dob": "08 OCT 2001",
+      "ranking_score": 1127,
+      "profile_url": "https://worldathletics.org/athletes/italy/kareem-hatem-mersal-14829523",
+      "data_id": "95388945",
+      "counted_competitions": []
+    }
+  ]
+}

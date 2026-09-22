@@ -24,7 +24,8 @@ const RankingsModule = (() => {
 
     if (!initializedControls) {
       sel.innerHTML = archive.snapshots.map((snap, idx) => {
-        return `<option value="${idx}">${snap.displayDate} • #${snap.lukaRank} (${snap.lukaScore} Pkt) • ${snap.milestoneNote}</option>`;
+        const lukaTxt = snap.lukaRank ? `Luka #${snap.lukaRank} (${snap.lukaScore} Pkt)` : `Luka außerhalb Top 100`;
+        return `<option value="${idx}">${snap.displayDate} • ${lukaTxt}</option>`;
       }).join('');
 
       slider.min = 0;
@@ -52,7 +53,8 @@ const RankingsModule = (() => {
     if (badge && currentSnapshotIdx !== null) {
       const snap = archive.snapshots[currentSnapshotIdx];
       if (snap) {
-        badge.textContent = snap.milestoneNote || `Stand: ${snap.displayDate}`;
+        const lukaTxt = snap.lukaRank ? `Luka #${snap.lukaRank} (${snap.lukaScore} Pkt)` : `Luka außerhalb Top 100`;
+        badge.textContent = `${snap.displayDate} • ${lukaTxt}`;
       }
     }
   }
@@ -335,23 +337,39 @@ const RankingsModule = (() => {
     const canvas = document.getElementById('historyChart');
     if (!canvas) return;
 
-    // Authentic World Athletics ranking milestones for Luka Herden since Top 100 entry
-    const historyData = [
-      { date: '20.06.23', rank: 100, score: 1116, label: 'Top 100 Eintritt' },
-      { date: '27.06.23', rank: 92, score: 1116, label: '#92' },
-      { date: '11.07.23', rank: 80, score: 1134, label: 'Top 80 (+18)' },
-      { date: '18.07.23', rank: 77, score: 1134, label: '#77 Peak' },
-      { date: '08.08.23', rank: 85, score: 1125, label: 'Chengdu 8.01m' },
-      { date: '16.01.24', rank: 86, score: 1110, label: 'Hallenstart' },
-      { date: '02.07.24', rank: 78, score: 1120, label: 'DM 8.08m' },
-      { date: '15.07.25', rank: 72, score: 1136, label: 'Kassel 8.14m' },
-      { date: '03.02.26', rank: 68, score: 1152, label: 'Gorzów 8.18m Sieg' },
-      { date: '15.09.26', rank: 70, score: 1144, label: 'Aktuell #70' }
-    ];
+    const snapshots = (state.rankingsArchive && state.rankingsArchive.snapshots) || [];
+    let historyData = [];
+
+    if (snapshots.length > 0) {
+      historyData = snapshots.map(s => {
+        const parts = (s.date || '').split('-');
+        const shortDate = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0].slice(2)}` : s.date;
+        return {
+          date: shortDate,
+          fullDate: s.displayDate || s.date,
+          rank: s.lukaRank || 100,
+          score: s.lukaScore || 1100
+        };
+      });
+    } else {
+      historyData = [
+        { date: '20.06.23', fullDate: '20.06.2023', rank: 100, score: 1116 },
+        { date: '12.06.24', fullDate: '12.06.2024', rank: 39, score: 1186 },
+        { date: '29.07.25', fullDate: '29.07.2025', rank: 35, score: 1192 },
+        { date: '03.02.26', fullDate: '03.02.2026', rank: 26, score: 1194 },
+        { date: '15.09.26', fullDate: '15.09.2026', rank: 70, score: 1144 }
+      ];
+    }
 
     const labels = historyData.map(d => d.date);
     const ranks = historyData.map(d => d.rank);
     const scores = historyData.map(d => d.score);
+
+    const minRank = Math.max(1, Math.min(...ranks) - 5);
+    const maxRank = Math.min(105, Math.max(...ranks) + 5);
+
+    const minScore = Math.min(...scores) - 20;
+    const maxScore = Math.max(...scores) + 20;
 
     if (rankChartInstance) rankChartInstance.destroy();
 
@@ -364,22 +382,24 @@ const RankingsModule = (() => {
             label: 'World Ranking Position (Invertiert)',
             data: ranks,
             borderColor: '#06b6d4',
-            backgroundColor: 'rgba(6, 182, 212, 0.1)',
-            borderWidth: 2.5,
-            pointRadius: 4,
+            backgroundColor: 'rgba(6, 182, 212, 0.08)',
+            borderWidth: 2,
+            pointRadius: historyData.length > 50 ? 1.5 : 3,
+            pointHoverRadius: 5,
             pointBackgroundColor: '#06b6d4',
             yAxisID: 'yRank',
-            tension: 0.3
+            tension: 0.25
           },
           {
             label: 'Ranking Score (Punkte)',
             data: scores,
             borderColor: '#f59e0b',
-            borderWidth: 2,
-            borderDash: [4, 4],
-            pointRadius: 3,
+            borderWidth: 1.8,
+            borderDash: [3, 3],
+            pointRadius: historyData.length > 50 ? 1 : 2.5,
+            pointHoverRadius: 4,
             yAxisID: 'yScore',
-            tension: 0.3
+            tension: 0.25
           }
         ]
       },
@@ -390,8 +410,8 @@ const RankingsModule = (() => {
           yRank: {
             position: 'left',
             reverse: true, // Higher rank is visually higher!
-            min: 60,
-            max: 110,
+            min: minRank,
+            max: maxRank,
             grid: { color: '#1e293b' },
             ticks: {
               color: '#06b6d4',
@@ -400,8 +420,8 @@ const RankingsModule = (() => {
           },
           yScore: {
             position: 'right',
-            min: 1080,
-            max: 1180,
+            min: minScore,
+            max: maxScore,
             grid: { drawOnChartArea: false },
             ticks: {
               color: '#f59e0b',
@@ -410,7 +430,11 @@ const RankingsModule = (() => {
           },
           x: {
             grid: { color: '#1e293b' },
-            ticks: { color: '#94a3b8', font: { size: 10 } }
+            ticks: {
+              color: '#94a3b8',
+              font: { size: 9 },
+              maxTicksLimit: 14
+            }
           }
         },
         plugins: {
@@ -419,9 +443,16 @@ const RankingsModule = (() => {
           },
           tooltip: {
             callbacks: {
-              afterLabel: (ctx) => {
-                const item = historyData[ctx.dataIndex];
-                return item ? item.label : '';
+              title: (items) => {
+                const item = historyData[items[0].dataIndex];
+                return item ? item.fullDate : '';
+              },
+              label: (ctx) => {
+                if (ctx.datasetIndex === 0) {
+                  return `World Ranking: #${ctx.parsed.y}`;
+                } else {
+                  return `Ranking Score: ${ctx.parsed.y} Pkt`;
+                }
               }
             }
           }

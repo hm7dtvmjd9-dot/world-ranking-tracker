@@ -48,20 +48,35 @@ const QualificationModule = (() => {
     }
 
     // 2. Process meetings and qualification standard
+    // World Athletics Rule: Direct Entry Standard is ONLY valid in Category C or higher!
+    const VALID_STANDARD_CATS = new Set(['OW', 'GL', 'GW', 'A', 'B', 'C', 'DF']);
+
     let processedList = pool.map(ath => {
       const validPeriodMeetings = [];
       let hasDirectStandard = false;
       let bestStandardMark = 0;
+
+      // DLV-Richtwert check (7.90m Hallen-EM / 8.05m WM, counts at any official meeting)
+      const dlvThreshold = state.isHallenEmPreset ? 7.90 : 8.05;
+      let hasDlvStandard = false;
+      let bestDlvMark = 0;
 
       (ath.countingMeetings || []).forEach(m => {
         const mDate = parseSafeDate(m.date);
         const cat = (m.category || '').toUpperCase().trim();
         const markVal = parseFloat(m.mark) || 0;
 
-        // Norm for Hallen-EM (from 22 Feb 2026 >= 8.17m)
-        if (state.isHallenEmPreset && mDate && mDate >= standardStartDate && markVal >= state.periodEntryStandard) {
+        // WA/EA Rule: Automatic Norm (Hallen-EM >= 8.17m) ONLY valid in Kat. C or higher!
+        const isEligibleCategory = VALID_STANDARD_CATS.has(cat);
+        if (state.isHallenEmPreset && mDate && mDate >= standardStartDate && markVal >= state.periodEntryStandard && isEligibleCategory) {
           hasDirectStandard = true;
           if (markVal > bestStandardMark) bestStandardMark = markVal;
+        }
+
+        // DLV-Richtwert (Germany national standard, independent of category)
+        if (ath.nation === 'GER' && markVal >= dlvThreshold) {
+          hasDlvStandard = true;
+          if (markVal > bestDlvMark) bestDlvMark = markVal;
         }
 
         if (state.periodMode === 'ranking') {
@@ -78,6 +93,15 @@ const QualificationModule = (() => {
         }
       });
 
+      // Also check athlete SB for DLV standard
+      if (ath.nation === 'GER' && ath.sb && ath.sb >= dlvThreshold) {
+        hasDlvStandard = true;
+        if (ath.sb > bestDlvMark) bestDlvMark = ath.sb;
+      }
+
+      const totalCountedMeetings = (ath.countingMeetings || []).length;
+      const isCountComplete = totalCountedMeetings >= 5;
+
       const scores = validPeriodMeetings.map(m => parseInt(m.performance_score) || 0);
       const marks = validPeriodMeetings.map(m => parseFloat(m.mark) || 0);
 
@@ -93,7 +117,11 @@ const QualificationModule = (() => {
         periodAvgScore: avgScore,
         periodMaxMark: displayMark,
         periodMaxScore: maxScore,
-        hasDirectStandard
+        hasDirectStandard,
+        hasDlvStandard,
+        bestDlvMark,
+        totalCountedMeetings,
+        isCountComplete
       };
     });
 
@@ -208,7 +236,7 @@ const QualificationModule = (() => {
 
       let statusBadge = '';
       if (ath.quotaStatus === 'standard_qualified') {
-        statusBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded bg-purple-600 text-white text-[9px] font-black tracking-wide">NORM (8.17m)</span>';
+        statusBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded bg-purple-600 text-white text-[9px] font-black tracking-wide">NORM (8.17m Kat. C+)</span>';
       } else if (ath.quotaStatus === 'qualified') {
         statusBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold">QUALIFIED</span>';
       } else if (ath.quotaStatus === 'bubble') {
@@ -233,25 +261,30 @@ const QualificationModule = (() => {
         render(state);
       };
 
+      const meetsBadge = ath.hasDirectStandard
+        ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-950 text-purple-300 border border-purple-800 font-mono">NORM 8.17m (Kat. C+)</span>'
+        : `<span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono ${ath.isCountComplete ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'}">
+            ${ath.totalCountedMeetings}/5 ${ath.isCountComplete ? 'Vollständig' : 'Provisorisch'}
+          </span>`;
+
       tr.innerHTML = `
         <td class="py-2 px-3 text-center font-bold text-slate-300">#${idx + 1}</td>
         <td class="py-2 px-3 text-center">
           ${ath.quotaRank ? `<span class="inline-flex items-center px-2 py-0.5 rounded font-bold text-[10px] ${ath.quotaRank <= state.periodFieldSize ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">#${ath.quotaRank}</span>` : `<span class="text-[9px] text-slate-500 italic">Slot ${ath.nationSlot}</span>`}
         </td>
         <td class="py-2 px-3">
-          <div class="flex items-center gap-1.5">
+          <div class="flex items-center gap-1.5 flex-wrap">
             <span class="uppercase font-bold text-white tracking-tight text-xs">${ath.name}</span>
             ${isMe ? '<span class="px-1.5 py-0.2 rounded bg-cyan-500 text-slate-950 font-black text-[9px] font-mono">YOU</span>' : ''}
             ${!isMe && isGerman ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold text-[9px] font-mono">GER</span>' : ''}
+            ${ath.hasDlvStandard ? `<span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[9px] font-mono">DLV ${ath.bestDlvMark.toFixed(2)}m</span>` : ''}
           </div>
         </td>
         <td class="py-2 px-3 text-center">
           <span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${ath.nation}</span>
         </td>
         <td class="py-2 px-3 text-center">
-          <span class="px-2 py-0.5 rounded text-[10px] font-bold ${ath.hasDirectStandard ? 'bg-purple-950 text-purple-300 border border-purple-800' : ath.periodMeetings.length > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-500'} font-mono">
-            ${ath.hasDirectStandard ? 'NORM 8.17m' : `${ath.periodMeetings.length} Meets`}
-          </span>
+          ${meetsBadge}
         </td>
         <td class="py-2 px-3 text-right font-black text-amber-400 font-mono text-sm">${displayValue}</td>
         <td class="py-2 px-3 text-center">${statusBadge}</td>

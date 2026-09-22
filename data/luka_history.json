@@ -9,49 +9,39 @@
     "currentScore": 1144,
     "pbOutdoor": "8.14m",
     "pbIndoor": "8.18m",
-    "top100EntryDate": "2023-05-16",
-    "top100EntryRank": 96
+    "top100EntryDate": "2023-06-20",
+    "top100EntryRank": 100
   },
   "seasons": [
     {
-      "year": 2022,
-      "peakRank": 128,
-      "yearEndRank": 134,
-      "peakScore": 1042,
-      "sb": 7.82,
-      "competitionsCount": 9,
-      "highlights": "Konsolidierung im U23/Aktiven-Bereich, DM-Finale",
-      "bestMark": { "mark": 7.82, "wind": 1.2, "venue": "Berlin", "date": "2022-06-25" }
-    },
-    {
       "year": 2023,
-      "peakRank": 88,
-      "yearEndRank": 92,
-      "peakScore": 1098,
-      "sb": 8.01,
+      "peakRank": 66,
+      "yearEndRank": 69,
+      "peakScore": 1150,
+      "sb": 8.14,
       "competitionsCount": 12,
-      "highlights": "Erstmals Top 100 Eintritt (Mai 2023). Erste 8m-Barriere durchbrochen (8.01m). World University Games Chengdu.",
-      "bestMark": { "mark": 8.01, "wind": 0.8, "venue": "Chengdu (CHN)", "date": "2023-08-06" }
+      "highlights": "Offizieller Top 100 Eintritt (20. Juni 2023 auf #100). Deutscher Vizemeister Kassel (7.91m). Outdoor PB 8.14m beim Weitsprungmeeting Inneringen.",
+      "bestMark": { "mark": 8.14, "wind": 1.5, "venue": "Inneringen", "date": "2023-07-30" }
     },
     {
       "year": 2024,
-      "peakRank": 78,
-      "yearEndRank": 81,
-      "peakScore": 1120,
+      "peakRank": 39,
+      "yearEndRank": 58,
+      "peakScore": 1195,
       "sb": 8.08,
       "competitionsCount": 14,
-      "highlights": "Etablierung in den Top 80 der Welt. Deutsche Hallen- und Freiluftmeisterschaften Medaillen.",
-      "bestMark": { "mark": 8.08, "wind": 1.4, "venue": "Braunschweig", "date": "2024-06-29" }
+      "highlights": "Karriere-Peak in der Weltspitze: EM Rom Finalist (8.08m Quali / 8.01m Finale Platz 8, Kat. GL). Sprung auf World Ranking #39 (1186 Pkt) und 1195 Pkt.",
+      "bestMark": { "mark": 8.08, "wind": 0.4, "venue": "Stadio Olimpico, Roma", "date": "2024-06-07" }
     },
     {
       "year": 2025,
-      "peakRank": 72,
-      "yearEndRank": 74,
-      "peakScore": 1136,
-      "sb": 8.14,
+      "peakRank": 64,
+      "yearEndRank": 72,
+      "peakScore": 1148,
+      "sb": 8.02,
       "competitionsCount": 11,
-      "highlights": "Freiluft-Bestleistung auf 8.14m gesteigert. Stabile 1130+ Ranking Score Basis.",
-      "bestMark": { "mark": 8.14, "wind": 0.5, "venue": "Kassel", "date": "2025-07-05" }
+      "highlights": "Etablierung im internationalen World Athletics Tour Circuit. Solide Punktebasis über 1140 Pkt.",
+      "bestMark": { "mark": 8.02, "wind": 0.6, "venue": "Deutschland", "date": "2025-06-15" }
     },
     {
       "year": 2026,
@@ -61,20 +51,8 @@
       "currentScore": 1144,
       "sb": 8.18,
       "competitionsCount": 8,
-      "highlights": "Hallen-Sensation: 8.18m Sieg in Gorzów (Kat. B / 1177 Pkt Performance Score). Direkte Hallen-EM Norm übertroffen!",
+      "highlights": "Hallen-Sensation: 8.18m Sieg beim Gorzów Jump Festival (31.01.2026, Kat. B / 1247 Pkt). Direkte Hallen-EM Norm übertroffen!",
       "bestMark": { "mark": 8.18, "wind": null, "venue": "Arena Gorzów (POL)", "date": "2026-01-31" }
     }
-  ],
-  "rankProgressionWeekly": [
-    { "date": "2023-01-10", "rank": 112, "score": 1050 },
-    { "date": "2023-03-01", "rank": 104, "score": 1072 },
-    { "date": "2023-05-16", "rank": 96, "score": 1088, "event": "Top 100 Eintritt" },
-    { "date": "2023-08-15", "rank": 88, "score": 1098, "event": "8.01m Chengdu" },
-    { "date": "2024-02-20", "rank": 85, "score": 1105 },
-    { "date": "2024-07-02", "rank": 78, "score": 1120, "event": "8.08m DM" },
-    { "date": "2025-01-28", "rank": 76, "score": 1126 },
-    { "date": "2025-07-15", "rank": 72, "score": 1136, "event": "8.14m Kassel" },
-    { "date": "2026-02-03", "rank": 68, "score": 1152, "event": "8.18m Gorzów" },
-    { "date": "2026-09-15", "rank": 70, "score": 1144 }
   ]
 }
