@@ -3,13 +3,16 @@
  */
 const App = (() => {
   const state = {
-    activeTab: 'rankings',
+    activeTab: 'analytics',
     athletes: [],
     previousAthletesMap: {},
     lukaHistory: null,
     trainingLogs: [],
     trainingInsights: null,
     venuesData: null,
+    rankingsArchive: null,
+    athletesDatabase: null,
+    calendarData: null,
 
     // Tab 1 filters
     cutoffSpots: 32,
@@ -147,6 +150,36 @@ const App = (() => {
       }
     } catch (e) {}
 
+    // 6. Rankings Archive (Time-Travel Snapshots)
+    try {
+      const resArch = await fetch('./data/rankings_archive.json?t=' + Date.now());
+      if (resArch.ok) {
+        state.rankingsArchive = await resArch.json();
+      }
+    } catch (e) {
+      console.warn('Rankings archive auto-load fallback', e);
+    }
+
+    // 7. Athletes Database (Top 100 Head-to-Head & Meeting Records)
+    try {
+      const resDb = await fetch('./data/athletes_database.json?t=' + Date.now());
+      if (resDb.ok) {
+        state.athletesDatabase = await resDb.json();
+      }
+    } catch (e) {
+      console.warn('Athletes database auto-load fallback', e);
+    }
+
+    // 8. Official Calendar 2027 (WIT & WA Tour Grounded)
+    try {
+      const resCal = await fetch('./data/calendar_2027.json?t=' + Date.now());
+      if (resCal.ok) {
+        state.calendarData = await resCal.json();
+      }
+    } catch (e) {
+      console.warn('Calendar 2027 auto-load fallback', e);
+    }
+
     showSyncBadge('Live WA (' + state.athletes.length + ')', 'text-emerald-400');
     renderCurrentTab();
   }
@@ -248,6 +281,25 @@ const App = (() => {
           localStorage.removeItem('sheets_url_key');
         }
       };
+    }
+
+    // Top 100 Competitor Modal Close Handlers
+    const closeCompetitorModalBtn = document.getElementById('closeCompetitorModalBtn');
+    const competitorModal = document.getElementById('competitorModal');
+    if (closeCompetitorModalBtn && competitorModal) {
+      closeCompetitorModalBtn.onclick = () => {
+        competitorModal.classList.add('hidden');
+      };
+      competitorModal.onclick = (e) => {
+        if (e.target === competitorModal) {
+          competitorModal.classList.add('hidden');
+        }
+      };
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !competitorModal.classList.contains('hidden')) {
+          competitorModal.classList.add('hidden');
+        }
+      });
     }
   }
 
@@ -414,8 +466,10 @@ const App = (() => {
     }
   }
 
-  return { init, state };
+  return { init, state, switchTab, renderCurrentTab, loadInitialData };
 })();
+
+window.App = App;
 
 document.addEventListener('DOMContentLoaded', () => {
   App.init();
