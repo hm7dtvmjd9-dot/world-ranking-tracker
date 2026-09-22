@@ -1,0 +1,160 @@
+{
+  "venues": [
+    {
+      "id": "gorzow-arena",
+      "name": "Arena Gorzów",
+      "city": "Gorzów Wielkopolski",
+      "country": "POL",
+      "indoor": true,
+      "runwaySurface": "Mondo Fast Track / Holz-Unterbau elastisch",
+      "pitRating": 9.8,
+      "pitDescription": "Ultra-feiner, tiefer Quarzsand mit exzellenter Bremswirkung und minimalem Rückprall/Einsinken. Holz-Schwingboden auf der Anlaufbahn sorgt für maximale Energierückgabe beim Absprung.",
+      "herdenHistory": {
+        "jumpsCount": 1,
+        "bestMark": 8.18,
+        "avgScore": 1177,
+        "notes": "Außergewöhnliche Performance (8.18m / Platz 1). Absolutes Top-Ergebnis."
+      },
+      "upcomingMeetings": [
+        {
+          "name": "Gorzów Jump Festival 2027",
+          "date": "2027-01-30",
+          "category": "B",
+          "tour": "World Athletics Indoor Tour (Silver)",
+          "managerAlert": true,
+          "managerNote": "🔥 PRIO 1 MEETING: Nach dem 8.18m-Sieg 2026 unbedingt wieder über Manager einbuchen lassen! Belag und Grube liegen Luka nachweislich perfekt."
+        }
+      ]
+    },
+    {
+      "id": "weinheim-sepp-herberger",
+      "name": "Sepp-Herberger-Stadion",
+      "city": "Weinheim",
+      "country": "GER",
+      "indoor": false,
+      "runwaySurface": "Polytan M (Schnell & windbegünstigt)",
+      "pitRating": 9.2,
+      "pitDescription": "Legendäre deutsche Weitsprung-Anlage mit optimaler Grubenrand-Ebene und verlässlichem Rückenwindkanal. Sand ist locker und schnell egalisiert.",
+      "herdenHistory": {
+        "jumpsCount": 4,
+        "bestMark": 8.09,
+        "avgScore": 1130,
+        "notes": "Regelmäßig 8m+ Weiten. Optimales Meeting für die DLV-Frühform."
+      },
+      "upcomingMeetings": [
+        {
+          "name": "Kurpfalz Gala Weinheim 2027",
+          "date": "2027-05-29",
+          "category": "D",
+          "tour": "World Athletics Continental Tour (Challenger)",
+          "managerAlert": true,
+          "managerNote": "Standard Pflichttermin für die Sommer-Saisoneröffnung mit Spitzen-Windbedingungen."
+        }
+      ]
+    },
+    {
+      "id": "torun-arena",
+      "name": "Arena Toruń",
+      "city": "Toruń",
+      "country": "POL",
+      "indoor": true,
+      "runwaySurface": "Mondo Super X 720",
+      "pitRating": 9.4,
+      "pitDescription": "Top 3 Hallenarena Europas. Schneller Steg, präzise Video-Weitenmessung, weicher Sand ohne Verhärtungen.",
+      "herdenHistory": {
+        "jumpsCount": 2,
+        "bestMark": 8.04,
+        "avgScore": 1145,
+        "notes": "Hohe Dichte an 8m-Sprüngen im Feld."
+      },
+      "upcomingMeetings": [
+        {
+          "name": "Copernicus Cup Toruń 2027",
+          "date": "2027-02-06",
+          "category": "A",
+          "tour": "World Athletics Indoor Tour (Gold)",
+          "managerAlert": true,
+          "managerNote": "Gold-Meeting: Hohe Placing-Scores (Kategorie A). Frühe Startplatz-Anfrage über Manager notwendig."
+        }
+      ]
+    },
+    {
+      "id": "madrid-gallur",
+      "name": "Centro Deportivo Municipal Gallur",
+      "city": "Madrid",
+      "country": "ESP",
+      "indoor": true,
+      "runwaySurface": "Mondo Sportflex SX",
+      "pitRating": 9.0,
+      "pitDescription": "Höhenlage (ca. 650m über NN) bietet leichten aerodynamischen Vorteil. Sehr schneller Anlaufbelag.",
+      "herdenHistory": {
+        "jumpsCount": 1,
+        "bestMark": 7.98,
+        "avgScore": 1120,
+        "notes": "Starke Konkurrenz, gute Absprungdynamik."
+      },
+      "upcomingMeetings": [
+        {
+          "name": "World Indoor Tour Gold Madrid 2027",
+          "date": "2027-02-19",
+          "category": "A",
+          "tour": "World Athletics Indoor Tour (Gold)",
+          "managerAlert": false,
+          "managerNote": "Später Hallen-Termin kurz vor der Hallen-EM Valencia — idealer Formtest."
+        }
+      ]
+    },
+    {
+      "id": "innsbruck-golden-roof",
+      "name": "Goldenes Dachl (City Event)",
+      "city": "Innsbruck",
+      "country": "AUT",
+      "indoor": false,
+      "runwaySurface": "Mobile 'The Fly' Holzsteg-Anlage",
+      "pitRating": 9.5,
+      "pitDescription": "Freistehende mobile Weitsprunganlage mit gewaltiger Schwingungsdynamik. Häufig Weltklasse-Weiten durch Sprungfedereffekt.",
+      "herdenHistory": {
+        "jumpsCount": 2,
+        "bestMark": 8.05,
+        "avgScore": 1135,
+        "notes": "Atmosphäre und Steg extrem beflügelnd."
+      },
+      "upcomingMeetings": [
+        {
+          "name": "Golden Roof Challenge Innsbruck 2027",
+          "date": "2027-06-05",
+          "category": "C",
+          "tour": "World Athletics Continental Tour (Bronze)",
+          "managerAlert": true,
+          "managerNote": "Spektakuläres City-Event mit extrem sprungfreudigem Holzsteg."
+        }
+      ]
+    },
+    {
+      "id": "monaco-louis-ii",
+      "name": "Stade Louis II",
+      "city": "Monaco",
+      "country": "MON",
+      "indoor": false,
+      "runwaySurface": "Mondo Track WS",
+      "pitRating": 9.7,
+      "pitDescription": "Eine der schnellsten Freiluftanlagen der Welt (siehe Tentoglou 8.61m). Windstille im Kessel.",
+      "herdenHistory": {
+        "jumpsCount": 0,
+        "bestMark": null,
+        "avgScore": 0,
+        "notes": "Ziel-Meeting für Diamond League."
+      },
+      "upcomingMeetings": [
+        {
+          "name": "Herculis EBS Diamond League Monaco",
+          "date": "2027-07-09",
+          "category": "GW",
+          "tour": "Wanda Diamond League",
+          "managerAlert": false,
+          "managerNote": "Diamond League Einladung erfordert World Top 30 Platzierung."
+        }
+      ]
+    }
+  ]
+}

@@ -2,9 +2,20 @@
 <html lang="de" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard • Athletics Intelligence</title>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#020617" />
+  <title>Athletics Intelligence • Luka Herden</title>
+
+  <!-- PWA Meta Tags for iOS & Safari -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Athletics Hub" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
+
+  <!-- Tailwind CSS & Chart.js -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -22,11 +33,24 @@
       }
     }
   </script>
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    /* Safe Area Insets for iPhone Dynamic Island & Home Swipe Indicator */
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+    }
+    body {
+      padding-top: var(--sat);
+      padding-bottom: calc(var(--sab) + 4rem);
+    }
+    @media (min-width: 768px) {
+      body {
+        padding-bottom: var(--sab);
+      }
+    }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: #020617; }
     ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #334155; }
@@ -36,19 +60,20 @@
 </head>
 <body class="bg-slate-950 text-slate-200 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
 
-  <!-- ================= TOP NAVIGATION / HEADER ================= -->
+  <!-- ================= TOP HEADER / DESKTOP NAVIGATION ================= -->
   <header class="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
-      <div class="py-2.5 flex flex-col md:flex-row md:items-center md:justify-between gap-2.5">
+      <div class="py-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 bg-cyan-600 rounded flex items-center justify-center font-black text-white text-xs shadow-md shadow-cyan-600/30 font-mono tracking-tighter">
+          <div class="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center font-black text-white text-xs shadow-md shadow-cyan-600/30 font-mono tracking-tighter">
             LH
           </div>
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
-                <span class="text-cyan-400">DASHBOARD</span>
-                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono">v3.1 SELECTION</span>
+                <span class="text-cyan-400">ATHLETICS</span>
+                <span class="ml-1 text-slate-300">INTELLIGENCE</span>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono bg-slate-950 px-1.5 py-0.2 rounded border border-slate-800">v4.0 PWA</span>
               </h1>
               <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -56,17 +81,17 @@
               </div>
             </div>
             <p class="text-[10px] text-slate-400 font-medium hidden sm:block">
-              World Athletics Rankings • Week-over-Week (WoW) • Custom Nomination Radar
+              Luka Herden • World Athletics Tracking • 7-Yr Analytics • Venue Radar
             </p>
           </div>
         </div>
 
-        <div class="flex items-center flex-wrap gap-1.5">
+        <div class="flex items-center flex-wrap gap-1.5 justify-between sm:justify-end">
           <div class="flex items-center gap-1.5 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px]">
             <span class="text-slate-500 font-bold uppercase text-[9px]">Feed:</span>
-            <span id="jsonStatusBadge" class="font-mono font-medium text-cyan-400">Sample WA</span>
+            <span id="jsonStatusBadge" class="font-mono font-bold text-cyan-400">Live WA</span>
             <span class="text-slate-700">|</span>
-            <span id="sheetsStatusBadge" class="font-mono font-medium text-amber-400">Sample Training</span>
+            <span id="sheetsStatusBadge" class="font-mono font-bold text-amber-400">Sample Training</span>
           </div>
 
           <button id="toggleConfigBtn" class="px-2.5 py-1 text-[10px] rounded font-bold uppercase tracking-wider border transition-all flex items-center gap-1 bg-slate-950 text-slate-400 border-slate-800 hover:bg-slate-800 hover:text-slate-200">
@@ -75,217 +100,363 @@
 
           <button id="syncDataBtn" class="bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold px-3 py-1 rounded uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm active:scale-95">
             <span id="syncSpinner" class="inline-block">🔄</span>
-            Sync Data
+            Sync
           </button>
         </div>
       </div>
 
-      <!-- Config Drawer -->
+      <!-- Config Drawer (Collapsible) -->
       <div id="configDrawer" class="hidden pb-3 pt-2 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-2.5">
         <div class="space-y-1">
-          <span class="text-[10px] text-slate-400 font-bold uppercase">🌐 WA Rankings JSON URL (`ranking_latest.json`)</span>
-          <input id="inputWaUrl" type="url" placeholder="https://raw.githubusercontent.com/.../data/ranking_latest.json" class="w-full bg-slate-950 border border-slate-700 text-[10px] px-2.5 py-1 rounded text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
+          <span class="text-[10px] text-slate-400 font-bold uppercase">📊 Google Sheets Live CSV Feed URL</span>
+          <input id="inputSheetsUrl" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" class="w-full bg-slate-950 border border-slate-700 text-[11px] px-2.5 py-1.5 rounded text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono" />
+          <p class="text-[9px] text-slate-500">In Google Sheets: Datei → Freigeben → Im Web veröffentlichen → Format: CSV.</p>
         </div>
-        <div class="space-y-1">
-          <span class="text-[10px] text-slate-400 font-bold uppercase">📊 Google Sheets CSV Feed URL</span>
-          <input id="inputSheetsUrl" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" class="w-full bg-slate-950 border border-slate-700 text-[10px] px-2.5 py-1 rounded text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono" />
-        </div>
-        <div class="md:col-span-2 flex items-center justify-between pt-1 text-[10px] text-slate-400 border-t border-slate-800/60">
-          <span id="lastUpdatedLabel" class="text-[9px] text-slate-500 font-mono">Sync: Live</span>
+        <div class="space-y-1 flex flex-col justify-between">
+          <span class="text-[10px] text-slate-400 font-bold uppercase">📲 PWA Multi-Device Status</span>
+          <div class="bg-slate-950 border border-slate-800 rounded p-2 text-[10px] text-slate-400 space-y-0.5 font-mono">
+            <div>Standalone Mode: <strong class="text-cyan-400">Aktiviert</strong></div>
+            <div>Offline Cache: <strong class="text-emerald-400">Service Worker bereit</strong></div>
+          </div>
         </div>
       </div>
 
-      <!-- Navigation Tabs -->
-      <div class="flex space-x-1 border-t border-slate-800 pt-1.5 pb-1 overflow-x-auto no-scrollbar">
-        <button id="tabBtnRankings" class="tab-btn active flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap bg-slate-800 text-cyan-400 border-b-2 border-cyan-500">
-          🌍 Gesamtranking & Details
+      <!-- Desktop Tab Bar (Hidden on Mobile) -->
+      <div class="hidden md:flex space-x-1 border-t border-slate-800 pt-1.5 pb-1 overflow-x-auto no-scrollbar">
+        <button data-tab="rankings" class="tab-btn active flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-slate-800 text-cyan-400 border-b-2 border-cyan-500 shadow-sm">
+          🌍 Rankings & Backlog
         </button>
-        <button id="tabBtnPeriod" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40">
-          ⏱️ Nominierungs- & Qualifikations-Hub
+        <button data-tab="analytics" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
+          ⚡ 7-Yr Training & Whoop
         </button>
-        <button id="tabBtnScouting" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40">
-          📡 Meeting & Venue Radar
+        <button data-tab="qualification" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
+          ⏱️ Quali-Hub (Hallen-EM & WM)
         </button>
-        <button id="tabBtnTraining" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40">
-          ⚡ Training Readiness & Sheets
+        <button data-tab="venues" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
+          📡 Venue & Meeting Radar
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ================= MAIN CONTAINER ================= -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-2.5 sm:px-4 py-3">
+  <!-- iOS PWA Install Guide Banner -->
+  <div id="iosInstallBanner" class="hidden max-w-7xl mx-auto px-3 sm:px-4 mt-2">
+    <div class="bg-cyan-950/70 border border-cyan-500/40 rounded-xl p-2.5 flex items-center justify-between text-xs text-slate-200 backdrop-blur-sm">
+      <div class="flex items-center gap-2">
+        <span class="text-base">📲</span>
+        <span><strong>Als App auf iPhone / iPad installieren:</strong> Tippe in Safari auf <strong>Teilen ⎙</strong> und wähle <strong>Zum Home-Bildschirm</strong>.</span>
+      </div>
+      <button onclick="document.getElementById('iosInstallBanner').remove(); localStorage.setItem('ios_pwa_banner_dismissed', '1');" class="text-slate-400 hover:text-white text-sm px-2 font-bold">✕</button>
+    </div>
+  </div>
 
-    <!-- ================= TAB 1: GESAMTRANKING ================= -->
-    <div id="tabContentRankings" class="space-y-3">
-      
-      <!-- 4 REFINED KPI TILES (STANDARD VIEW) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5">
-        <!-- Tile 1: Luka Herden Focus -->
-        <div class="bg-slate-900 border-2 border-cyan-500/50 p-2.5 rounded shadow-sm shadow-cyan-950/40">
-          <div class="text-[10px] text-cyan-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>Athlete Focus (YOU)</span>
+  <!-- ================= MAIN CONTENT VIEWPORT ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-2.5 sm:px-4 py-3 space-y-4">
+
+    <!-- ================= TAB 1: RANKINGS & HISTORICAL BACKLOG ================= -->
+    <div id="tabContentRankings" class="space-y-4">
+      <!-- 4 Refined KPI Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+        <!-- Tile 1: Luka Focus -->
+        <div class="bg-slate-900 border-2 border-cyan-500/60 p-3 rounded-xl shadow-md shadow-cyan-950/30">
+          <div class="text-[10px] text-cyan-400 uppercase font-bold tracking-wider mb-1 flex items-center justify-between">
+            <span>ATHLETE FOCUS (YOU)</span>
             <span class="text-white text-[9px] font-mono bg-cyan-950 border border-cyan-800 px-1 rounded">GER</span>
           </div>
           <div class="flex items-baseline justify-between">
-            <div class="text-base font-black text-white truncate">LUKA HERDEN</div>
-            <div id="kpiMeRank" class="text-lg font-black text-cyan-400 font-mono">#--</div>
+            <div class="text-sm sm:text-base font-black text-white truncate">LUKA HERDEN</div>
+            <div id="kpiMeRank" class="text-lg sm:text-xl font-black text-cyan-400 font-mono">#70</div>
           </div>
-          <div class="text-[10px] text-slate-400 font-mono mt-0.5 flex items-center justify-between">
-            <span>Score: <strong id="kpiMeScore" class="text-white">--</strong></span>
-            <span id="kpiMeDelta" class="text-[9px] font-bold">-</span>
+          <div class="text-[11px] text-slate-400 font-mono mt-1 flex items-center justify-between">
+            <span>Score: <strong id="kpiMeScore" class="text-white">1144 Pkt</strong></span>
+            <span id="kpiMeDelta" class="text-[10px] font-bold">-</span>
           </div>
         </div>
 
-        <!-- Tile 2: Dynamic Major Cutoff -->
-        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
-          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>Major Cutoff Spot</span>
+        <!-- Tile 2: Major Cutoff Spot -->
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1 flex items-center justify-between">
+            <span>MAJOR CUTOFF</span>
             <div class="flex items-center gap-1">
               <span class="text-[9px] font-mono text-slate-500">TOP</span>
-              <input id="customCutoffInput" type="number" min="1" max="100" value="32" class="w-12 bg-slate-950 border border-slate-700 text-cyan-400 font-mono font-bold text-center text-[10px] rounded focus:outline-none focus:border-cyan-500 px-0.5 py-0.2" />
+              <input id="customCutoffInput" type="number" min="1" max="100" value="32" class="w-12 bg-slate-950 border border-slate-700 text-cyan-400 font-mono font-bold text-center text-[10px] rounded focus:outline-none focus:border-cyan-500 px-1 py-0.5" />
             </div>
           </div>
-          <div id="kpiCutoffScore" class="text-base font-black text-amber-400 font-mono">- PKT</div>
-          <div class="text-[10px] text-slate-400 font-mono truncate" id="kpiCutoffAthName">Target Direct Entry Score</div>
+          <div id="kpiCutoffScore" class="text-base sm:text-lg font-black text-amber-400 font-mono">- Pkt</div>
+          <div class="text-[10px] text-slate-400 font-mono truncate" id="kpiCutoffAthName">Target Direct Entry</div>
         </div>
 
-        <!-- Tile 3: DLV Focus (All Germans) -->
-        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
-          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>DLV Squad in Top 100</span>
-            <span id="kpiGerCountBadge" class="text-emerald-400 text-[9px] font-mono">0 ATH</span>
+        <!-- Tile 3: DLV Squad -->
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1 flex items-center justify-between">
+            <span>DLV SQUAD TOP 100</span>
+            <span id="kpiGerCountBadge" class="text-emerald-400 text-[9px] font-mono">0 DLV</span>
           </div>
           <div id="kpiGerList" class="text-[10px] text-slate-300 font-mono space-y-0.5 max-h-12 overflow-y-auto no-scrollbar pt-0.5">
-            <span class="text-slate-500 italic">Noch keine Daten...</span>
+            <span class="text-slate-500 italic">Lade DLV Kader...</span>
           </div>
         </div>
 
-        <!-- Tile 4: Distance to Cutoff -->
-        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
-          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>Delta to Cutoff</span>
+        <!-- Tile 4: Delta to Cutoff -->
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1 flex items-center justify-between">
+            <span>DELTA TO CUTOFF</span>
             <span class="text-slate-500 text-[9px] font-mono">GAP</span>
           </div>
-          <div id="kpiMeGap" class="text-base font-black font-mono text-white">-</div>
+          <div id="kpiMeGap" class="text-base sm:text-lg font-black font-mono text-white">-</div>
           <div id="kpiMeGapSub" class="text-[10px] text-slate-400 font-mono truncate">Abstand zur Qualifikation</div>
         </div>
       </div>
 
+      <!-- Historical Progression Backlog (2022 - 2026) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-sm space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-2 border-b border-slate-800">
+          <div>
+            <h2 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+              <span class="text-cyan-400">📈</span>
+              <span>LUKA HERDEN • HISTORISCHER RANKING-BACKLOG (2022 - 2026)</span>
+            </h2>
+            <p class="text-[11px] text-slate-400 font-mono mt-0.5">
+              Top 100 Eintritt: <strong id="historyEntryDate" class="text-cyan-300">Mai 2023</strong> • Sprung von Rang #134 auf #70 der Welt
+            </p>
+          </div>
+          <span class="text-[10px] font-mono text-amber-400 bg-amber-950/60 border border-amber-800 px-2 py-0.5 rounded self-start sm:self-auto">
+            Hallen-PB: 8.18m (Gorzów) • Freiluft-PB: 8.14m
+          </span>
+        </div>
+
+        <!-- History Chart -->
+        <div class="h-60 sm:h-72 w-full pt-1">
+          <canvas id="historyChart"></canvas>
+        </div>
+
+        <!-- Season Highlights Cards -->
+        <div id="seasonCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 pt-2">
+          <!-- Populated by rankings.js -->
+        </div>
+      </div>
+
       <!-- Filter Bar -->
-      <div class="bg-slate-900 border border-slate-800 rounded p-2.5 shadow-sm space-y-2">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 shadow-sm space-y-2">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
           <div class="md:col-span-6 relative">
-            <input id="athleteSearchInput" type="text" placeholder="Search athlete (Herden, Tentoglou, Furlani, Ehammer)..." class="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-[11px] text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
+            <input id="athleteSearchInput" type="text" placeholder="Suche Athlet (Herden, Tentoglou, Furlani, Ehammer)..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
           </div>
           <div class="md:col-span-6 flex flex-wrap items-center gap-1 font-mono">
-            <span class="text-[10px] text-slate-400 font-bold uppercase mr-0.5">Nat:</span>
-            <button data-nation="ALL" class="nat-filter-btn px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-white">ALL</button>
-            <button data-nation="GER" class="nat-filter-btn px-2 py-0.5 rounded text-[10px] font-black text-cyan-400 border border-cyan-800/60 bg-slate-950 hover:bg-slate-800">GER</button>
-            <button data-nation="GRE" class="nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">GRE</button>
-            <button data-nation="ITA" class="nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">ITA</button>
-            <button data-nation="SUI" class="nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">SUI</button>
-            <button data-nation="JAM" class="nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">JAM</button>
-            <button data-nation="USA" class="nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">USA</button>
+            <span class="text-[10px] text-slate-400 font-bold uppercase mr-1">Nation:</span>
+            <button data-nation="ALL" class="nat-filter-btn px-2.5 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-white">ALL</button>
+            <button data-nation="GER" class="nat-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-cyan-400 border border-cyan-800 bg-slate-950 hover:bg-slate-800">GER</button>
+            <button data-nation="GRE" class="nat-filter-btn px-2 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">GRE</button>
+            <button data-nation="ITA" class="nat-filter-btn px-2 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">ITA</button>
+            <button data-nation="SUI" class="nat-filter-btn px-2 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">SUI</button>
+            <button data-nation="JAM" class="nat-filter-btn px-2 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">JAM</button>
+            <button data-nation="USA" class="nat-filter-btn px-2 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">USA</button>
           </div>
         </div>
       </div>
 
-      <!-- Main Ranking Table -->
-      <div class="bg-slate-900 border border-slate-800 rounded overflow-hidden shadow-sm">
+      <!-- Main World Athletics Ranking Table -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-[11px]">
+          <table class="w-full text-left border-collapse text-xs">
             <thead>
-              <tr class="sticky top-0 bg-slate-950 text-slate-400 font-bold border-b border-slate-800 text-[10px] uppercase tracking-wider">
-                <th class="py-2 px-3 w-16 text-center">Rank (WoW)</th>
-                <th class="py-2 px-3">Athlete</th>
-                <th class="py-2 px-3">Nation</th>
-                <th class="py-2 px-3">DOB</th>
-                <th class="py-2 px-3 text-right">SB</th>
-                <th class="py-2 px-3 text-right font-bold text-white">Score (WoW)</th>
-                <th class="py-2 px-3 text-center">Status</th>
-                <th class="py-2 px-3 w-10 text-center">Details</th>
+              <tr class="sticky top-0 bg-slate-950 text-slate-400 font-bold border-b border-slate-800 text-[10px] uppercase tracking-wider font-mono">
+                <th class="py-2.5 px-3 w-16 text-center">Rang (WoW)</th>
+                <th class="py-2.5 px-3">Athlet</th>
+                <th class="py-2.5 px-3 text-center">Nation</th>
+                <th class="py-2.5 px-3 text-right">SB</th>
+                <th class="py-2.5 px-3 text-right font-bold text-white">Score</th>
+                <th class="py-2.5 px-3 text-center">Meetings</th>
+                <th class="py-2.5 px-3 w-10 text-center">Details</th>
               </tr>
             </thead>
-            <tbody id="rankingTableBody" class="divide-y divide-slate-800/60 font-mono"></tbody>
+            <tbody id="rankingTableBody" class="divide-y divide-slate-800/40 font-mono"></tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- ================= TAB 2: NOMINIERUNGS- & QUALIFIKATIONS-HUB ================= -->
-    <div id="tabContentPeriod" class="hidden space-y-3">
-      
-      <!-- 4 DEDICATED KPI TILES FOR PERIOD VIEW -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5">
-        <!-- Period Tile 1: Luka Herden In Period -->
-        <div class="bg-slate-900 border-2 border-cyan-500/50 p-2.5 rounded shadow-sm shadow-cyan-950/40">
-          <div class="text-[10px] text-cyan-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>Athlete Focus (YOU)</span>
+    <!-- ================= TAB 2: 7-YEAR TRAINING & WHOOP ANALYTICS ================= -->
+    <div id="tabContentAnalytics" class="hidden space-y-4">
+      <!-- 7-Year Database Highlights -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+          <span class="text-[10px] text-slate-400 uppercase font-mono font-bold block">Dokumentierte Einheiten</span>
+          <span id="statTotalSessions" class="text-xl font-black font-mono text-cyan-400 mt-1 block">75</span>
+          <span class="text-[9px] text-slate-500 font-mono">2019 - 2026 Archiv</span>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+          <span class="text-[10px] text-slate-400 uppercase font-mono font-bold block">Erfasste Sprünge</span>
+          <span id="statTotalJumps" class="text-xl font-black font-mono text-white mt-1 block">35</span>
+          <span class="text-[9px] text-slate-500 font-mono">Effektive Weiten</span>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+          <span class="text-[10px] text-slate-400 uppercase font-mono font-bold block">Sprünge &gt;= 8.00m</span>
+          <span id="statJumpsOver8m" class="text-xl font-black font-mono text-amber-400 mt-1 block">19</span>
+          <span class="text-[9px] text-slate-500 font-mono">Weltklasse-Weiten</span>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+          <span class="text-[10px] text-slate-400 uppercase font-mono font-bold block">Peak Anlauf-Speed</span>
+          <span id="statPeakSpeed" class="text-xl font-black font-mono text-emerald-400 mt-1 block">10.85 m/s</span>
+          <span class="text-[9px] text-slate-500 font-mono">Laser 11m-1m Zone</span>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl col-span-2 sm:col-span-1">
+          <span class="text-[10px] text-slate-400 uppercase font-mono font-bold block">Peak Trapbar e1RM</span>
+          <span id="statPeakTrapbar" class="text-xl font-black font-mono text-purple-400 mt-1 block">265 kg</span>
+          <span class="text-[9px] text-slate-500 font-mono">Maximalkraft-Basis</span>
+        </div>
+      </div>
+
+      <!-- 8.00m+ Driver Prerequisites -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+          <div>
+            <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+              <span class="text-amber-400">⚡</span>
+              <span>8.00m+ PERFORMANCE PREREQUISITES (ERFOLGSFAKTOREN)</span>
+            </h3>
+            <p class="text-[11px] text-slate-400 font-mono mt-0.5">
+              Statistischer Vergleich: Einheiten mit Sprüngen &gt;= 8.00m gegenüber Einheiten &lt; 8.00m
+            </p>
+          </div>
+          <span class="text-[9px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            64-Variablen Python Engine
+          </span>
+        </div>
+        <div id="eightMeterDriversGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <!-- Populated by analytics.js -->
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        <!-- Chart 1: Jump Marks -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2 lg:col-span-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+              📈 Wettkampf- & Trainingssprünge (Balkenweite vs. Effektive Weite)
+            </h3>
+            <span class="text-[10px] text-cyan-400 font-mono">Letzte 40 Einheiten</span>
+          </div>
+          <div class="h-64 w-full pt-1">
+            <canvas id="compMarksChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: Whoop Recovery & Sleep -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2 lg:col-span-2">
+          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            💤 Whoop Recovery (%), Schlaf (h) & Bereitschaft
+          </h3>
+          <div class="h-56 w-full pt-1">
+            <canvas id="readinessChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: 1RM Strength -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2">
+          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            🏋️ e1RM Kraftwerte (Trapbar, Umsetzen, Hip-Thrust)
+          </h3>
+          <div class="h-56 w-full pt-1">
+            <canvas id="strengthChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Correlation Matrix Table -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+        <div class="p-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
+            🔬 Korrelations-Matrix mit der Weitsprungleistung (Pearson r)
+          </h3>
+          <span class="text-[10px] text-slate-500 font-mono">Top Faktoren</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs font-mono">
+            <thead>
+              <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase font-bold text-[10px]">
+                <th class="py-2 px-3">Variable</th>
+                <th class="py-2 px-3 text-right">Korrelation (r)</th>
+                <th class="py-2 px-3 w-32">Signal</th>
+                <th class="py-2 px-3 text-center">Stärke</th>
+                <th class="py-2 px-3">Bedeutung für Luka</th>
+              </tr>
+            </thead>
+            <tbody id="correlationTableBody" class="divide-y divide-slate-800/40"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB 3: QUALIFICATION & NOMINATION HUB ================= -->
+    <div id="tabContentQualification" class="hidden space-y-4">
+      <!-- 4 Period KPI Tiles -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+        <!-- Period Tile 1: Luka Focus -->
+        <div class="bg-slate-900 border-2 border-cyan-500/60 p-3 rounded-xl shadow-md shadow-cyan-950/30">
+          <div class="text-[10px] text-cyan-400 uppercase font-bold tracking-wider mb-1 flex items-center justify-between">
+            <span>ATHLETE FOCUS (YOU)</span>
             <span class="text-white text-[9px] font-mono bg-cyan-950 border border-cyan-800 px-1 rounded">GER</span>
           </div>
           <div class="flex items-baseline justify-between">
-            <div class="text-base font-black text-white truncate">LUKA HERDEN</div>
-            <div id="kpiPeriodMeRank" class="text-lg font-black text-cyan-400 font-mono">#--</div>
+            <div class="text-sm sm:text-base font-black text-white truncate">LUKA HERDEN</div>
+            <div id="kpiPeriodMeRank" class="text-lg sm:text-xl font-black text-cyan-400 font-mono">#--</div>
           </div>
-          <div class="text-[10px] text-slate-400 font-mono mt-0.5 flex items-center justify-between">
+          <div class="text-[11px] text-slate-400 font-mono mt-1 flex items-center justify-between">
             <span>Wert: <strong id="kpiPeriodMeScore" class="text-white">--</strong></span>
             <span id="kpiPeriodMeCount" class="text-cyan-300 font-mono font-bold">- Meets</span>
           </div>
         </div>
 
-        <!-- Period Tile 2: Cutoff Spot In Period -->
-        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
-          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>Cutoff Schwelle</span>
+        <!-- Period Tile 2: Cutoff Spot -->
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1 flex items-center justify-between">
+            <span>CUTOFF SCHWELLE</span>
             <span id="periodCutoffBadge" class="text-cyan-400 text-[9px] font-mono font-bold">TOP 18</span>
           </div>
-          <div id="kpiPeriodCutoffScore" class="text-base font-black text-amber-400 font-mono">- PKT</div>
+          <div id="kpiPeriodCutoffScore" class="text-base sm:text-lg font-black text-amber-400 font-mono">- Pkt</div>
           <div class="text-[10px] text-slate-400 font-mono truncate" id="kpiPeriodCutoffAthName">Target Entry Level</div>
         </div>
 
-        <!-- Period Tile 3: DLV Squad In Period -->
-        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
-          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>DLV Squad (Zeitraum)</span>
-            <span id="kpiPeriodGerCount" class="text-emerald-400 text-[9px] font-mono">0 ATH</span>
+        <!-- Period Tile 3: DLV Squad in Period -->
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1 flex items-center justify-between">
+            <span>DLV KADER (ZEITRAUM)</span>
+            <span id="kpiPeriodGerCount" class="text-emerald-400 text-[9px] font-mono">0 DLV</span>
           </div>
           <div id="kpiPeriodGerList" class="text-[10px] text-slate-300 font-mono space-y-0.5 max-h-12 overflow-y-auto no-scrollbar pt-0.5">
-            <span class="text-slate-500 italic">Noch keine Daten...</span>
+            <span class="text-slate-500 italic">Lade DLV Auswahl...</span>
           </div>
         </div>
 
-        <!-- Period Tile 4: Distance to Cutoff In Period -->
-        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded">
-          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-between">
-            <span>Delta to Cutoff</span>
+        <!-- Period Tile 4: Distance to Cutoff -->
+        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1 flex items-center justify-between">
+            <span>DELTA TO CUTOFF</span>
             <span class="text-slate-500 text-[9px] font-mono">GAP</span>
           </div>
-          <div id="kpiPeriodMeGap" class="text-base font-black font-mono text-white">-</div>
+          <div id="kpiPeriodMeGap" class="text-base sm:text-lg font-black font-mono text-white">-</div>
           <div id="kpiPeriodMeGapSub" class="text-[10px] text-slate-400 font-mono truncate">Abstand im Zeitraum</div>
         </div>
       </div>
 
-      <!-- Controls & Selection Bar -->
-      <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-3">
-        
-        <!-- Preset Row (1-Click Setup) -->
+      <!-- Preset Row (1-Click Switch) & Parameters -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-sm space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800">
-          <div class="flex items-center gap-2">
+          <div class="flex items-center flex-wrap gap-2">
             <span class="text-[10px] text-slate-400 font-bold uppercase font-mono">⚡ Schnellauswahl:</span>
-            <button id="presetWm2027Btn" class="px-2.5 py-1 rounded text-[10px] font-bold font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all flex items-center gap-1 shadow-sm">
-              🌍 WM 2027 (36 Ath / 3 Nat / Ranking / 12M)
+            <button id="presetHallenEmBtn" class="px-3 py-1.5 rounded-lg text-xs font-bold font-mono bg-purple-600 text-white shadow-sm flex items-center gap-1">
+              🇪🇺 Hallen-EM 2027 (Valencia • 18 Plätze / 3 Nat / Norm 8.17m + Toplist ab 01.11.26)
             </button>
-            <button id="presetHallenEmBtn" class="px-2.5 py-1 rounded text-[10px] font-bold font-mono bg-purple-600 text-white hover:bg-purple-500 transition-all flex items-center gap-1 shadow-sm">
-              🇪🇺 Hallen-EM 2027 (18 Ath / 3 Nat / Norm 8.17m + Toplist ab 01.11.26)
+            <button id="presetWm2027Btn" class="px-3 py-1.5 rounded-lg text-xs font-bold font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all flex items-center gap-1 shadow-sm">
+              🌍 WM 2027 (Peking • 36 Plätze / 3 Nat / 12M World Ranking)
             </button>
           </div>
-          <span id="periodInfoRuleBadge" class="text-[9px] text-purple-400 font-mono font-bold">EA Valencia 2027 Modus aktiv (Norm 8.17m ab 22.02.26 + Toplist ab 01.11.26)</span>
+          <span id="periodInfoRuleBadge" class="text-[10px] text-purple-400 font-mono font-bold">EA Valencia 2027 Modus aktiv (Norm 8.17m ab 22.02.26 + Toplist ab 01.11.26)</span>
         </div>
 
-        <!-- Manual Parameter Grid -->
         <div class="grid grid-cols-2 md:grid-cols-5 gap-2.5 items-center font-mono text-[10px]">
-          
           <!-- Control 1: Total Spots -->
           <div class="space-y-1">
             <span class="text-slate-400 font-bold uppercase block">1. Feldgröße (Cutoff):</span>
@@ -304,7 +475,7 @@
             </div>
           </div>
 
-          <!-- Control 3: Scope (Global vs Europe) -->
+          <!-- Control 3: Scope -->
           <div class="space-y-1">
             <span class="text-slate-400 font-bold uppercase block">3. Region:</span>
             <div class="flex items-center gap-1 bg-slate-950 p-0.5 rounded border border-slate-700">
@@ -313,7 +484,7 @@
             </div>
           </div>
 
-          <!-- Control 4: Mode (Ranking vs Toplist) -->
+          <!-- Control 4: Mode -->
           <div class="space-y-1">
             <span class="text-slate-400 font-bold uppercase block">4. Wertung:</span>
             <div class="flex items-center gap-1 bg-slate-950 p-0.5 rounded border border-slate-700">
@@ -331,1099 +502,98 @@
       </div>
 
       <!-- Period Table -->
-      <div class="bg-slate-900 border border-slate-800 rounded overflow-hidden shadow-sm">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-[11px]">
+          <table class="w-full text-left border-collapse text-xs">
             <thead>
-              <tr class="sticky top-0 bg-slate-950 text-slate-400 font-bold border-b border-slate-800 text-[10px] uppercase tracking-wider">
-                <th class="py-2 px-3 w-12 text-center">Rank</th>
+              <tr class="sticky top-0 bg-slate-950 text-slate-400 font-bold border-b border-slate-800 text-[10px] uppercase tracking-wider font-mono">
+                <th class="py-2 px-3 w-12 text-center">Rang</th>
                 <th class="py-2 px-3 w-16 text-center text-cyan-400">Quota</th>
-                <th class="py-2 px-3">Athlete</th>
-                <th class="py-2 px-3">Nation</th>
+                <th class="py-2 px-3">Athlet</th>
+                <th class="py-2 px-3 text-center">Nation</th>
                 <th class="py-2 px-3 text-center">Gültige Meetings</th>
                 <th id="periodValueHeaderCol" class="py-2 px-3 text-right font-bold text-amber-400">Toplist Weite / SB</th>
                 <th class="py-2 px-3 text-center">Status</th>
                 <th class="py-2 px-3 w-10 text-center">Details</th>
               </tr>
             </thead>
-            <tbody id="periodTableBody" class="divide-y divide-slate-800/60 font-mono"></tbody>
+            <tbody id="periodTableBody" class="divide-y divide-slate-800/40 font-mono"></tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- ================= TAB 3: MEETING & VENUE RADAR ================= -->
-    <div id="tabContentScouting" class="hidden space-y-4">
-      <div class="bg-slate-900 border border-slate-800 rounded p-2.5 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+    <!-- ================= TAB 4: VENUE & MEETING RADAR ================= -->
+    <div id="tabContentVenues" class="hidden space-y-4">
+      <!-- Venue Intelligence Header Banner -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-cyan-950/40 border border-cyan-500/30 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
         <div>
-          <h2 class="text-sm font-bold text-white uppercase tracking-wider font-mono">
-            📡 Meeting & Track Scouting Radar
-          </h2>
-          <p class="text-[10px] text-slate-400 font-mono mt-0.5">
-            Automatische Erkennung schneller Anlagen, Stege & Rückenwind-Meetings der Top 100 Konkurrenz
+          <div class="flex items-center gap-2">
+            <span class="text-xl">📡</span>
+            <h2 class="text-sm font-black text-white uppercase tracking-wider font-mono">
+              MEETING & SANDPIT RADAR • SCOUTING COCKPIT
+            </h2>
+          </div>
+          <p class="text-xs text-slate-300 font-sans mt-1">
+            Systematische Analyse schneller Anlaufbahnen, Schwingboden-Stege und tiefer Quarzsand-Gruben weltweit.
           </p>
         </div>
-        <div class="flex flex-wrap items-center gap-1 font-mono">
-          <span class="text-[10px] text-slate-400 uppercase font-bold mr-0.5">Min Weite:</span>
-          <button data-minmark="0" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-white">ALL</button>
-          <button data-minmark="8.0" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-cyan-400 border border-cyan-800/50 bg-slate-950">&gt; 8.00m</button>
-          <button data-minmark="8.15" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-amber-400 border border-amber-800/50 bg-slate-950">&gt; 8.15m</button>
-          <button data-minmark="8.3" class="mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-emerald-400 border border-emerald-800/50 bg-slate-950">&gt; 8.30m</button>
+        <div class="bg-slate-950/80 border border-amber-500/40 px-3 py-2 rounded-lg text-[11px] font-mono text-amber-300 self-start sm:self-auto">
+          🔥 <strong>Gorzów PB-Alert:</strong> 8.18m Rekordsprung auf elastischem Holzschwingboden!
         </div>
       </div>
 
-      <div class="overflow-x-auto border border-slate-800 rounded bg-slate-950">
-        <table class="w-full text-left border-collapse text-[11px]">
-          <thead>
-            <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 font-bold uppercase tracking-wider text-[10px]">
-              <th class="py-1.5 px-3">Mark</th>
-              <th class="py-1.5 px-3">Wind</th>
-              <th class="py-1.5 px-3">Athlete</th>
-              <th class="py-1.5 px-3">Nation</th>
-              <th class="py-1.5 px-3">Meeting</th>
-              <th class="py-1.5 px-3">Venue</th>
-              <th class="py-1.5 px-3">Date</th>
-              <th class="py-1.5 px-3 text-center">Place</th>
-              <th class="py-1.5 px-3 text-right font-bold text-white">Score</th>
-            </tr>
-          </thead>
-          <tbody id="recentMarksTableBody" class="divide-y divide-slate-800/60 font-mono"></tbody>
-        </table>
+      <!-- Priority Upcoming Meetings for Manager -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-black text-white uppercase tracking-wider font-mono flex items-center gap-1.5">
+            <span>🎯 ZIEL-MEETINGS FÜR DEINEN MANAGER (PRIORISIERTE ANFRAGEN)</span>
+          </h3>
+          <span class="text-[10px] text-slate-500 font-mono">1-Klick Pitch Generator</span>
+        </div>
+        <div id="upcomingMeetingsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <!-- Populated by venues.js -->
+        </div>
       </div>
-    </div>
 
-    <!-- ================= TAB 4: ATHLETIC TRAINING & READINESS ================= -->
-    <div id="tabContentTraining" class="hidden space-y-3">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
-        <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2 lg:col-span-3">
-          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
-            📈 Wettkampf- & Formkurve (Sprungweiten & Weite Effektiv)
-          </h3>
-          <div class="h-64 w-full pt-1">
-            <canvas id="compMarksChart"></canvas>
-          </div>
-        </div>
-
-        <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2 lg:col-span-2">
-          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
-            🏋️ e1RM Kraftwerte (Trapbar, Umsetzen, Hip-Thrust)
-          </h3>
-          <div class="h-56 w-full pt-1">
-            <canvas id="strengthChart"></canvas>
-          </div>
-        </div>
-
-        <div class="bg-slate-900 border border-slate-800 rounded p-3 shadow-sm space-y-2">
-          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
-            💤 Whoop Recovery, Sleep & Strain
-          </h3>
-          <div class="h-56 w-full pt-1">
-            <canvas id="readinessChart"></canvas>
-          </div>
+      <!-- Full Venues & Sandpits Database -->
+      <div class="space-y-2 pt-3 border-t border-slate-800/70">
+        <h3 class="text-xs font-black text-white uppercase tracking-wider font-mono">
+          🏟️ ANLAGEN- & GRUBEN-DATENBANK (BELAG-ELASTIZITÄT & QUARZSAND-BEWERTUNG)
+        </h3>
+        <div id="venuesListContainer" class="space-y-3">
+          <!-- Populated by venues.js -->
         </div>
       </div>
     </div>
+
   </main>
 
-  <!-- ================= LOGIC & DATA ENGINE ================= -->
-  <script>
-    let state = {
-      activeTab: 'rankings',
-      athletes: [],
-      previousAthletesMap: {},
-      trainingLogs: [],
-      cutoffSpots: 32,
-      selectedNation: 'ALL',
-      searchQuery: '',
-      expandedRowId: null,
-      expandedPeriodRowId: null,
-      minMarkFilter: 0,
-      showConfig: false,
-
-      // Period Tab Settings (Default: Hallen-EM 2027 Preset)
-      periodFieldSize: 18,
-      periodMaxPerNation: 3,
-      periodScope: 'europe', // 'global' | 'europe'
-      periodMode: 'toplist', // 'ranking' | 'toplist'
-      periodStartDate: '2026-11-01',
-      periodEntryStandard: 8.17,
-      periodStandardStartDate: '2026-02-22',
-      periodStandardEndDate: '2027-02-21',
-      isHallenEmPreset: true
-    };
-
-    let compChartInstance = null;
-    let strengthChartInstance = null;
-    let readinessChartInstance = null;
-
-    function parseSafeDate(dateStr) {
-      if (!dateStr || typeof dateStr !== 'string') return null;
-      const clean = dateStr.trim();
-      const months = {
-        'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'jun': 5,
-        'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
-      };
-      const parts = clean.split(/[\s\.\-\/]+/);
-      if (parts.length === 3) {
-        const mKey = parts[1].toLowerCase().substring(0, 3);
-        if (months[mKey] !== undefined) {
-          const day = parseInt(parts[0]);
-          const year = parseInt(parts[2]);
-          if (!isNaN(day) && !isNaN(year)) return new Date(year, months[mKey], day);
-        }
-        if (parts[0].length === 4) {
-          return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-        }
-      }
-      const d = new Date(clean);
-      return isNaN(d.getTime()) ? null : d;
-    }
-
-    function isEuropeanCountry(code) {
-      const europe = ['GER', 'GRE', 'ITA', 'SUI', 'ESP', 'SWE', 'FRA', 'GBR', 'POR', 'CZE', 'NED', 'POL', 'FIN', 'NOR', 'AUT', 'CRO', 'SRB', 'BUL', 'BEL', 'HUN', 'UKR', 'ROU', 'TUR', 'IRL', 'DEN', 'SVK', 'SLO', 'LTU', 'LAT', 'EST', 'CYP', 'ISR', 'LUX'];
-      return europe.includes((code || '').toUpperCase().trim());
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const savedWaUrl = localStorage.getItem('wa_url_key') || '';
-      const savedSheetsUrl = localStorage.getItem('sheets_url_key') || '';
-      document.getElementById('inputWaUrl').value = savedWaUrl;
-      document.getElementById('inputSheetsUrl').value = savedSheetsUrl;
-
-      setupNavigation();
-      setupFilters();
-      setupPeriodControls();
-      
-      if (savedWaUrl || savedSheetsUrl) {
-        handleSync();
-      } else {
-        renderRankings();
-      }
-    });
-
-    function setupNavigation() {
-      document.getElementById('tabBtnRankings').onclick = () => switchTab('rankings');
-      document.getElementById('tabBtnPeriod').onclick = () => switchTab('period');
-      document.getElementById('tabBtnScouting').onclick = () => switchTab('scouting');
-      document.getElementById('tabBtnTraining').onclick = () => switchTab('training');
-
-      document.getElementById('toggleConfigBtn').onclick = () => {
-        state.showConfig = !state.showConfig;
-        document.getElementById('configDrawer').classList.toggle('hidden', !state.showConfig);
-      };
-
-      document.getElementById('syncDataBtn').onclick = handleSync;
-
-      document.getElementById('customCutoffInput').onchange = (e) => {
-        let val = parseInt(e.target.value);
-        if (isNaN(val) || val < 1) val = 32;
-        state.cutoffSpots = val;
-        renderRankings();
-      };
-    }
-
-    function setupPeriodControls() {
-      // Preset 1: WM 2027
-      document.getElementById('presetWm2027Btn').onclick = () => {
-        state.isHallenEmPreset = false;
-        setPeriodParams(36, 3, 'global', 'ranking', '2026-08-23');
-        document.getElementById('presetWm2027Btn').className = 'px-2.5 py-1 rounded text-[10px] font-bold font-mono bg-cyan-600 text-white transition-all flex items-center gap-1 shadow-sm';
-        document.getElementById('presetHallenEmBtn').className = 'px-2.5 py-1 rounded text-[10px] font-bold font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all flex items-center gap-1 shadow-sm';
-        document.getElementById('periodInfoRuleBadge').textContent = 'WA Rule 2.8.4 & 2.8.5 aktiv (OW/GL geschützt)';
-      };
-
-      // Preset 2: Hallen-EM 2027 (Kombinierte Norm & Toplist)
-      document.getElementById('presetHallenEmBtn').onclick = () => {
-        state.isHallenEmPreset = true;
-        setPeriodParams(18, 3, 'europe', 'toplist', '2026-11-01');
-        document.getElementById('presetHallenEmBtn').className = 'px-2.5 py-1 rounded text-[10px] font-bold font-mono bg-purple-600 text-white transition-all flex items-center gap-1 shadow-sm';
-        document.getElementById('presetWm2027Btn').className = 'px-2.5 py-1 rounded text-[10px] font-bold font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all flex items-center gap-1 shadow-sm';
-        document.getElementById('periodInfoRuleBadge').textContent = 'EA Valencia 2027 Modus aktiv (Norm 8.17m ab 22.02.26 + Toplist ab 01.11.26)';
-      };
-
-      // Manual Inputs
-      document.getElementById('periodFieldSizeInput').onchange = (e) => {
-        state.periodFieldSize = Math.max(1, parseInt(e.target.value) || 18);
-        renderPeriodRankings();
-      };
-
-      document.getElementById('periodNatQuota2Btn').onclick = () => setPeriodNatQuota(2);
-      document.getElementById('periodNatQuota3Btn').onclick = () => setPeriodNatQuota(3);
-
-      document.getElementById('periodScopeGlobalBtn').onclick = () => setPeriodScope('global');
-      document.getElementById('periodScopeEuropeBtn').onclick = () => setPeriodScope('europe');
-
-      document.getElementById('periodModeRankingBtn').onclick = () => setPeriodMode('ranking');
-      document.getElementById('periodModeToplistBtn').onclick = () => setPeriodMode('toplist');
-
-      document.getElementById('periodStartDateInput').onchange = (e) => {
-        state.periodStartDate = e.target.value;
-        renderPeriodRankings();
-      };
-    }
-
-    function setPeriodParams(fieldSize, quota, scope, mode, dateStr) {
-      state.periodFieldSize = fieldSize;
-      state.periodMaxPerNation = quota;
-      state.periodScope = scope;
-      state.periodMode = mode;
-      state.periodStartDate = dateStr;
-
-      document.getElementById('periodFieldSizeInput').value = fieldSize;
-      document.getElementById('periodStartDateInput').value = dateStr;
-      updatePeriodButtonStates();
-      renderPeriodRankings();
-    }
-
-    function setPeriodNatQuota(q) {
-      state.periodMaxPerNation = q;
-      updatePeriodButtonStates();
-      renderPeriodRankings();
-    }
-
-    function setPeriodScope(s) {
-      state.periodScope = s;
-      updatePeriodButtonStates();
-      renderPeriodRankings();
-    }
-
-    function setPeriodMode(m) {
-      state.periodMode = m;
-      updatePeriodButtonStates();
-      renderPeriodRankings();
-    }
-
-    function updatePeriodButtonStates() {
-      document.getElementById('periodNatQuota2Btn').className = state.periodMaxPerNation === 2 ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
-      document.getElementById('periodNatQuota3Btn').className = state.periodMaxPerNation === 3 ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
-
-      document.getElementById('periodScopeGlobalBtn').className = state.periodScope === 'global' ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
-      document.getElementById('periodScopeEuropeBtn').className = state.periodScope === 'europe' ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
-
-      document.getElementById('periodModeRankingBtn').className = state.periodMode === 'ranking' ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
-      document.getElementById('periodModeToplistBtn').className = state.periodMode === 'toplist' ? 'flex-1 py-1 rounded text-center font-bold bg-cyan-600 text-white' : 'flex-1 py-1 rounded text-center font-bold text-slate-400 hover:text-white';
-
-      document.getElementById('periodValueHeaderCol').textContent = state.periodMode === 'ranking' ? 'Ø Score (Zeitraum)' : 'Toplist Weite / SB';
-    }
-
-    function switchTab(tab) {
-      state.activeTab = tab;
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        b.className = 'tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/40';
-      });
-
-      document.getElementById('tabContentRankings').classList.toggle('hidden', tab !== 'rankings');
-      document.getElementById('tabContentPeriod').classList.toggle('hidden', tab !== 'period');
-      document.getElementById('tabContentScouting').classList.toggle('hidden', tab !== 'scouting');
-      document.getElementById('tabContentTraining').classList.toggle('hidden', tab !== 'training');
-
-      const activeBtn = tab === 'rankings' ? document.getElementById('tabBtnRankings')
-                      : tab === 'period' ? document.getElementById('tabBtnPeriod')
-                      : tab === 'scouting' ? document.getElementById('tabBtnScouting')
-                      : document.getElementById('tabBtnTraining');
-      
-      activeBtn.className = 'tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide whitespace-nowrap bg-slate-800 text-cyan-400 border-b-2 border-cyan-500';
-
-      if (tab === 'period') {
-        renderPeriodRankings();
-      } else if (tab === 'training') {
-        setTimeout(renderCharts, 50);
-      }
-    }
-
-    function setupFilters() {
-      document.getElementById('athleteSearchInput').oninput = (e) => {
-        state.searchQuery = (e.target.value || '').toLowerCase();
-        renderRankings();
-      };
-
-      document.querySelectorAll('.nat-filter-btn').forEach(btn => {
-        btn.onclick = () => {
-          document.querySelectorAll('.nat-filter-btn').forEach(b => {
-            b.className = 'nat-filter-btn px-1.5 py-0.5 rounded text-[10px] text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950';
-          });
-          btn.className = 'nat-filter-btn px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-white';
-          state.selectedNation = btn.getAttribute('data-nation') || 'ALL';
-          renderRankings();
-        };
-      });
-
-      document.querySelectorAll('.mark-filter-btn').forEach(btn => {
-        btn.onclick = () => {
-          document.querySelectorAll('.mark-filter-btn').forEach(b => {
-            b.className = 'mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold text-slate-400 border border-slate-800 bg-slate-950';
-          });
-          btn.className = 'mark-filter-btn px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-white';
-          state.minMarkFilter = parseFloat(btn.getAttribute('data-minmark')) || 0;
-          renderRecentMarks();
-        };
-      });
-    }
-
-    function getProcessedRankings() {
-      let list = [...state.athletes];
-
-      list = list.map((ath, idx) => {
-        const aName = (ath.name || '').toLowerCase();
-        const prev = aName ? state.previousAthletesMap[aName] : null;
-        let rankDelta = null;
-        let scoreDelta = null;
-
-        if (prev) {
-          rankDelta = prev.rank - (idx + 1);
-          scoreDelta = ath.totalScore - prev.score;
-        }
-
-        return { ...ath, calculatedRank: idx + 1, rankDelta, scoreDelta };
-      });
-
-      if (state.selectedNation !== 'ALL') {
-        list = list.filter(a => a.nation === state.selectedNation);
-      }
-
-      if (state.searchQuery) {
-        list = list.filter(a => (a.name && a.name.toLowerCase().includes(state.searchQuery)) || (a.nation && a.nation.toLowerCase().includes(state.searchQuery)));
-      }
-
-      return list;
-    }
-
-    function renderRankings() {
-      const data = getProcessedRankings();
-
-      const me = state.athletes.find(a => a.name.toLowerCase().includes('herden')) || state.athletes.find(a => a.nation === 'GER');
-      const cutoffAth = state.athletes[Math.min(state.cutoffSpots - 1, state.athletes.length - 1)];
-
-      if (me) {
-        document.getElementById('kpiMeRank').textContent = '#' + me.originalRank;
-        document.getElementById('kpiMeScore').textContent = me.totalScore + ' Pkt';
-
-        const mePrev = state.previousAthletesMap[me.name.toLowerCase()];
-        if (mePrev) {
-          const delta = mePrev.rank - me.originalRank;
-          const ptsDelta = me.totalScore - mePrev.score;
-          document.getElementById('kpiMeDelta').innerHTML = delta > 0 
-            ? `<span class="text-emerald-400">▲ +${delta} (${ptsDelta >= 0 ? '+' : ''}${ptsDelta} Pkt)</span>`
-            : delta < 0 
-            ? `<span class="text-rose-400">▼ ${Math.abs(delta)} (${ptsDelta} Pkt)</span>`
-            : `<span class="text-slate-500">NC (±0 Pkt)</span>`;
-        } else {
-          document.getElementById('kpiMeDelta').innerHTML = `<span class="text-cyan-400">SB: ${me.sb ? me.sb.toFixed(2) : '-'}m</span>`;
-        }
-
-        if (cutoffAth) {
-          const gap = me.totalScore - cutoffAth.totalScore;
-          document.getElementById('kpiMeGap').textContent = (gap >= 0 ? '+' : '') + gap + ' Pkt';
-          document.getElementById('kpiMeGap').className = gap >= 0 ? 'text-base font-black font-mono text-emerald-400' : 'text-base font-black font-mono text-rose-400';
-          document.getElementById('kpiMeGapSub').textContent = gap >= 0 ? `Sicher vor Platz #${state.cutoffSpots}` : `Rückstand auf Platz #${state.cutoffSpots}`;
-        }
-      }
-
-      if (cutoffAth) {
-        document.getElementById('kpiCutoffScore').textContent = cutoffAth.totalScore + ' PKT';
-        document.getElementById('kpiCutoffAthName').textContent = `#${state.cutoffSpots}: ${cutoffAth.name} (${cutoffAth.nation})`;
-      }
-
-      const germans = state.athletes.filter(a => a.nation === 'GER');
-      document.getElementById('kpiGerCountBadge').textContent = `${germans.length} DLV ATHLETEN`;
-      const gerListElem = document.getElementById('kpiGerList');
-      if (germans.length > 0) {
-        gerListElem.innerHTML = germans.map(g => {
-          const isLuka = g.name.toLowerCase().includes('herden');
-          return `
-            <div class="flex items-center justify-between py-0.5 border-b border-slate-800/40 ${isLuka ? 'text-cyan-400 font-bold' : ''}">
-              <span class="truncate">#${g.originalRank} ${g.name}</span>
-              <span class="text-amber-400 font-mono ml-2">${g.totalScore} Pkt</span>
-            </div>
-          `;
-        }).join('');
-      } else {
-        gerListElem.innerHTML = '<span class="text-slate-500 italic">Keine DLV Athleten gefunden</span>';
-      }
-
-      const tbody = document.getElementById('rankingTableBody');
-      tbody.innerHTML = '';
-
-      if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="py-6 text-center text-slate-500 text-xs font-sans">Keine Ranking-Daten geladen. Trage die Raw GitHub JSON URL unter Config ein und klicke Sync Data.</td></tr>';
-        return;
-      }
-
-      data.forEach((ath, idx) => {
-        const isCutoff = (idx + 1) === state.cutoffSpots;
-        const isExpanded = state.expandedRowId === ath.id;
-        const isGerman = ath.nation === 'GER';
-        const isMe = ath.name.toLowerCase().includes('herden');
-
-        let rankBadge = '';
-        if (ath.rankDelta !== null) {
-          if (ath.rankDelta > 0) {
-            rankBadge = `<span class="text-emerald-400 text-[9px] font-bold">▲+${ath.rankDelta}</span>`;
-          } else if (ath.rankDelta < 0) {
-            rankBadge = `<span class="text-rose-400 text-[9px] font-bold">▼${Math.abs(ath.rankDelta)}</span>`;
-          } else {
-            rankBadge = `<span class="text-slate-600 text-[8px]">NC</span>`;
-          }
-        } else if (Object.keys(state.previousAthletesMap).length > 0) {
-          rankBadge = `<span class="text-amber-400 text-[8px] font-bold">NEW</span>`;
-        }
-
-        let scoreDeltaBadge = '';
-        if (ath.scoreDelta !== null && ath.scoreDelta !== 0) {
-          scoreDeltaBadge = ath.scoreDelta > 0 
-            ? `<span class="text-[9px] text-emerald-400 font-mono ml-1">(+${ath.scoreDelta})</span>` 
-            : `<span class="text-[9px] text-rose-400 font-mono ml-1">(${ath.scoreDelta})</span>`;
-        }
-
-        const tr = document.createElement('tr');
-        tr.className = `cursor-pointer transition-colors ${isExpanded ? 'bg-slate-800/90' : isMe ? 'bg-cyan-950/40 hover:bg-cyan-950/60 border-l-4 border-l-cyan-400 font-bold' : isGerman ? 'bg-cyan-950/20 hover:bg-cyan-950/30 border-l-2 border-l-cyan-500' : 'hover:bg-slate-800/50'}`;
-        tr.onclick = () => {
-          state.expandedRowId = state.expandedRowId === ath.id ? null : ath.id;
-          renderRankings();
-        };
-
-        const statusBadge = isMe 
-          ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-cyan-600 text-white text-[9px] font-bold">LUKA (YOU)</span>'
-          : '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[9px]">RANKED</span>';
-
-        tr.innerHTML = `
-          <td class="py-1.5 px-3 text-center font-bold text-slate-300">
-            <div class="flex items-center justify-center gap-1">
-              <span>${ath.originalRank}</span>
-              ${rankBadge}
-            </div>
-          </td>
-          <td class="py-1.5 px-3 font-semibold text-white font-sans">
-            <div class="flex items-center gap-1.5">
-              <span class="uppercase font-bold tracking-tight">${ath.name}</span>
-              ${isMe ? '<span class="text-[8px] px-1 py-0.2 rounded bg-cyan-600 text-white font-bold font-mono">YOU</span>' : isGerman ? '<span class="text-[8px] px-1 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold font-mono">GER</span>' : ''}
-            </div>
-          </td>
-          <td class="py-1.5 px-3"><span class="inline-flex items-center px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${ath.nation}</span></td>
-          <td class="py-1.5 px-3 text-slate-400 text-[10px]">${ath.dob || '-'}</td>
-          <td class="py-1.5 px-3 text-right font-bold text-cyan-400">${ath.sb ? ath.sb.toFixed(2) + 'm' : '-'}</td>
-          <td class="py-1.5 px-3 text-right font-bold text-amber-400">${ath.totalScore} ${scoreDeltaBadge}</td>
-          <td class="py-1.5 px-3 text-center">${statusBadge}</td>
-          <td class="py-1.5 px-3 text-center text-slate-500">${isExpanded ? '▲' : '▼'}</td>
-        `;
-        tbody.appendChild(tr);
-
-        if (isCutoff) {
-          const cutTr = document.createElement('tr');
-          cutTr.className = 'border-t-2 border-b-2 border-amber-500/60 bg-amber-500/10';
-          cutTr.innerHTML = `<td colspan="8" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">CUT-OFF GRENZE (PLATZ ${state.cutoffSpots})</td>`;
-          tbody.appendChild(cutTr);
-        }
-
-        if (isExpanded && ath.countingMeetings && ath.countingMeetings.length > 0) {
-          const accTr = document.createElement('tr');
-          accTr.className = 'bg-slate-950 border-b border-slate-800';
-          
-          let meetingsHtml = ath.countingMeetings.map(m => {
-            const isSteg = (m.competition && m.competition.toLowerCase().includes('überflieger')) || (m.venue && m.venue.toLowerCase().includes('steg'));
-            return `
-              <tr class="hover:bg-slate-800/40">
-                <td class="py-1 px-2 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
-                <td class="py-1 px-2 font-sans font-medium text-slate-200">
-                  <span>${m.competition || '-'}</span>
-                  ${isSteg ? '<span class="ml-1 px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[8px] font-bold">STEG</span>' : ''}
-                  ${m.indoor ? '<span class="ml-1 px-1 py-0.2 rounded bg-purple-950 text-purple-300 border border-purple-800 text-[8px] font-bold">INDOOR</span>' : ''}
-                </td>
-                <td class="py-1 px-2 text-slate-400 font-sans">${m.venue || '-'}</td>
-                <td class="py-1 px-2 text-center"><span class="px-1 py-0.2 rounded border text-[8px] font-bold bg-slate-800 border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
-                <td class="py-1 px-2 text-right font-bold text-cyan-400">${m.mark}m</td>
-                <td class="py-1 px-2 text-right text-slate-400">${m.wind ? m.wind + ' m/s' : '-'}</td>
-                <td class="py-1 px-2 text-center text-slate-300">${m.place || '-'}</td>
-                <td class="py-1 px-2 text-right text-slate-400">${m.result_score || '-'}</td>
-                <td class="py-1 px-2 text-right text-amber-400">+${m.placing_score || 0}</td>
-                <td class="py-1 px-2 text-right font-bold text-cyan-300">${m.performance_score || '-'}</td>
-              </tr>
-            `;
-          }).join('');
-
-          accTr.innerHTML = `
-            <td colspan="8" class="p-2.5">
-              <div class="bg-slate-900 rounded border border-slate-800 p-2.5 shadow-sm">
-                <h4 class="font-bold text-white text-[11px] uppercase tracking-wide font-sans mb-2">
-                  🏆 5 gewertete Meetings: ${ath.name} (Score: ${ath.totalScore})
-                </h4>
-                <div class="overflow-x-auto">
-                  <table class="w-full text-left border-collapse text-[10px] font-mono">
-                    <thead>
-                      <tr class="bg-slate-950 text-slate-500 border-b border-slate-800 uppercase font-bold text-[9px]">
-                        <th class="py-1.5 px-2">Date</th>
-                        <th class="py-1.5 px-2">Competition</th>
-                        <th class="py-1.5 px-2">Venue</th>
-                        <th class="py-1.5 px-2 text-center">Cat</th>
-                        <th class="py-1.5 px-2 text-right">Mark</th>
-                        <th class="py-1.5 px-2 text-right">Wind</th>
-                        <th class="py-1.5 px-2 text-center">Place</th>
-                        <th class="py-1.5 px-2 text-right">Result</th>
-                        <th class="py-1.5 px-2 text-right">Placing</th>
-                        <th class="py-1.5 px-2 text-right font-bold text-white">Perf. Score</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-800/50">
-                      ${meetingsHtml}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </td>
-          `;
-          tbody.appendChild(accTr);
-        }
-      });
-    }
-
-    /* ================= TAB 2: SELECTION & NOMINATION HUB ENGINE ================= */
-    function renderPeriodRankings() {
-      const tbody = document.getElementById('periodTableBody');
-      const toplistStartDate = new Date(state.periodStartDate);
-      const standardStartDate = new Date(state.periodStandardStartDate);
-
-      if (state.athletes.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="py-6 text-center text-slate-500 text-xs">Keine Daten geladen. Bitte Sync Data ausführen.</td></tr>';
-        return;
-      }
-
-      // 1. Filtere Pool nach Region (Weltweit vs. Europa)
-      let pool = state.athletes;
-      if (state.periodScope === 'europe') {
-        pool = pool.filter(a => isEuropeanCountry(a.nation));
-      }
-
-      // 2. Berechne gültige Wettkämpfe und Normerfüllung
-      let processedList = pool.map(ath => {
-        const validPeriodMeetings = [];
-        let hasDirectStandard = false;
-        let bestStandardMark = 0;
-
-        (ath.countingMeetings || []).forEach(m => {
-          const mDate = parseSafeDate(m.date);
-          const cat = (m.category || '').toUpperCase().trim();
-          const markVal = parseFloat(m.mark) || 0;
-
-          // Normprüfung für Hallen-EM (ab 22.02.2026 >= 8.17m)
-          if (state.isHallenEmPreset && mDate && mDate >= standardStartDate && markVal >= state.periodEntryStandard) {
-            hasDirectStandard = true;
-            if (markVal > bestStandardMark) bestStandardMark = markVal;
-          }
-
-          // Gültige Meetings für die jeweilige Wertung
-          if (state.periodMode === 'ranking') {
-            // WA 2.8.4 & 2.8.5: Nur OW und GL bleiben vor Stichtag geschützt aktiv
-            const isProtectedMajor = (cat === 'OW' || cat === 'GL');
-            if (mDate && (mDate >= toplistStartDate || isProtectedMajor)) {
-              validPeriodMeetings.push({ ...m, parsedDate: mDate, isMajorProtected: mDate < toplistStartDate });
-            }
-          } else {
-            // Toplist: Wettkämpfe ab dem Toplist-Stichtag (z.B. 01.11.2026)
-            if (mDate && mDate >= toplistStartDate) {
-              validPeriodMeetings.push({ ...m, parsedDate: mDate });
-            }
-          }
-        });
-
-        const scores = validPeriodMeetings.map(m => parseInt(m.performance_score) || 0);
-        const marks = validPeriodMeetings.map(m => parseFloat(m.mark) || 0);
-
-        const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
-        const maxMark = marks.length > 0 ? Math.max(...marks) : 0;
-        const maxScore = scores.length > 0 ? Math.max(...scores) : 0;
-
-        // Falls die Norm im 12M Fenster vor dem 01.11. fiel, weisen wir sie als Maßstab aus
-        const displayMark = Math.max(maxMark, bestStandardMark);
-
-        return {
-          ...ath,
-          periodMeetings: validPeriodMeetings,
-          periodAvgScore: avgScore,
-          periodMaxMark: displayMark,
-          periodMaxScore: maxScore,
-          hasDirectStandard: hasDirectStandard
-        };
-      });
-
-      // 3. Sortierung
-      if (state.periodMode === 'ranking') {
-        processedList.sort((a, b) => {
-          if (b.periodAvgScore !== a.periodAvgScore) return b.periodAvgScore - a.periodAvgScore;
-          return b.periodMaxScore - a.periodMaxScore;
-        });
-      } else {
-        // Hallen-EM / Toplist: Norm-Erfüller stehen ganz oben, danach nach Weite im Fenster
-        processedList.sort((a, b) => {
-          if (a.hasDirectStandard && !b.hasDirectStandard) return -1;
-          if (!a.hasDirectStandard && b.hasDirectStandard) return 1;
-          if (b.periodMaxMark !== a.periodMaxMark) return b.periodMaxMark - a.periodMaxMark;
-          return b.periodAvgScore - a.periodAvgScore;
-        });
-      }
-
-      // 4. Länderquoten anwenden (Max 2 oder Max 3 pro Nation)
-      const nationCounts = {};
-      let quotaCounter = 1;
-
-      processedList = processedList.map((ath, idx) => {
-        const nat = ath.nation || 'UNK';
-        nationCounts[nat] = (nationCounts[nat] || 0) + 1;
-        const slot = nationCounts[nat];
-
-        let quotaRank = null;
-        let quotaStatus = 'outside';
-
-        if (slot <= state.periodMaxPerNation) {
-          quotaRank = quotaCounter++;
-          if (ath.hasDirectStandard) {
-            quotaStatus = 'standard_qualified';
-          } else {
-            quotaStatus = quotaRank <= state.periodFieldSize ? 'qualified' : (quotaRank <= state.periodFieldSize + 3 ? 'bubble' : 'outside');
-          }
-        } else {
-          quotaStatus = 'quota_full';
-        }
-
-        return { ...ath, periodRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot };
-      });
-
-      // 5. Update KPI Kacheln für Period-Tab
-      document.getElementById('periodCutoffBadge').textContent = `TOP ${state.periodFieldSize} (MAX ${state.periodMaxPerNation}/NAT)`;
-      
-      const mePeriod = processedList.find(a => a.name.toLowerCase().includes('herden'));
-      const cutoffPeriodAth = processedList.find(a => a.quotaRank === state.periodFieldSize);
-
-      if (mePeriod) {
-        document.getElementById('kpiPeriodMeRank').textContent = mePeriod.quotaRank ? `#${mePeriod.quotaRank}` : `Slot #${mePeriod.nationSlot}`;
-        document.getElementById('kpiPeriodMeScore').textContent = state.periodMode === 'ranking' 
-          ? (mePeriod.periodAvgScore > 0 ? mePeriod.periodAvgScore + ' Pkt' : '-')
-          : (mePeriod.periodMaxMark > 0 ? mePeriod.periodMaxMark.toFixed(2) + 'm' : '-');
-        document.getElementById('kpiPeriodMeCount').textContent = mePeriod.hasDirectStandard ? 'NORM ERFÜLLT' : `${mePeriod.periodMeetings.length} Meetings`;
-
-        if (cutoffPeriodAth) {
-          if (state.periodMode === 'ranking') {
-            const gap = mePeriod.periodAvgScore - cutoffPeriodAth.periodAvgScore;
-            document.getElementById('kpiPeriodMeGap').textContent = (gap >= 0 ? '+' : '') + gap + ' Pkt';
-            document.getElementById('kpiPeriodMeGap').className = gap >= 0 ? 'text-base font-black font-mono text-emerald-400' : 'text-base font-black font-mono text-rose-400';
-            document.getElementById('kpiPeriodMeGapSub').textContent = gap >= 0 ? `Vorsprung auf Platz #${state.periodFieldSize}` : `Rückstand auf Platz #${state.periodFieldSize}`;
-          } else {
-            const gapM = mePeriod.periodMaxMark - cutoffPeriodAth.periodMaxMark;
-            document.getElementById('kpiPeriodMeGap').textContent = (gapM >= 0 ? '+' : '') + gapM.toFixed(2) + 'm';
-            document.getElementById('kpiPeriodMeGap').className = gapM >= 0 ? 'text-base font-black font-mono text-emerald-400' : 'text-base font-black font-mono text-rose-400';
-            document.getElementById('kpiPeriodMeGapSub').textContent = gapM >= 0 ? `Vorsprung auf Platz #${state.periodFieldSize}` : `Rückstand auf Platz #${state.periodFieldSize}`;
-          }
-        }
-      }
-
-      if (cutoffPeriodAth) {
-        document.getElementById('kpiPeriodCutoffScore').textContent = state.periodMode === 'ranking' 
-          ? `${cutoffPeriodAth.periodAvgScore} PKT`
-          : `${cutoffPeriodAth.periodMaxMark.toFixed(2)}m`;
-        document.getElementById('kpiPeriodCutoffAthName').textContent = `#${state.periodFieldSize}: ${cutoffPeriodAth.name} (${cutoffPeriodAth.nation})`;
-      }
-
-      // Deutsche Athleten im Period Tab
-      const germansPeriod = processedList.filter(a => a.nation === 'GER');
-      document.getElementById('kpiPeriodGerCount').textContent = `${germansPeriod.length} DLV ATHLETEN`;
-      const gerListPeriodElem = document.getElementById('kpiPeriodGerList');
-      if (germansPeriod.length > 0) {
-        gerListPeriodElem.innerHTML = germansPeriod.map((g) => {
-          const isLuka = g.name.toLowerCase().includes('herden');
-          const valDisplay = state.periodMode === 'ranking' ? `${g.periodAvgScore} Pkt` : `${g.periodMaxMark.toFixed(2)}m`;
-          return `
-            <div class="flex items-center justify-between py-0.5 border-b border-slate-800/40 ${isLuka ? 'text-cyan-400 font-bold' : ''}">
-              <span class="truncate">${g.quotaRank ? `#${g.quotaRank}` : `(Max ${state.periodMaxPerNation})`} ${g.name} ${g.hasDirectStandard ? '(NORM)' : ''}</span>
-              <span class="text-amber-400 font-mono ml-2">${valDisplay}</span>
-            </div>
-          `;
-        }).join('');
-      } else {
-        gerListPeriodElem.innerHTML = '<span class="text-slate-500 italic">Keine DLV Athleten in der Auswahl</span>';
-      }
-
-      // 6. Tabelle rendern
-      tbody.innerHTML = '';
-      processedList.forEach((ath, idx) => {
-        const isCutoff = ath.quotaRank === state.periodFieldSize;
-        const isExpanded = state.expandedPeriodRowId === ath.id;
-        const isGerman = ath.nation === 'GER';
-        const isMe = ath.name.toLowerCase().includes('herden');
-
-        let statusBadge = '';
-        if (ath.quotaStatus === 'standard_qualified') {
-          statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-purple-600 text-white text-[9px] font-black tracking-wide">NORM (8.17m)</span>';
-        } else if (ath.quotaStatus === 'qualified') {
-          statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold">QUALIFIED</span>';
-        } else if (ath.quotaStatus === 'bubble') {
-          statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[9px] font-bold">BUBBLE</span>';
-        } else if (ath.quotaStatus === 'quota_full') {
-          statusBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 border border-slate-800 text-[9px]">MAX ${state.periodMaxPerNation} NAT</span>`;
-        } else {
-          statusBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-rose-950/30 text-rose-400 border border-rose-900/40 text-[9px]">OUTSIDE</span>';
-        }
-
-        const displayValue = state.periodMode === 'ranking'
-          ? (ath.periodAvgScore > 0 ? `${ath.periodAvgScore} PKT` : '-')
-          : (ath.periodMaxMark > 0 ? `${ath.periodMaxMark.toFixed(2)}m` : '-');
-
-        const tr = document.createElement('tr');
-        tr.className = `cursor-pointer transition-colors ${isExpanded ? 'bg-slate-800/90' : isMe ? 'bg-cyan-950/40 hover:bg-cyan-950/60 border-l-4 border-l-cyan-400 font-bold' : isGerman ? 'bg-cyan-950/20 hover:bg-cyan-950/30 border-l-2 border-l-cyan-500' : 'hover:bg-slate-800/50'}`;
-        tr.onclick = () => {
-          state.expandedPeriodRowId = state.expandedPeriodRowId === ath.id ? null : ath.id;
-          renderPeriodRankings();
-        };
-
-        tr.innerHTML = `
-          <td class="py-1.5 px-3 text-center font-bold text-slate-300">#${idx + 1}</td>
-          <td class="py-1.5 px-3 text-center">
-            ${ath.quotaRank ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded font-bold text-[10px] ${ath.quotaRank <= state.periodFieldSize ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">#${ath.quotaRank}</span>` : `<span class="text-[9px] text-slate-500 italic">Slot ${ath.nationSlot}</span>`}
-          </td>
-          <td class="py-1.5 px-3 font-semibold text-white font-sans">
-            <div class="flex items-center gap-1.5">
-              <span class="uppercase font-bold tracking-tight">${ath.name}</span>
-              ${isMe ? '<span class="text-[8px] px-1 py-0.2 rounded bg-cyan-600 text-white font-bold font-mono">YOU</span>' : isGerman ? '<span class="text-[8px] px-1 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold font-mono">GER</span>' : ''}
-            </div>
-          </td>
-          <td class="py-1.5 px-3"><span class="inline-flex items-center px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${ath.nation}</span></td>
-          <td class="py-1.5 px-3 text-center">
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${ath.hasDirectStandard ? 'bg-purple-950 text-purple-300 border border-purple-800' : ath.periodMeetings.length > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-500'} font-mono">
-              ${ath.hasDirectStandard ? 'NORM 8.17m' : `${ath.periodMeetings.length} Meetings`}
-            </span>
-          </td>
-          <td class="py-1.5 px-3 text-right font-bold text-amber-400 font-mono text-xs">${displayValue}</td>
-          <td class="py-1.5 px-3 text-center">${statusBadge}</td>
-          <td class="py-1.5 px-3 text-center text-slate-500">${isExpanded ? '▲' : '▼'}</td>
-        `;
-        tbody.appendChild(tr);
-
-        if (isCutoff) {
-          const cutTr = document.createElement('tr');
-          cutTr.className = 'border-t-2 border-b-2 border-amber-500/60 bg-amber-500/10';
-          cutTr.innerHTML = `<td colspan="8" class="py-1 px-3 text-center font-black text-amber-400 text-[9px] tracking-wider uppercase font-mono">NOMINIERUNGS-CUT-OFF (PLATZ ${state.periodFieldSize} • MAX ${state.periodMaxPerNation}/NAT)</td>`;
-          tbody.appendChild(cutTr);
-        }
-
-        if (isExpanded && ath.periodMeetings.length > 0) {
-          const accTr = document.createElement('tr');
-          accTr.className = 'bg-slate-950 border-b border-slate-800';
-
-          let mHtml = ath.periodMeetings.map(m => `
-            <tr class="hover:bg-slate-800/40">
-              <td class="py-1 px-2 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
-              <td class="py-1 px-2 font-sans font-medium text-slate-200">
-                ${m.competition || '-'}
-                ${m.isMajorProtected ? '<span class="ml-1 text-[8px] bg-purple-950 border border-purple-800 text-purple-300 px-1 py-0.2 rounded font-mono font-bold">WA 2.8 PROTECTED (' + m.category + ')</span>' : ''}
-              </td>
-              <td class="py-1 px-2 text-center"><span class="px-1 py-0.2 rounded border text-[8px] font-bold bg-slate-800 border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
-              <td class="py-1 px-2 text-right font-bold text-cyan-400">${m.mark}m</td>
-              <td class="py-1 px-2 text-right text-slate-400">${m.wind ? m.wind + ' m/s' : '-'}</td>
-              <td class="py-1 px-2 text-center text-slate-300">${m.place || '-'}</td>
-              <td class="py-1 px-2 text-right font-bold text-amber-400">${m.performance_score} Pkt</td>
-            </tr>
-          `).join('');
-
-          accTr.innerHTML = `
-            <td colspan="8" class="p-2.5">
-              <div class="bg-slate-900 rounded border border-slate-800 p-2.5 shadow-sm">
-                <h4 class="font-bold text-white text-[11px] uppercase tracking-wide font-sans mb-1.5">
-                  Gezählte Meetings für ${ath.name} (${displayValue})
-                </h4>
-                <div class="overflow-x-auto">
-                  <table class="w-full text-left border-collapse text-[10px] font-mono">
-                    <thead>
-                      <tr class="bg-slate-950 text-slate-500 border-b border-slate-800 uppercase font-bold text-[9px]">
-                        <th class="py-1.5 px-2">Datum</th>
-                        <th class="py-1.5 px-2">Meeting</th>
-                        <th class="py-1.5 px-2 text-center">Kat</th>
-                        <th class="py-1.5 px-2 text-right">Weite</th>
-                        <th class="py-1.5 px-2 text-right">Wind</th>
-                        <th class="py-1.5 px-2 text-center">Platz</th>
-                        <th class="py-1.5 px-2 text-right font-bold text-white">Score</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-800/50">
-                      ${mHtml}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </td>
-          `;
-          tbody.appendChild(accTr);
-        }
-      });
-    }
-
-    function renderRecentMarks() {
-      const tbody = document.getElementById('recentMarksTableBody');
-      const allMeetings = [];
-
-      state.athletes.forEach(ath => {
-        if (ath.countingMeetings) {
-          ath.countingMeetings.forEach(m => {
-            allMeetings.push({ ...m, athleteName: ath.name, athleteNation: ath.nation });
-          });
-        }
-      });
-
-      let filtered = allMeetings.sort((a, b) => parseFloat(b.mark || 0) - parseFloat(a.mark || 0));
-      if (state.minMarkFilter > 0) {
-        filtered = filtered.filter(m => parseFloat(m.mark || 0) >= state.minMarkFilter);
-      }
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="py-4 text-center text-slate-500 text-xs">Keine Meetings für diesen Filter gefunden.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = filtered.slice(0, 25).map(m => {
-        const isSteg = (m.competition && m.competition.toLowerCase().includes('überflieger')) || (m.venue && m.venue.toLowerCase().includes('steg'));
-        return `
-          <tr class="hover:bg-slate-850/80 transition-colors">
-            <td class="py-1.5 px-3 font-extrabold text-cyan-400">${m.mark}m</td>
-            <td class="py-1.5 px-3 text-slate-400">${m.wind ? m.wind + ' m/s' : '-'}</td>
-            <td class="py-1.5 px-3 font-semibold text-white font-sans">${m.athleteName}</td>
-            <td class="py-1.5 px-3"><span class="px-1.5 py-0.2 rounded bg-slate-900 border border-slate-800 text-slate-300 font-bold text-[10px]">${m.athleteNation}</span></td>
-            <td class="py-1.5 px-3 text-slate-300 font-sans">${m.competition || '-'} ${isSteg ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[8px]">STEG</span>' : ''}</td>
-            <td class="py-1.5 px-3 text-slate-400 font-sans">${m.venue || '-'}</td>
-            <td class="py-1.5 px-3 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
-            <td class="py-1.5 px-3 text-center text-slate-300">${m.place || '-'}</td>
-            <td class="py-1.5 px-3 text-right font-bold text-amber-400">${m.performance_score || '-'}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function parseAndSetTrainingLogs(csvText) {
-      const lines = csvText.split('\n').map(l => l.trim()).filter(Boolean);
-      if (lines.length <= 1) return;
-
-      const header = lines[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(h => h.replace(/^"\vert{}"$/g, '').trim().toLowerCase());
-      
-      const getIndex = (keys) => {
-        for (const k of keys) {
-          const idx = header.findIndex(h => h.includes(k.toLowerCase()));
-          if (idx !== -1) return idx;
-        }
-        return -1;
-      };
-
-      const colDate = getIndex(['name', 'datum', 'tag']);
-      const colMark = getIndex(['weitsprung wk', 'sprungweite']);
-      const colEffMark = getIndex(['weite effektiv']);
-      const colTrap = getIndex(['e1rm trapbar']);
-      const colClean = getIndex(['e1rm umsetzen']);
-      const colRecovery = getIndex(['recovery']);
-      const colSleep = getIndex(['sleep']);
-
-      const parsed = [];
-      for (let i = 1; i < lines.length; i++) {
-        const parts = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(p => p.replace(/^"\vert{}"$/g, '').trim());
-        
-        const parseNum = (idx) => {
-          if (idx === -1 || !parts[idx]) return null;
-          const val = parseFloat(parts[idx].replace(',', '.'));
-          return isNaN(val) ? null : val;
-        };
-
-        if (parts.length >= 2) {
-          parsed.push({
-            date: colDate !== -1 ? parts[colDate] : `Log ${i}`,
-            mark: parseNum(colMark),
-            effMark: parseNum(colEffMark),
-            trapbar: parseNum(colTrap),
-            clean: parseNum(colClean),
-            recovery: parseNum(colRecovery),
-            sleep: parseNum(colSleep)
-          });
-        }
-      }
-      if (parsed.length > 0) {
-        state.trainingLogs = parsed;
-      }
-    }
-
-    function renderCharts() {
-      const logs = state.trainingLogs;
-      if (!logs || logs.length === 0) return;
-
-      const chartData = logs.slice(-50);
-      const labels = chartData.map(l => l.date);
-      const marks = chartData.map(l => l.mark);
-      const effMarks = chartData.map(l => l.effMark);
-      const traps = chartData.map(l => l.trapbar);
-      const cleans = chartData.map(l => l.clean);
-      const whoops = chartData.map(l => l.recovery);
-      const sleeps = chartData.map(l => l.sleep);
-
-      if (compChartInstance) compChartInstance.destroy();
-      if (strengthChartInstance) strengthChartInstance.destroy();
-      if (readinessChartInstance) readinessChartInstance.destroy();
-
-      const ctx1 = document.getElementById('compMarksChart').getContext('2d');
-      compChartInstance = new Chart(ctx1, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Weitsprung WK (m)', data: marks, borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.1)', borderWidth: 2.5, pointRadius: 4, spanGaps: true },
-            { label: 'Weite Effektiv (m)', data: effMarks, borderColor: '#f59e0b', borderWidth: 1.5, borderDash: [4,4], pointRadius: 3, spanGaps: true }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: { min: 7.0, max: 8.5, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
-            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
-          },
-          plugins: { legend: { labels: { color: '#cbd5e1' } } }
-        }
-      });
-
-      const ctx2 = document.getElementById('strengthChart').getContext('2d');
-      strengthChartInstance = new Chart(ctx2, {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            { label: 'e1RM Trapbar (kg)', data: traps, backgroundColor: '#f59e0b', borderRadius: 2 },
-            { label: 'e1RM Umsetzen (kg)', data: cleans, backgroundColor: '#06b6d4', borderRadius: 2 }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: { min: 100, max: 280, grid: { color: '#1e293b' }, ticks: { color: '#cbd5e1' } },
-            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
-          },
-          plugins: { legend: { labels: { color: '#cbd5e1' } } }
-        }
-      });
-
-      const ctx3 = document.getElementById('readinessChart').getContext('2d');
-      readinessChartInstance = new Chart(ctx3, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Whoop Recovery (%)', data: whoops, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, borderWidth: 2, spanGaps: true },
-            { label: 'Schlaf (h)', data: sleeps, borderColor: '#a855f7', borderWidth: 2, spanGaps: true }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#10b981' } },
-            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
-          },
-          plugins: { legend: { labels: { color: '#cbd5e1' } } }
-        }
-      });
-    }
-
-    async function handleSync() {
-      const waUrl = document.getElementById('inputWaUrl').value.trim();
-      const sheetsUrl = document.getElementById('inputSheetsUrl').value.trim();
-      const spinner = document.getElementById('syncSpinner');
-
-      spinner.classList.add('animate-spin');
-      if (waUrl) localStorage.setItem('wa_url_key', waUrl);
-      if (sheetsUrl) localStorage.setItem('sheets_url_key', sheetsUrl);
-
-      // 1. WA Rankings Import (Aktuell)
-      if (waUrl) {
-        try {
-          const fetchUrl = waUrl.includes('raw.githubusercontent.com') ? waUrl + '?t=' + Date.now() : waUrl;
-          const res = await fetch(fetchUrl);
-
-          if (res.ok) {
-            const rawJson = await res.json();
-            const rawList = rawJson.athletes || (Array.isArray(rawJson) ? rawJson : []);
-            
-            state.athletes = rawList.map((ath, idx) => {
-              const meetings = ath.counted_competitions || ath.countingMeetings || [];
-              let sb = 0;
-              meetings.forEach(m => {
-                const markVal = parseFloat(m.mark);
-                if (!isNaN(markVal) && markVal > sb) sb = markVal;
-              });
-
-              return {
-                id: ath.profile_url || ath.athlete_id || 'ath-' + idx,
-                originalRank: parseInt(ath.rank) || idx + 1,
-                name: ath.name || '',
-                nation: ath.country || ath.nation || '',
-                dob: ath.dob || '',
-                sb: sb > 0 ? sb : null,
-                totalScore: parseInt(ath.ranking_score || ath.total_score || 0),
-                countingMeetings: meetings.map(c => {
-                  let cleanWind = c.wind;
-                  if (cleanWind !== null && cleanWind !== undefined) {
-                    const nw = parseFloat(cleanWind);
-                    if (!isNaN(nw) && Math.abs(nw) >= 10) cleanWind = (nw / 10).toFixed(1);
-                  }
-                  return { ...c, wind: cleanWind };
-                })
-              };
-            });
-
-            document.getElementById('jsonStatusBadge').textContent = 'Live WA (' + state.athletes.length + ')';
-            document.getElementById('jsonStatusBadge').className = 'font-mono font-medium text-emerald-400';
-          }
-        } catch (e) {
-          console.warn('WA Fetch Error', e);
-        }
-
-        // 2. Vorwoche parallel abrufen
-        try {
-          const prevUrl = waUrl.replace('ranking_latest.json', 'ranking_previous.json') + '?t=' + Date.now();
-          const resPrev = await fetch(prevUrl);
-          if (resPrev.ok) {
-            const prevJson = await resPrev.json();
-            const prevList = prevJson.athletes || (Array.isArray(prevJson) ? prevJson : []);
-            state.previousAthletesMap = {};
-            prevList.forEach((a, idx) => {
-              const aName = (a.name || '').toLowerCase();
-              if (aName) {
-                state.previousAthletesMap[aName] = {
-                  rank: parseInt(a.rank) || (idx + 1),
-                  score: parseInt(a.ranking_score || a.total_score) || 0
-                };
-              }
-            });
-          }
-        } catch (e) {
-          // Vorwoche noch nicht vorhanden
-        }
-      }
-
-      // 3. Sheets CSV Import
-      if (sheetsUrl) {
-        try {
-          const fetchUrl = sheetsUrl + (sheetsUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
-          const res = await fetch(fetchUrl);
-          if (res.ok) {
-            const csvText = await res.text();
-            parseAndSetTrainingLogs(csvText);
-            document.getElementById('sheetsStatusBadge').textContent = 'Live Sheets';
-            document.getElementById('sheetsStatusBadge').className = 'font-mono font-medium text-emerald-400';
-          }
-        } catch (e) {
-          console.warn('Sheets CSV Fetch Error', e);
-        }
-      }
-
-      spinner.classList.remove('animate-spin');
-      document.getElementById('lastUpdatedLabel').textContent = 'Sync: ' + new Date().toLocaleTimeString('de-DE');
-      
-      renderRankings();
-      if (state.activeTab === 'period') renderPeriodRankings();
-      renderRecentMarks();
-      if (state.activeTab === 'training') renderCharts();
-    }
-  </script>
+  <!-- ================= MOBILE BOTTOM DOCK (iPhone / iPad / Mobile) ================= -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 border-t border-slate-800 backdrop-blur-lg flex items-center justify-around px-2 py-1 shadow-2xl" style="padding-bottom: calc(var(--sab) + 4px);">
+    <button data-tab="rankings" class="mobile-dock-btn flex flex-col items-center justify-center flex-1 py-1 text-cyan-400 font-bold transition-all">
+      <span class="text-lg">🌍</span>
+      <span class="text-[10px] font-mono tracking-tight">Rankings</span>
+    </button>
+    <button data-tab="analytics" class="mobile-dock-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-500 hover:text-slate-300 font-medium transition-all">
+      <span class="text-lg">⚡</span>
+      <span class="text-[10px] font-mono tracking-tight">Training</span>
+    </button>
+    <button data-tab="qualification" class="mobile-dock-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-500 hover:text-slate-300 font-medium transition-all">
+      <span class="text-lg">⏱️</span>
+      <span class="text-[10px] font-mono tracking-tight">Quali-Hub</span>
+    </button>
+    <button data-tab="venues" class="mobile-dock-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-500 hover:text-slate-300 font-medium transition-all">
+      <span class="text-lg">📡</span>
+      <span class="text-[10px] font-mono tracking-tight">Venues</span>
+    </button>
+  </nav>
+
+  <!-- Load Modular Application Logic -->
+  <script src="js/rankings.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/qualification.js"></script>
+  <script src="js/venues.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

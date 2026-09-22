@@ -1,0 +1,86 @@
+{
+  "totalVariables": 64,
+  "categories": {
+    "context": [
+      { "id": "date", "name": "Date", "type": "date", "unit": "YYYY-MM-DD" },
+      { "id": "weekday", "name": "Wochentag", "type": "string" },
+      { "id": "season_year", "name": "Saison", "type": "integer" },
+      { "id": "period", "name": "Periodisierung", "type": "string", "options": ["Indoor", "Aufbau 1", "Aufbau 2", "Wettkampf", "Tapering", "Offseason"] },
+      { "id": "session_type", "name": "Einheiten-Typ", "type": "string", "options": ["Technik Sprung", "Kraft / e1RM", "Sprint / Anlauf", "Reaktivkraft / Plyo", "Regeneration / Prehab"] },
+      { "id": "start_time", "name": "Uhrzeit", "type": "time" },
+      { "id": "duration_min", "name": "Dauer", "type": "number", "unit": "min" }
+    ],
+    "biometrics_whoop_apple": [
+      { "id": "body_weight_kg", "name": "Körpergewicht", "type": "number", "unit": "kg" },
+      { "id": "hydration_score_1_5", "name": "Hydration Score", "type": "number", "unit": "1-5" },
+      { "id": "sleep_hours", "name": "Schlafdauer", "type": "number", "unit": "h" },
+      { "id": "sleep_quality_pct", "name": "Schlafqualität", "type": "number", "unit": "%" },
+      { "id": "sleep_rem_h", "name": "REM-Schlaf", "type": "number", "unit": "h" },
+      { "id": "sleep_deep_h", "name": "Tiefschlaf", "type": "number", "unit": "h" },
+      { "id": "whoop_recovery_pct", "name": "Whoop Recovery", "type": "number", "unit": "%" },
+      { "id": "whoop_strain", "name": "Whoop Day Strain", "type": "number", "unit": "0-21" },
+      { "id": "whoop_rhr", "name": "Ruhepuls (Whoop)", "type": "number", "unit": "bpm" },
+      { "id": "whoop_hrv", "name": "Herzfrequenzvariabilität HRV", "type": "number", "unit": "ms" },
+      { "id": "apple_health_rhr", "name": "Apple Health Ruhepuls", "type": "number", "unit": "bpm" },
+      { "id": "steps_count", "name": "Schritte Gesamt", "type": "integer" }
+    ],
+    "subjective_readiness": [
+      { "id": "energy_readiness_1_10", "name": "Subjektive Energie", "type": "number", "unit": "1-10" },
+      { "id": "muscle_soreness_1_10", "name": "Muskelkater / Tonus", "type": "number", "unit": "1-10" },
+      { "id": "hamstring_tightness_1_5", "name": "Beinbeuger-Spannung", "type": "number", "unit": "1-5" },
+      { "id": "takeoff_ankle_status_1_5", "name": "Sprunggelenk Absprungfuß", "type": "number", "unit": "1-5" },
+      { "id": "patella_tendon_load_1_5", "name": "Patellasehnen-Reizung", "type": "number", "unit": "1-5" }
+    ],
+    "jump_kinematics": [
+      { "id": "approach_speed_11m_to_1m", "name": "Anlaufgeschwindigkeit (11m-1m)", "type": "number", "unit": "m/s" },
+      { "id": "board_accuracy_cm", "name": "Balken-Genauigkeit (Verschenkt)", "type": "number", "unit": "cm" },
+      { "id": "jumps_count", "name": "Anzahl Gesamtsprünge", "type": "integer" },
+      { "id": "best_mark_m", "name": "Beste Weite (Balken)", "type": "number", "unit": "m" },
+      { "id": "eff_mark_m", "name": "Effektive Weite (ab Absprungspitze)", "type": "number", "unit": "m" },
+      { "id": "avg_jump_mark_m", "name": "Durchschnittsweite Serie", "type": "number", "unit": "m" },
+      { "id": "short_approach_jumps", "name": "Kurzanlaufsprünge", "type": "integer" },
+      { "id": "short_approach_best_m", "name": "Beste Weite Kurzanlauf", "type": "number", "unit": "m" },
+      { "id": "technique_style", "name": "Flugtechnik", "type": "string", "options": ["Hangsprung", "1.5 Laufsprung", "2.5 Laufsprung"] },
+      { "id": "wind_ms", "name": "Wind", "type": "number", "unit": "m/s" },
+      { "id": "temp_celsius", "name": "Temperatur", "type": "number", "unit": "°C" },
+      { "id": "facility", "name": "Anlage & Schuhwerk", "type": "string" }
+    ],
+    "strength_vbt": [
+      { "id": "trapbar_weight_kg", "name": "Trapbar Gewicht", "type": "number", "unit": "kg" },
+      { "id": "trapbar_reps", "name": "Trapbar Wdh", "type": "integer" },
+      { "id": "trapbar_e1rm_kg", "name": "Trapbar e1RM", "type": "number", "unit": "kg" },
+      { "id": "power_clean_kg", "name": "Umsetzen Last", "type": "number", "unit": "kg" },
+      { "id": "power_clean_e1rm_kg", "name": "Umsetzen e1RM", "type": "number", "unit": "kg" },
+      { "id": "hip_thrust_kg", "name": "Hip-Thrust Last", "type": "number", "unit": "kg" },
+      { "id": "hip_thrust_e1rm_kg", "name": "Hip-Thrust e1RM", "type": "number", "unit": "kg" },
+      { "id": "squat_kg", "name": "Kniebeuge / Pinsquat", "type": "number", "unit": "kg" },
+      { "id": "mean_concentric_velocity_ms", "name": "Hantel-Geschwindigkeit (VBT)", "type": "number", "unit": "m/s" },
+      { "id": "peak_power_watts", "name": "Spitzenleistung Kraft", "type": "number", "unit": "W" }
+    ],
+    "plyometrics_sprint": [
+      { "id": "drop_jump_height_cm", "name": "Drop Jump Sprunghöhe", "type": "number", "unit": "cm" },
+      { "id": "contact_time_ms", "name": "Bodenkontaktzeit", "type": "number", "unit": "ms" },
+      { "id": "rsi_score", "name": "Reactive Strength Index (RSI)", "type": "number", "unit": "Index" },
+      { "id": "standing_triple_jump_m", "name": "Dreiersprung aus dem Stand", "type": "number", "unit": "m" },
+      { "id": "sprint_30m_fly_s", "name": "30m Fliegend", "type": "number", "unit": "s" },
+      { "id": "sprint_10m_s", "name": "10m Antritt", "type": "number", "unit": "s" }
+    ],
+    "recovery_protocols": [
+      { "id": "recovery_sauna_min", "name": "Sauna", "type": "number", "unit": "min" },
+      { "id": "recovery_cold_min", "name": "Eisbad / Kälte", "type": "number", "unit": "min" },
+      { "id": "recovery_physio_min", "name": "Physio / Massage", "type": "number", "unit": "min" },
+      { "id": "recovery_normatec_min", "name": "Kompressionsstiefel", "type": "number", "unit": "min" },
+      { "id": "mobility_min", "name": "Mobility & Blackroll", "type": "number", "unit": "min" },
+      { "id": "supplements_logged", "name": "Supplemente (Kreatin/Beta-Alanin)", "type": "boolean" },
+      { "id": "caffeine_mg", "name": "Koffein Timing", "type": "number", "unit": "mg" },
+      { "id": "carb_intake_level", "name": "Kohlenhydrat-Versorgung", "type": "string", "options": ["Niedrig", "Moderat", "Hoch (Carb-Load)"] },
+      { "id": "caloric_balance", "name": "Kalorienbilanz", "type": "string", "options": ["Defizit", "Erhalt", "Überschuss"] }
+    ],
+    "load_and_notes": [
+      { "id": "session_rpe_1_10", "name": "Session RPE (Anstrengung)", "type": "number", "unit": "1-10" },
+      { "id": "session_training_load", "name": "Training Load (sRPE * min)", "type": "number", "unit": "AU" },
+      { "id": "coach_notes", "name": "Trainer-Feedback", "type": "text" },
+      { "id": "athlete_comments", "name": "Persönliche Notizen Luka", "type": "text" }
+    ]
+  }
+}

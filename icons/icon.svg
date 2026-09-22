@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded rect -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  <rect width="508" height="508" x="2" y="2" rx="110" fill="none" stroke="#1e293b" stroke-width="4"/>
+
+  <!-- Runway Marks / Jump Board -->
+  <g opacity="0.15">
+    <line x1="80" y1="400" x2="432" y2="400" stroke="#94a3b8" stroke-width="4" stroke-dasharray="8 12"/>
+    <line x1="80" y1="360" x2="432" y2="360" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4 8"/>
+  </g>
+
+  <!-- Takeoff Board (Glow Cyan) -->
+  <rect x="96" y="380" width="80" height="24" rx="6" fill="url(#accentGrad)" filter="url(#glow)"/>
+  <rect x="176" y="380" width="20" height="24" rx="3" fill="#ef4444"/>
+
+  <!-- Dynamic Jumper / Apex Arc -->
+  <path d="M 120 380 Q 240 120 392 340" fill="none" stroke="url(#accentGrad)" stroke-width="14" stroke-linecap="round" filter="url(#glow)"/>
+
+  <!-- Athlete Figure (Silhouette / Stylized Jump Apex) -->
+  <!-- Head -->
+  <circle cx="280" cy="180" r="24" fill="#ffffff" filter="url(#glow)"/>
+  <!-- Torso & In-flight extension (Hitch-kick / Hang style) -->
+  <path d="M 270 204 L 240 270 L 310 290 L 370 240" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Lead Leg extended into sandpit -->
+  <path d="M 310 290 L 380 300 L 420 320" fill="none" stroke="url(#goldGrad)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Trailing Leg -->
+  <path d="M 240 270 L 210 320 L 250 350" fill="none" stroke="#94a3b8" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Arms reaching forward for landing balance -->
+  <path d="M 260 220 L 330 200 L 380 230" fill="none" stroke="#e2e8f0" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- Landing Pit Target / 8.00m+ Indicator -->
+  <g transform="translate(370, 395)">
+    <rect x="-10" y="-12" width="70" height="26" rx="6" fill="#0369a1" stroke="#38bdf8" stroke-width="2"/>
+    <text x="25" y="6" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" text-anchor="middle" letter-spacing="1">8.18m</text>
+  </g>
+
+  <!-- Athletics Intelligence Monogram Badge (LH) -->
+  <rect x="40" y="44" width="72" height="36" rx="8" fill="#082f49" stroke="#0284c7" stroke-width="2"/>
+  <text x="76" y="68" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-weight="900" font-size="18" text-anchor="middle" letter-spacing="1.5">LH70</text>
+</svg>

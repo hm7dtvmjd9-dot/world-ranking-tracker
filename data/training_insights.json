@@ -1,0 +1,165 @@
+{
+  "targetMetric": "best_mark_m",
+  "totalSessions": 75,
+  "jumpsLogged": 35,
+  "jumpsOver8mCount": 19,
+  "topCorrelations": [
+    {
+      "variable": "eff_mark_m",
+      "correlation": 0.978,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Sehr stark"
+    },
+    {
+      "variable": "approach_speed_11m_to_1m",
+      "correlation": 0.907,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Sehr stark"
+    },
+    {
+      "variable": "muscle_soreness_1_10",
+      "correlation": -0.856,
+      "sampleSize": 35,
+      "direction": "Negativ (Hemmend / Ermüdung)",
+      "strength": "Sehr stark"
+    },
+    {
+      "variable": "whoop_recovery_pct",
+      "correlation": 0.847,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Sehr stark"
+    },
+    {
+      "variable": "sleep_hours",
+      "correlation": 0.796,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Sehr stark"
+    },
+    {
+      "variable": "rsi_score",
+      "correlation": 0.784,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Sehr stark"
+    },
+    {
+      "variable": "trapbar_e1rm_kg",
+      "correlation": 0.759,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Sehr stark"
+    },
+    {
+      "variable": "whoop_hrv",
+      "correlation": 0.755,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Sehr stark"
+    },
+    {
+      "variable": "whoop_rhr",
+      "correlation": -0.701,
+      "sampleSize": 35,
+      "direction": "Negativ (Hemmend / Ermüdung)",
+      "strength": "Sehr stark"
+    },
+    {
+      "variable": "power_clean_e1rm_kg",
+      "correlation": 0.69,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Stark"
+    },
+    {
+      "variable": "energy_readiness_1_10",
+      "correlation": 0.681,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Stark"
+    },
+    {
+      "variable": "hip_thrust_e1rm_kg",
+      "correlation": 0.608,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Stark"
+    },
+    {
+      "variable": "body_weight_kg",
+      "correlation": 0.346,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Moderat"
+    },
+    {
+      "variable": "duration_min",
+      "correlation": 0.291,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Schwach"
+    },
+    {
+      "variable": "session_training_load",
+      "correlation": 0.238,
+      "sampleSize": 35,
+      "direction": "Positiv (Leistungssteigernd)",
+      "strength": "Schwach"
+    }
+  ],
+  "eightMeterDrivers": [
+    {
+      "metric": "approach_speed_11m_to_1m",
+      "avgOver8m": 10.62,
+      "avgUnder8m": 10.47,
+      "delta": 0.15,
+      "insight": "+0.15 bei Sprüngen >= 8.00m"
+    },
+    {
+      "metric": "rsi_score",
+      "avgOver8m": 2.53,
+      "avgUnder8m": 2.23,
+      "delta": 0.3,
+      "insight": "+0.3 bei Sprüngen >= 8.00m"
+    },
+    {
+      "metric": "whoop_recovery_pct",
+      "avgOver8m": 62.58,
+      "avgUnder8m": 35.12,
+      "delta": 27.46,
+      "insight": "+27.46 bei Sprüngen >= 8.00m"
+    },
+    {
+      "metric": "whoop_hrv",
+      "avgOver8m": 113.84,
+      "avgUnder8m": 84.5,
+      "delta": 29.34,
+      "insight": "+29.34 bei Sprüngen >= 8.00m"
+    },
+    {
+      "metric": "sleep_hours",
+      "avgOver8m": 8.82,
+      "avgUnder8m": 7.81,
+      "delta": 1.01,
+      "insight": "+1.01 bei Sprüngen >= 8.00m"
+    },
+    {
+      "metric": "trapbar_e1rm_kg",
+      "avgOver8m": 246.73,
+      "avgUnder8m": 234.39,
+      "delta": 12.34,
+      "insight": "+12.34 bei Sprüngen >= 8.00m"
+    },
+    {
+      "metric": "body_weight_kg",
+      "avgOver8m": 79.34,
+      "avgUnder8m": 79.17,
+      "delta": 0.17,
+      "insight": "+0.17 bei Sprüngen >= 8.00m"
+    }
+  ],
+  "generatedAt": "2026-09-22"
+}
