@@ -82,9 +82,12 @@ def scrape_rankings(date_str=None, fetch_all_competitions=False):
         rows = [("", u, c) for u, c in rows_alt]
 
     total_rows = min(len(rows), 100)
-    print(f"Found {len(rows)} athletes. Extracting Top {total_rows}...")
+    print(f"Found {len(rows)} athletes. Extracting Top {total_rows} and fetching 5 counting competitions for all...")
+
+    from concurrent.futures import ThreadPoolExecutor
 
     athletes = []
+    data_ids = []
     for idx, (data_id, athlete_url, content) in enumerate(rows[:total_rows]):
         cells = re.findall(r'<td[^>]*data-th="([^"]+)"[^>]*>(.*?)</td>', content, re.DOTALL)
         clean = {th: re.sub(r'<[^>]+>', '', val).strip() for th, val in cells}
@@ -95,17 +98,7 @@ def scrape_rankings(date_str=None, fetch_all_competitions=False):
         dob = clean.get("DOB", "")
         score = int(clean.get("score", 0))
 
-        # Determine if we should fetch competitions:
-        # Always fetch for Luka Herden and German squad; fetch top 10 or all if requested
-        is_luka = "herden" in name.lower() or "herden" in athlete_url.lower()
-        is_ger = country == "GER"
-        should_fetch_comps = fetch_all_competitions or is_luka or is_ger or idx < 10
-
-        counted_meetings = []
-        if should_fetch_comps and data_id:
-            counted_meetings = fetch_competitions_for_athlete(data_id)
-            time.sleep(0.05)
-
+        data_ids.append(data_id)
         athletes.append({
             "rank": rank,
             "name": name,
@@ -114,8 +107,14 @@ def scrape_rankings(date_str=None, fetch_all_competitions=False):
             "ranking_score": score,
             "profile_url": f"https://worldathletics.org{athlete_url}" if athlete_url else "",
             "data_id": data_id,
-            "counted_competitions": counted_meetings
+            "counted_competitions": []
         })
+
+    with ThreadPoolExecutor(max_workers=25) as executor:
+        all_comps = list(executor.map(fetch_competitions_for_athlete, data_ids))
+
+    for ath, comps in zip(athletes, all_comps):
+        ath["counted_competitions"] = comps
 
     return athletes
 

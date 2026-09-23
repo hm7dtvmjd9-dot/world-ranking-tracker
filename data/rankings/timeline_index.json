@@ -2,6 +2,7 @@
   "event": "Men's Long Jump",
   "total_weeks": 162,
   "start_date": "2023-06-20",
+  "end_date": "2026-09-22",
   "weeks": [
     {
       "date": "2023-06-20",
@@ -1336,15 +1337,6 @@
       "topScore": 1368
     },
     {
-      "date": "2026-06-09",
-      "label": "09 JUN 2026",
-      "file": "rankings/ranking_2026-06-09.json",
-      "lukaRank": null,
-      "lukaScore": null,
-      "topAthlete": "",
-      "topScore": 0
-    },
-    {
       "date": "2026-06-16",
       "label": "16 JUN 2026",
       "file": "rankings/ranking_2026-06-16.json",
@@ -1457,6 +1449,15 @@
       "label": "15 SEP 2026",
       "file": "rankings/ranking_2026-09-15.json",
       "lukaRank": 70,
+      "lukaScore": 1144,
+      "topAthlete": "Miltiadis TENTOGLOU",
+      "topScore": 1402
+    },
+    {
+      "date": "2026-09-22",
+      "label": "22 SEP 2026",
+      "file": "rankings/ranking_2026-09-22.json",
+      "lukaRank": 69,
       "lukaScore": 1144,
       "topAthlete": "Miltiadis TENTOGLOU",
       "topScore": 1402

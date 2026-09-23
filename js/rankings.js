@@ -84,7 +84,9 @@ const RankingsModule = (() => {
         sb: sb > 0 ? sb : null,
         totalScore: parseInt(ath.ranking_score) || 0,
         profile_url: ath.profile_url || '',
-        countingMeetings: meetings
+        countingMeetings: meetings,
+        rankDelta: ath.rank_delta !== undefined ? ath.rank_delta : null,
+        scoreDelta: ath.score_delta !== undefined ? ath.score_delta : null
       };
     });
 
@@ -111,17 +113,16 @@ const RankingsModule = (() => {
       const elScore = document.getElementById('kpiMeScore');
       if (elScore) elScore.textContent = me.totalScore + ' Pkt';
 
-      const mePrev = state.previousAthletesMap[me.name.toLowerCase()];
       const elDelta = document.getElementById('kpiMeDelta');
       if (elDelta) {
-        if (mePrev) {
-          const delta = mePrev.rank - me.originalRank;
-          const ptsDelta = me.totalScore - mePrev.score;
+        if (me.rankDelta !== null && me.rankDelta !== undefined) {
+          const delta = me.rankDelta;
+          const ptsDelta = me.scoreDelta || 0;
           elDelta.innerHTML = delta > 0
             ? `<span class="text-emerald-400 font-bold">▲ +${delta} (${ptsDelta >= 0 ? '+' : ''}${ptsDelta} Pkt)</span>`
             : delta < 0
             ? `<span class="text-rose-400 font-bold">▼ ${Math.abs(delta)} (${ptsDelta} Pkt)</span>`
-            : `<span class="text-slate-400">WoW: ±0 Pkt</span>`;
+            : `<span class="text-slate-400">WoW: ±0 (${ptsDelta >= 0 ? '+' : ''}${ptsDelta} Pkt)</span>`;
         } else {
           elDelta.innerHTML = `<span class="text-cyan-400">SB: ${me.sb ? me.sb.toFixed(2) : '8.18'}m</span>`;
         }
@@ -179,16 +180,17 @@ const RankingsModule = (() => {
 
     let list = [...state.athletes];
 
-    // Calculate WoW Delays
+    // Ensure WoW Delays are populated
     list = list.map((ath, idx) => {
-      const aName = (ath.name || '').toLowerCase();
-      const prev = state.previousAthletesMap[aName];
-      let rankDelta = null;
-      let scoreDelta = null;
-
-      if (prev) {
-        rankDelta = prev.rank - ath.originalRank;
-        scoreDelta = ath.totalScore - prev.score;
+      let rankDelta = ath.rankDelta;
+      let scoreDelta = ath.scoreDelta;
+      if (rankDelta === undefined || rankDelta === null) {
+        const aName = (ath.name || '').toLowerCase();
+        const prev = state.previousAthletesMap[aName];
+        if (prev) {
+          rankDelta = prev.rank - ath.originalRank;
+          scoreDelta = ath.totalScore - prev.score;
+        }
       }
       return { ...ath, rankDelta, scoreDelta };
     });
@@ -213,13 +215,16 @@ const RankingsModule = (() => {
       const isExpanded = state.expandedRowId === ath.id;
 
       let wowBadge = '<span class="text-slate-600 font-mono text-[10px]">-</span>';
-      if (ath.rankDelta !== null) {
+      if (ath.rankDelta !== null && ath.rankDelta !== undefined) {
+        const ptsTxt = ath.scoreDelta !== null && ath.scoreDelta !== undefined && ath.scoreDelta !== 0
+          ? ` (${ath.scoreDelta > 0 ? '+' : ''}${ath.scoreDelta})`
+          : '';
         if (ath.rankDelta > 0) {
-          wowBadge = `<span class="text-emerald-400 font-bold font-mono text-[10px]">▲ +${ath.rankDelta}</span>`;
+          wowBadge = `<span class="text-emerald-400 font-bold font-mono text-[10px]" title="Aufstieg um ${ath.rankDelta} Plätze">▲ +${ath.rankDelta}${ptsTxt}</span>`;
         } else if (ath.rankDelta < 0) {
-          wowBadge = `<span class="text-rose-400 font-bold font-mono text-[10px]">▼ ${Math.abs(ath.rankDelta)}</span>`;
+          wowBadge = `<span class="text-rose-400 font-bold font-mono text-[10px]" title="Abstieg um ${Math.abs(ath.rankDelta)} Plätze">▼ ${Math.abs(ath.rankDelta)}${ptsTxt}</span>`;
         } else {
-          wowBadge = '<span class="text-slate-500 font-mono text-[10px]">±0</span>';
+          wowBadge = `<span class="text-slate-400 font-mono text-[10px]">±0${ptsTxt}</span>`;
         }
       }
 
@@ -479,17 +484,21 @@ const RankingsModule = (() => {
 
     if (!target) return;
 
-    const lukaScore = 1144;
-    const lukaRank = 70;
-    const athScore = parseInt(target.ranking_score || target.totalScore || 0);
-    const athRank = parseInt(target.rank || target.originalRank || 0);
+    const me = (window.App && window.App.state && window.App.state.athletes && window.App.state.athletes.find(a => a.name.toLowerCase().includes('herden')));
+    const lukaScore = me ? me.totalScore : 1144;
+    const lukaRank = me ? me.originalRank : 69;
+    const athScore = parseInt(target.ranking_score || target.totalScore || target.latest_score || 0);
+    const athRank = parseInt(target.rank || target.originalRank || target.latest_rank || 0);
     const scoreDiff = athScore - lukaScore;
     const rankDiff = lukaRank - athRank;
 
     document.getElementById('modalAthRank').textContent = '#' + athRank;
     document.getElementById('modalAthName').textContent = target.name;
     document.getElementById('modalAthCountry').textContent = target.country || target.nation || '';
-    document.getElementById('modalAthDob').textContent = `DOB: ${target.dob || '-'} • Score: ${athScore} Pkt`;
+    
+    const peakTxt = target.peak_rank ? ` • Peak: #${target.peak_rank} (${target.peak_score || 0} Pkt)` : '';
+    const weeksTxt = target.weeks_in_top100 ? ` • ${target.weeks_in_top100} Wo. Top 100` : '';
+    document.getElementById('modalAthDob').textContent = `DOB: ${target.dob || '-'} • Score: ${athScore} Pkt${peakTxt}${weeksTxt}`;
 
     const diffRankEl = document.getElementById('modalDiffRank');
     if (diffRankEl) {
@@ -515,8 +524,14 @@ const RankingsModule = (() => {
     }
 
     // Populate competitions
+    const compTitle = document.getElementById('modalCompetitionsTitle');
     const compBody = document.getElementById('modalCompetitionsBody');
     const comps = target.counted_competitions || target.countingMeetings || [];
+    
+    if (compTitle) {
+      compTitle.textContent = `🏆 ERFASSTE WETTKÄMPFE (${comps.length} Wettkämpfe in der WA-Datenbank)`;
+    }
+
     if (compBody) {
       if (comps.length > 0) {
         compBody.innerHTML = comps.map(c => `
