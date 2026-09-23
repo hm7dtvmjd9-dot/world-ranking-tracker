@@ -57,7 +57,8 @@ const AnalyticsModule = (() => {
 
   function renderDailyWhoopCockpit(state) {
     const logs = state.trainingLogs || [];
-    const currentLog = logs.find(l => l.date === currentSelectedDate) || logs.slice(-1)[0] || {};
+    const dayLogs = logs.filter(l => l.date === currentSelectedDate);
+    const currentLog = dayLogs.find(l => l.whoop_recovery_pct != null) || dayLogs[0] || logs.slice(-1)[0] || {};
 
     // Update Date Display & Date Input
     const dateDisplay = document.getElementById('selectedTrainingDayDisplay');
@@ -204,16 +205,23 @@ const AnalyticsModule = (() => {
     if (!container) return;
 
     const logs = state.trainingLogs || [];
-    const currentLog = logs.find(l => l.date === currentSelectedDate) || logs.slice(-1)[0] || {};
-    const exercises = currentLog.exercises || [];
+    const daySessions = logs.filter(l => l.date === currentSelectedDate);
+    const primaryLog = daySessions[0] || logs.slice(-1)[0] || {};
 
-    const isRest = currentLog.duration_min === 0 || currentLog.session_type === 'Regeneration / Ruhetag';
+    const isRest = daySessions.length === 0 || (daySessions.length === 1 && (primaryLog.duration_min === 0 || primaryLog.session_type === 'Regeneration / Ruhetag'));
 
     if (badge) {
-      badge.textContent = isRest ? 'Ruhetag' : `${exercises.length > 0 ? exercises.length + ' Übungen' : '1 Einheit'}`;
+      if (isRest) {
+        badge.textContent = 'Ruhetag';
+      } else if (daySessions.length > 1) {
+        badge.textContent = `${daySessions.length} Einheiten`;
+      } else {
+        const exCount = (primaryLog.exercises || []).length;
+        badge.textContent = exCount > 0 ? `${exCount} Übungen` : '1 Einheit';
+      }
     }
 
-    if (isRest && exercises.length === 0) {
+    if (isRest && (!primaryLog.exercises || primaryLog.exercises.length === 0)) {
       container.innerHTML = `
         <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 text-center space-y-2">
           <span class="text-2xl">🧘‍♂️</span>
@@ -226,85 +234,93 @@ const AnalyticsModule = (() => {
       return;
     }
 
-    // Generate session card
-    let typeBadge = 'bg-cyan-950 text-cyan-300 border-cyan-700';
-    if ((currentLog.session_type || '').includes('Sprung')) {
-      typeBadge = 'bg-amber-950 text-amber-300 border-amber-700';
-    } else if ((currentLog.session_type || '').includes('Kraft')) {
-      typeBadge = 'bg-emerald-950 text-emerald-300 border-emerald-700';
-    } else if ((currentLog.session_type || '').includes('Sprint')) {
-      typeBadge = 'bg-purple-950 text-purple-300 border-purple-700';
-    }
+    // Render all sessions for the day
+    const sessionsToRender = daySessions.length > 0 ? daySessions : [primaryLog];
+    
+    container.innerHTML = sessionsToRender.map((log, sIdx) => {
+      const exercises = log.exercises || [];
 
-    let exercisesRows = '';
-    if (exercises.length > 0) {
-      exercisesRows = exercises.map(ex => `
-        <tr class="hover:bg-slate-900/50">
-          <td class="py-2 px-2.5 font-bold text-white font-sans text-xs">${ex.name}</td>
-          <td class="py-2 px-2 text-center text-slate-300 font-mono">${ex.sets} x ${ex.reps}</td>
-          <td class="py-2 px-2 text-right font-mono font-bold text-cyan-400">${ex.load || '-'}</td>
-          <td class="py-2 px-2 text-right font-mono font-bold text-amber-400">${ex.speed || '-'}</td>
-          <td class="py-2 px-2.5 text-slate-400 font-sans text-[11px]">${ex.notes || '-'}</td>
-        </tr>
-      `).join('');
-    } else {
-      // Fallback default exercises for the day's session type
-      exercisesRows = `
-        <tr class="hover:bg-slate-900/50">
-          <td class="py-2 px-2.5 font-bold text-white font-sans text-xs">Hauptübung (${currentLog.session_type || 'Training'})</td>
-          <td class="py-2 px-2 text-center text-slate-300 font-mono">4 x 3</td>
-          <td class="py-2 px-2 text-right font-mono font-bold text-cyan-400">${currentLog.trapbar_e1rm_kg ? currentLog.trapbar_e1rm_kg + ' kg' : 'BW'}</td>
-          <td class="py-2 px-2 text-right font-mono font-bold text-amber-400">${currentLog.approach_speed_11m_to_1m ? currentLog.approach_speed_11m_to_1m + ' m/s' : currentLog.rsi_score ? 'RSI ' + currentLog.rsi_score : '0.82 m/s'}</td>
-          <td class="py-2 px-2.5 text-slate-400 font-sans text-[11px]">${currentLog.athlete_comments || 'Einheit planmäßig absolviert'}</td>
-        </tr>
+      // Generate session type badge
+      let typeBadge = 'bg-cyan-950 text-cyan-300 border-cyan-700';
+      if ((log.session_type || '').includes('Sprung')) {
+        typeBadge = 'bg-amber-950 text-amber-300 border-amber-700';
+      } else if ((log.session_type || '').includes('Kraft')) {
+        typeBadge = 'bg-emerald-950 text-emerald-300 border-emerald-700';
+      } else if ((log.session_type || '').includes('Sprint')) {
+        typeBadge = 'bg-purple-950 text-purple-300 border-purple-700';
+      }
+
+      let exercisesRows = '';
+      if (exercises.length > 0) {
+        exercisesRows = exercises.map(ex => `
+          <tr class="hover:bg-slate-900/50">
+            <td class="py-2 px-2.5 font-bold text-white font-sans text-xs">${ex.name}</td>
+            <td class="py-2 px-2 text-center text-slate-300 font-mono">${ex.sets} x ${ex.reps}</td>
+            <td class="py-2 px-2 text-right font-mono font-bold text-cyan-400">${ex.load || '-'}</td>
+            <td class="py-2 px-2 text-right font-mono font-bold text-amber-400">${ex.speed || '-'}</td>
+            <td class="py-2 px-2.5 text-slate-400 font-sans text-[11px]">${ex.notes || '-'}</td>
+          </tr>
+        `).join('');
+      } else {
+        exercisesRows = `
+          <tr class="hover:bg-slate-900/50">
+            <td class="py-2 px-2.5 font-bold text-white font-sans text-xs">Hauptübung (${log.session_type || 'Training'})</td>
+            <td class="py-2 px-2 text-center text-slate-300 font-mono">4 x 3</td>
+            <td class="py-2 px-2 text-right font-mono font-bold text-cyan-400">${log.trapbar_e1rm_kg ? log.trapbar_e1rm_kg + ' kg' : 'BW'}</td>
+            <td class="py-2 px-2 text-right font-mono font-bold text-amber-400">${log.approach_speed_11m_to_1m ? log.approach_speed_11m_to_1m + ' m/s' : log.rsi_score ? 'RSI ' + log.rsi_score : '0.82 m/s'}</td>
+            <td class="py-2 px-2.5 text-slate-400 font-sans text-[11px]">${log.athlete_comments || 'Einheit planmäßig absolviert'}</td>
+          </tr>
+        `;
+      }
+
+      return `
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-3">
+          <!-- Session Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
+              ${sessionsToRender.length > 1 ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-slate-800 text-white">Einheit ${sIdx + 1}</span>` : ''}
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase border ${typeBadge}">
+                ${log.session_type || 'Training'}
+              </span>
+              <span class="font-bold text-white text-xs font-mono">
+                ⏱️ ${log.duration_min || 90} Min. Dauer
+              </span>
+              ${log.best_mark_m ? `<span class="px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 font-black text-[9px] font-mono">BESTWEITE: ${log.best_mark_m}m</span>` : ''}
+            </div>
+
+            <div class="flex items-center gap-3 text-[11px] font-mono text-slate-400">
+              ${log.approach_speed_11m_to_1m ? `<span>Speed: <strong class="text-cyan-300">${log.approach_speed_11m_to_1m} m/s</strong></span>` : ''}
+              ${log.rsi_score ? `<span>RSI: <strong class="text-amber-300">${log.rsi_score}</strong></span>` : ''}
+              ${log.session_rpe_1_10 ? `<span>RPE: <strong class="text-purple-300">${log.session_rpe_1_10}/10</strong></span>` : ''}
+            </div>
+          </div>
+
+          <!-- Exercise Details Accordion Table -->
+          <div class="overflow-x-auto border border-slate-800/80 rounded-lg">
+            <table class="w-full text-left border-collapse text-[11px] font-mono">
+              <thead>
+                <tr class="bg-slate-900 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
+                  <th class="py-1.5 px-2.5">Übung</th>
+                  <th class="py-1.5 px-2 text-center">Sätze & Wdh.</th>
+                  <th class="py-1.5 px-2 text-right">Last / Gewicht</th>
+                  <th class="py-1.5 px-2 text-right">VBT Speed / Reaktivität</th>
+                  <th class="py-1.5 px-2.5">Trainer- / Athletennotiz</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/40">
+                ${exercisesRows}
+              </tbody>
+            </table>
+          </div>
+        </div>
       `;
-    }
-
-    container.innerHTML = `
-      <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-3">
-        <!-- Session Header -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase border ${typeBadge}">
-              ${currentLog.session_type || 'Training'}
-            </span>
-            <span class="font-bold text-white text-xs font-mono">
-              ⏱️ ${currentLog.duration_min || 90} Min. Dauer
-            </span>
-            ${currentLog.best_mark_m ? `<span class="px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 font-black text-[9px] font-mono">BESTWEITE: ${currentLog.best_mark_m}m</span>` : ''}
-          </div>
-
-          <div class="flex items-center gap-3 text-[11px] font-mono text-slate-400">
-            ${currentLog.approach_speed_11m_to_1m ? `<span>Speed: <strong class="text-cyan-300">${currentLog.approach_speed_11m_to_1m} m/s</strong></span>` : ''}
-            ${currentLog.rsi_score ? `<span>RSI: <strong class="text-amber-300">${currentLog.rsi_score}</strong></span>` : ''}
-            ${currentLog.session_rpe_1_10 ? `<span>RPE: <strong class="text-purple-300">${currentLog.session_rpe_1_10}/10</strong></span>` : ''}
-          </div>
-        </div>
-
-        <!-- Exercise Details Accordion Table -->
-        <div class="overflow-x-auto border border-slate-800/80 rounded-lg">
-          <table class="w-full text-left border-collapse text-[11px] font-mono">
-            <thead>
-              <tr class="bg-slate-900 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
-                <th class="py-1.5 px-2.5">Übung</th>
-                <th class="py-1.5 px-2 text-center">Sätze & Wdh.</th>
-                <th class="py-1.5 px-2 text-right">Last / Gewicht</th>
-                <th class="py-1.5 px-2 text-right">VBT Speed / Reaktivität</th>
-                <th class="py-1.5 px-2.5">Trainer- / Athletennotiz</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-800/40">
-              ${exercisesRows}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    `;
+    }).join('<div class="h-2"></div>');
   }
 
   function renderDailyJournal(state) {
     const logs = state.trainingLogs || [];
-    const currentLog = logs.find(l => l.date === currentSelectedDate) || logs.slice(-1)[0] || {};
+    const dayLogs = logs.filter(l => l.date === currentSelectedDate);
+    const currentLog = dayLogs.find(l => l.body_weight_kg != null || l.athlete_comments) || dayLogs[0] || logs.slice(-1)[0] || {};
 
     const elWeight = document.getElementById('journalWeightVal');
     if (elWeight) {
@@ -442,46 +458,104 @@ const AnalyticsModule = (() => {
     }
   }
 
+  function normalizeDateStr(raw) {
+    if (!raw) return null;
+    const s = String(raw).trim();
+    // YYYY-MM-DD
+    if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(s)) {
+      const parts = s.split('-');
+      return `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+    }
+    // M/D/YYYY or MM/DD/YYYY
+    if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
+      const parts = s.split('/');
+      const month = parts[0].padStart(2, '0');
+      const day = parts[1].padStart(2, '0');
+      const year = parts[2];
+      return `${year}-${month}-${day}`;
+    }
+    // DD.MM.YYYY
+    if (/^\d{1,2}\.\d{1,2}\.\d{4}$/.test(s)) {
+      const parts = s.split('.');
+      const day = parts[0].padStart(2, '0');
+      const month = parts[1].padStart(2, '0');
+      const year = parts[2];
+      return `${year}-${month}-${day}`;
+    }
+    return s;
+  }
+
   function parseCsvTrainingLogs(csvText) {
     const lines = csvText.trim().split(/\r?\n/);
     if (lines.length < 2) return [];
 
-    const header = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/[\"\'\s]/g, '_'));
+    const firstLine = lines[0];
+    const delimiter = (firstLine.match(/;/g) || []).length > (firstLine.match(/,/g) || []).length ? ';' : ',';
+
+    function splitLine(line) {
+      if (delimiter === ';') {
+        return line.split(';').map(c => c.trim().replace(/^["']|["']$/g, ''));
+      }
+      const pattern = /(?:^|,)(?:"([^"]*)"|([^,]*))/g;
+      const res = [];
+      let m;
+      while ((m = pattern.exec(line)) !== null) {
+        res.push((m[1] !== undefined ? m[1] : m[2] || '').trim());
+      }
+      return res;
+    }
+
+    const header = splitLine(firstLine).map(h => h.trim().toLowerCase().replace(/[\"\'\s]/g, '_'));
     const logs = [];
+
+    const parseNum = (v) => {
+      if (v == null || v === '') return null;
+      const clean = String(v).replace(',', '.').trim();
+      const n = parseFloat(clean);
+      return isNaN(n) ? null : n;
+    };
+
+    const parseIntNum = (v) => {
+      if (v == null || v === '') return null;
+      const clean = String(v).replace(',', '.').trim();
+      const n = parseInt(clean, 10);
+      return isNaN(n) ? null : n;
+    };
 
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i].trim();
       if (!line) continue;
-      const cols = line.split(',').map(c => c.trim().replace(/^[\"\']|[\"\']$/g, ''));
+      const cols = splitLine(line);
       const row = {};
       header.forEach((h, idx) => {
         row[h] = cols[idx] !== undefined ? cols[idx] : null;
       });
 
-      // Map common column name variations
-      const d = row.date || row.datum || row.tag;
+      // Map date from header synonyms or fall back to column 0
+      const rawDate = row.date || row.datum || row.tag || row.day || cols[0];
+      const d = normalizeDateStr(rawDate);
       if (!d) continue;
 
       logs.push({
         date: d,
-        session_type: row.session_type || row.einheit || row.typ || 'Training',
-        duration_min: parseInt(row.duration_min || row.dauer || 90) || 90,
-        body_weight_kg: parseFloat(row.body_weight_kg || row.gewicht || row.weight) || 78.4,
-        sleep_hours: parseFloat(row.sleep_hours || row.schlaf || row.sleep) || 8.0,
-        whoop_recovery_pct: parseInt(row.whoop_recovery_pct || row.recovery || row.erholung) || 85,
-        whoop_hrv: parseInt(row.whoop_hrv || row.hrv) || 92,
-        whoop_rhr: parseInt(row.whoop_rhr || row.rhr || row.ruhepuls) || 47,
-        whoop_strain: parseFloat(row.whoop_strain || row.strain || row.belastung) || 14.5,
-        approach_speed_11m_to_1m: parseFloat(row.approach_speed_11m_to_1m || row.speed || row.geschwindigkeit) || null,
-        rsi_score: parseFloat(row.rsi_score || row.rsi) || null,
-        best_mark_m: parseFloat(row.best_mark_m || row.weite || row.mark) || null,
-        eff_mark_m: parseFloat(row.eff_mark_m || row.effektive_weite) || null,
-        trapbar_e1rm_kg: parseFloat(row.trapbar_e1rm_kg || row.trapbar) || null,
-        calories_kcal: parseInt(row.calories_kcal || row.kalorien || row.kcal) || 3400,
-        water_liters: parseFloat(row.water_liters || row.wasser) || 4.0,
-        energy_readiness_1_10: parseInt(row.energy_readiness_1_10 || row.energie) || 8,
-        muscle_soreness_1_10: parseInt(row.muscle_soreness_1_10 || row.muskelkater) || 2,
-        athlete_comments: row.athlete_comments || row.kommentar || row.notizen || row.notes || ''
+        session_type: row.session_type || row.einheit || row.typ || row.training || row.trainingsart || 'Training',
+        duration_min: parseIntNum(row.duration_min || row.dauer || row.duration || row.minuten) || 90,
+        body_weight_kg: parseNum(row.body_weight_kg || row.gewicht || row.weight || row.kg) || 78.4,
+        sleep_hours: parseNum(row.sleep_hours || row.schlaf || row.sleep || row.schlafdauer) || 8.0,
+        whoop_recovery_pct: parseIntNum(row.whoop_recovery_pct || row.recovery || row.recovery_pct || row.erholung),
+        whoop_hrv: parseIntNum(row.whoop_hrv || row.hrv || row.rmssd),
+        whoop_rhr: parseIntNum(row.whoop_rhr || row.rhr || row.ruhepuls || row.puls),
+        whoop_strain: parseNum(row.whoop_strain || row.strain || row.belastung || row.tagesbelastung),
+        approach_speed_11m_to_1m: parseNum(row.approach_speed_11m_to_1m || row.speed || row.anlauf || row.geschwindigkeit),
+        rsi_score: parseNum(row.rsi_score || row.rsi || row.reaktivitaet),
+        best_mark_m: parseNum(row.best_mark_m || row.weite || row.mark || row.bestweite),
+        eff_mark_m: parseNum(row.eff_mark_m || row.effektive_weite || row.effektiv),
+        trapbar_e1rm_kg: parseNum(row.trapbar_e1rm_kg || row.trapbar || row.kraft),
+        calories_kcal: parseIntNum(row.calories_kcal || row.kalorien || row.kcal) || 3400,
+        water_liters: parseNum(row.water_liters || row.wasser || row.water || row.liter) || 4.0,
+        energy_readiness_1_10: parseIntNum(row.energy_readiness_1_10 || row.energie || row.energy) || 8,
+        muscle_soreness_1_10: parseIntNum(row.muscle_soreness_1_10 || row.muskelkater || row.soreness) || 2,
+        athlete_comments: row.athlete_comments || row.kommentar || row.notizen || row.notes || row.journal || ''
       });
     }
 
@@ -851,6 +925,7 @@ const AnalyticsModule = (() => {
     openSheetsModal,
     saveSheetsUrl,
     resetToSampleData,
-    syncGoogleSheets
+    syncGoogleSheets,
+    parseCsvTrainingLogs
   };
 })();
