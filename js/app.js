@@ -71,9 +71,20 @@ const App = (() => {
             totalScore: parseInt(ath.ranking_score || ath.total_score || 0),
             countingMeetings: meetings.map(c => {
               let cleanWind = c.wind;
-              if (cleanWind !== null && cleanWind !== undefined) {
-                const nw = parseFloat(cleanWind);
-                if (!isNaN(nw) && Math.abs(nw) >= 10) cleanWind = (nw / 10).toFixed(1);
+              if (cleanWind !== null && cleanWind !== undefined && cleanWind !== '') {
+                const s = String(cleanWind).replace('m/s', '').trim();
+                const nw = parseFloat(s);
+                if (!isNaN(nw)) {
+                  let val = nw;
+                  if (Math.abs(nw) >= 10 && !String(cleanWind).includes('m/s')) {
+                    val = nw / 10;
+                  }
+                  if (Math.abs(val) < 0.01) {
+                    cleanWind = '0.0 m/s';
+                  } else {
+                    cleanWind = (val > 0 ? '+' : '') + val.toFixed(1) + ' m/s';
+                  }
+                }
               }
               return { ...c, wind: cleanWind };
             })

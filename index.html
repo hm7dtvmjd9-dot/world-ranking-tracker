@@ -587,17 +587,33 @@
             <div class="md:col-span-7">
               <input id="athleteDbSearchInput" type="text" placeholder="Suche Athlet (z.B. Anvarov, Tentoglou, Herden, Ehammer, Furlani, Batz)..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
             </div>
-            <div class="md:col-span-5 flex flex-wrap items-center gap-1 font-mono text-[10px]">
-              <span class="text-slate-400 font-bold uppercase mr-1">Nation:</span>
-              <button data-dbnation="ALL" class="dbnat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white">ALL</button>
-              <button data-dbnation="GER" class="dbnat-filter-btn px-2 py-0.5 rounded text-cyan-400 border border-cyan-800 bg-slate-950 hover:bg-slate-800">GER</button>
-              <button data-dbnation="UZB" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">UZB</button>
-              <button data-dbnation="GRE" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">GRE</button>
-              <button data-dbnation="ITA" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">ITA</button>
-              <button data-dbnation="SUI" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">SUI</button>
-              <button data-dbnation="JAM" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">JAM</button>
-              <button data-dbnation="USA" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">USA</button>
+            <div class="md:col-span-5 flex items-center gap-1.5 font-mono text-[10px]">
+              <label for="athleteDbSortSelect" class="text-slate-400 font-bold uppercase whitespace-nowrap">Sortierung:</label>
+              <select id="athleteDbSortSelect" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-cyan-300 font-mono focus:outline-none focus:border-cyan-500">
+                <option value="latest_rank" selected>Aktueller Rang (#1 bis #100)</option>
+                <option value="peak_rank">All-Time Peak Rang (#1 - #100)</option>
+                <option value="peak_score">All-Time Peak Score (Höchster)</option>
+                <option value="best_mark">Bestleistung (PB/SB Weite)</option>
+                <option value="name_asc">Name (A → Z)</option>
+                <option value="name_desc">Name (Z → A)</option>
+                <option value="dob_desc">Alter (Jüngste zuerst)</option>
+                <option value="dob_asc">Alter (Älteste zuerst)</option>
+                <option value="weeks">Wochen in den Top 100</option>
+                <option value="nation">Nation (A → Z)</option>
+              </select>
             </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1 font-mono text-[10px] pt-1 border-t border-slate-800/60">
+            <span class="text-slate-400 font-bold uppercase mr-1">Nation Filter:</span>
+            <button data-dbnation="ALL" class="dbnat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white">ALL</button>
+            <button data-dbnation="GER" class="dbnat-filter-btn px-2 py-0.5 rounded text-cyan-400 border border-cyan-800 bg-slate-950 hover:bg-slate-800">GER</button>
+            <button data-dbnation="UZB" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">UZB</button>
+            <button data-dbnation="GRE" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">GRE</button>
+            <button data-dbnation="ITA" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">ITA</button>
+            <button data-dbnation="SUI" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">SUI</button>
+            <button data-dbnation="JAM" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">JAM</button>
+            <button data-dbnation="USA" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">USA</button>
           </div>
         </div>
 
@@ -630,14 +646,26 @@
             <div class="md:col-span-7">
               <input id="meetingsDbSearchInput" type="text" placeholder="Suche Wettkampf (z.B. European Championships 2024, Rom, Gorzów, Überflieger, Kassel, Diamond League)..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono" />
             </div>
-            <div class="md:col-span-5 flex flex-wrap items-center gap-1 font-mono text-[10px]">
-              <span class="text-slate-400 font-bold uppercase mr-1">Kategorie:</span>
-              <button data-catfilter="ALL" class="cat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white">ALL</button>
-              <button data-catfilter="GL" class="cat-filter-btn px-2 py-0.5 rounded text-amber-400 border border-amber-800 bg-slate-950 hover:bg-slate-800">OW / GL</button>
-              <button data-catfilter="A" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. A</button>
-              <button data-catfilter="B" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. B</button>
-              <button data-catfilter="C" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. C</button>
+            <div class="md:col-span-5 flex items-center gap-1.5 font-mono text-[10px]">
+              <label for="meetingDbSortSelect" class="text-slate-400 font-bold uppercase whitespace-nowrap">Sortierung:</label>
+              <select id="meetingDbSortSelect" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-amber-300 font-mono focus:outline-none focus:border-amber-500">
+                <option value="density" selected>Top-100-Dichte (Teilnehmerzahl)</option>
+                <option value="category">Kategorie (OW/GL → A → B → C → D)</option>
+                <option value="date_desc">Datum (Neueste zuerst)</option>
+                <option value="date_asc">Datum (Älteste zuerst)</option>
+                <option value="name_asc">Meeting-Name (A → Z)</option>
+                <option value="top_mark">Beste Weite (Top-Mark)</option>
+              </select>
             </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1 font-mono text-[10px] pt-1 border-t border-slate-800/60">
+            <span class="text-slate-400 font-bold uppercase mr-1">Kategorie Filter:</span>
+            <button data-catfilter="ALL" class="cat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white">ALL</button>
+            <button data-catfilter="GL" class="cat-filter-btn px-2 py-0.5 rounded text-amber-400 border border-amber-800 bg-slate-950 hover:bg-slate-800">OW / GL</button>
+            <button data-catfilter="A" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. A</button>
+            <button data-catfilter="B" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. B</button>
+            <button data-catfilter="C" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. C</button>
           </div>
         </div>
 
@@ -646,6 +674,7 @@
           <!-- Populated dynamically by rankings.js -->
         </div>
       </div>
+    </div> <!-- Close tabContentRankings -->
 
     <!-- ================= TAB 3: QUALIFICATION & NOMINATION HUB ================= -->
     <div id="tabContentQualification" class="hidden space-y-4">
@@ -879,6 +908,7 @@
                   <th class="py-2 px-2.5">Meeting / Ort</th>
                   <th class="py-2 px-2 text-center">Kat.</th>
                   <th class="py-2 px-2 text-right">Weite</th>
+                  <th class="py-2 px-2 text-center">Wind</th>
                   <th class="py-2 px-2 text-center">Pl.</th>
                   <th class="py-2 px-2 text-right font-bold text-white">Score</th>
                 </tr>

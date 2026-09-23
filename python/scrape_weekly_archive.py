@@ -57,6 +57,20 @@ def get_official_dates(start_date="2023-06-20"):
     valid.sort(key=lambda x: x["value"])
     return valid
 
+def normalize_wind(raw):
+    if raw is None or raw == "" or str(raw).lower() in ["none", "null", "nan", "-", "none m/s"]:
+        return None
+    try:
+        s = str(raw).replace("m/s", "").strip()
+        val = float(s)
+        if "m/s" not in str(raw):
+            val = val / 10.0
+        if abs(val) < 0.01:
+            return "0.0 m/s"
+        return f"{val:+.1f} m/s"
+    except (ValueError, TypeError):
+        return None
+
 def fetch_single_athlete_competitions(data_id):
     """Fetches exact 5 counting competitions directly from World Athletics Calculation API."""
     if not data_id:
@@ -82,7 +96,7 @@ def fetch_single_athlete_competitions(data_id):
                     "venue": r.get("venue", ""),
                     "category": r.get("category"),
                     "mark": r.get("mark"),
-                    "wind": r.get("wind"),
+                    "wind": normalize_wind(r.get("wind")),
                     "place": r.get("place"),
                     "result_score": r.get("resultScore"),
                     "placing_score": r.get("placingScore"),

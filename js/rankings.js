@@ -10,10 +10,74 @@ const RankingsModule = (() => {
   let activeSubTab = 'ranking'; // 'ranking' | 'athletes' | 'meetings'
   let athleteSearchQuery = '';
   let athleteSelectedNation = 'ALL';
+  let athleteSortBy = 'latest_rank';
+  let displayedAthletesLimit = 50;
+
   let meetingSearchQuery = '';
   let meetingSelectedCategory = 'ALL';
+  let meetingSortBy = 'density';
+  let displayedMeetingsLimit = 40;
+
   let expandedAthleteDbId = null;
   let expandedMeetingDbName = null;
+
+  function formatWindBadge(w) {
+    if (!w || w === '-' || w === 'null' || w === 'None' || w === 'none') {
+      return '<span class="text-slate-600 font-mono text-[10px]">-</span>';
+    }
+    const cleanStr = String(w).trim();
+    if (cleanStr.startsWith('-')) {
+      return `<span class="px-1.5 py-0.2 rounded font-mono font-bold text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800" title="Gegenwind (+Bonus-Punkte)">${cleanStr} 🌬️</span>`;
+    }
+    const val = parseFloat(cleanStr.replace('+', '').replace('m/s', ''));
+    if (!isNaN(val) && val > 2.05) {
+      return `<span class="px-1.5 py-0.2 rounded font-mono font-bold text-[9px] bg-amber-950 text-amber-300 border border-amber-800" title="Rückenwind über +2.0 m/s">${cleanStr}</span>`;
+    }
+    return `<span class="text-slate-300 font-mono text-[9px]">${cleanStr}</span>`;
+  }
+
+  function parseAthleteDob(dobStr) {
+    if (!dobStr) return 0;
+    const parts = dobStr.trim().split(/\s+/);
+    const months = { 'JAN': 0, 'FEB': 1, 'MAR': 2, 'APR': 3, 'MAY': 4, 'JUN': 5, 'JUL': 6, 'AUG': 7, 'SEP': 8, 'OCT': 9, 'NOV': 10, 'DEC': 11 };
+    if (parts.length === 3) {
+      const day = parseInt(parts[0]) || 1;
+      const mIdx = months[parts[1].toUpperCase()] !== undefined ? months[parts[1].toUpperCase()] : 0;
+      const year = parseInt(parts[2]) || 2000;
+      return new Date(year, mIdx, day).getTime();
+    }
+    const d = new Date(dobStr);
+    return isNaN(d.getTime()) ? 0 : d.getTime();
+  }
+
+  function parseDateStr(str) {
+    if (!str) return 0;
+    const months = { 'JAN': 0, 'FEB': 1, 'MAR': 2, 'APR': 3, 'MAY': 4, 'JUN': 5, 'JUL': 6, 'AUG': 7, 'SEP': 8, 'OCT': 9, 'NOV': 10, 'DEC': 11 };
+    const parts = str.trim().split(/\s+/);
+    if (parts.length === 3) {
+      const d = parseInt(parts[0]) || 1;
+      const m = months[parts[1].toUpperCase()] !== undefined ? months[parts[1].toUpperCase()] : 0;
+      const y = parseInt(parts[2]) || 2024;
+      return new Date(y, m, d).getTime();
+    }
+    const dt = new Date(str);
+    return isNaN(dt.getTime()) ? 0 : dt.getTime();
+  }
+
+  function getMeetingSortDate(meet, newest = true) {
+    const dates = (meet.dates_seen || []).map(parseDateStr).filter(t => t > 0);
+    if (dates.length === 0) return 0;
+    return newest ? Math.max(...dates) : Math.min(...dates);
+  }
+
+  function getMeetingTopMark(meet) {
+    let top = 0;
+    (meet.results || []).forEach(r => {
+      const v = parseFloat(r.mark);
+      if (!isNaN(v) && v > top) top = v;
+    });
+    return top;
+  }
 
   function render(state) {
     initSubTabs(state);
@@ -36,12 +100,23 @@ const RankingsModule = (() => {
     btnAthletes.onclick = () => switchSubTab(state, 'athletes');
     btnMeetings.onclick = () => switchSubTab(state, 'meetings');
 
-    // Athlete Search Listeners
+    // Athlete Search & Sort Listeners
     const athInput = document.getElementById('athleteDbSearchInput');
     if (athInput && !athInput.dataset.bound) {
       athInput.dataset.bound = 'true';
       athInput.oninput = (e) => {
         athleteSearchQuery = e.target.value;
+        displayedAthletesLimit = 50;
+        renderAthletesDatabase(state);
+      };
+    }
+
+    const athSort = document.getElementById('athleteDbSortSelect');
+    if (athSort && !athSort.dataset.bound) {
+      athSort.dataset.bound = 'true';
+      athSort.onchange = (e) => {
+        athleteSortBy = e.target.value;
+        displayedAthletesLimit = 50;
         renderAthletesDatabase(state);
       };
     }
@@ -55,17 +130,29 @@ const RankingsModule = (() => {
           });
           btn.className = 'dbnat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white';
           athleteSelectedNation = btn.dataset.dbnation;
+          displayedAthletesLimit = 50;
           renderAthletesDatabase(state);
         };
       }
     });
 
-    // Meeting Search Listeners
+    // Meeting Search & Sort Listeners
     const meetInput = document.getElementById('meetingsDbSearchInput');
     if (meetInput && !meetInput.dataset.bound) {
       meetInput.dataset.bound = 'true';
       meetInput.oninput = (e) => {
         meetingSearchQuery = e.target.value;
+        displayedMeetingsLimit = 40;
+        renderMeetingsDatabase(state);
+      };
+    }
+
+    const meetSort = document.getElementById('meetingDbSortSelect');
+    if (meetSort && !meetSort.dataset.bound) {
+      meetSort.dataset.bound = 'true';
+      meetSort.onchange = (e) => {
+        meetingSortBy = e.target.value;
+        displayedMeetingsLimit = 40;
         renderMeetingsDatabase(state);
       };
     }
@@ -79,6 +166,7 @@ const RankingsModule = (() => {
           });
           btn.className = 'cat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white';
           meetingSelectedCategory = btn.dataset.catfilter;
+          displayedMeetingsLimit = 40;
           renderMeetingsDatabase(state);
         };
       }
@@ -390,6 +478,7 @@ const RankingsModule = (() => {
               </td>
               <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 border border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
               <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${m.mark}m</td>
+              <td class="py-1.5 px-2 text-center">${formatWindBadge(m.wind)}</td>
               <td class="py-1.5 px-2 text-center text-slate-300">${m.place || '-'}</td>
               <td class="py-1.5 px-2 text-right text-slate-300">${m.result_score || '-'}</td>
               <td class="py-1.5 px-2 text-right text-slate-300">${m.placing_score || '-'}</td>
@@ -397,7 +486,7 @@ const RankingsModule = (() => {
             </tr>
           `).join('');
         } else {
-          meetsHtml = '<tr><td colspan="8" class="py-3 text-center text-slate-500 italic">Keine detaillierten Meeting-Ergebnisse verfügbar</td></tr>';
+          meetsHtml = '<tr><td colspan="9" class="py-3 text-center text-slate-500 italic">Keine detaillierten Meeting-Ergebnisse verfügbar</td></tr>';
         }
 
         accTr.innerHTML = `
@@ -419,6 +508,7 @@ const RankingsModule = (() => {
                       <th class="py-1.5 px-2">Wettkampf</th>
                       <th class="py-1.5 px-2 text-center">Kat.</th>
                       <th class="py-1.5 px-2 text-right">Weite</th>
+                      <th class="py-1.5 px-2 text-center">Wind</th>
                       <th class="py-1.5 px-2 text-center">Pl.</th>
                       <th class="py-1.5 px-2 text-right">Result</th>
                       <th class="py-1.5 px-2 text-right">Platz</th>
@@ -641,12 +731,13 @@ const RankingsModule = (() => {
             </td>
             <td class="py-2 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span></td>
             <td class="py-2 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m</td>
+            <td class="py-2 px-2 text-center">${formatWindBadge(c.wind)}</td>
             <td class="py-2 px-2 text-center text-slate-300">${c.place || '-'}</td>
             <td class="py-2 px-2 text-right font-black text-amber-400">${c.performance_score || c.result_score || '-'} Pkt</td>
           </tr>
         `).join('');
       } else {
-        compBody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-slate-500 italic">Keine Meeting-Ergebnisse hinterlegt.</td></tr>';
+        compBody.innerHTML = '<tr><td colspan="7" class="py-4 text-center text-slate-500 italic">Keine Meeting-Ergebnisse hinterlegt.</td></tr>';
       }
     }
 
@@ -656,6 +747,34 @@ const RankingsModule = (() => {
     }
 
     modal.classList.remove('hidden');
+  }
+
+  function loadMoreAthletes(count = 50) {
+    displayedAthletesLimit += count;
+    if (window.App && window.App.state) {
+      renderAthletesDatabase(window.App.state);
+    }
+  }
+
+  function showAllAthletes(total) {
+    displayedAthletesLimit = total;
+    if (window.App && window.App.state) {
+      renderAthletesDatabase(window.App.state);
+    }
+  }
+
+  function loadMoreMeetings(count = 40) {
+    displayedMeetingsLimit += count;
+    if (window.App && window.App.state) {
+      renderMeetingsDatabase(window.App.state);
+    }
+  }
+
+  function showAllMeetings(total) {
+    displayedMeetingsLimit = total;
+    if (window.App && window.App.state) {
+      renderMeetingsDatabase(window.App.state);
+    }
   }
 
   function renderAthletesDatabase(state) {
@@ -680,6 +799,50 @@ const RankingsModule = (() => {
       list = list.filter(a => (a.name && a.name.toLowerCase().includes(q)) || (a.country && a.country.toLowerCase().includes(q)));
     }
 
+    // Sort athletes
+    list.sort((a, b) => {
+      if (athleteSortBy === 'latest_rank') {
+        const rA = (a.latest_rank && a.latest_rank <= 100) ? a.latest_rank : 999;
+        const rB = (b.latest_rank && b.latest_rank <= 100) ? b.latest_rank : 999;
+        if (rA !== rB) return rA - rB;
+        return (a.peak_rank || 999) - (b.peak_rank || 999);
+      }
+      if (athleteSortBy === 'peak_rank') {
+        return (a.peak_rank || 999) - (b.peak_rank || 999);
+      }
+      if (athleteSortBy === 'peak_score') {
+        return (b.peak_score || 0) - (a.peak_score || 0);
+      }
+      if (athleteSortBy === 'best_mark') {
+        const mA = parseFloat(a.sb || 0);
+        const mB = parseFloat(b.sb || 0);
+        return mB - mA;
+      }
+      if (athleteSortBy === 'name_asc') {
+        return (a.name || '').localeCompare(b.name || '');
+      }
+      if (athleteSortBy === 'name_desc') {
+        return (b.name || '').localeCompare(a.name || '');
+      }
+      if (athleteSortBy === 'dob_asc') {
+        const dA = parseAthleteDob(a.dob);
+        const dB = parseAthleteDob(b.dob);
+        return dA - dB;
+      }
+      if (athleteSortBy === 'dob_desc') {
+        const dA = parseAthleteDob(a.dob);
+        const dB = parseAthleteDob(b.dob);
+        return dB - dA;
+      }
+      if (athleteSortBy === 'weeks') {
+        return (b.weeks_in_top100 || 0) - (a.weeks_in_top100 || 0);
+      }
+      if (athleteSortBy === 'nation') {
+        return (a.country || '').localeCompare(b.country || '');
+      }
+      return 0;
+    });
+
     if (badge) {
       badge.textContent = `${list.length} von ${db.athletes.length} Athleten`;
     }
@@ -689,7 +852,10 @@ const RankingsModule = (() => {
       return;
     }
 
-    container.innerHTML = list.slice(0, 60).map(ath => {
+    const totalAthletes = list.length;
+    const slicedAthletes = list.slice(0, displayedAthletesLimit);
+
+    const cardsHtml = slicedAthletes.map(ath => {
       const isLuka = ath.name.toLowerCase().includes('herden');
       const isGerman = ath.country === 'GER';
       const isExpanded = expandedAthleteDbId === ath.id;
@@ -716,6 +882,7 @@ const RankingsModule = (() => {
                       <th class="py-1.5 px-2">Wettkampf / Ort</th>
                       <th class="py-1.5 px-2 text-center">Kat.</th>
                       <th class="py-1.5 px-2 text-right">Weite</th>
+                      <th class="py-1.5 px-2 text-center">Wind</th>
                       <th class="py-1.5 px-2 text-center">Pl.</th>
                       <th class="py-1.5 px-2 text-right font-bold text-white">Score</th>
                     </tr>
@@ -730,6 +897,7 @@ const RankingsModule = (() => {
                         </td>
                         <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span></td>
                         <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m</td>
+                        <td class="py-1.5 px-2 text-center">${formatWindBadge(c.wind)}</td>
                         <td class="py-1.5 px-2 text-center text-slate-300">${c.place || '-'}</td>
                         <td class="py-1.5 px-2 text-right font-black text-amber-400">${c.performance_score || '-'} Pkt</td>
                       </tr>
@@ -767,6 +935,8 @@ const RankingsModule = (() => {
                   <span>🗓️ ${ath.weeks_in_top100} Wo. Top 100</span>
                   <span>•</span>
                   <span class="text-cyan-300 font-bold">Bestleistung: ${ath.sb ? ath.sb.toFixed(2) + 'm' : '-'}</span>
+                  <span>•</span>
+                  <span>Geb: ${ath.dob || '-'}</span>
                 </div>
               </div>
             </div>
@@ -785,6 +955,24 @@ const RankingsModule = (() => {
         </div>
       `;
     }).join('');
+
+    const paginationHtml = totalAthletes > displayedAthletesLimit ? `
+      <div class="p-3.5 bg-slate-900 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left shadow-sm">
+        <div class="text-xs font-mono text-slate-400">
+          Zeige <strong class="text-white">${slicedAthletes.length}</strong> von <strong class="text-cyan-400">${totalAthletes}</strong> Athleten
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="RankingsModule.loadMoreAthletes(50)" class="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black font-mono text-xs shadow-md transition-all">
+            Mehr anzeigen (+50) ▾
+          </button>
+          <button onclick="RankingsModule.showAllAthletes(${totalAthletes})" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold font-mono text-xs transition-all">
+            Alle ${totalAthletes} anzeigen
+          </button>
+        </div>
+      </div>
+    ` : '';
+
+    container.innerHTML = cardsHtml + paginationHtml;
   }
 
   function renderMeetingsDatabase(state) {
@@ -818,6 +1006,42 @@ const RankingsModule = (() => {
       });
     }
 
+    // Sort meetings
+    const CAT_WEIGHT = { 'OW': 10, 'GL': 9, 'GW': 8, 'DF': 7, 'A': 6, 'B': 5, 'C': 4, 'D': 3, 'E': 2, 'F': 1 };
+    list.sort((a, b) => {
+      if (meetingSortBy === 'density') {
+        const countA = (a.results || []).length;
+        const countB = (b.results || []).length;
+        if (countA !== countB) return countB - countA;
+        return (CAT_WEIGHT[b.category] || 0) - (CAT_WEIGHT[a.category] || 0);
+      }
+      if (meetingSortBy === 'category') {
+        const cA = CAT_WEIGHT[a.category] || 0;
+        const cB = CAT_WEIGHT[b.category] || 0;
+        if (cA !== cB) return cB - cA;
+        return (b.results || []).length - (a.results || []).length;
+      }
+      if (meetingSortBy === 'date_desc') {
+        const dA = getMeetingSortDate(a, true);
+        const dB = getMeetingSortDate(b, true);
+        return dB - dA;
+      }
+      if (meetingSortBy === 'date_asc') {
+        const dA = getMeetingSortDate(a, false);
+        const dB = getMeetingSortDate(b, false);
+        return dA - dB;
+      }
+      if (meetingSortBy === 'name_asc') {
+        return (a.name || '').localeCompare(b.name || '');
+      }
+      if (meetingSortBy === 'top_mark') {
+        const mA = getMeetingTopMark(a);
+        const mB = getMeetingTopMark(b);
+        return mB - mA;
+      }
+      return 0;
+    });
+
     if (badge) {
       badge.textContent = `${list.length} von ${db.competitions.length} Meetings`;
     }
@@ -827,7 +1051,10 @@ const RankingsModule = (() => {
       return;
     }
 
-    container.innerHTML = list.slice(0, 40).map(meet => {
+    const totalMeetings = list.length;
+    const slicedMeetings = list.slice(0, displayedMeetingsLimit);
+
+    const cardsHtml = slicedMeetings.map(meet => {
       const isExpanded = expandedMeetingDbName === meet.name || list.length <= 3;
       const results = meet.results || [];
       const hasLuka = results.some(r => r.athlete.toLowerCase().includes('herden'));
@@ -845,6 +1072,7 @@ const RankingsModule = (() => {
                       <th class="py-1.5 px-2.5">Athlet</th>
                       <th class="py-1.5 px-2 text-center">Nation</th>
                       <th class="py-1.5 px-2 text-right">Weite</th>
+                      <th class="py-1.5 px-2 text-center">Wind</th>
                       <th class="py-1.5 px-2 text-right font-bold text-white">WA Score</th>
                       <th class="py-1.5 px-2 text-center">Aktion</th>
                     </tr>
@@ -867,6 +1095,7 @@ const RankingsModule = (() => {
                             <span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${r.country}</span>
                           </td>
                           <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${r.mark}m</td>
+                          <td class="py-1.5 px-2 text-center">${formatWindBadge(r.wind)}</td>
                           <td class="py-1.5 px-2 text-right font-black text-amber-400 text-xs">${r.performance_score} Pkt</td>
                           <td class="py-1.5 px-2 text-center">
                             <button onclick="RankingsModule.openCompetitorModal('${r.athlete}')" class="px-2 py-0.5 rounded bg-slate-950 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500 text-cyan-400 font-mono text-[10px] font-bold transition-all">
@@ -917,6 +1146,24 @@ const RankingsModule = (() => {
         </div>
       `;
     }).join('');
+
+    const paginationHtml = totalMeetings > displayedMeetingsLimit ? `
+      <div class="p-3.5 bg-slate-900 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left shadow-sm">
+        <div class="text-xs font-mono text-slate-400">
+          Zeige <strong class="text-white">${slicedMeetings.length}</strong> von <strong class="text-amber-400">${totalMeetings}</strong> Meetings
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="RankingsModule.loadMoreMeetings(40)" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black font-mono text-xs shadow-md transition-all">
+            Mehr anzeigen (+40) ▾
+          </button>
+          <button onclick="RankingsModule.showAllMeetings(${totalMeetings})" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold font-mono text-xs transition-all">
+            Alle ${totalMeetings} anzeigen
+          </button>
+        </div>
+      </div>
+    ` : '';
+
+    container.innerHTML = cardsHtml + paginationHtml;
   }
 
   function toggleAthleteDbRow(id) {
@@ -964,6 +1211,10 @@ const RankingsModule = (() => {
     toggleAthleteDbRow,
     toggleMeetingDbRow,
     searchAthleteDirect,
-    searchMeetingDirect
+    searchMeetingDirect,
+    loadMoreAthletes,
+    showAllAthletes,
+    loadMoreMeetings,
+    showAllMeetings
   };
 })();
