@@ -123,10 +123,11 @@ const App = (() => {
     } catch (e) {}
 
     // 4. Training Insights & Sample Logs
-    const customSheetsUrl = localStorage.getItem('sheets_url_key');
+    const customSheetsUrl = localStorage.getItem('googleSheetsCsvUrl') || localStorage.getItem('sheets_url_key');
     if (customSheetsUrl) {
       try {
-        const resSheet = await fetch(customSheetsUrl);
+        const bustUrl = customSheetsUrl + (customSheetsUrl.includes('?') ? '&' : '?') + '_t=' + Date.now();
+        const resSheet = await fetch(bustUrl);
         if (resSheet.ok) {
           const csvText = await resSheet.text();
           state.trainingLogs = AnalyticsModule.parseCsvTrainingLogs(csvText);

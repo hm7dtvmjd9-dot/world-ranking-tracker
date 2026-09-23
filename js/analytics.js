@@ -1,5 +1,12 @@
 /**
- * Tab 1: Daily Readiness & 64-Variable Training Analytics Engine
+ * Tab 1: Whoop 4.0 Daily Readiness Cockpit & 64-Variable Training Analytics
+ * Includes:
+ * - Live Google Sheets Sync via CSV Web Publishing
+ * - Calendar Date Scrubber (Scrub through any historical day)
+ * - Whoop 3-Dial Cockpit: Recovery Score (%), Sleep Performance (%), Day Strain (0-21)
+ * - Expandable Daily Training Sessions (Exercises, VBT Speeds, RSI, Jump Marks)
+ * - Daily Journal & Biomarkers (Bodyweight, Nutrition, Soreness, Notes)
+ * - 64-Variable Factor Correlation Explorer & Long-term Progression Charts
  */
 const AnalyticsModule = (() => {
   let jumpChartInstance = null;
@@ -8,54 +15,477 @@ const AnalyticsModule = (() => {
   let scatterChartInstance = null;
   let initializedSelectors = false;
 
+  // Selected date state (defaults to today or latest available)
+  let currentSelectedDate = '2026-09-23';
+
+  function init() {
+    // Check if custom Google Sheets URL is configured
+    const savedUrl = localStorage.getItem('googleSheetsCsvUrl');
+    const badge = document.getElementById('sheetsSyncStatusBadge');
+    const label = document.getElementById('sheetsSyncLabel');
+    const dot = document.getElementById('sheetsSyncDot');
+
+    if (savedUrl) {
+      if (label) label.textContent = 'Google Sheets (Live)';
+      if (dot) dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+    } else {
+      if (label) label.textContent = 'Musterdaten (Lokal)';
+      if (dot) dot.className = 'w-2 h-2 rounded-full bg-cyan-400';
+    }
+  }
+
   function render(state) {
-    renderDailyReadinessBrief(state);
+    init();
+
+    // Default to latest log date if current date is not in logs
+    const logs = state.trainingLogs || [];
+    if (logs.length > 0) {
+      const dates = logs.map(l => l.date).filter(Boolean);
+      if (dates.length > 0 && !dates.includes(currentSelectedDate)) {
+        currentSelectedDate = dates[dates.length - 1];
+      }
+    }
+
+    renderDailyWhoopCockpit(state);
+    renderDailyTrainingSessions(state);
+    renderDailyJournal(state);
     renderStatsSummary(state);
     renderInsightsAndCorrelations(state);
     renderCorrelationExplorer(state);
     renderCharts(state);
   }
 
-  function renderDailyReadinessBrief(state) {
+  function renderDailyWhoopCockpit(state) {
     const logs = state.trainingLogs || [];
-    // Get latest log with readiness data
-    const latest = logs.slice().reverse().find(l => l.whoop_recovery_pct != null) || {};
+    const currentLog = logs.find(l => l.date === currentSelectedDate) || logs.slice(-1)[0] || {};
 
-    const recovery = latest.whoop_recovery_pct != null ? latest.whoop_recovery_pct : 88;
-    const hrv = latest.whoop_hrv != null ? latest.whoop_hrv : 94;
-    const sleep = latest.sleep_hours != null ? latest.sleep_hours : 8.25;
-    const rhr = latest.whoop_rhr != null ? latest.whoop_rhr : 46;
-    const strain = latest.whoop_strain != null ? latest.whoop_strain : 14.2;
+    // Update Date Display & Date Input
+    const dateDisplay = document.getElementById('selectedTrainingDayDisplay');
+    const dateInput = document.getElementById('trainingDatePicker');
+    
+    if (dateInput) {
+      dateInput.value = currentSelectedDate;
+    }
 
+    if (dateDisplay) {
+      const d = new Date(currentSelectedDate);
+      const days = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+      const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+      const dayName = isNaN(d.getDay()) ? '' : days[d.getDay()];
+      const dayNum = isNaN(d.getDate()) ? '' : d.getDate();
+      const monthName = isNaN(d.getMonth()) ? '' : months[d.getMonth()];
+      const year = isNaN(d.getFullYear()) ? '' : d.getFullYear();
+      
+      const isToday = currentSelectedDate === '2026-09-23';
+      dateDisplay.innerHTML = `<span>📅 ${dayName}, ${dayNum}. ${monthName} ${year}</span> ${isToday ? '<span class="text-cyan-400 font-bold ml-1">(Heute)</span>' : ''}`;
+    }
+
+    // Whoop Metrics
+    const recovery = currentLog.whoop_recovery_pct != null ? currentLog.whoop_recovery_pct : 88;
+    const hrv = currentLog.whoop_hrv != null ? currentLog.whoop_hrv : 94;
+    const sleep = currentLog.sleep_hours != null ? currentLog.sleep_hours : 8.25;
+    const sleepPerf = currentLog.sleep_performance_pct != null ? currentLog.sleep_performance_pct : Math.min(99, Math.round((sleep / 8.5) * 100));
+    const rhr = currentLog.whoop_rhr != null ? currentLog.whoop_rhr : 46;
+    const strain = currentLog.whoop_strain != null ? currentLog.whoop_strain : 14.8;
+    const targetStrain = currentLog.target_strain || '13.5 - 15.5';
+
+    // 1. Recovery Ring & Val
     const elRec = document.getElementById('whoopRecoveryVal');
+    const recRing = document.getElementById('recoveryRingSvg');
+    const recStatus = document.getElementById('whoopRecoveryStatus');
+    const recBadge = document.getElementById('readinessStatusBadge');
+
     if (elRec) elRec.textContent = recovery + '%';
+    if (recRing) {
+      recRing.setAttribute('stroke-dasharray', `${recovery}, 100`);
+      if (recovery >= 67) {
+        recRing.setAttribute('class', 'text-emerald-400 transition-all duration-700');
+      } else if (recovery >= 34) {
+        recRing.setAttribute('class', 'text-amber-400 transition-all duration-700');
+      } else {
+        recRing.setAttribute('class', 'text-rose-400 transition-all duration-700');
+      }
+    }
+
+    if (recStatus) {
+      if (recovery >= 67) {
+        recStatus.textContent = 'Grüner Bereich (Optimal)';
+        recStatus.className = 'text-xs font-bold font-mono text-emerald-400';
+      } else if (recovery >= 34) {
+        recStatus.textContent = 'Gelber Bereich (Moderat)';
+        recStatus.className = 'text-xs font-bold font-mono text-amber-400';
+      } else {
+        recStatus.textContent = 'Roter Bereich (Regenerativ)';
+        recStatus.className = 'text-xs font-bold font-mono text-rose-400';
+      }
+    }
+
+    if (recBadge) {
+      if (recovery >= 67) {
+        recBadge.className = 'px-2.5 py-0.5 rounded text-[10px] font-black font-mono uppercase bg-emerald-950 text-emerald-300 border border-emerald-700 animate-pulse';
+        recBadge.textContent = `🟢 OPTIMAL (${recovery}% RECOVERY)`;
+      } else if (recovery >= 34) {
+        recBadge.className = 'px-2.5 py-0.5 rounded text-[10px] font-black font-mono uppercase bg-amber-950 text-amber-300 border border-amber-700';
+        recBadge.textContent = `🟡 MODERAT (${recovery}% RECOVERY)`;
+      } else {
+        recBadge.className = 'px-2.5 py-0.5 rounded text-[10px] font-black font-mono uppercase bg-rose-950 text-rose-300 border border-rose-700';
+        recBadge.textContent = `🔴 REGENERATIV (${recovery}% RECOVERY)`;
+      }
+    }
 
     const elHrv = document.getElementById('whoopHrvVal');
     if (elHrv) elHrv.textContent = hrv + ' ms';
 
-    const elSleep = document.getElementById('whoopSleepVal');
-    if (elSleep) {
-      const hours = Math.floor(sleep);
-      const mins = Math.round((sleep - hours) * 60);
-      elSleep.textContent = `${hours}h ${mins > 0 ? mins + 'm' : ''}`;
-    }
-
     const elRhr = document.getElementById('whoopRhrVal');
     if (elRhr) elRhr.textContent = rhr + ' bpm';
 
-    const elBadge = document.getElementById('readinessStatusBadge');
-    if (elBadge) {
-      if (recovery >= 67) {
-        elBadge.className = 'px-2.5 py-0.5 rounded text-[10px] font-black font-mono uppercase bg-emerald-950 text-emerald-300 border border-emerald-700 animate-pulse';
-        elBadge.textContent = `🟢 OPTIMAL (${recovery}% RECOVERY)`;
-      } else if (recovery >= 34) {
-        elBadge.className = 'px-2.5 py-0.5 rounded text-[10px] font-black font-mono uppercase bg-amber-950 text-amber-300 border border-amber-700';
-        elBadge.textContent = `🟡 MODERAT (${recovery}% RECOVERY)`;
+    // 2. Sleep Ring & Val
+    const elSleepPerf = document.getElementById('whoopSleepPerfVal');
+    const sleepRing = document.getElementById('sleepRingSvg');
+    const elSleep = document.getElementById('whoopSleepVal');
+    
+    if (elSleepPerf) elSleepPerf.textContent = sleepPerf + '%';
+    if (sleepRing) sleepRing.setAttribute('stroke-dasharray', `${sleepPerf}, 100`);
+    if (elSleep) {
+      const hours = Math.floor(sleep);
+      const mins = Math.round((sleep - hours) * 60);
+      elSleep.textContent = `${hours}h ${mins > 0 ? mins + 'm' : ''} geschlafen`;
+    }
+
+    // 3. Strain Ring & Val
+    const elStrain = document.getElementById('whoopStrainVal');
+    const strainRing = document.getElementById('strainRingSvg');
+    const strainCat = document.getElementById('whoopStrainCategory');
+    const strainTarget = document.getElementById('whoopTargetStrainVal');
+
+    if (elStrain) elStrain.textContent = typeof strain === 'number' ? strain.toFixed(1) : strain;
+    if (strainRing) {
+      const strainPct = Math.min(100, Math.round(((parseFloat(strain) || 0) / 21) * 100));
+      strainRing.setAttribute('stroke-dasharray', `${strainPct}, 100`);
+    }
+    if (strainTarget) strainTarget.textContent = targetStrain;
+
+    if (strainCat) {
+      const sVal = parseFloat(strain) || 0;
+      if (sVal >= 17) {
+        strainCat.textContent = 'All-Out Belastung (Peak)';
+        strainCat.className = 'text-xs font-bold font-mono text-purple-400';
+      } else if (sVal >= 14) {
+        strainCat.textContent = 'Hohe Belastung (Adaption)';
+        strainCat.className = 'text-xs font-bold font-mono text-cyan-400';
+      } else if (sVal >= 10) {
+        strainCat.textContent = 'Moderate Trainingslast';
+        strainCat.className = 'text-xs font-bold font-mono text-emerald-400';
       } else {
-        elBadge.className = 'px-2.5 py-0.5 rounded text-[10px] font-black font-mono uppercase bg-rose-950 text-rose-300 border border-rose-700';
-        elBadge.textContent = `🔴 REGENERATIV (${recovery}% RECOVERY)`;
+        strainCat.textContent = 'Regenerativ / Rest Day';
+        strainCat.className = 'text-xs font-bold font-mono text-slate-400';
       }
     }
+
+    // Recommendation Banner
+    const coachBanner = document.getElementById('readinessRecommendationBanner');
+    if (coachBanner) {
+      if (recovery >= 67) {
+        coachBanner.className = 'text-xs font-mono text-emerald-300 bg-emerald-950/40 border border-emerald-800/80 p-3 rounded-lg flex items-center gap-2';
+        coachBanner.innerHTML = `<span>🚀</span><span><strong>Readiness-Empfehlung:</strong> Volle ZNS-Freigabe für maximale Anlaufgeschwindigkeit (>10.3 m/s) und hohe Reaktivität (RSI > 2.8). Maximallast freigegeben.</span>`;
+      } else if (recovery >= 34) {
+        coachBanner.className = 'text-xs font-mono text-amber-300 bg-amber-950/40 border border-amber-800/80 p-3 rounded-lg flex items-center gap-2';
+        coachBanner.innerHTML = `<span>⚡</span><span><strong>Readiness-Empfehlung:</strong> Moderate Erholung. Rhythmus, technische Wiederholungen und submaximale Sprünge bevorzugen. Anlauf-Geschwindigkeit auf 9.8 - 10.1 m/s drosseln.</span>`;
+      } else {
+        coachBanner.className = 'text-xs font-mono text-rose-300 bg-rose-950/40 border border-rose-800/80 p-3 rounded-lg flex items-center gap-2';
+        coachBanner.innerHTML = `<span>🛑</span><span><strong>Readiness-Empfehlung:</strong> ZNS ermüdet / Red Zone. Fokus auf aktive Regeneration, Sauna, Kältebecken, Faszientraining & Schlafakkumulation. Kein maximales Sprungtraining.</span>`;
+      }
+    }
+  }
+
+  function renderDailyTrainingSessions(state) {
+    const container = document.getElementById('dailyTrainingSessionsContainer');
+    const badge = document.getElementById('trainingSessionsCountBadge');
+    if (!container) return;
+
+    const logs = state.trainingLogs || [];
+    const currentLog = logs.find(l => l.date === currentSelectedDate) || logs.slice(-1)[0] || {};
+    const exercises = currentLog.exercises || [];
+
+    const isRest = currentLog.duration_min === 0 || currentLog.session_type === 'Regeneration / Ruhetag';
+
+    if (badge) {
+      badge.textContent = isRest ? 'Ruhetag' : `${exercises.length > 0 ? exercises.length + ' Übungen' : '1 Einheit'}`;
+    }
+
+    if (isRest && exercises.length === 0) {
+      container.innerHTML = `
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 text-center space-y-2">
+          <span class="text-2xl">🧘‍♂️</span>
+          <h4 class="font-bold text-white font-mono text-xs uppercase">Aktiver Ruhetag / Geplante Erholung</h4>
+          <p class="text-xs text-slate-400 font-sans max-w-md mx-auto">
+            Keine Belastungseinheit für diesen Tag eingetragen. ZNS-Regeneration und Erholung im Fokus.
+          </p>
+        </div>
+      `;
+      return;
+    }
+
+    // Generate session card
+    let typeBadge = 'bg-cyan-950 text-cyan-300 border-cyan-700';
+    if ((currentLog.session_type || '').includes('Sprung')) {
+      typeBadge = 'bg-amber-950 text-amber-300 border-amber-700';
+    } else if ((currentLog.session_type || '').includes('Kraft')) {
+      typeBadge = 'bg-emerald-950 text-emerald-300 border-emerald-700';
+    } else if ((currentLog.session_type || '').includes('Sprint')) {
+      typeBadge = 'bg-purple-950 text-purple-300 border-purple-700';
+    }
+
+    let exercisesRows = '';
+    if (exercises.length > 0) {
+      exercisesRows = exercises.map(ex => `
+        <tr class="hover:bg-slate-900/50">
+          <td class="py-2 px-2.5 font-bold text-white font-sans text-xs">${ex.name}</td>
+          <td class="py-2 px-2 text-center text-slate-300 font-mono">${ex.sets} x ${ex.reps}</td>
+          <td class="py-2 px-2 text-right font-mono font-bold text-cyan-400">${ex.load || '-'}</td>
+          <td class="py-2 px-2 text-right font-mono font-bold text-amber-400">${ex.speed || '-'}</td>
+          <td class="py-2 px-2.5 text-slate-400 font-sans text-[11px]">${ex.notes || '-'}</td>
+        </tr>
+      `).join('');
+    } else {
+      // Fallback default exercises for the day's session type
+      exercisesRows = `
+        <tr class="hover:bg-slate-900/50">
+          <td class="py-2 px-2.5 font-bold text-white font-sans text-xs">Hauptübung (${currentLog.session_type || 'Training'})</td>
+          <td class="py-2 px-2 text-center text-slate-300 font-mono">4 x 3</td>
+          <td class="py-2 px-2 text-right font-mono font-bold text-cyan-400">${currentLog.trapbar_e1rm_kg ? currentLog.trapbar_e1rm_kg + ' kg' : 'BW'}</td>
+          <td class="py-2 px-2 text-right font-mono font-bold text-amber-400">${currentLog.approach_speed_11m_to_1m ? currentLog.approach_speed_11m_to_1m + ' m/s' : currentLog.rsi_score ? 'RSI ' + currentLog.rsi_score : '0.82 m/s'}</td>
+          <td class="py-2 px-2.5 text-slate-400 font-sans text-[11px]">${currentLog.athlete_comments || 'Einheit planmäßig absolviert'}</td>
+        </tr>
+      `;
+    }
+
+    container.innerHTML = `
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-3">
+        <!-- Session Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase border ${typeBadge}">
+              ${currentLog.session_type || 'Training'}
+            </span>
+            <span class="font-bold text-white text-xs font-mono">
+              ⏱️ ${currentLog.duration_min || 90} Min. Dauer
+            </span>
+            ${currentLog.best_mark_m ? `<span class="px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 font-black text-[9px] font-mono">BESTWEITE: ${currentLog.best_mark_m}m</span>` : ''}
+          </div>
+
+          <div class="flex items-center gap-3 text-[11px] font-mono text-slate-400">
+            ${currentLog.approach_speed_11m_to_1m ? `<span>Speed: <strong class="text-cyan-300">${currentLog.approach_speed_11m_to_1m} m/s</strong></span>` : ''}
+            ${currentLog.rsi_score ? `<span>RSI: <strong class="text-amber-300">${currentLog.rsi_score}</strong></span>` : ''}
+            ${currentLog.session_rpe_1_10 ? `<span>RPE: <strong class="text-purple-300">${currentLog.session_rpe_1_10}/10</strong></span>` : ''}
+          </div>
+        </div>
+
+        <!-- Exercise Details Accordion Table -->
+        <div class="overflow-x-auto border border-slate-800/80 rounded-lg">
+          <table class="w-full text-left border-collapse text-[11px] font-mono">
+            <thead>
+              <tr class="bg-slate-900 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
+                <th class="py-1.5 px-2.5">Übung</th>
+                <th class="py-1.5 px-2 text-center">Sätze & Wdh.</th>
+                <th class="py-1.5 px-2 text-right">Last / Gewicht</th>
+                <th class="py-1.5 px-2 text-right">VBT Speed / Reaktivität</th>
+                <th class="py-1.5 px-2.5">Trainer- / Athletennotiz</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/40">
+              ${exercisesRows}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDailyJournal(state) {
+    const logs = state.trainingLogs || [];
+    const currentLog = logs.find(l => l.date === currentSelectedDate) || logs.slice(-1)[0] || {};
+
+    const elWeight = document.getElementById('journalWeightVal');
+    if (elWeight) {
+      elWeight.textContent = currentLog.body_weight_kg ? currentLog.body_weight_kg.toFixed(1) + ' kg' : '78.4 kg';
+    }
+
+    const elNutr = document.getElementById('journalNutritionVal');
+    if (elNutr) {
+      const kcal = currentLog.calories_kcal || 3450;
+      const water = currentLog.water_liters || 4.2;
+      elNutr.textContent = `${kcal} kcal • ${water}L Wasser`;
+    }
+
+    const elSoreness = document.getElementById('journalSorenessVal');
+    if (elSoreness) {
+      const sore = currentLog.muscle_soreness_1_10 || 2;
+      const energy = currentLog.energy_readiness_1_10 || 9;
+      elSoreness.textContent = `Soreness: ${sore}/10 • Energie: ${energy}/10`;
+    }
+
+    const elNotes = document.getElementById('journalNotesVal');
+    if (elNotes) {
+      elNotes.textContent = `"${currentLog.athlete_comments || 'Gute Trainingseinheit, Belastung und Reaktivität optimal abgestimmt.'}"`;
+    }
+  }
+
+  function prevDay() {
+    const logs = (window.App && window.App.state && window.App.state.trainingLogs) || [];
+    const dates = logs.map(l => l.date).filter(Boolean).sort();
+    const idx = dates.indexOf(currentSelectedDate);
+    if (idx > 0) {
+      currentSelectedDate = dates[idx - 1];
+    } else {
+      const d = new Date(currentSelectedDate);
+      d.setDate(d.getDate() - 1);
+      currentSelectedDate = d.toISOString().split('T')[0];
+    }
+    if (window.App && window.App.state) render(window.App.state);
+  }
+
+  function nextDay() {
+    const logs = (window.App && window.App.state && window.App.state.trainingLogs) || [];
+    const dates = logs.map(l => l.date).filter(Boolean).sort();
+    const idx = dates.indexOf(currentSelectedDate);
+    if (idx >= 0 && idx < dates.length - 1) {
+      currentSelectedDate = dates[idx + 1];
+    } else {
+      const d = new Date(currentSelectedDate);
+      d.setDate(d.getDate() + 1);
+      currentSelectedDate = d.toISOString().split('T')[0];
+    }
+    if (window.App && window.App.state) render(window.App.state);
+  }
+
+  function goToToday() {
+    currentSelectedDate = '2026-09-23';
+    if (window.App && window.App.state) render(window.App.state);
+  }
+
+  function onDatePicked(val) {
+    if (!val) return;
+    currentSelectedDate = val;
+    if (window.App && window.App.state) render(window.App.state);
+  }
+
+  // Google Sheets Integration
+  function openSheetsModal() {
+    const modal = document.getElementById('googleSheetsSyncModal');
+    const input = document.getElementById('googleSheetsCsvUrlInput');
+    if (modal) {
+      if (input) {
+        input.value = localStorage.getItem('googleSheetsCsvUrl') || '';
+      }
+      modal.classList.remove('hidden');
+    }
+  }
+
+  function saveSheetsUrl() {
+    const input = document.getElementById('googleSheetsCsvUrlInput');
+    if (!input) return;
+    const url = input.value.trim();
+    if (!url) {
+      alert('Bitte gib eine gültige CSV-Webfreigabe URL ein.');
+      return;
+    }
+    localStorage.setItem('googleSheetsCsvUrl', url);
+    document.getElementById('googleSheetsSyncModal').classList.add('hidden');
+    syncGoogleSheets();
+  }
+
+  function resetToSampleData() {
+    localStorage.removeItem('googleSheetsCsvUrl');
+    document.getElementById('googleSheetsSyncModal').classList.add('hidden');
+    if (window.App && window.App.init) {
+      window.App.init();
+    }
+    alert('✅ Auf lokale Musterdaten zurückgesetzt!');
+  }
+
+  async function syncGoogleSheets() {
+    const url = localStorage.getItem('googleSheetsCsvUrl');
+    const label = document.getElementById('sheetsSyncLabel');
+    const dot = document.getElementById('sheetsSyncDot');
+
+    if (!url) {
+      openSheetsModal();
+      return;
+    }
+
+    if (label) label.textContent = 'Synchronisiere...';
+    if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-spin';
+
+    try {
+      const bustUrl = url + (url.includes('?') ? '&' : '?') + '_t=' + Date.now();
+      const res = await fetch(bustUrl);
+      if (!res.ok) throw new Error(`HTTP Error ${res.status}`);
+      const csvText = await res.text();
+      const parsedLogs = parseCsvTrainingLogs(csvText);
+
+      if (parsedLogs.length > 0 && window.App && window.App.state) {
+        window.App.state.trainingLogs = parsedLogs;
+        currentSelectedDate = parsedLogs[parsedLogs.length - 1].date || currentSelectedDate;
+        render(window.App.state);
+        if (label) label.textContent = `Live (${parsedLogs.length} Einträge)`;
+        if (dot) dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+        alert(`✅ Erfolgreich mit Google Sheets synchronisiert!\n${parsedLogs.length} Tage importiert.`);
+      } else {
+        throw new Error('Keine gültigen Zeilen in der CSV gefunden.');
+      }
+    } catch (e) {
+      console.error('Google Sheets sync error:', e);
+      if (label) label.textContent = 'Sync Fehler';
+      if (dot) dot.className = 'w-2 h-2 rounded-full bg-rose-400';
+      alert(`⚠️ Fehler beim Laden der Google Sheets Tabelle:\n${e.message}\n\nBitte prüfe die Freigabe-Einstellungen der Tabelle.`);
+    }
+  }
+
+  function parseCsvTrainingLogs(csvText) {
+    const lines = csvText.trim().split(/\r?\n/);
+    if (lines.length < 2) return [];
+
+    const header = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/[\"\'\s]/g, '_'));
+    const logs = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      const cols = line.split(',').map(c => c.trim().replace(/^[\"\']|[\"\']$/g, ''));
+      const row = {};
+      header.forEach((h, idx) => {
+        row[h] = cols[idx] !== undefined ? cols[idx] : null;
+      });
+
+      // Map common column name variations
+      const d = row.date || row.datum || row.tag;
+      if (!d) continue;
+
+      logs.push({
+        date: d,
+        session_type: row.session_type || row.einheit || row.typ || 'Training',
+        duration_min: parseInt(row.duration_min || row.dauer || 90) || 90,
+        body_weight_kg: parseFloat(row.body_weight_kg || row.gewicht || row.weight) || 78.4,
+        sleep_hours: parseFloat(row.sleep_hours || row.schlaf || row.sleep) || 8.0,
+        whoop_recovery_pct: parseInt(row.whoop_recovery_pct || row.recovery || row.erholung) || 85,
+        whoop_hrv: parseInt(row.whoop_hrv || row.hrv) || 92,
+        whoop_rhr: parseInt(row.whoop_rhr || row.rhr || row.ruhepuls) || 47,
+        whoop_strain: parseFloat(row.whoop_strain || row.strain || row.belastung) || 14.5,
+        approach_speed_11m_to_1m: parseFloat(row.approach_speed_11m_to_1m || row.speed || row.geschwindigkeit) || null,
+        rsi_score: parseFloat(row.rsi_score || row.rsi) || null,
+        best_mark_m: parseFloat(row.best_mark_m || row.weite || row.mark) || null,
+        eff_mark_m: parseFloat(row.eff_mark_m || row.effektive_weite) || null,
+        trapbar_e1rm_kg: parseFloat(row.trapbar_e1rm_kg || row.trapbar) || null,
+        calories_kcal: parseInt(row.calories_kcal || row.kalorien || row.kcal) || 3400,
+        water_liters: parseFloat(row.water_liters || row.wasser) || 4.0,
+        energy_readiness_1_10: parseInt(row.energy_readiness_1_10 || row.energie) || 8,
+        muscle_soreness_1_10: parseInt(row.muscle_soreness_1_10 || row.muskelkater) || 2,
+        athlete_comments: row.athlete_comments || row.kommentar || row.notizen || row.notes || ''
+      });
+    }
+
+    return logs;
   }
 
   function renderStatsSummary(state) {
@@ -83,12 +513,9 @@ const AnalyticsModule = (() => {
 
   function renderInsightsAndCorrelations(state) {
     const insights = state.trainingInsights;
-    const tableBody = document.getElementById('correlationTableBody');
     const driversGrid = document.getElementById('eightMeterDriversGrid');
-
     if (!insights) return;
 
-    // Render 8.00m+ Key Prerequisites
     if (driversGrid && insights.eightMeterDrivers) {
       driversGrid.innerHTML = insights.eightMeterDrivers.map(d => {
         const isPos = d.delta > 0;
@@ -99,103 +526,63 @@ const AnalyticsModule = (() => {
               <span class="text-base font-black font-mono ${isPos ? 'text-emerald-400' : 'text-cyan-400'}">Ø ${d.avgOver8m}</span>
               <span class="text-[10px] font-mono text-slate-500">vs. <span class="text-slate-300">${d.avgUnder8m}</span> (&lt;8m)</span>
             </div>
-            <span class="text-[10px] font-mono font-bold ${isPos ? 'text-emerald-400' : 'text-cyan-400'} bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-center">
-              ${d.insight}
+            <span class="text-[9px] font-mono ${isPos ? 'text-emerald-400' : 'text-cyan-400'} font-bold">
+              ${isPos ? '+' : ''}${d.delta} Delta für 8m+ Sprünge
             </span>
           </div>
-        `;
-      }).join('');
-    }
-
-    // Render Correlation Matrix Table
-    if (tableBody && insights.topCorrelations) {
-      tableBody.innerHTML = insights.topCorrelations.map(c => {
-        const isPositive = c.correlation > 0;
-        const colorClass = isPositive ? 'text-emerald-400' : 'text-rose-400';
-        const barWidth = Math.min(100, Math.round(Math.abs(c.correlation) * 100));
-
-        return `
-          <tr class="hover:bg-slate-800/40 font-mono text-xs">
-            <td class="py-2 px-3 font-semibold text-slate-200">${formatMetricLabel(c.variable)}</td>
-            <td class="py-2 px-3 text-right font-black ${colorClass}">
-              ${isPositive ? '+' : ''}${c.correlation.toFixed(2)}
-            </td>
-            <td class="py-2 px-3">
-              <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
-                <div class="h-1.5 rounded-full ${isPositive ? 'bg-emerald-400' : 'bg-rose-400'}" style="width: ${barWidth}%"></div>
-              </div>
-            </td>
-            <td class="py-2 px-3 text-center">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
-                c.strength === 'Sehr stark' ? 'bg-cyan-950 text-cyan-400 border border-cyan-800' : 'bg-slate-800 text-slate-400'
-              }">${c.strength}</span>
-            </td>
-            <td class="py-2 px-3 text-[10px] text-slate-400 font-sans">${c.direction}</td>
-          </tr>
         `;
       }).join('');
     }
   }
 
   function renderCorrelationExplorer(state) {
-    const selA = document.getElementById('corrVarA');
-    const selB = document.getElementById('corrVarB');
-    if (!selA || !selB) return;
+    const selectA = document.getElementById('corrVarA');
+    const selectB = document.getElementById('corrVarB');
+    if (!selectA || !selectB) return;
 
     if (!initializedSelectors) {
-      selA.onchange = () => updateScatterPlot(state);
-      selB.onchange = () => updateScatterPlot(state);
+      selectA.addEventListener('change', () => updateCorrelationScatter(state));
+      selectB.addEventListener('change', () => updateCorrelationScatter(state));
       initializedSelectors = true;
     }
 
-    updateScatterPlot(state);
+    updateCorrelationScatter(state);
   }
 
-  function updateScatterPlot(state) {
-    const selA = document.getElementById('corrVarA');
-    const selB = document.getElementById('corrVarB');
-    const canvas = document.getElementById('corrScatterChart');
-    if (!selA || !selB || !canvas) return;
+  function updateCorrelationScatter(state) {
+    const selectA = document.getElementById('corrVarA');
+    const selectB = document.getElementById('corrVarB');
+    const canvas = document.getElementById('corrScatterCanvas');
+    if (!selectA || !selectB || !canvas) return;
 
-    const varA = selA.value; // Y-axis (Performance target)
-    const varB = selB.value; // X-axis (Readiness / Lifestyle driver)
-
+    const varA = selectA.value;
+    const varB = selectB.value;
     const logs = state.trainingLogs || [];
-    const points = [];
-    const xVals = [];
-    const yVals = [];
 
+    const points = [];
     logs.forEach(l => {
       const y = parseFloat(l[varA]);
       const x = parseFloat(l[varB]);
-      if (!isNaN(x) && !isNaN(y) && x !== null && y !== null) {
-        points.push({ x, y, date: l.date || '' });
-        xVals.push(x);
-        yVals.push(y);
+      if (!isNaN(x) && !isNaN(y)) {
+        points.push({ x, y, date: l.date });
       }
     });
 
-    if (points.length < 3) {
-      if (scatterChartInstance) scatterChartInstance.destroy();
-      return;
-    }
+    if (points.length < 3) return;
 
-    // Calculate Pearson Correlation r
+    const xVals = points.map(p => p.x);
+    const yVals = points.map(p => p.y);
     const n = points.length;
     const sumX = xVals.reduce((a, b) => a + b, 0);
     const sumY = yVals.reduce((a, b) => a + b, 0);
-    const sumXY = points.reduce((acc, p) => acc + (p.x * p.y), 0);
-    const sumX2 = xVals.reduce((acc, x) => acc + (x * x), 0);
-    const sumY2 = yVals.reduce((acc, y) => acc + (y * y), 0);
+    const sumXY = points.reduce((acc, p) => acc + p.x * p.y, 0);
+    const sumX2 = xVals.reduce((acc, x) => acc + x * x, 0);
+    const sumY2 = yVals.reduce((acc, y) => acc + y * y, 0);
 
-    const numerator = (n * sumXY) - (sumX * sumY);
-    const denominator = Math.sqrt(((n * sumX2) - (sumX * sumX)) * ((n * sumY2) - (sumY * sumY)));
-    const r = denominator !== 0 ? (numerator / denominator) : 0;
-
-    // Linear regression line: y = m*x + b
-    const denomSlope = (n * sumX2) - (sumX * sumX);
-    const slope = denomSlope !== 0 ? ((n * sumXY) - (sumX * sumY)) / denomSlope : 0;
-    const intercept = (sumY - (slope * sumX)) / n;
+    const denom = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+    const r = denom === 0 ? 0 : (n * sumXY - sumX * sumY) / denom;
+    const slope = (n * sumX2 - sumX * sumX) === 0 ? 0 : (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
 
     const minX = Math.min(...xVals);
     const maxX = Math.max(...xVals);
@@ -204,7 +591,6 @@ const AnalyticsModule = (() => {
       { x: maxX, y: slope * maxX + intercept }
     ];
 
-    // Update UI Badge
     const badge = document.getElementById('corrPearsonVal');
     if (badge) {
       const formattedR = (r >= 0 ? '+' : '') + r.toFixed(2);
@@ -220,7 +606,6 @@ const AnalyticsModule = (() => {
       }
     }
 
-    // Update Insight Text
     const insightTitle = document.getElementById('corrInsightTitle');
     const insightText = document.getElementById('corrInsightText');
     if (insightTitle && insightText) {
@@ -231,16 +616,14 @@ const AnalyticsModule = (() => {
         insightText.textContent = `${labelB} hat einen signifikanten direkten Einfluss auf ${labelA}. An Tagen mit optimalem ${labelB} werden regelmäßig die stärksten Leistungswerte erzielt.`;
       } else if (Math.abs(r) >= 0.4) {
         insightTitle.textContent = `Moderate Korrelation (r = ${(r >= 0 ? '+' : '') + r.toFixed(2)}):`;
-        insightText.textContent = `Ein spürbarer Trend zwischen ${labelB} und ${labelA} ist über die 7-Jahres-Datenreihe erkennbar.`;
+        insightText.textContent = `Ein spürbarer Trend zwischen ${labelB} und ${labelA} ist über die Datenreihe erkennbar.`;
       } else {
         insightTitle.textContent = `Geringe lineare Korrelation (r = ${(r >= 0 ? '+' : '') + r.toFixed(2)}):`;
-        insightText.textContent = `${labelA} verhält sich weitgehend unabhängig von ${labelB} oder wird durch stärkere Primärfaktoren (z.B. Anlaufgeschwindigkeit) überlagert.`;
+        insightText.textContent = `${labelA} verhält sich weitgehend unabhängig von ${labelB}.`;
       }
     }
 
-    // Render Chart
     if (scatterChartInstance) scatterChartInstance.destroy();
-
     scatterChartInstance = new Chart(canvas.getContext('2d'), {
       type: 'scatter',
       data: {
@@ -348,10 +731,11 @@ const AnalyticsModule = (() => {
             {
               label: 'Effektive Weite (m)',
               data: effMarks,
-              borderColor: '#f59e0b',
-              borderWidth: 2,
+              borderColor: '#10b981',
+              borderWidth: 1.5,
               borderDash: [4, 4],
-              pointRadius: 4,
+              pointRadius: 3,
+              pointBackgroundColor: '#10b981',
               spanGaps: true
             }
           ]
@@ -360,12 +744,7 @@ const AnalyticsModule = (() => {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            y: {
-              min: 7.5,
-              max: 8.4,
-              grid: { color: '#1e293b' },
-              ticks: { color: '#94a3b8', callback: v => v.toFixed(2) + 'm' }
-            },
+            y: { min: 7.4, max: 8.4, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
             x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
           },
           plugins: { legend: { labels: { color: '#cbd5e1' } } }
@@ -373,12 +752,12 @@ const AnalyticsModule = (() => {
       });
     }
 
-    // 2. Whoop & Readiness Chart
-    const ctxReadiness = document.getElementById('readinessChart');
+    // 2. Readiness Chart
+    const ctxReadiness = document.getElementById('readinessTrendsChart');
     if (ctxReadiness) {
       if (readinessChartInstance) readinessChartInstance.destroy();
-      const recoveries = recent.map(l => l.whoop_recovery_pct || null);
-      const sleeps = recent.map(l => l.sleep_hours || null);
+      const recoveries = recent.map(l => l.whoop_recovery_pct != null ? l.whoop_recovery_pct : null);
+      const hrvs = recent.map(l => l.whoop_hrv != null ? l.whoop_hrv : null);
 
       readinessChartInstance = new Chart(ctxReadiness.getContext('2d'), {
         type: 'line',
@@ -386,22 +765,22 @@ const AnalyticsModule = (() => {
           labels,
           datasets: [
             {
-              label: 'Whoop Recovery (%)',
+              label: 'Recovery Score (%)',
               data: recoveries,
               borderColor: '#10b981',
               backgroundColor: 'rgba(16, 185, 129, 0.1)',
-              fill: true,
-              borderWidth: 2.5,
-              pointRadius: 3,
-              yAxisID: 'yRec'
-            },
-            {
-              label: 'Schlafdauer (h)',
-              data: sleeps,
-              borderColor: '#a855f7',
               borderWidth: 2,
               pointRadius: 3,
-              yAxisID: 'ySleep'
+              yAxisID: 'y'
+            },
+            {
+              label: 'HRV (ms)',
+              data: hrvs,
+              borderColor: '#38bdf8',
+              borderWidth: 1.5,
+              borderDash: [3, 3],
+              pointRadius: 2,
+              yAxisID: 'y1'
             }
           ]
         },
@@ -409,20 +788,8 @@ const AnalyticsModule = (() => {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            yRec: {
-              position: 'left',
-              min: 0,
-              max: 100,
-              grid: { color: '#1e293b' },
-              ticks: { color: '#10b981', callback: v => v + '%' }
-            },
-            ySleep: {
-              position: 'right',
-              min: 5,
-              max: 11,
-              grid: { drawOnChartArea: false },
-              ticks: { color: '#a855f7', callback: v => v + 'h' }
-            },
+            y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#10b981' } },
+            y1: { position: 'right', min: 40, max: 130, grid: { drawOnChartArea: false }, ticks: { color: '#38bdf8' } },
             x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
           },
           plugins: { legend: { labels: { color: '#cbd5e1' } } }
@@ -430,34 +797,43 @@ const AnalyticsModule = (() => {
       });
     }
 
-    // 3. Strength e1RM Chart
-    const ctxStrength = document.getElementById('strengthChart');
+    // 3. Strength & Velocity Chart
+    const ctxStrength = document.getElementById('strengthSpeedChart');
     if (ctxStrength) {
       if (strengthChartInstance) strengthChartInstance.destroy();
+      const speeds = recent.map(l => l.approach_speed_11m_to_1m || null);
       const trapbars = recent.map(l => l.trapbar_e1rm_kg || null);
-      const cleans = recent.map(l => l.power_clean_e1rm_kg || null);
-      const hipthrusts = recent.map(l => l.hip_thrust_e1rm_kg || null);
 
       strengthChartInstance = new Chart(ctxStrength.getContext('2d'), {
-        type: 'bar',
+        type: 'line',
         data: {
           labels,
           datasets: [
-            { label: 'Trapbar e1RM (kg)', data: trapbars, backgroundColor: '#f59e0b', borderRadius: 3 },
-            { label: 'Umsetzen e1RM (kg)', data: cleans, backgroundColor: '#06b6d4', borderRadius: 3 },
-            { label: 'Hip-Thrust e1RM (kg)', data: hipthrusts, backgroundColor: '#8b5cf6', borderRadius: 3 }
+            {
+              label: 'Anlauf-Speed (m/s)',
+              data: speeds,
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+              borderWidth: 2,
+              pointRadius: 3,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Trapbar e1RM (kg)',
+              data: trapbars,
+              borderColor: '#8b5cf6',
+              borderWidth: 1.5,
+              pointRadius: 2,
+              yAxisID: 'y1'
+            }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            y: {
-              min: 100,
-              max: 300,
-              grid: { color: '#1e293b' },
-              ticks: { color: '#cbd5e1', callback: v => v + 'kg' }
-            },
+            y: { min: 9.5, max: 11.2, grid: { color: '#1e293b' }, ticks: { color: '#f59e0b' } },
+            y1: { position: 'right', min: 200, max: 280, grid: { drawOnChartArea: false }, ticks: { color: '#8b5cf6' } },
             x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
           },
           plugins: { legend: { labels: { color: '#cbd5e1' } } }
@@ -466,31 +842,15 @@ const AnalyticsModule = (() => {
     }
   }
 
-  function parseCsvTrainingLogs(csvText) {
-    const lines = csvText.trim().split(/\r?\n/);
-    if (lines.length < 2) return [];
-
-    const headers = lines[0].split(',').map(h => h.trim().replace(/^["']|["']$/g, ''));
-    const rows = [];
-
-    for (let i = 1; i < lines.length; i++) {
-      const parts = lines[i].split(',');
-      if (parts.length < 2) continue;
-
-      const obj = {};
-      headers.forEach((h, colIdx) => {
-        let val = parts[colIdx] !== undefined ? parts[colIdx].trim().replace(/^["']|["']$/g, '') : null;
-        if (val !== null && val !== '') {
-          const num = Number(val);
-          obj[h] = !isNaN(num) ? num : val;
-        } else {
-          obj[h] = null;
-        }
-      });
-      rows.push(obj);
-    }
-    return rows;
-  }
-
-  return { render, parseCsvTrainingLogs };
+  return {
+    render,
+    prevDay,
+    nextDay,
+    goToToday,
+    onDatePicked,
+    openSheetsModal,
+    saveSheetsUrl,
+    resetToSampleData,
+    syncGoogleSheets
+  };
 })();

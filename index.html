@@ -155,64 +155,191 @@
 
     <!-- ================= TAB 1: TAGES-READINESS & TRAINING ANALYTICS ================= -->
     <div id="tabContentAnalytics" class="space-y-4">
-      <!-- 1. Daily Readiness Cockpit (Whoop 4.0 & Apple Health) -->
+      <!-- 1. Google Sheets Live Sync & Date Scrubber Header -->
       <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-500/40 rounded-xl p-4 shadow-lg space-y-3">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800">
           <div>
             <div class="flex items-center gap-2">
               <span class="text-xl">⚡</span>
               <h2 class="text-sm font-black text-white uppercase tracking-wider font-mono">
-                TAGES-READINESS & TRAINING-STATUS • LUKA HERDEN
+                DAILY READINESS & WHOOP 4.0 STATUS • LUKA HERDEN
               </h2>
               <span id="readinessStatusBadge" class="px-2.5 py-0.5 rounded text-[10px] font-black font-mono uppercase bg-emerald-950 text-emerald-300 border border-emerald-700 animate-pulse">
                 🟢 OPTIMAL (88% RECOVERY)
               </span>
             </div>
             <p class="text-[11px] text-slate-300 font-mono mt-0.5">
-              Live-Auswertung basierend auf Whoop 4.0 & Apple Health • Synchronisiert mit Google Sheets
+              Live Whoop 4.0 & Training Analytics • Bereitstellung für Training & Wettkampf
             </p>
           </div>
-          <div class="text-[11px] font-mono text-emerald-300 bg-emerald-950/60 border border-emerald-800 px-3 py-1 rounded-lg self-start sm:self-auto">
-            🚀 <strong>Tagesempfehlung:</strong> Maximale Anlaufgeschwindigkeit (>10.2 m/s) freigegeben!
+
+          <!-- Google Sheets Live Sync Status & Actions -->
+          <div class="flex items-center gap-2 font-mono text-xs self-start sm:self-auto flex-wrap">
+            <span id="sheetsSyncStatusBadge" class="px-2 py-1 rounded bg-slate-950 text-slate-300 border border-slate-800 text-[10px] flex items-center gap-1.5">
+              <span id="sheetsSyncDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="sheetsSyncLabel">Musterdaten (Lokal)</span>
+            </span>
+            <button onclick="AnalyticsModule.syncGoogleSheets()" class="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 active:scale-95 text-cyan-400 border border-slate-700 hover:border-cyan-500 text-[10px] font-bold transition-all shadow-sm flex items-center gap-1">
+              <span>🔄 Sync</span>
+            </button>
+            <button onclick="AnalyticsModule.openSheetsModal()" class="px-2.5 py-1 rounded bg-cyan-950 hover:bg-cyan-900 active:scale-95 text-cyan-300 border border-cyan-700 text-[10px] font-bold transition-all shadow-sm flex items-center gap-1">
+              <span>⚙️ Google Sheets verknüpfen</span>
+            </button>
           </div>
         </div>
 
-        <!-- Readiness Metrics 4-Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 flex flex-col justify-between">
-            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold">Whoop Recovery</span>
-            <div class="my-1 flex items-baseline justify-between">
-              <span id="whoopRecoveryVal" class="text-2xl font-black font-mono text-emerald-400">88%</span>
-              <span class="text-[10px] font-mono text-emerald-500 font-bold">Grüner Bereich</span>
+        <!-- Date Scrubber & Calendar Day Picker -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2">
+            <button onclick="AnalyticsModule.prevDay()" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs font-mono font-bold transition-all">
+              ◀ Tag zurück
+            </button>
+            <div id="selectedTrainingDayDisplay" class="text-xs sm:text-sm font-black font-mono text-white flex items-center gap-1.5 px-2">
+              📅 Mittwoch, 23. September 2026 (Heute)
             </div>
-            <span class="text-[9px] text-slate-500 font-mono">ZNS voll erholt</span>
+            <button onclick="AnalyticsModule.nextDay()" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs font-mono font-bold transition-all">
+              Tag vor ▶
+            </button>
           </div>
 
-          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 flex flex-col justify-between">
-            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold">Herzfrequenzvariabilität</span>
-            <div class="my-1 flex items-baseline justify-between">
-              <span id="whoopHrvVal" class="text-2xl font-black font-mono text-cyan-400">94 ms</span>
-              <span class="text-[10px] font-mono text-cyan-400 font-bold">+15% vs. Baseline</span>
+          <div class="flex items-center gap-2 font-mono text-xs">
+            <input type="date" id="trainingDatePicker" onchange="AnalyticsModule.onDatePicked(this.value)" class="bg-slate-900 border border-slate-700 text-cyan-300 rounded px-2.5 py-1 text-xs focus:outline-none focus:border-cyan-500" />
+            <button onclick="AnalyticsModule.goToToday()" class="px-2.5 py-1 rounded bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black text-xs transition-all shadow-sm">
+              Heute
+            </button>
+          </div>
+        </div>
+
+        <!-- Whoop 3-Gauge Cockpit: Recovery, Sleep, Strain -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <!-- 1. Recovery Dial Card -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex items-center gap-4">
+            <div class="relative w-20 h-20 shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                <path class="text-slate-800" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="recoveryRingSvg" class="text-emerald-400 transition-all duration-700" stroke-dasharray="88, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="whoopRecoveryVal" class="text-lg font-black font-mono text-white">88%</span>
+              </div>
             </div>
-            <span class="text-[9px] text-slate-500 font-mono">Parasympathikus aktiv</span>
+            <div class="space-y-1">
+              <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">WHOOP RECOVERY</span>
+              <div id="whoopRecoveryStatus" class="text-xs font-bold font-mono text-emerald-400">Grüner Bereich (Optimal)</div>
+              <div class="text-[10px] font-mono text-slate-400 flex items-center gap-2 pt-0.5">
+                <span>HRV: <strong id="whoopHrvVal" class="text-cyan-300">94 ms</strong></span>
+                <span>•</span>
+                <span>RHR: <strong id="whoopRhrVal" class="text-amber-300">46 bpm</strong></span>
+              </div>
+            </div>
           </div>
 
-          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 flex flex-col justify-between">
-            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold">Schlaf-Performance</span>
-            <div class="my-1 flex items-baseline justify-between">
-              <span id="whoopSleepVal" class="text-2xl font-black font-mono text-purple-400">8h 15m</span>
-              <span class="text-[10px] font-mono text-purple-300 font-bold">92% Effizienz</span>
+          <!-- 2. Sleep Performance Dial Card -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex items-center gap-4">
+            <div class="relative w-20 h-20 shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                <path class="text-slate-800" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="sleepRingSvg" class="text-purple-400 transition-all duration-700" stroke-dasharray="94, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="whoopSleepPerfVal" class="text-lg font-black font-mono text-white">94%</span>
+              </div>
             </div>
-            <span class="text-[9px] text-slate-500 font-mono">Tiefschlaf: 1h 48m</span>
+            <div class="space-y-1">
+              <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">SCHLAF-PERFORMANCE</span>
+              <div id="whoopSleepVal" class="text-xs font-bold font-mono text-purple-300">8h 15m geschlafen</div>
+              <div class="text-[10px] font-mono text-slate-400 flex items-center gap-2 pt-0.5">
+                <span id="whoopSleepNeedVal">Bedarf: 8h 30m</span>
+                <span>•</span>
+                <span class="text-slate-300">Effizienz: 92%</span>
+              </div>
+            </div>
           </div>
 
-          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 flex flex-col justify-between">
-            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold">Ruhepuls & Strain</span>
-            <div class="my-1 flex items-baseline justify-between">
-              <span id="whoopRhrVal" class="text-2xl font-black font-mono text-amber-400">46 bpm</span>
-              <span class="text-[10px] font-mono text-slate-400">Strain: 14.2</span>
+          <!-- 3. Day Strain Dial Card -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex items-center gap-4">
+            <div class="relative w-20 h-20 shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                <path class="text-slate-800" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="strainRingSvg" class="text-cyan-400 transition-all duration-700" stroke-dasharray="70, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="whoopStrainVal" class="text-lg font-black font-mono text-white">14.8</span>
+              </div>
             </div>
-            <span class="text-[9px] text-slate-500 font-mono">Kardiovaskulär top</span>
+            <div class="space-y-1">
+              <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">DAY STRAIN (0 - 21)</span>
+              <div id="whoopStrainCategory" class="text-xs font-bold font-mono text-cyan-400">Hohe Belastung</div>
+              <div class="text-[10px] font-mono text-slate-400 flex items-center gap-2 pt-0.5">
+                <span>Zielbereich: <strong id="whoopTargetStrainVal" class="text-slate-200">13.5 - 15.5</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coach Recommendation Banner -->
+        <div id="readinessRecommendationBanner" class="text-xs font-mono text-emerald-300 bg-emerald-950/40 border border-emerald-800/80 p-3 rounded-lg flex items-center gap-2">
+          <span>🚀</span>
+          <span><strong>Readiness-Empfehlung:</strong> Volle ZNS-Freigabe für maximale Anlaufgeschwindigkeit (>10.3 m/s) und hohe Reaktivität (RSI > 2.8).</span>
+        </div>
+      </div>
+
+      <!-- 2. Trainingseinheiten des Tages (Ausklappbar) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3 shadow-sm">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🏋️</span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white font-mono">
+              TRAININGSEINHEITEN DES TAGES (ÜBUNGEN, VBT-GESCHWINDIGKEITEN & WEITEN)
+            </h3>
+          </div>
+          <span id="trainingSessionsCountBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-950 text-cyan-400 border border-slate-800">
+            1 Einheit
+          </span>
+        </div>
+
+        <div id="dailyTrainingSessionsContainer" class="space-y-3">
+          <!-- Populated dynamically by analytics.js -->
+        </div>
+      </div>
+
+      <!-- 3. Tägliches Journal & Wohlbefinden (Notizen, Gewicht, Ernährung) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3 shadow-sm">
+        <div class="flex items-center gap-2 pb-2 border-b border-slate-800">
+          <span class="text-base">📖</span>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-white font-mono">
+            TAGESJOURNAL & BIO-METRIKEN (AUS TABELLENSPALTEN)
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <!-- Bodyweight -->
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-1">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Körpergewicht</span>
+            <div id="journalWeightVal" class="text-xl font-black font-mono text-cyan-400">78.4 kg</div>
+            <span class="text-[10px] font-mono text-slate-500">Optimum für Wettkampf</span>
+          </div>
+
+          <!-- Nutrition & Hydration -->
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-1">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Ernährung & Wasser</span>
+            <div id="journalNutritionVal" class="text-sm font-bold font-mono text-emerald-400">3.450 kcal • 4.2L</div>
+            <span class="text-[10px] font-mono text-slate-500">Kreatin, Omega-3, Elektrolyte</span>
+          </div>
+
+          <!-- Soreness & Energy -->
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-1">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Muskelkater / ZNS</span>
+            <div id="journalSorenessVal" class="text-sm font-bold font-mono text-amber-300">Soreness: 2/10 • Energie: 9/10</div>
+            <span class="text-[10px] font-mono text-slate-500">ZNS frisch, Beine schmerzfrei</span>
+          </div>
+
+          <!-- Athlete Notes -->
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-1">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Tagesnotiz / Kommentar</span>
+            <div id="journalNotesVal" class="text-xs font-sans text-slate-200 line-clamp-3 italic">
+              "Sehr gute Anlaufdynamik, Druck am Brett konstant."
+            </div>
           </div>
         </div>
       </div>
@@ -897,9 +1024,17 @@
 
         <!-- Counted Competitions Table -->
         <div class="space-y-2">
-          <h3 id="modalCompetitionsTitle" class="text-xs font-bold text-white uppercase font-mono tracking-wider">
-            🏆 GEWERTETE WETTKÄMPFE (MEETING RECORDS & WA PUNKTE)
-          </h3>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 id="modalCompetitionsTitle" class="text-xs font-bold text-white uppercase font-mono tracking-wider">
+              🏆 GEWERTETE WETTKÄMPFE (MEETING RECORDS & WA PUNKTE)
+            </h3>
+            <div id="modalSortControls" class="flex items-center gap-1 font-mono text-[10px]">
+              <span class="text-slate-400">Sortieren:</span>
+              <button id="modalSortDateBtn" onclick="RankingsModule.setModalAthleteSort('date')" class="px-2 py-0.5 rounded bg-cyan-900 text-cyan-300 font-bold border border-cyan-700 transition-all">Datum ▾</button>
+              <button id="modalSortMarkBtn" onclick="RankingsModule.setModalAthleteSort('mark')" class="px-2 py-0.5 rounded bg-slate-950 text-slate-400 hover:text-white border border-slate-800 transition-all">Weite ▾</button>
+              <button id="modalSortScoreBtn" onclick="RankingsModule.setModalAthleteSort('score')" class="px-2 py-0.5 rounded bg-slate-950 text-slate-400 hover:text-white border border-slate-800 transition-all">Score ▾</button>
+            </div>
+          </div>
           <div class="overflow-x-auto border border-slate-800 rounded-xl">
             <table class="w-full text-left border-collapse text-[11px] font-mono">
               <thead>
@@ -925,6 +1060,92 @@
           <button onclick="document.getElementById('competitorModal').classList.add('hidden')" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-mono font-bold">
             Schließen
           </button>
+        </div>
+    </div>
+
+    <!-- ================= MEETING ORGANISER & DETAILS MODAL ================= -->
+    <div id="meetingInfoModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl space-y-4 p-4 sm:p-5">
+        <div class="flex items-start justify-between pb-3 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span id="modalMeetingCategoryBadge" class="px-2 py-0.5 rounded text-xs font-black font-mono bg-cyan-950 text-cyan-300 border border-cyan-800">SILVER • KAT. B</span>
+              <h2 id="modalMeetingName" class="text-base sm:text-lg font-black text-white font-mono">Gorzów Jump Festival 2027</h2>
+            </div>
+            <p id="modalMeetingSub" class="text-[11px] text-slate-400 font-mono mt-0.5">📅 30. JAN 2027 • Arena Gorzów, Gorzów Wielkopolski (POL)</p>
+          </div>
+          <button onclick="document.getElementById('meetingInfoModal').classList.add('hidden')" class="text-slate-400 hover:text-white p-1 text-lg">✕</button>
+        </div>
+
+        <div id="modalMeetingBody" class="space-y-4">
+          <!-- Populated by venues.js -->
+        </div>
+
+        <div class="pt-2 flex justify-between items-center text-xs">
+          <div id="modalMeetingLinks" class="flex items-center gap-3"></div>
+          <button onclick="document.getElementById('meetingInfoModal').classList.add('hidden')" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-mono font-bold">
+            Schließen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= GOOGLE SHEETS LIVE SYNC MODAL ================= -->
+    <div id="googleSheetsSyncModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl space-y-4 p-4 sm:p-5">
+        <div class="flex items-start justify-between pb-3 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">📊</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-black text-white font-mono">GOOGLE SHEETS LIVE-SYNC</h2>
+              <p class="text-[11px] text-slate-400 font-mono">Tagesaktuelle Synchronisation deiner Trainings- & Bio-Metriken</p>
+            </div>
+          </div>
+          <button onclick="document.getElementById('googleSheetsSyncModal').classList.add('hidden')" class="text-slate-400 hover:text-white p-1 text-lg">✕</button>
+        </div>
+
+        <div class="space-y-3 font-sans text-xs text-slate-300">
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2">
+            <h4 class="font-bold text-white font-mono uppercase text-[11px] flex items-center gap-1.5">
+              <span>📋</span>
+              <span>So veröffentlichst du deine Google Tabelle (3 Schritte):</span>
+            </h4>
+            <ol class="list-decimal list-inside space-y-1.5 text-slate-300 leading-relaxed font-sans text-[11px]">
+              <li>Öffne deine Trainings-Tabelle in Google Sheets.</li>
+              <li>Klicke oben links auf <strong>Datei</strong> ➔ <strong>Freigeben</strong> ➔ <strong>Im Web veröffentlichen</strong>.</li>
+              <li>Wähle unter <em>Link</em> die Option <strong>Kommagetrennte Werte (.csv)</strong> und klicke auf <strong>Veröffentlichen</strong>.</li>
+              <li>Kopiere den generierten Link und füge ihn unten ein:</li>
+            </ol>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-bold font-mono text-cyan-400 block uppercase">
+              Google Sheets CSV-Webfreigabe URL:
+            </label>
+            <input 
+              type="url" 
+              id="googleSheetsCsvUrlInput" 
+              placeholder="https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?output=csv"
+              class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500" 
+            />
+            <p class="text-[10px] text-slate-500 font-mono">
+              Wird dauerhaft in deinem Browser (localStorage) gesichert. Das Dashboard ruft die Tabelle bei jedem Laden tagesaktuell ab.
+            </p>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+          <button onclick="AnalyticsModule.resetToSampleData()" class="text-slate-400 hover:text-rose-400 font-mono text-xs underline">
+            Musterdaten wiederherstellen
+          </button>
+          <div class="flex items-center gap-2">
+            <button onclick="document.getElementById('googleSheetsSyncModal').classList.add('hidden')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-mono font-bold">
+              Abbrechen
+            </button>
+            <button onclick="AnalyticsModule.saveSheetsUrl()" class="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black rounded-lg text-xs font-mono shadow-md">
+              Speichern & Synchronisieren 💾
+            </button>
+          </div>
         </div>
       </div>
     </div>

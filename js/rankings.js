@@ -79,6 +79,61 @@ const RankingsModule = (() => {
     return top;
   }
 
+  const athleteTableSorts = {};
+  const athleteDbSorts = {};
+  let currentModalAthleteName = null;
+  let currentModalSort = 'date';
+
+  function sortAthleteCompetitions(comps, sortKey = 'date') {
+    if (!comps || !comps.length) return [];
+    const list = [...comps];
+    if (sortKey === 'mark') {
+      return list.sort((a, b) => (parseFloat(b.mark) || 0) - (parseFloat(a.mark) || 0));
+    } else if (sortKey === 'score') {
+      return list.sort((a, b) => {
+        const sA = parseInt(a.performance_score || a.performanceScore || a.result_score || 0);
+        const sB = parseInt(b.performance_score || b.performanceScore || b.result_score || 0);
+        return sB - sA;
+      });
+    } else if (sortKey === 'date-asc') {
+      return list.sort((a, b) => parseDateStr(a.date) - parseDateStr(b.date));
+    } else {
+      // Default: date descending (newest first)
+      return list.sort((a, b) => parseDateStr(b.date) - parseDateStr(a.date));
+    }
+  }
+
+  function setAthleteRowSort(athName, sortKey) {
+    athleteTableSorts[athName] = sortKey;
+    if (window.App && window.App.state) {
+      renderTable(window.App.state);
+    }
+  }
+
+  function setAthleteDbSort(athId, sortKey) {
+    athleteDbSorts[athId] = sortKey;
+    if (window.App && window.App.state) {
+      renderAthletesDatabase(window.App.state);
+    }
+  }
+
+  function setModalAthleteSort(sortKey) {
+    currentModalSort = sortKey;
+    ['date', 'mark', 'score'].forEach(k => {
+      const btn = document.getElementById('modalSort' + k.charAt(0).toUpperCase() + k.slice(1) + 'Btn');
+      if (btn) {
+        if (k === sortKey) {
+          btn.className = 'px-2 py-0.5 rounded bg-cyan-900 text-cyan-300 font-bold border border-cyan-700 transition-all';
+        } else {
+          btn.className = 'px-2 py-0.5 rounded bg-slate-950 text-slate-400 hover:text-white border border-slate-800 transition-all';
+        }
+      }
+    });
+    if (currentModalAthleteName) {
+      openCompetitorModal(currentModalAthleteName, false);
+    }
+  }
+
   function render(state) {
     initSubTabs(state);
     initTimeTravelControls(state);
@@ -467,9 +522,12 @@ const RankingsModule = (() => {
         const accTr = document.createElement('tr');
         accTr.className = 'bg-slate-950/90 border-b border-slate-800';
 
+        const athRowSort = athleteTableSorts[ath.name] || 'date';
+        const sortedMeets = sortAthleteCompetitions(ath.countingMeetings || [], athRowSort);
+
         let meetsHtml = '';
-        if (ath.countingMeetings && ath.countingMeetings.length > 0) {
-          meetsHtml = ath.countingMeetings.map(m => `
+        if (sortedMeets && sortedMeets.length > 0) {
+          meetsHtml = sortedMeets.map(m => `
             <tr class="hover:bg-slate-900/50">
               <td class="py-1.5 px-2 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
               <td class="py-1.5 px-2 text-slate-200 font-sans font-medium text-xs">
@@ -492,11 +550,19 @@ const RankingsModule = (() => {
         accTr.innerHTML = `
           <td colspan="7" class="p-3">
             <div class="bg-slate-900 rounded-lg border border-slate-800 p-3 shadow-md">
-              <div class="flex items-center justify-between mb-2">
-                <h4 class="font-bold text-white text-xs uppercase tracking-wider flex items-center gap-1.5">
-                  <span>📊 Gewertete Meetings für ${ath.name}</span>
-                </h4>
-                <button onclick="event.stopPropagation(); RankingsModule.openCompetitorModal('${ath.name}')" class="text-cyan-400 hover:text-cyan-300 font-mono text-[10px] font-bold underline">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h4 class="font-bold text-white text-xs uppercase tracking-wider flex items-center gap-1.5">
+                    <span>📊 Gewertete Meetings für ${ath.name}</span>
+                  </h4>
+                  <div class="flex items-center gap-1 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] font-mono">
+                    <span class="text-slate-500">Sortieren:</span>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'date')" class="px-1.5 py-0.2 rounded ${athRowSort === 'date' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Datum ▾</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'mark')" class="px-1.5 py-0.2 rounded ${athRowSort === 'mark' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Weite ▾</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'score')" class="px-1.5 py-0.2 rounded ${athRowSort === 'score' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Score ▾</button>
+                  </div>
+                </div>
+                <button onclick="event.stopPropagation(); RankingsModule.openCompetitorModal('${ath.name.replace(/'/g, "\\'")}')" class="text-cyan-400 hover:text-cyan-300 font-mono text-[10px] font-bold underline">
                   Im direkten Vergleich mit Luka öffnen ↗
                 </button>
               </div>
@@ -654,9 +720,10 @@ const RankingsModule = (() => {
     });
   }
 
-  function openCompetitorModal(athleteName) {
+  function openCompetitorModal(athleteName, updateSortButtons = true) {
     const modal = document.getElementById('competitorModal');
     if (!modal) return;
+    currentModalAthleteName = athleteName;
 
     // Find in athletes database or state.athletes
     let target = null;
@@ -714,10 +781,24 @@ const RankingsModule = (() => {
     // Populate competitions
     const compTitle = document.getElementById('modalCompetitionsTitle');
     const compBody = document.getElementById('modalCompetitionsBody');
-    const comps = target.counted_competitions || target.countingMeetings || [];
+    const rawComps = target.counted_competitions || target.countingMeetings || [];
+    const comps = sortAthleteCompetitions(rawComps, currentModalSort);
     
     if (compTitle) {
       compTitle.textContent = `🏆 ERFASSTE WETTKÄMPFE (${comps.length} Wettkämpfe in der WA-Datenbank)`;
+    }
+
+    if (updateSortButtons) {
+      ['date', 'mark', 'score'].forEach(k => {
+        const btn = document.getElementById('modalSort' + k.charAt(0).toUpperCase() + k.slice(1) + 'Btn');
+        if (btn) {
+          if (k === currentModalSort) {
+            btn.className = 'px-2 py-0.5 rounded bg-cyan-900 text-cyan-300 font-bold border border-cyan-700 transition-all';
+          } else {
+            btn.className = 'px-2 py-0.5 rounded bg-slate-950 text-slate-400 hover:text-white border border-slate-800 transition-all';
+          }
+        }
+      });
     }
 
     if (compBody) {
@@ -864,13 +945,24 @@ const RankingsModule = (() => {
       let compsHtml = '';
       if (isExpanded) {
         if (comps.length > 0) {
+          const athDbSort = athleteDbSorts[ath.id] || 'date';
+          const sortedComps = sortAthleteCompetitions(comps, athDbSort);
+
           compsHtml = `
             <div class="mt-3 pt-3 border-t border-slate-800/80">
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-[11px] font-bold text-slate-300 uppercase font-mono">
-                  📊 Alle ${comps.length} dokumentierten Wettkämpfe (2023 - 2026)
-                </span>
-                <button onclick="event.stopPropagation(); RankingsModule.openCompetitorModal('${ath.name}')" class="text-cyan-400 hover:text-cyan-300 text-[10px] font-mono font-bold underline">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-[11px] font-bold text-slate-300 uppercase font-mono">
+                    📊 Alle ${comps.length} dokumentierten Wettkämpfe (2023 - 2026)
+                  </span>
+                  <div class="flex items-center gap-1 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] font-mono">
+                    <span class="text-slate-500">Sortieren:</span>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'date')" class="px-1.5 py-0.2 rounded ${athDbSort === 'date' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Datum ▾</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'mark')" class="px-1.5 py-0.2 rounded ${athDbSort === 'mark' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Weite ▾</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'score')" class="px-1.5 py-0.2 rounded ${athDbSort === 'score' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Score ▾</button>
+                  </div>
+                </div>
+                <button onclick="event.stopPropagation(); RankingsModule.openCompetitorModal('${ath.name.replace(/'/g, "\\'")}')" class="text-cyan-400 hover:text-cyan-300 text-[10px] font-mono font-bold underline">
                   Direkter Vergleich mit Luka ↗
                 </button>
               </div>
@@ -1208,6 +1300,9 @@ const RankingsModule = (() => {
   return {
     render,
     openCompetitorModal,
+    setModalAthleteSort,
+    setAthleteRowSort,
+    setAthleteDbSort,
     toggleAthleteDbRow,
     toggleMeetingDbRow,
     searchAthleteDirect,
