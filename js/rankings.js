@@ -6,11 +6,108 @@ const RankingsModule = (() => {
   let initializedControls = false;
   let currentSnapshotIdx = null;
 
+  // Sub-tabs & Search State
+  let activeSubTab = 'ranking'; // 'ranking' | 'athletes' | 'meetings'
+  let athleteSearchQuery = '';
+  let athleteSelectedNation = 'ALL';
+  let meetingSearchQuery = '';
+  let meetingSelectedCategory = 'ALL';
+  let expandedAthleteDbId = null;
+  let expandedMeetingDbName = null;
+
   function render(state) {
+    initSubTabs(state);
     initTimeTravelControls(state);
     renderKpiTiles(state);
     renderTable(state);
     renderCompactHistoryChart(state);
+    if (activeSubTab === 'athletes') renderAthletesDatabase(state);
+    if (activeSubTab === 'meetings') renderMeetingsDatabase(state);
+  }
+
+  function initSubTabs(state) {
+    const btnRanking = document.getElementById('subTabRankingBtn');
+    const btnAthletes = document.getElementById('subTabAthletesBtn');
+    const btnMeetings = document.getElementById('subTabMeetingsBtn');
+
+    if (!btnRanking || !btnAthletes || !btnMeetings) return;
+
+    btnRanking.onclick = () => switchSubTab(state, 'ranking');
+    btnAthletes.onclick = () => switchSubTab(state, 'athletes');
+    btnMeetings.onclick = () => switchSubTab(state, 'meetings');
+
+    // Athlete Search Listeners
+    const athInput = document.getElementById('athleteDbSearchInput');
+    if (athInput && !athInput.dataset.bound) {
+      athInput.dataset.bound = 'true';
+      athInput.oninput = (e) => {
+        athleteSearchQuery = e.target.value;
+        renderAthletesDatabase(state);
+      };
+    }
+
+    document.querySelectorAll('.dbnat-filter-btn').forEach(btn => {
+      if (!btn.dataset.bound) {
+        btn.dataset.bound = 'true';
+        btn.onclick = () => {
+          document.querySelectorAll('.dbnat-filter-btn').forEach(b => {
+            b.className = 'dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950';
+          });
+          btn.className = 'dbnat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white';
+          athleteSelectedNation = btn.dataset.dbnation;
+          renderAthletesDatabase(state);
+        };
+      }
+    });
+
+    // Meeting Search Listeners
+    const meetInput = document.getElementById('meetingsDbSearchInput');
+    if (meetInput && !meetInput.dataset.bound) {
+      meetInput.dataset.bound = 'true';
+      meetInput.oninput = (e) => {
+        meetingSearchQuery = e.target.value;
+        renderMeetingsDatabase(state);
+      };
+    }
+
+    document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+      if (!btn.dataset.bound) {
+        btn.dataset.bound = 'true';
+        btn.onclick = () => {
+          document.querySelectorAll('.cat-filter-btn').forEach(b => {
+            b.className = 'cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950';
+          });
+          btn.className = 'cat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white';
+          meetingSelectedCategory = btn.dataset.catfilter;
+          renderMeetingsDatabase(state);
+        };
+      }
+    });
+  }
+
+  function switchSubTab(state, tabName) {
+    activeSubTab = tabName;
+    const vRank = document.getElementById('subViewRanking');
+    const vAth = document.getElementById('subViewAthletes');
+    const vMeet = document.getElementById('subViewMeetings');
+
+    const bRank = document.getElementById('subTabRankingBtn');
+    const bAth = document.getElementById('subTabAthletesBtn');
+    const bMeet = document.getElementById('subTabMeetingsBtn');
+
+    if (vRank) vRank.classList.toggle('hidden', tabName !== 'ranking');
+    if (vAth) vAth.classList.toggle('hidden', tabName !== 'athletes');
+    if (vMeet) vMeet.classList.toggle('hidden', tabName !== 'meetings');
+
+    const activeCls = 'px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono bg-cyan-500 text-slate-950 transition-all flex items-center gap-1.5 shadow-sm';
+    const inactiveCls = 'px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono bg-slate-900 text-slate-300 hover:text-white border border-slate-800 hover:border-cyan-500/50 transition-all flex items-center gap-1.5';
+
+    if (bRank) bRank.className = tabName === 'ranking' ? activeCls : inactiveCls;
+    if (bAth) bAth.className = tabName === 'athletes' ? activeCls : inactiveCls;
+    if (bMeet) bMeet.className = tabName === 'meetings' ? activeCls : inactiveCls;
+
+    if (tabName === 'athletes') renderAthletesDatabase(state);
+    if (tabName === 'meetings') renderMeetingsDatabase(state);
   }
 
   function initTimeTravelControls(state) {
@@ -557,5 +654,311 @@ const RankingsModule = (() => {
     modal.classList.remove('hidden');
   }
 
-  return { render, openCompetitorModal };
+  function renderAthletesDatabase(state) {
+    const container = document.getElementById('athletesDbContainer');
+    const badge = document.getElementById('athletesDbCountBadge');
+    if (!container) return;
+
+    const db = state.athletesDatabase;
+    if (!db || !db.athletes) {
+      container.innerHTML = '<div class="py-12 text-center text-slate-500 font-mono text-xs">Lade Gesamtdatenbank aller Athleten...</div>';
+      return;
+    }
+
+    let list = [...db.athletes];
+
+    if (athleteSelectedNation !== 'ALL') {
+      list = list.filter(a => a.country === athleteSelectedNation);
+    }
+
+    if (athleteSearchQuery) {
+      const q = athleteSearchQuery.toLowerCase().trim();
+      list = list.filter(a => (a.name && a.name.toLowerCase().includes(q)) || (a.country && a.country.toLowerCase().includes(q)));
+    }
+
+    if (badge) {
+      badge.textContent = `${list.length} von ${db.athletes.length} Athleten`;
+    }
+
+    if (list.length === 0) {
+      container.innerHTML = '<div class="py-12 text-center text-slate-500 font-mono text-xs">Keine Athleten gefunden für diesen Filter.</div>';
+      return;
+    }
+
+    container.innerHTML = list.slice(0, 60).map(ath => {
+      const isLuka = ath.name.toLowerCase().includes('herden');
+      const isGerman = ath.country === 'GER';
+      const isExpanded = expandedAthleteDbId === ath.id;
+      const comps = ath.counted_competitions || [];
+
+      let compsHtml = '';
+      if (isExpanded) {
+        if (comps.length > 0) {
+          compsHtml = `
+            <div class="mt-3 pt-3 border-t border-slate-800/80">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-bold text-slate-300 uppercase font-mono">
+                  📊 Alle ${comps.length} dokumentierten Wettkämpfe (2023 - 2026)
+                </span>
+                <button onclick="event.stopPropagation(); RankingsModule.openCompetitorModal('${ath.name}')" class="text-cyan-400 hover:text-cyan-300 text-[10px] font-mono font-bold underline">
+                  Direkter Vergleich mit Luka ↗
+                </button>
+              </div>
+              <div class="overflow-x-auto border border-slate-800 rounded-lg">
+                <table class="w-full text-left border-collapse text-[10px] font-mono">
+                  <thead>
+                    <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[9px] uppercase">
+                      <th class="py-1.5 px-2">Datum</th>
+                      <th class="py-1.5 px-2">Wettkampf / Ort</th>
+                      <th class="py-1.5 px-2 text-center">Kat.</th>
+                      <th class="py-1.5 px-2 text-right">Weite</th>
+                      <th class="py-1.5 px-2 text-right">Wind</th>
+                      <th class="py-1.5 px-2 text-center">Pl.</th>
+                      <th class="py-1.5 px-2 text-right font-bold text-white">Score</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800/40">
+                    ${comps.map(c => `
+                      <tr class="hover:bg-slate-800/30">
+                        <td class="py-1.5 px-2 text-slate-400 whitespace-nowrap">${c.date || '-'}</td>
+                        <td class="py-1.5 px-2 text-slate-200 font-sans font-medium text-xs">${c.competition || '-'}</td>
+                        <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span></td>
+                        <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m</td>
+                        <td class="py-1.5 px-2 text-right text-slate-400">${c.wind ? c.wind + ' m/s' : '-'}</td>
+                        <td class="py-1.5 px-2 text-center text-slate-300">${c.place || '-'}</td>
+                        <td class="py-1.5 px-2 text-right font-black text-amber-400">${c.performance_score || '-'} Pkt</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        } else {
+          compsHtml = '<div class="mt-2 text-[10px] text-slate-500 italic">Keine Wettkämpfe hinterlegt.</div>';
+        }
+      }
+
+      return `
+        <div class="bg-slate-900 border rounded-xl p-3.5 shadow-sm transition-all ${
+          isLuka ? 'border-cyan-500/80 bg-cyan-950/20' : isGerman ? 'border-cyan-800/50 bg-slate-900/90' : 'border-slate-800 hover:border-slate-700'
+        }">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div class="flex items-start gap-3">
+              <div class="text-center min-w-10">
+                <span class="text-xs font-mono font-bold text-slate-400 block uppercase">Rang</span>
+                <span class="text-base font-black font-mono ${isLuka ? 'text-cyan-400' : 'text-white'}">#${ath.latest_rank <= 100 ? ath.latest_rank : ath.peak_rank}</span>
+              </div>
+              <div>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="font-bold text-white text-sm uppercase tracking-tight">${ath.name}</span>
+                  <span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px] font-mono">${ath.country}</span>
+                  ${isLuka ? '<span class="px-1.5 py-0.2 rounded bg-cyan-500 text-slate-950 font-black text-[9px] font-mono">YOU</span>' : ''}
+                  ${!isLuka && isGerman ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold text-[9px] font-mono">GER</span>' : ''}
+                </div>
+                <div class="flex flex-wrap items-center gap-2 mt-1 text-[11px] font-mono text-slate-400">
+                  <span class="text-amber-400 font-bold">⭐ Peak: #${ath.peak_rank} (${ath.peak_score} Pkt)</span>
+                  <span>•</span>
+                  <span>🗓️ ${ath.weeks_in_top100} Wo. Top 100</span>
+                  <span>•</span>
+                  <span class="text-cyan-300 font-bold">Bestleistung: ${ath.sb ? ath.sb.toFixed(2) + 'm' : '-'}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 self-end sm:self-center font-mono">
+              <button onclick="RankingsModule.toggleAthleteDbRow('${ath.id}')" class="px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-bold transition-all flex items-center gap-1">
+                <span>${isExpanded ? 'Ausblenden ▴' : `Wettkämpfe (${comps.length}) ▾`}</span>
+              </button>
+              <button onclick="RankingsModule.openCompetitorModal('${ath.name}')" class="px-2.5 py-1 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-700 text-cyan-300 text-xs font-bold transition-all">
+                Vergleich ⚖️
+              </button>
+            </div>
+          </div>
+
+          ${compsHtml}
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderMeetingsDatabase(state) {
+    const container = document.getElementById('meetingsDbContainer');
+    const badge = document.getElementById('meetingsDbCountBadge');
+    if (!container) return;
+
+    const db = state.competitionsDatabase;
+    if (!db || !db.competitions) {
+      container.innerHTML = '<div class="py-12 text-center text-slate-500 font-mono text-xs">Lade Wettkampf-Archiv...</div>';
+      return;
+    }
+
+    let list = [...db.competitions];
+
+    if (meetingSelectedCategory !== 'ALL') {
+      if (meetingSelectedCategory === 'GL') {
+        list = list.filter(c => ['OW', 'GL', 'GW'].includes(c.category));
+      } else {
+        list = list.filter(c => c.category === meetingSelectedCategory);
+      }
+    }
+
+    if (meetingSearchQuery) {
+      const q = meetingSearchQuery.toLowerCase().trim();
+      list = list.filter(c => {
+        const nameMatch = c.name && c.name.toLowerCase().includes(q);
+        const venueMatch = c.venue && c.venue.toLowerCase().includes(q);
+        const athMatch = (c.results || []).some(r => r.athlete && r.athlete.toLowerCase().includes(q));
+        return nameMatch || venueMatch || athMatch;
+      });
+    }
+
+    if (badge) {
+      badge.textContent = `${list.length} von ${db.competitions.length} Meetings`;
+    }
+
+    if (list.length === 0) {
+      container.innerHTML = '<div class="py-12 text-center text-slate-500 font-mono text-xs">Keine Wettkämpfe gefunden für diesen Suchbegriff.</div>';
+      return;
+    }
+
+    container.innerHTML = list.slice(0, 40).map(meet => {
+      const isExpanded = expandedMeetingDbName === meet.name || list.length <= 3;
+      const results = meet.results || [];
+      const hasLuka = results.some(r => r.athlete.toLowerCase().includes('herden'));
+
+      let resultsHtml = '';
+      if (isExpanded) {
+        if (results.length > 0) {
+          resultsHtml = `
+            <div class="mt-3 pt-3 border-t border-slate-800">
+              <div class="overflow-x-auto border border-slate-800 rounded-lg">
+                <table class="w-full text-left border-collapse text-[11px] font-mono">
+                  <thead>
+                    <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
+                      <th class="py-1.5 px-2 text-center w-12">Platz</th>
+                      <th class="py-1.5 px-2.5">Athlet</th>
+                      <th class="py-1.5 px-2 text-center">Nation</th>
+                      <th class="py-1.5 px-2 text-right">Weite</th>
+                      <th class="py-1.5 px-2 text-right">Wind</th>
+                      <th class="py-1.5 px-2 text-right font-bold text-white">WA Score</th>
+                      <th class="py-1.5 px-2 text-center">Aktion</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800/40">
+                    ${results.map(r => {
+                      const isMe = r.athlete.toLowerCase().includes('herden');
+                      const isGer = r.country === 'GER';
+                      return `
+                        <tr class="hover:bg-slate-800/30 ${isMe ? 'bg-cyan-950/40 font-bold text-cyan-300' : ''}">
+                          <td class="py-1.5 px-2 text-center font-bold text-slate-300">${r.place || '-'}</td>
+                          <td class="py-1.5 px-2.5 font-bold uppercase tracking-tight text-white flex items-center gap-1.5">
+                            <span>${r.athlete}</span>
+                            ${isMe ? '<span class="px-1 py-0.2 rounded bg-cyan-500 text-slate-950 font-black text-[9px] font-mono">YOU</span>' : ''}
+                            ${!isMe && isGer ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold text-[9px] font-mono">GER</span>' : ''}
+                          </td>
+                          <td class="py-1.5 px-2 text-center">
+                            <span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${r.country}</span>
+                          </td>
+                          <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${r.mark}m</td>
+                          <td class="py-1.5 px-2 text-right text-slate-400">${r.wind ? r.wind + ' m/s' : '-'}</td>
+                          <td class="py-1.5 px-2 text-right font-black text-amber-400 text-xs">${r.performance_score} Pkt</td>
+                          <td class="py-1.5 px-2 text-center">
+                            <button onclick="RankingsModule.openCompetitorModal('${r.athlete}')" class="px-2 py-0.5 rounded bg-slate-950 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500 text-cyan-400 font-mono text-[10px] font-bold transition-all">
+                              Profil ↗
+                            </button>
+                          </td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      return `
+        <div class="bg-slate-900 border rounded-xl p-3.5 shadow-sm transition-all ${
+          hasLuka ? 'border-cyan-500/70 bg-cyan-950/20' : 'border-slate-800 hover:border-slate-700'
+        }">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono bg-slate-800 text-cyan-300 border border-slate-700">
+                  Kat. ${meet.category || '-'}
+                </span>
+                <h3 class="font-bold text-white text-sm font-sans tracking-tight">${meet.name}</h3>
+                ${meet.indoor ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-indigo-950 text-indigo-300 border border-indigo-800">Indoor</span>' : ''}
+                ${hasLuka ? '<span class="px-1.5 py-0.2 rounded bg-cyan-500 text-slate-950 font-black text-[9px] font-mono">MIT LUKA</span>' : ''}
+              </div>
+              <p class="text-[11px] text-slate-400 font-mono mt-1">
+                Ort: ${meet.venue || '-'} • Erfasst: ${(meet.dates_seen || []).join(', ') || '-'}
+              </p>
+            </div>
+
+            <div class="flex items-center gap-2 self-end sm:self-center font-mono">
+              <span class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] font-bold text-amber-400">
+                ${results.length} Springer
+              </span>
+              <button onclick="RankingsModule.toggleMeetingDbRow('${encodeURIComponent(meet.name)}')" class="px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-bold transition-all">
+                ${isExpanded ? 'Ausblenden ▴' : 'Ergebnisse ▾'}
+              </button>
+            </div>
+          </div>
+
+          ${resultsHtml}
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleAthleteDbRow(id) {
+    expandedAthleteDbId = expandedAthleteDbId === id ? null : id;
+    if (window.App && window.App.state) {
+      renderAthletesDatabase(window.App.state);
+    }
+  }
+
+  function toggleMeetingDbRow(encodedName) {
+    const name = decodeURIComponent(encodedName);
+    expandedMeetingDbName = expandedMeetingDbName === name ? null : name;
+    if (window.App && window.App.state) {
+      renderMeetingsDatabase(window.App.state);
+    }
+  }
+
+  function searchAthleteDirect(name) {
+    if (window.App && window.App.state) {
+      switchSubTab(window.App.state, 'athletes');
+      const input = document.getElementById('athleteDbSearchInput');
+      if (input) {
+        input.value = name;
+        athleteSearchQuery = name;
+        renderAthletesDatabase(window.App.state);
+      }
+    }
+  }
+
+  function searchMeetingDirect(name) {
+    if (window.App && window.App.state) {
+      switchSubTab(window.App.state, 'meetings');
+      const input = document.getElementById('meetingsDbSearchInput');
+      if (input) {
+        input.value = name;
+        meetingSearchQuery = name;
+        renderMeetingsDatabase(window.App.state);
+      }
+    }
+  }
+
+  return {
+    render,
+    openCompetitorModal,
+    toggleAthleteDbRow,
+    toggleMeetingDbRow,
+    searchAthleteDirect,
+    searchMeetingDirect
+  };
 })();

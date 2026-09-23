@@ -12,6 +12,7 @@ const App = (() => {
     venuesData: null,
     rankingsArchive: null,
     athletesDatabase: null,
+    competitionsDatabase: null,
     calendarData: null,
 
     // Tab 1 filters
@@ -170,7 +171,17 @@ const App = (() => {
       console.warn('Athletes database auto-load fallback', e);
     }
 
-    // 8. Official Calendar 2027 (WIT & WA Tour Grounded)
+    // 8. Competitions Database (1,236 International Meetings & Results)
+    try {
+      const resCdb = await fetch('./data/competitions_database.json?t=' + Date.now());
+      if (resCdb.ok) {
+        state.competitionsDatabase = await resCdb.json();
+      }
+    } catch (e) {
+      console.warn('Competitions database auto-load fallback', e);
+    }
+
+    // 9. Official Calendar 2027 (WIT & WA Tour Grounded)
     try {
       const resCal = await fetch('./data/calendar_2027.json?t=' + Date.now());
       if (resCal.ok) {

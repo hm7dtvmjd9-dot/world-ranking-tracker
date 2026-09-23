@@ -399,16 +399,31 @@
 
     <!-- ================= TAB 2: WORLD ATHLETICS RANKINGS & ZEITREISE ================= -->
     <div id="tabContentRankings" class="hidden space-y-4">
-      <!-- Time-Travel Bar -->
-      <div class="bg-slate-900 border border-cyan-500/50 rounded-xl p-3 sm:p-4 shadow-md space-y-2.5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-base">⏱️</span>
-              <h2 class="text-xs sm:text-sm font-black text-white uppercase tracking-wider font-mono">
-                ZEITREISE • HISTORISCHES WORLD RANKINGS ARCHIV (SEIT JUNI 2023)
-              </h2>
-            </div>
+      <!-- Sub-Mode Selector for Tab 2 -->
+      <div class="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-3">
+        <button id="subTabRankingBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono bg-cyan-500 text-slate-950 transition-all flex items-center gap-1.5 shadow-sm">
+          <span>📅 Wöchentliches Ranking (162 Wochen)</span>
+        </button>
+        <button id="subTabAthletesBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono bg-slate-900 text-slate-300 hover:text-white border border-slate-800 hover:border-cyan-500/50 transition-all flex items-center gap-1.5">
+          <span>🏃‍♂️ Athleten-Suche (244 Springer)</span>
+        </button>
+        <button id="subTabMeetingsBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono bg-slate-900 text-slate-300 hover:text-white border border-slate-800 hover:border-cyan-500/50 transition-all flex items-center gap-1.5">
+          <span>🏟️ Wettkampf-Suche (1.236 Meetings)</span>
+        </button>
+      </div>
+
+      <!-- VIEW 1: WEEKLY TIME-TRAVEL RANKING -->
+      <div id="subViewRanking" class="space-y-4">
+        <!-- Time-Travel Bar -->
+        <div class="bg-slate-900 border border-cyan-500/50 rounded-xl p-3 sm:p-4 shadow-md space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-base">⏱️</span>
+                <h2 class="text-xs sm:text-sm font-black text-white uppercase tracking-wider font-mono">
+                  ZEITREISE • HISTORISCHES WORLD RANKINGS ARCHIV (SEIT JUNI 2023)
+                </h2>
+              </div>
             <p class="text-[11px] text-slate-400 font-mono mt-0.5">
               Offizielle World Athletics Dienstag-Snapshots • Scrolle zurück und verfolge die Entwicklung der Top 100
             </p>
@@ -546,7 +561,91 @@
           </table>
         </div>
       </div>
-    </div>
+      <!-- END VIEW 1: WEEKLY TIME-TRAVEL RANKING -->
+      </div>
+
+      <!-- VIEW 2: ATHLETES DATABASE SEARCH (244 ATHLETES) -->
+      <div id="subViewAthletes" class="hidden space-y-4">
+        <!-- Search & Control Header -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 space-y-3 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 class="text-xs sm:text-sm font-black text-white uppercase tracking-wider font-mono flex items-center gap-1.5">
+                <span class="text-cyan-400">🏃‍♂️</span>
+                <span>GESAMTDATENBANK ALLER TOP-100-ATHLETEN (2023 - 2026)</span>
+              </h2>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">
+                244 Weitspringer • All-Time Peak Ränge & Scores • Wochen in den Top 100 • Alle dokumentierten Wettkämpfe
+              </p>
+            </div>
+            <span id="athletesDbCountBadge" class="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-950 border border-cyan-800 px-2 py-0.5 rounded self-start sm:self-auto">
+              244 Athleten erfasst
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center">
+            <div class="md:col-span-7">
+              <input id="athleteDbSearchInput" type="text" placeholder="Suche Athlet (z.B. Anvarov, Tentoglou, Herden, Ehammer, Furlani, Batz)..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" />
+            </div>
+            <div class="md:col-span-5 flex flex-wrap items-center gap-1 font-mono text-[10px]">
+              <span class="text-slate-400 font-bold uppercase mr-1">Nation:</span>
+              <button data-dbnation="ALL" class="dbnat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white">ALL</button>
+              <button data-dbnation="GER" class="dbnat-filter-btn px-2 py-0.5 rounded text-cyan-400 border border-cyan-800 bg-slate-950 hover:bg-slate-800">GER</button>
+              <button data-dbnation="UZB" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">UZB</button>
+              <button data-dbnation="GRE" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">GRE</button>
+              <button data-dbnation="ITA" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">ITA</button>
+              <button data-dbnation="SUI" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">SUI</button>
+              <button data-dbnation="JAM" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">JAM</button>
+              <button data-dbnation="USA" class="dbnat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">USA</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Athletes Catalog Container -->
+        <div id="athletesDbContainer" class="space-y-3">
+          <!-- Populated dynamically by rankings.js -->
+        </div>
+      </div>
+
+      <!-- VIEW 3: COMPETITIONS & MEETINGS DATABASE SEARCH (1,236 MEETINGS) -->
+      <div id="subViewMeetings" class="hidden space-y-4">
+        <!-- Search & Control Header -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 space-y-3 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 class="text-xs sm:text-sm font-black text-white uppercase tracking-wider font-mono flex items-center gap-1.5">
+                <span class="text-amber-400">🏟️</span>
+                <span>WELTWEITES WETTKAMPF-ARCHIV (1.236 MEETINGS 2023 - 2026)</span>
+              </h2>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">
+                Suche jedes Meeting (z.B. European Championships 2024, Rom, Gorzów, Kassel, Diamond League) & sieh alle gewerteten Springer
+              </p>
+            </div>
+            <span id="meetingsDbCountBadge" class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950 border border-amber-800 px-2 py-0.5 rounded self-start sm:self-auto">
+              1.236 Meetings erfasst
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center">
+            <div class="md:col-span-7">
+              <input id="meetingsDbSearchInput" type="text" placeholder="Suche Wettkampf (z.B. European Championships 2024, Rom, Gorzów, Überflieger, Kassel, Diamond League)..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono" />
+            </div>
+            <div class="md:col-span-5 flex flex-wrap items-center gap-1 font-mono text-[10px]">
+              <span class="text-slate-400 font-bold uppercase mr-1">Kategorie:</span>
+              <button data-catfilter="ALL" class="cat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white">ALL</button>
+              <button data-catfilter="GL" class="cat-filter-btn px-2 py-0.5 rounded text-amber-400 border border-amber-800 bg-slate-950 hover:bg-slate-800">OW / GL</button>
+              <button data-catfilter="A" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. A</button>
+              <button data-catfilter="B" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. B</button>
+              <button data-catfilter="C" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. C</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meetings Catalog Container -->
+        <div id="meetingsDbContainer" class="space-y-3">
+          <!-- Populated dynamically by rankings.js -->
+        </div>
+      </div>
 
     <!-- ================= TAB 3: QUALIFICATION & NOMINATION HUB ================= -->
     <div id="tabContentQualification" class="hidden space-y-4">
