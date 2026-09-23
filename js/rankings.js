@@ -384,10 +384,12 @@ const RankingsModule = (() => {
           meetsHtml = ath.countingMeetings.map(m => `
             <tr class="hover:bg-slate-900/50">
               <td class="py-1.5 px-2 text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
-              <td class="py-1.5 px-2 text-slate-200 font-sans font-medium text-xs">${m.competition || '-'}</td>
+              <td class="py-1.5 px-2 text-slate-200 font-sans font-medium text-xs">
+                <span>${m.competition || '-'}</span>
+                ${m.remark ? `<span class="ml-1.5 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60">${m.remark}</span>` : ''}
+              </td>
               <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 border border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
               <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${m.mark}m</td>
-              <td class="py-1.5 px-2 text-right text-slate-400">${m.wind !== null && m.wind !== undefined ? m.wind + ' m/s' : '-'}</td>
               <td class="py-1.5 px-2 text-center text-slate-300">${m.place || '-'}</td>
               <td class="py-1.5 px-2 text-right text-slate-300">${m.result_score || '-'}</td>
               <td class="py-1.5 px-2 text-right text-slate-300">${m.placing_score || '-'}</td>
@@ -395,7 +397,7 @@ const RankingsModule = (() => {
             </tr>
           `).join('');
         } else {
-          meetsHtml = '<tr><td colspan="9" class="py-3 text-center text-slate-500 italic">Keine detaillierten Meeting-Ergebnisse verfügbar</td></tr>';
+          meetsHtml = '<tr><td colspan="8" class="py-3 text-center text-slate-500 italic">Keine detaillierten Meeting-Ergebnisse verfügbar</td></tr>';
         }
 
         accTr.innerHTML = `
@@ -417,7 +419,6 @@ const RankingsModule = (() => {
                       <th class="py-1.5 px-2">Wettkampf</th>
                       <th class="py-1.5 px-2 text-center">Kat.</th>
                       <th class="py-1.5 px-2 text-right">Weite</th>
-                      <th class="py-1.5 px-2 text-right">Wind</th>
                       <th class="py-1.5 px-2 text-center">Pl.</th>
                       <th class="py-1.5 px-2 text-right">Result</th>
                       <th class="py-1.5 px-2 text-right">Platz</th>
@@ -634,9 +635,12 @@ const RankingsModule = (() => {
         compBody.innerHTML = comps.map(c => `
           <tr class="hover:bg-slate-800/40">
             <td class="py-2 px-2.5 text-slate-400 whitespace-nowrap">${c.date || '-'}</td>
-            <td class="py-2 px-2.5 text-slate-200 font-sans font-medium text-xs">${c.competition || '-'}</td>
+            <td class="py-2 px-2.5 text-slate-200 font-sans font-medium text-xs">
+              <span>${c.competition || '-'}</span>
+              ${c.remark ? `<span class="ml-1.5 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60">${c.remark}</span>` : ''}
+            </td>
             <td class="py-2 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span></td>
-            <td class="py-2 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m ${c.wind ? '(' + c.wind + ')' : ''}</td>
+            <td class="py-2 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m</td>
             <td class="py-2 px-2 text-center text-slate-300">${c.place || '-'}</td>
             <td class="py-2 px-2 text-right font-black text-amber-400">${c.performance_score || c.result_score || '-'} Pkt</td>
           </tr>
@@ -712,7 +716,6 @@ const RankingsModule = (() => {
                       <th class="py-1.5 px-2">Wettkampf / Ort</th>
                       <th class="py-1.5 px-2 text-center">Kat.</th>
                       <th class="py-1.5 px-2 text-right">Weite</th>
-                      <th class="py-1.5 px-2 text-right">Wind</th>
                       <th class="py-1.5 px-2 text-center">Pl.</th>
                       <th class="py-1.5 px-2 text-right font-bold text-white">Score</th>
                     </tr>
@@ -721,10 +724,12 @@ const RankingsModule = (() => {
                     ${comps.map(c => `
                       <tr class="hover:bg-slate-800/30">
                         <td class="py-1.5 px-2 text-slate-400 whitespace-nowrap">${c.date || '-'}</td>
-                        <td class="py-1.5 px-2 text-slate-200 font-sans font-medium text-xs">${c.competition || '-'}</td>
+                        <td class="py-1.5 px-2 text-slate-200 font-sans font-medium text-xs">
+                          <span>${c.competition || '-'}</span>
+                          ${c.remark ? `<span class="ml-1.5 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60">${c.remark}</span>` : ''}
+                        </td>
                         <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span></td>
                         <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m</td>
-                        <td class="py-1.5 px-2 text-right text-slate-400">${c.wind ? c.wind + ' m/s' : '-'}</td>
                         <td class="py-1.5 px-2 text-center text-slate-300">${c.place || '-'}</td>
                         <td class="py-1.5 px-2 text-right font-black text-amber-400">${c.performance_score || '-'} Pkt</td>
                       </tr>
@@ -840,7 +845,6 @@ const RankingsModule = (() => {
                       <th class="py-1.5 px-2.5">Athlet</th>
                       <th class="py-1.5 px-2 text-center">Nation</th>
                       <th class="py-1.5 px-2 text-right">Weite</th>
-                      <th class="py-1.5 px-2 text-right">Wind</th>
                       <th class="py-1.5 px-2 text-right font-bold text-white">WA Score</th>
                       <th class="py-1.5 px-2 text-center">Aktion</th>
                     </tr>
@@ -852,16 +856,17 @@ const RankingsModule = (() => {
                       return `
                         <tr class="hover:bg-slate-800/30 ${isMe ? 'bg-cyan-950/40 font-bold text-cyan-300' : ''}">
                           <td class="py-1.5 px-2 text-center font-bold text-slate-300">${r.place || '-'}</td>
-                          <td class="py-1.5 px-2.5 font-bold uppercase tracking-tight text-white flex items-center gap-1.5">
+                          <td class="py-1.5 px-2.5 font-bold uppercase tracking-tight text-white flex items-center gap-1.5 flex-wrap">
                             <span>${r.athlete}</span>
                             ${isMe ? '<span class="px-1 py-0.2 rounded bg-cyan-500 text-slate-950 font-black text-[9px] font-mono">YOU</span>' : ''}
                             ${!isMe && isGer ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold text-[9px] font-mono">GER</span>' : ''}
+                            ${r.remark ? `<span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60">${r.remark}</span>` : ''}
+                            ${r.round === 'Qualifikation' && !r.remark ? `<span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700">Qualifikation</span>` : ''}
                           </td>
                           <td class="py-1.5 px-2 text-center">
                             <span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${r.country}</span>
                           </td>
                           <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${r.mark}m</td>
-                          <td class="py-1.5 px-2 text-right text-slate-400">${r.wind ? r.wind + ' m/s' : '-'}</td>
                           <td class="py-1.5 px-2 text-right font-black text-amber-400 text-xs">${r.performance_score} Pkt</td>
                           <td class="py-1.5 px-2 text-center">
                             <button onclick="RankingsModule.openCompetitorModal('${r.athlete}')" class="px-2 py-0.5 rounded bg-slate-950 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500 text-cyan-400 font-mono text-[10px] font-bold transition-all">
