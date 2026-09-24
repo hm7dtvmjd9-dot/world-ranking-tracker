@@ -123,7 +123,8 @@ const App = (() => {
     } catch (e) {}
 
     // 4. Training Insights & Sample Logs
-    const customSheetsUrl = localStorage.getItem('googleSheetsCsvUrl') || localStorage.getItem('sheets_url_key');
+    const defaultSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTc8yM5su18QpGZUFRo2nU7NBU_2AjJMZPInRnFdhq32akr_LanQmgAEBaIXSCoIENSU0qt0dFTFNhj/pub?output=csv';
+    const customSheetsUrl = localStorage.getItem('googleSheetsCsvUrl') || localStorage.getItem('sheets_url_key') || defaultSheetsUrl;
     if (customSheetsUrl) {
       try {
         const bustUrl = customSheetsUrl + (customSheetsUrl.includes('?') ? '&' : '?') + '_t=' + Date.now();
@@ -131,10 +132,10 @@ const App = (() => {
         if (resSheet.ok) {
           const csvText = await resSheet.text();
           state.trainingLogs = AnalyticsModule.parseCsvTrainingLogs(csvText);
-          showSheetsBadge('Live Sheets', 'text-emerald-400');
+          showSheetsBadge(`Live Sheets (${state.trainingLogs.length})`, 'text-emerald-400');
         }
       } catch (e) {
-        console.warn('Custom sheets fetch error', e);
+        console.warn('Google sheets live fetch error', e);
       }
     }
 
@@ -143,7 +144,7 @@ const App = (() => {
         const resSample = await fetch('./data/training_sample.json?t=' + Date.now());
         if (resSample.ok) {
           const sampleJson = await resSample.json();
-          state.trainingLogs = sampleJson.sessions || [];
+          state.trainingLogs = sampleJson.training_logs || sampleJson.sessions || [];
         }
       } catch (e) {}
     }

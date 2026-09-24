@@ -52,16 +52,32 @@ const RankingsModule = (() => {
 
   function parseDateStr(str) {
     if (!str) return 0;
-    const months = { 'JAN': 0, 'FEB': 1, 'MAR': 2, 'APR': 3, 'MAY': 4, 'JUN': 5, 'JUL': 6, 'AUG': 7, 'SEP': 8, 'OCT': 9, 'NOV': 10, 'DEC': 11 };
-    const parts = str.trim().split(/\s+/);
-    if (parts.length === 3) {
-      const d = parseInt(parts[0]) || 1;
-      const m = months[parts[1].toUpperCase()] !== undefined ? months[parts[1].toUpperCase()] : 0;
-      const y = parseInt(parts[2]) || 2024;
+    const trimmed = String(str).trim();
+    if (/^\d{4}-\d{2}-\d{2}/.test(trimmed)) {
+      const parts = trimmed.split('-');
+      return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10)).getTime();
+    }
+    const months = {
+      'JAN': 0, 'FEB': 1, 'MAR': 2, 'MRZ': 2, 'MÄR': 2, 'APR': 3, 'MAY': 4, 'MAI': 4,
+      'JUN': 5, 'JUL': 6, 'AUG': 7, 'SEP': 8, 'OCT': 9, 'OKT': 9, 'NOV': 10, 'DEC': 11, 'DEZ': 11
+    };
+    const parts = trimmed.split(/[\s.]+/);
+    if (parts.length >= 3) {
+      const d = parseInt(parts[0], 10) || 1;
+      const mStr = parts[1].toUpperCase();
+      const m = months[mStr] !== undefined ? months[mStr] : (parseInt(mStr, 10) ? parseInt(mStr, 10) - 1 : 0);
+      const y = parseInt(parts[2], 10) || 2024;
       return new Date(y, m, d).getTime();
     }
-    const dt = new Date(str);
+    const dt = new Date(trimmed);
     return isNaN(dt.getTime()) ? 0 : dt.getTime();
+  }
+
+  function cleanFloatMark(val) {
+    if (val == null || val === '' || val === '-') return 0;
+    const clean = String(val).replace(',', '.').replace(/[^\d.-]/g, '');
+    const n = parseFloat(clean);
+    return isNaN(n) ? 0 : n;
   }
 
   function getMeetingSortDate(meet, newest = true) {
@@ -73,8 +89,8 @@ const RankingsModule = (() => {
   function getMeetingTopMark(meet) {
     let top = 0;
     (meet.results || []).forEach(r => {
-      const v = parseFloat(r.mark);
-      if (!isNaN(v) && v > top) top = v;
+      const v = cleanFloatMark(r.mark);
+      if (v > top) top = v;
     });
     return top;
   }
@@ -87,13 +103,22 @@ const RankingsModule = (() => {
   function sortAthleteCompetitions(comps, sortKey = 'date') {
     if (!comps || !comps.length) return [];
     const list = [...comps];
+
     if (sortKey === 'mark') {
-      return list.sort((a, b) => (parseFloat(b.mark) || 0) - (parseFloat(a.mark) || 0));
+      return list.sort((a, b) => cleanFloatMark(b.mark) - cleanFloatMark(a.mark));
+    } else if (sortKey === 'mark-asc') {
+      return list.sort((a, b) => cleanFloatMark(a.mark) - cleanFloatMark(b.mark));
     } else if (sortKey === 'score') {
       return list.sort((a, b) => {
         const sA = parseInt(a.performance_score || a.performanceScore || a.result_score || 0);
         const sB = parseInt(b.performance_score || b.performanceScore || b.result_score || 0);
         return sB - sA;
+      });
+    } else if (sortKey === 'score-asc') {
+      return list.sort((a, b) => {
+        const sA = parseInt(a.performance_score || a.performanceScore || a.result_score || 0);
+        const sB = parseInt(b.performance_score || b.performanceScore || b.result_score || 0);
+        return sA - sB;
       });
     } else if (sortKey === 'date-asc') {
       return list.sort((a, b) => parseDateStr(a.date) - parseDateStr(b.date));
@@ -104,14 +129,24 @@ const RankingsModule = (() => {
   }
 
   function setAthleteRowSort(athName, sortKey) {
-    athleteTableSorts[athName] = sortKey;
+    const cur = athleteTableSorts[athName] || 'date';
+    if (cur === sortKey) {
+      athleteTableSorts[athName] = sortKey.endsWith('-asc') ? sortKey.replace('-asc', '') : `${sortKey}-asc`;
+    } else {
+      athleteTableSorts[athName] = sortKey;
+    }
     if (window.App && window.App.state) {
       renderTable(window.App.state);
     }
   }
 
   function setAthleteDbSort(athId, sortKey) {
-    athleteDbSorts[athId] = sortKey;
+    const cur = athleteDbSorts[athId] || 'date';
+    if (cur === sortKey) {
+      athleteDbSorts[athId] = sortKey.endsWith('-asc') ? sortKey.replace('-asc', '') : `${sortKey}-asc`;
+    } else {
+      athleteDbSorts[athId] = sortKey;
+    }
     if (window.App && window.App.state) {
       renderAthletesDatabase(window.App.state);
     }
@@ -134,11 +169,25 @@ const RankingsModule = (() => {
     }
   }
 
+  function selectPrognosisDate(dateStr) {
+    const archive = (window.App && window.App.state && window.App.state.rankingsArchive) || null;
+    if (!archive || !archive.snapshots) return;
+    const idx = archive.snapshots.findIndex(s => s.date === dateStr || (s.date && s.date.startsWith(dateStr)));
+    if (idx >= 0) {
+      const sel = document.getElementById('rankingSnapshotSelect');
+      const slider = document.getElementById('rankingTimelineSlider');
+      if (sel) sel.value = idx;
+      if (slider) slider.value = idx;
+      loadSnapshot(window.App.state, idx);
+    }
+  }
+
   function render(state) {
     initSubTabs(state);
     initTimeTravelControls(state);
     renderKpiTiles(state);
     renderTable(state);
+    renderPrognosisCard(state);
     renderCompactHistoryChart(state);
     if (activeSubTab === 'athletes') renderAthletesDatabase(state);
     if (activeSubTab === 'meetings') renderMeetingsDatabase(state);
@@ -308,21 +357,25 @@ const RankingsModule = (() => {
 
     // Map snapshot athletes
     state.athletes = snap.athletes.map((ath, i) => {
-      const meetings = ath.counted_competitions || [];
+      const meetings = (ath.counted_competitions || []).map(m => ({
+        ...m,
+        place_display: m.place_display || m.place || '-',
+        round: m.round || (m.competition && (m.competition.toLowerCase().includes('quali') || m.competition.toLowerCase().includes(' q')) ? 'Q' : 'F')
+      }));
       let sb = 0;
       meetings.forEach(m => {
-        const markVal = parseFloat(m.mark);
-        if (!isNaN(markVal) && markVal > sb) sb = markVal;
+        const markVal = cleanFloatMark(m.mark);
+        if (markVal > sb) sb = markVal;
       });
 
       return {
         id: ath.profile_url || `ath-${idx}-${i}`,
-        originalRank: parseInt(ath.rank) || i + 1,
+        originalRank: parseInt(ath.rank, 10) || i + 1,
         name: ath.name || '',
         nation: ath.country || '',
         dob: ath.dob || '',
         sb: sb > 0 ? sb : null,
-        totalScore: parseInt(ath.ranking_score) || 0,
+        totalScore: parseInt(ath.ranking_score, 10) || 0,
         profile_url: ath.profile_url || '',
         countingMeetings: meetings,
         rankDelta: ath.rank_delta !== undefined ? ath.rank_delta : null,
@@ -333,11 +386,16 @@ const RankingsModule = (() => {
     // Update milestone badge
     const badge = document.getElementById('rankingMilestoneBadge');
     if (badge) {
-      badge.textContent = snap.milestoneNote ? `${snap.displayDate}: ${snap.milestoneNote}` : `Stand: ${snap.displayDate}`;
+      if (snap.milestoneNote) {
+        badge.innerHTML = `<span class="text-amber-400 font-bold">${snap.is_prognosis ? '🔮 PROGNOSE ' : ''}${snap.displayDate}:</span> ${snap.milestoneNote}`;
+      } else {
+        badge.textContent = snap.is_prognosis ? `🔮 PROGNOSE: ${snap.displayDate}` : `Stand: ${snap.displayDate}`;
+      }
     }
 
     renderKpiTiles(state);
     renderTable(state);
+    renderPrognosisCard(state);
   }
 
   function renderKpiTiles(state) {
@@ -411,6 +469,280 @@ const RankingsModule = (() => {
         gerListElem.innerHTML = '<span class="text-slate-500 italic">Keine DLV Athleten in der Liste</span>';
       }
     }
+  }
+
+  function renderPrognosisCard(state) {
+    const container = document.getElementById('prognosisCockpitContainer');
+    if (!container) return;
+
+    const snap = (state.rankingsArchive && state.rankingsArchive.snapshots && currentSnapshotIdx !== null)
+      ? state.rankingsArchive.snapshots[currentSnapshotIdx]
+      : null;
+    const snapDate = snap ? parseDateStr(snap.date) : new Date(2026, 8, 23).getTime();
+
+    const luka = state.athletes.find(a => a.name.toLowerCase().includes('herden'));
+    const meets = (luka && luka.countingMeetings) ? luka.countingMeetings : [];
+
+    // Calculate meeting expiration details (365 days after date)
+    const meetsWithExpiry = meets.map(m => {
+      const meetTime = parseDateStr(m.date);
+      const expiryTime = meetTime > 0 ? meetTime + (365 * 24 * 60 * 60 * 1000) : 0;
+      const expiryDate = new Date(expiryTime);
+      const daysLeft = expiryTime > 0 ? Math.ceil((expiryTime - snapDate) / (1000 * 60 * 60 * 24)) : 0;
+      const expDateStr = expiryTime > 0
+        ? `${String(expiryDate.getDate()).padStart(2, '0')}.${String(expiryDate.getMonth() + 1).padStart(2, '0')}.${expiryDate.getFullYear()}`
+        : '-';
+
+      let statusBadge = '';
+      if (daysLeft <= 0) {
+        statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-950 text-rose-300 border border-rose-800">⚠️ Verfallen (${expDateStr})</span>`;
+      } else if (daysLeft <= 60) {
+        statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-950 text-amber-300 border border-amber-800">⏳ Verfällt in ${daysLeft} Tagen (${expDateStr})</span>`;
+      } else {
+        statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">✅ Aktiv (${daysLeft} Tage bis ${expDateStr})</span>`;
+      }
+
+      return {
+        ...m,
+        meetTime,
+        expiryTime,
+        expDateStr,
+        daysLeft,
+        statusBadge
+      };
+    });
+
+    const activeDate = snap ? snap.date : '2026-09-23';
+
+    container.innerHTML = `
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 shadow-sm space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-base">🔮</span>
+              <h3 class="text-xs font-black text-white uppercase tracking-wider font-mono">
+                PUNKTE-VERFALL & RANKING-PROGNOSE COCKPIT (365-TAGE-REGEL)
+              </h3>
+            </div>
+            <p class="text-[10px] text-slate-400 font-mono mt-0.5">
+              Jeder gewertete Wettkampf verfällt nach exakt 365 Tagen. Simulation des Top-100 Feldes bis Sommer 2027.
+            </p>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${meetsWithExpiry.length >= 5 ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-amber-950 text-amber-300 border border-amber-800'}">
+            Status: ${meetsWithExpiry.length}/5 Meetings in Wertung
+          </span>
+        </div>
+
+        <!-- 1. Expiration Roadmap for Luka's Meetings -->
+        <div>
+          <h4 class="text-[11px] font-bold text-slate-300 uppercase font-mono mb-2 flex items-center gap-1.5">
+            <span>⏱️</span>
+            <span>Ablauf-Fahrplan von Lukas aktuellen Meetings:</span>
+          </h4>
+          <div class="overflow-x-auto border border-slate-800 rounded-lg">
+            <table class="w-full text-left border-collapse text-[10px] font-mono">
+              <thead>
+                <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[9px] uppercase">
+                  <th class="py-1.5 px-2">Wettkampf</th>
+                  <th class="py-1.5 px-2 text-center">Datum</th>
+                  <th class="py-1.5 px-2 text-center">Kat.</th>
+                  <th class="py-1.5 px-2 text-right">Weite</th>
+                  <th class="py-1.5 px-2 text-right">Punkte</th>
+                  <th class="py-1.5 px-2 text-center">Ablaufdatum (WA 365d)</th>
+                  <th class="py-1.5 px-2 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/40">
+                ${meetsWithExpiry.length > 0 ? meetsWithExpiry.map(m => `
+                  <tr class="hover:bg-slate-800/30 ${m.daysLeft <= 0 ? 'opacity-60 bg-rose-950/10' : ''}">
+                    <td class="py-1.5 px-2 text-white font-sans font-medium text-xs">
+                      ${m.competition || '-'}
+                      ${m.competition && m.competition.toLowerCase().includes('gorz') ? '<span class="ml-1 px-1 py-0.2 rounded bg-amber-500 text-slate-950 font-black text-[9px]">PEAK 1247</span>' : ''}
+                    </td>
+                    <td class="py-1.5 px-2 text-center text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
+                    <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${m.category || '-'}</span></td>
+                    <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${m.mark}m</td>
+                    <td class="py-1.5 px-2 text-right font-black text-amber-400">${m.performance_score || m.performanceScore || '-'} Pkt</td>
+                    <td class="py-1.5 px-2 text-center text-slate-300 whitespace-nowrap font-bold">${m.expDateStr}</td>
+                    <td class="py-1.5 px-2 text-center whitespace-nowrap">${m.statusBadge}</td>
+                  </tr>
+                `).join('') : '<tr><td colspan="7" class="py-3 text-center text-slate-500 italic">Keine Meetings für diesen Zeitpunkt hinterlegt.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. Interactive Milestone Timeline Quick-Jumps -->
+        <div>
+          <h4 class="text-[11px] font-bold text-slate-300 uppercase font-mono mb-1.5 flex items-center gap-1.5">
+            <span>📅</span>
+            <span>Wichtige Prognose-Meilensteine ansteuern:</span>
+          </h4>
+          <div class="flex items-center gap-2 flex-wrap text-xs font-mono">
+            <button onclick="RankingsModule.selectPrognosisDate('2026-09-23')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2026-09-23' ? 'bg-cyan-600 text-slate-950 font-bold border border-cyan-400' : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-700'}">
+              📍 23.09.2026 (Aktuell) • Luka #47 (1144 Pkt)
+            </button>
+            <button onclick="RankingsModule.selectPrognosisDate('2027-01-31')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2027-01-31' ? 'bg-cyan-600 text-slate-950 font-bold border border-cyan-400' : 'bg-slate-950 hover:bg-slate-800 text-cyan-300 border border-slate-700'}">
+              🔮 31.01.2027 (Vor Gorzów-Ablauf) • Luka #43 (1144 Pkt)
+            </button>
+            <button onclick="RankingsModule.selectPrognosisDate('2027-02-01')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2027-02-01' ? 'bg-rose-600 text-white font-bold border border-rose-400' : 'bg-slate-950 hover:bg-slate-800 text-rose-300 border border-rose-800'}">
+              ⚠️ 01.02.2027 (Gorzów verfällt) • Luka #89 (895 Pkt, 4 Meets)
+            </button>
+            <button onclick="RankingsModule.selectPrognosisDate('2027-02-28')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2027-02-28' ? 'bg-amber-600 text-slate-950 font-bold border border-amber-400' : 'bg-slate-950 hover:bg-slate-800 text-amber-300 border border-slate-700'}">
+              ⚠️ 28.02.2027 (Dortmund verfällt) • Luka 781 Pkt (3 Meets)
+            </button>
+            <button onclick="RankingsModule.selectPrognosisDate('2027-06-30')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2027-06-30' ? 'bg-purple-600 text-white font-bold border border-purple-400' : 'bg-slate-950 hover:bg-slate-800 text-purple-300 border border-slate-700'}">
+              🔮 30.06.2027 (Sommer bereinigt)
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. What-If Replacement Simulator -->
+        <div class="mt-3 pt-3 border-t border-slate-800/80">
+          <div class="flex items-center justify-between gap-2 mb-2">
+            <div class="flex items-center gap-1.5">
+              <span class="text-sm">🧮</span>
+              <h4 class="text-xs font-bold text-white uppercase font-mono tracking-wider">
+                MEETING-ERSATZ SIMULATOR • NEUES ERGEBNIS DURCHRECHNEN
+              </h4>
+            </div>
+            <span class="text-[10px] text-slate-400 font-mono">World Athletics Wertungsformel (Men's LJ)</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">Ziel-Weite (m):</label>
+              <input id="simMarkInput" type="number" step="0.01" value="8.05" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">Kategorie:</label>
+              <select id="simCatSelect" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none">
+                <option value="A" selected>Kat. A (Gold / Indoor Gold) • +100 max</option>
+                <option value="GL">Kat. GL (Hallen-EM) • +140 max</option>
+                <option value="GW">Kat. GW (Hallen-WM) • +170 max</option>
+                <option value="B">Kat. B (Silver / DM) • +60 max</option>
+                <option value="C">Kat. C (Bronze) • +40 max</option>
+                <option value="D">Kat. D (Challenger) • +25 max</option>
+                <option value="OW">Kat. OW (Olympia / WM) • +350 max</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">Platzierung:</label>
+              <select id="simPlaceSelect" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none">
+                <option value="1">1. Platz</option>
+                <option value="2">2. Platz</option>
+                <option value="3">3. Platz</option>
+                <option value="4">4. Platz</option>
+                <option value="5">5. Platz</option>
+                <option value="6">6. Platz</option>
+              </select>
+            </div>
+            <div class="flex items-end">
+              <button onclick="RankingsModule.simulateNewMeeting()" class="w-full py-1 px-2 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold font-mono text-xs rounded transition-all shadow-sm">
+                Berechnen ➔
+              </button>
+            </div>
+          </div>
+
+          <div id="simResultBox" class="mt-2.5 hidden bg-slate-950 border border-cyan-500/40 rounded-lg p-2.5 text-xs font-mono text-slate-300">
+            <!-- Populated by simulateNewMeeting -->
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function simulateNewMeeting() {
+    const markInput = document.getElementById('simMarkInput');
+    const catSelect = document.getElementById('simCatSelect');
+    const placeSelect = document.getElementById('simPlaceSelect');
+    const resultBox = document.getElementById('simResultBox');
+    if (!markInput || !catSelect || !placeSelect || !resultBox) return;
+
+    const mark = parseFloat(markInput.value) || 8.00;
+    const cat = catSelect.value || 'A';
+    const place = parseInt(placeSelect.value, 10) || 1;
+
+    const bonuses = {
+      'OW': [350, 300, 260, 230, 200, 175, 150, 130],
+      'GW': [170, 140, 120, 100, 85, 75, 65, 55],
+      'GL': [140, 120, 100, 85, 75, 65, 55, 45],
+      'A':  [100, 80, 70, 60, 50, 40, 35, 30],
+      'B':  [60, 50, 45, 40, 35, 30, 25, 20],
+      'C':  [40, 35, 30, 25, 20, 15, 12, 10],
+      'D':  [25, 20, 15, 10, 8, 5, 0, 0]
+    };
+
+    const placeIdx = Math.max(0, Math.min(place - 1, 7));
+    const bonus = (bonuses[cat] && bonuses[cat][placeIdx] !== undefined) ? bonuses[cat][placeIdx] : 0;
+    const resultPoints = Math.round(1138 + (mark - 8.00) * 215);
+    const totalNewScore = resultPoints + bonus;
+
+    const state = (window.App && window.App.state) || null;
+    if (!state) return;
+
+    const luka = state.athletes.find(a => a.name.toLowerCase().includes('herden'));
+    const currentMeets = (luka && luka.countingMeetings) ? [...luka.countingMeetings] : [];
+    const currentScores = currentMeets.map(m => parseInt(m.performance_score || m.performanceScore || 0, 10)).filter(s => s > 0);
+
+    let updatedScores = [];
+    let replaceNote = '';
+    const oldAvg = currentScores.length > 0 ? Math.round(currentScores.reduce((a,b) => a+b, 0) / currentScores.length) : 0;
+
+    if (currentScores.length < 5) {
+      updatedScores = [...currentScores, totalNewScore];
+      replaceNote = `Füllt den fehlenden 5. Wettkampf auf (aktuell nur ${currentScores.length}/5 Meets aktiv).`;
+    } else {
+      currentScores.sort((a,b) => a - b);
+      const lowest = currentScores[0];
+      if (totalNewScore > lowest) {
+        updatedScores = [...currentScores.slice(1), totalNewScore];
+        replaceNote = `Ersetzt das bisher schwächste Meeting (${lowest} Pkt) durch ${totalNewScore} Pkt (+${totalNewScore - lowest} Pkt Einzeldifferenz).`;
+      } else {
+        updatedScores = [...currentScores];
+        replaceNote = `Das neue Meeting (${totalNewScore} Pkt) liegt unter deinem schwächsten zählenden Meeting (${lowest} Pkt) und würde als Backup dienen.`;
+      }
+    }
+
+    const newAvg = Math.round(updatedScores.reduce((a,b) => a+b, 0) / updatedScores.length);
+    const delta = newAvg - oldAvg;
+
+    // Projected World Rank
+    const projectedRank = state.athletes.filter(a => !a.name.toLowerCase().includes('herden') && a.totalScore >= newAvg).length + 1;
+    const currentRank = luka ? luka.originalRank : 47;
+    const rankDelta = currentRank - projectedRank;
+
+    resultBox.classList.remove('hidden');
+    resultBox.innerHTML = `
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-slate-800">
+        <span class="font-bold text-white text-xs">
+          🎯 Simulations-Ergebnis: ${mark.toFixed(2)}m • Kat. ${cat} (${place}. Platz)
+        </span>
+        <span class="px-2 py-0.5 rounded font-black text-amber-400 bg-amber-950/80 border border-amber-800">
+          Meeting-Score: ${totalNewScore} Pkt (${resultPoints} Weite + ${bonus} Platz)
+        </span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
+        <div class="bg-slate-900 border border-slate-800 rounded p-2">
+          <span class="text-[10px] text-slate-400 uppercase block">Neuer Gesamt-Score:</span>
+          <span class="text-base font-black text-white font-mono">${newAvg} Pkt</span>
+          <span class="text-[10px] font-mono ${delta >= 0 ? 'text-emerald-400' : 'text-rose-400'} block">
+            ${delta >= 0 ? '+' : ''}${delta} Pkt im Schnitt
+          </span>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded p-2">
+          <span class="text-[10px] text-slate-400 uppercase block">Prognostizierter Rang:</span>
+          <span class="text-base font-black text-cyan-400 font-mono">#${projectedRank} weltweit</span>
+          <span class="text-[10px] font-mono ${rankDelta > 0 ? 'text-emerald-400' : 'text-slate-400'} block">
+            ${rankDelta > 0 ? `▲ +${rankDelta} Plätze Aufstieg` : 'Rang gehalten'}
+          </span>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded p-2">
+          <span class="text-[10px] text-slate-400 uppercase block">Auswirkung auf Wertung:</span>
+          <span class="text-[11px] text-slate-300 font-sans leading-tight block mt-0.5">${replaceNote}</span>
+        </div>
+      </div>
+    `;
   }
 
   function renderTable(state) {
@@ -537,7 +869,13 @@ const RankingsModule = (() => {
               <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 border border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
               <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${m.mark}m</td>
               <td class="py-1.5 px-2 text-center">${formatWindBadge(m.wind)}</td>
-              <td class="py-1.5 px-2 text-center text-slate-300">${m.place || '-'}</td>
+              <td class="py-1.5 px-2 text-center text-slate-300">
+                ${m.place_display ? (
+                  m.place_display.includes('Q') ? `<span class="px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/80 font-bold text-[9px]">${m.place_display}</span>` :
+                  m.place_display.includes('F') ? `<span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/80 font-bold text-[9px]">${m.place_display}</span>` :
+                  `<span class="font-bold">${m.place_display}</span>`
+                ) : (m.place || '-')}
+              </td>
               <td class="py-1.5 px-2 text-right text-slate-300">${m.result_score || '-'}</td>
               <td class="py-1.5 px-2 text-right text-slate-300">${m.placing_score || '-'}</td>
               <td class="py-1.5 px-2 text-right font-black text-amber-400 text-xs">${m.performance_score} Pkt</td>
@@ -557,9 +895,9 @@ const RankingsModule = (() => {
                   </h4>
                   <div class="flex items-center gap-1 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] font-mono">
                     <span class="text-slate-500">Sortieren:</span>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'date')" class="px-1.5 py-0.2 rounded ${athRowSort === 'date' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Datum ▾</button>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'mark')" class="px-1.5 py-0.2 rounded ${athRowSort === 'mark' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Weite ▾</button>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'score')" class="px-1.5 py-0.2 rounded ${athRowSort === 'score' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Score ▾</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'date')" class="px-1.5 py-0.2 rounded ${athRowSort.startsWith('date') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Datum ${athRowSort === 'date-asc' ? '▲' : '▼'}</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'mark')" class="px-1.5 py-0.2 rounded ${athRowSort.startsWith('mark') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Weite ${athRowSort === 'mark-asc' ? '▲' : '▼'}</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'score')" class="px-1.5 py-0.2 rounded ${athRowSort.startsWith('score') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Score ${athRowSort === 'score-asc' ? '▲' : '▼'}</button>
                   </div>
                 </div>
                 <button onclick="event.stopPropagation(); RankingsModule.openCompetitorModal('${ath.name.replace(/'/g, "\\'")}')" class="text-cyan-400 hover:text-cyan-300 font-mono text-[10px] font-bold underline">
@@ -957,9 +1295,9 @@ const RankingsModule = (() => {
                   </span>
                   <div class="flex items-center gap-1 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] font-mono">
                     <span class="text-slate-500">Sortieren:</span>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'date')" class="px-1.5 py-0.2 rounded ${athDbSort === 'date' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Datum ▾</button>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'mark')" class="px-1.5 py-0.2 rounded ${athDbSort === 'mark' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Weite ▾</button>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'score')" class="px-1.5 py-0.2 rounded ${athDbSort === 'score' ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Score ▾</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'date')" class="px-1.5 py-0.2 rounded ${athDbSort.startsWith('date') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Datum ${athDbSort === 'date-asc' ? '▲' : '▼'}</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'mark')" class="px-1.5 py-0.2 rounded ${athDbSort.startsWith('mark') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Weite ${athDbSort === 'mark-asc' ? '▲' : '▼'}</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'score')" class="px-1.5 py-0.2 rounded ${athDbSort.startsWith('score') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Score ${athDbSort === 'score-asc' ? '▲' : '▼'}</button>
                   </div>
                 </div>
                 <button onclick="event.stopPropagation(); RankingsModule.openCompetitorModal('${ath.name.replace(/'/g, "\\'")}')" class="text-cyan-400 hover:text-cyan-300 text-[10px] font-mono font-bold underline">
@@ -980,7 +1318,7 @@ const RankingsModule = (() => {
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-800/40">
-                    ${comps.map(c => `
+                    ${sortedComps.map(c => `
                       <tr class="hover:bg-slate-800/30">
                         <td class="py-1.5 px-2 text-slate-400 whitespace-nowrap">${c.date || '-'}</td>
                         <td class="py-1.5 px-2 text-slate-200 font-sans font-medium text-xs">
@@ -990,7 +1328,13 @@ const RankingsModule = (() => {
                         <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span></td>
                         <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m</td>
                         <td class="py-1.5 px-2 text-center">${formatWindBadge(c.wind)}</td>
-                        <td class="py-1.5 px-2 text-center text-slate-300">${c.place || '-'}</td>
+                        <td class="py-1.5 px-2 text-center text-slate-300">
+                          ${c.place_display ? (
+                            c.place_display.includes('Q') ? `<span class="px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/80 font-bold text-[9px]">${c.place_display}</span>` :
+                            c.place_display.includes('F') ? `<span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/80 font-bold text-[9px]">${c.place_display}</span>` :
+                            `<span class="font-bold">${c.place_display}</span>`
+                          ) : (c.place || '-')}
+                        </td>
                         <td class="py-1.5 px-2 text-right font-black text-amber-400">${c.performance_score || '-'} Pkt</td>
                       </tr>
                     `).join('')}
@@ -1310,6 +1654,9 @@ const RankingsModule = (() => {
     loadMoreAthletes,
     showAllAthletes,
     loadMoreMeetings,
-    showAllMeetings
+    showAllMeetings,
+    selectPrognosisDate,
+    simulateNewMeeting,
+    renderPrognosisCard
   };
 })();

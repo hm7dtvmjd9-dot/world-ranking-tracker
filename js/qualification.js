@@ -99,8 +99,8 @@ const QualificationModule = (() => {
         if (ath.sb > bestDlvMark) bestDlvMark = ath.sb;
       }
 
-      const totalCountedMeetings = (ath.countingMeetings || []).length;
-      const isCountComplete = totalCountedMeetings >= 5;
+      const periodMeetsCount = validPeriodMeetings.length;
+      const isCountComplete = periodMeetsCount >= 5;
 
       const scores = validPeriodMeetings.map(m => parseInt(m.performance_score) || 0);
       const marks = validPeriodMeetings.map(m => parseFloat(m.mark) || 0);
@@ -120,7 +120,7 @@ const QualificationModule = (() => {
         hasDirectStandard,
         hasDlvStandard,
         bestDlvMark,
-        totalCountedMeetings,
+        totalCountedMeetings: periodMeetsCount,
         isCountComplete
       };
     });

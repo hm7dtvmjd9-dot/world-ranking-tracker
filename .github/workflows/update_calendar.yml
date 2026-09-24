@@ -1,0 +1,34 @@
+name: Update World Athletics 2027 Calendar
+
+on:
+  schedule:
+    # Run every Tuesday at 04:00 UTC (World Athletics publishes calendar additions on Tuesdays)
+    - cron: '0 4 * * 2'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-calendar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run 2027 Calendar Scraper
+        run: |
+          python python/scrape_calendar_2027.py
+
+      - name: Commit and push updated calendar
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/calendar_2027.json
+          git diff --staged --quiet || (git commit -m "Auto-update: World Athletics 2027 Tour & Championships Calendar" && git push)

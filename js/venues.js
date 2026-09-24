@@ -9,6 +9,14 @@ const VenuesModule = (() => {
   let mensOnly = true;
   let initializedListeners = false;
   let searchQuery = '';
+  let expandedMeetingId = null;
+
+  function toggleMeetingRow(id) {
+    expandedMeetingId = expandedMeetingId === id ? null : id;
+    if (window.App && window.App.state) {
+      render(window.App.state);
+    }
+  }
 
   function initListeners() {
     if (initializedListeners) return;
@@ -137,12 +145,13 @@ const VenuesModule = (() => {
   }
 
   function renderMeetingRow(m) {
-    const isGorzow = m.name.toLowerCase().includes('gorzów') || m.city.toLowerCase().includes('gorzów');
+    const isGorzow = m.name.toLowerCase().includes('gorzów') || (m.city && m.city.toLowerCase().includes('gorzów'));
     const isPromising = m.promisingRunway;
+    const isExpanded = expandedMeetingId === m.id;
 
     // Tier badge colors
     let tierBadge = 'bg-slate-800 text-slate-300 border-slate-700';
-    if (m.tier === 'Gold') {
+    if (m.tier === 'Gold' || m.tier === 'World Athletics Series') {
       tierBadge = 'bg-amber-950 text-amber-300 border-amber-700';
     } else if (m.tier === 'Silver') {
       tierBadge = 'bg-cyan-950 text-cyan-300 border-cyan-700';
@@ -155,8 +164,10 @@ const VenuesModule = (() => {
     const hasContacts = m.contactPersons && m.contactPersons.length > 0;
     const contactCount = hasContacts ? m.contactPersons.length : 0;
 
-    return `
-      <tr class="hover:bg-slate-800/30 transition-colors ${isGorzow ? 'bg-amber-950/15' : ''}">
+    let mainRow = `
+      <tr onclick="VenuesModule.toggleMeetingRow('${m.id}')" class="cursor-pointer hover:bg-slate-800/40 transition-colors ${
+        isExpanded ? 'bg-slate-800/70 border-b border-slate-800' : isGorzow ? 'bg-amber-950/15' : ''
+      }">
         <!-- Datum -->
         <td class="py-2 px-2.5 whitespace-nowrap font-bold text-white">
           <div class="flex items-center gap-1.5">
@@ -212,12 +223,113 @@ const VenuesModule = (() => {
 
         <!-- Aktionen -->
         <td class="py-2 px-2.5 text-right whitespace-nowrap">
-          <button onclick="VenuesModule.openMeetingInfoModal('${m.id}')" class="px-2.5 py-1 rounded bg-slate-950 hover:bg-cyan-950 active:scale-95 border border-slate-700 hover:border-cyan-500 text-cyan-400 font-mono text-[10px] font-bold transition-all shadow-sm flex items-center gap-1 ml-auto">
-            <span>ℹ️ Details / Kontakt ${contactCount > 0 ? `(${contactCount})` : ''}</span>
-          </button>
+          <div class="flex items-center justify-end gap-1.5">
+            <button onclick="event.stopPropagation(); VenuesModule.openMeetingInfoModal('${m.id}')" class="px-2.5 py-1 rounded bg-slate-950 hover:bg-cyan-950 active:scale-95 border border-slate-700 hover:border-cyan-500 text-cyan-400 font-mono text-[10px] font-bold transition-all shadow-sm flex items-center gap-1">
+              <span>ℹ️ Details ${contactCount > 0 ? `(${contactCount})` : ''}</span>
+            </button>
+            <span class="text-slate-500 text-xs">${isExpanded ? '▲' : '▼'}</span>
+          </div>
         </td>
       </tr>
     `;
+
+    if (!isExpanded) {
+      return mainRow;
+    }
+
+    const accordionRow = `
+      <tr class="bg-slate-950/90 border-b border-slate-800">
+        <td colspan="6" class="p-3">
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-3 shadow-md">
+            <!-- 1. Header with Title & Action Shortcuts -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
+              <div class="flex items-center gap-2">
+                <span class="text-base">${isPromising ? '⭐' : '🏟️'}</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white uppercase font-mono tracking-wider">
+                    ${m.name} • ANLAGEN- & WETTKAMPFDETAILS
+                  </h4>
+                  <span class="text-[10px] text-slate-400 font-mono">${m.displayDate || m.date} • ${m.venue ? m.venue + ', ' : ''}${m.city} (${m.country}) • ${m.tier} (Kat. ${m.category})</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="event.stopPropagation(); VenuesModule.copyManagerPitchById('${m.id}')" class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold font-mono text-[10px] rounded transition-all shadow-sm">
+                  📋 Pitch für Manager
+                </button>
+                <button onclick="event.stopPropagation(); VenuesModule.openMeetingInfoModal('${m.id}')" class="px-2.5 py-1 bg-slate-950 hover:bg-slate-800 border border-slate-700 text-cyan-300 font-bold font-mono text-[10px] rounded transition-all">
+                  Vollansicht / Kontakte ↗
+                </button>
+              </div>
+            </div>
+
+            <!-- 2. Historical Basis & Runway Justification -->
+            <div class="${isPromising ? 'bg-amber-950/25 border-amber-600/60' : 'bg-slate-950 border-slate-800'} border rounded-lg p-3 space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5 font-bold font-mono text-xs ${isPromising ? 'text-amber-300' : 'text-slate-300'}">
+                  <span>${isPromising ? '⭐ DATENBASIS: VIELVERSPRECHENDE ANLAGE' : '📊 ANLAGENBEWERTUNG'}</span>
+                </div>
+                ${m.standardEligible ? '<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Standard C+ berechtigt</span>' : ''}
+              </div>
+              <p class="text-xs text-slate-200 font-sans leading-relaxed">
+                ${m.runwayNote || 'Reguläre Wettkampfanlage mit standardisierten Bedingungen.'}
+              </p>
+
+              <!-- Historical Marks Table/Row -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2 pt-2 border-t border-slate-800/60 text-[11px] font-mono">
+                <div>
+                  <span class="text-slate-400 block text-[10px] uppercase font-bold">Lukas bisherige Weiten hier:</span>
+                  ${m.lukaHistory && m.lukaHistory.length > 0 ? `
+                    <div class="flex flex-wrap gap-1 mt-1">
+                      ${m.lukaHistory.map(h => `
+                        <span class="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-300 font-bold">
+                          ${typeof h.mark === 'number' ? h.mark.toFixed(2) : h.mark}m (${h.date || h.year}, Pl. ${h.place})
+                        </span>
+                      `).join('')}
+                    </div>
+                  ` : '<span class="text-slate-500 text-[10px] italic">Noch kein Wettkampf von Luka dokumentiert.</span>'}
+                </div>
+
+                <div>
+                  <span class="text-slate-400 block text-[10px] uppercase font-bold">Top-Weiten bei diesem Meeting:</span>
+                  ${m.topHistoricalMarks && m.topHistoricalMarks.length > 0 ? `
+                    <div class="flex flex-wrap gap-1 mt-1">
+                      ${m.topHistoricalMarks.map((mk, idx) => `
+                        <span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-700 text-amber-300 font-bold">
+                          #${idx + 1}: ${typeof mk === 'number' ? mk.toFixed(2) : mk}m
+                        </span>
+                      `).join('')}
+                    </div>
+                  ` : '<span class="text-slate-500 text-[10px] italic">Keine Weiten im WA-Archiv erfasst.</span>'}
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Organizer Contacts Quick Box -->
+            ${m.contactPersons && m.contactPersons.length > 0 ? `
+              <div class="space-y-1.5">
+                <span class="text-[10px] font-bold text-slate-400 uppercase font-mono block">Veranstalter / Liaison-Kontakte:</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  ${m.contactPersons.map(cp => `
+                    <div class="bg-slate-950 border border-slate-800 rounded p-2 text-xs font-mono">
+                      <div class="flex items-center justify-between">
+                        <strong class="text-white">${cp.name}</strong>
+                        <span class="text-[9px] text-cyan-400">${cp.title || 'Organisation'}</span>
+                      </div>
+                      <div class="flex items-center gap-3 mt-1 text-[11px]">
+                        ${cp.email ? `<a href="mailto:${cp.email}" class="text-cyan-400 hover:underline">✉️ ${cp.email}</a>` : ''}
+                        ${cp.phone ? `<a href="tel:${cp.phone}" class="text-emerald-400 hover:underline">📞 ${cp.phone}</a>` : ''}
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return mainRow + accordionRow;
   }
 
   function openMeetingInfoModal(meetingId) {
@@ -426,5 +538,5 @@ const VenuesModule = (() => {
     }
   }
 
-  return { render, openMeetingInfoModal, copyManagerPitchById, resetFilters };
+  return { render, openMeetingInfoModal, copyManagerPitchById, resetFilters, toggleMeetingRow };
 })();

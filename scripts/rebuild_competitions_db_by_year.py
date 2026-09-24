@@ -45,8 +45,8 @@ def main():
     ranking_files = sorted(glob.glob(os.path.join(RANKINGS_DIR, "ranking_*.json")))
     print(f"Reading {len(ranking_files)} weekly ranking files to build year-separated competitions catalog...")
 
-    # Key: (comp_name_by_year, year) -> comp_data
-    comps_by_year = {}
+    # Key: (raw_name, year) -> metadata + all collected results
+    comps_collected = {}
 
     for fpath in ranking_files:
         with open(fpath, "r", encoding="utf-8") as f:
@@ -62,91 +62,194 @@ def main():
                     continue
                 date_str = c.get("date", "").strip()
                 year = extract_year(date_str)
-                name_with_year = make_year_meeting_name(raw_name, year)
                 
                 cat = c.get("category", "")
                 venue = c.get("venue", "")
                 indoor = c.get("indoor", False)
                 mark = c.get("mark")
                 wind = c.get("wind")
-                place = c.get("place", "")
+                place = str(c.get("place", "")).strip().replace(".", "")
                 pts = c.get("performance_score")
+                placing_score = c.get("placing_score")
                 remark = c.get("remark", "")
-                round_name = c.get("round", "Finale")
-                q_mark = c.get("qualification_mark")
-                q_place = c.get("qualification_place")
-                q_score = c.get("qualification_score")
 
-                unique_key = (name_with_year, year)
-                if unique_key not in comps_by_year:
-                    comps_by_year[unique_key] = {
-                        "name": name_with_year,
+                unique_key = (raw_name, year)
+                if unique_key not in comps_collected:
+                    comps_collected[unique_key] = {
                         "raw_name": raw_name,
                         "year": int(year),
                         "category": cat,
                         "venue": venue,
                         "indoor": indoor,
                         "dates_seen": set(),
-                        "results_map": {} # (athlete, date, mark) -> result_obj
+                        "results_map": {}
                     }
 
-                entry = comps_by_year[unique_key]
+                entry = comps_collected[unique_key]
                 if date_str:
                     entry["dates_seen"].add(date_str)
                 
                 res_key = (ath_name, date_str, str(mark))
                 if res_key not in entry["results_map"]:
-                    res_obj = {
+                    entry["results_map"][res_key] = {
                         "athlete": ath_name,
                         "country": ath_country,
                         "date": date_str,
                         "mark": str(mark) if mark is not None else "-",
-                        "place": place,
+                        "raw_place": place,
                         "performance_score": int(pts) if pts is not None else 0,
-                        "round": round_name,
+                        "placing_score": placing_score,
                         "remark": remark,
                         "wind": wind
                     }
-                    if q_mark:
-                        res_obj["qualification_mark"] = q_mark
-                        res_obj["qualification_place"] = q_place
-                        res_obj["qualification_score"] = q_score
-                    entry["results_map"][res_key] = res_obj
 
     final_competitions = []
-    for (name_with_year, year), data in comps_by_year.items():
-        results_list = list(data["results_map"].values())
-        # Sort results: best mark first
-        results_list.sort(key=lambda r: float(r["mark"]) if r["mark"] not in ["-", None] else 0.0, reverse=True)
-        
-        # Calculate summary statistics for runway evaluation
-        valid_marks = [float(r["mark"]) for r in results_list if r["mark"] not in ["-", None]]
-        avg_mark = round(sum(valid_marks) / len(valid_marks), 2) if valid_marks else None
-        best_mark = max(valid_marks) if valid_marks else None
-        marks_over_8m = len([m for m in valid_marks if m >= 8.00])
-        luka_results = [r for r in results_list if "herden" in r["athlete"].lower()]
-        
+
+    for (raw_name, year), data in comps_collected.items():
+        name_with_year = make_year_meeting_name(raw_name, str(year))
         dates_sorted = sorted(list(data["dates_seen"]))
-        final_competitions.append({
-            "name": name_with_year,
-            "raw_name": data["raw_name"],
-            "year": data["year"],
-            "category": data["category"],
-            "venue": data["venue"],
-            "indoor": data["indoor"],
-            "dates_seen": dates_sorted,
-            "results_count": len(results_list),
-            "best_mark": best_mark,
-            "avg_mark": avg_mark,
-            "marks_over_8m": marks_over_8m,
-            "luka_mark": luka_results[0]["mark"] if luka_results else None,
-            "results": results_list
-        })
+        results_list = list(data["results_map"].values())
+
+        # If a competition has multiple dates (or was a major championship with Quali and Final):
+        # We separate it into dedicated "(Finale)" and "(Qualifikation)" competition entries!
+        is_multi_day = len(dates_sorted) > 1
+        is_championship = any(w in raw_name.lower() for w in ["olympic", "championship", "games", "trials", "spiele", "meisterschaft"])
+
+        if is_multi_day and is_championship:
+            final_date = dates_sorted[-1]
+            quali_dates = set(dates_sorted[:-1])
+
+            final_results = [r for r in results_list if r["date"] == final_date]
+            quali_results = [r for r in results_list if r["date"] in quali_dates]
+
+            # 1. Final Entry
+            if final_results:
+                final_results.sort(key=lambda r: (
+                    int(r["raw_place"]) if r["raw_place"].isdigit() else 999,
+                    -float(r["mark"]) if r["mark"] not in ["-", None] else 0.0
+                ))
+                clean_final_res = []
+                for r in final_results:
+                    p = r["raw_place"]
+                    clean_final_res.append({
+                        "athlete": r["athlete"],
+                        "country": r["country"],
+                        "date": r["date"],
+                        "mark": r["mark"],
+                        "place": f"{p}. F" if p else "F",
+                        "performance_score": r["performance_score"],
+                        "round": "Finale",
+                        "remark": r["remark"],
+                        "wind": r["wind"]
+                    })
+                
+                v_marks = [float(r["mark"]) for r in clean_final_res if r["mark"] not in ["-", None]]
+                luka_res = [r for r in clean_final_res if "herden" in r["athlete"].lower()]
+                final_competitions.append({
+                    "name": f"{name_with_year} (Finale)",
+                    "raw_name": raw_name,
+                    "round": "Finale",
+                    "year": data["year"],
+                    "category": data["category"],
+                    "venue": data["venue"],
+                    "indoor": data["indoor"],
+                    "dates_seen": [final_date],
+                    "results_count": len(clean_final_res),
+                    "best_mark": max(v_marks) if v_marks else None,
+                    "avg_mark": round(sum(v_marks) / len(v_marks), 2) if v_marks else None,
+                    "marks_over_8m": len([m for m in v_marks if m >= 8.00]),
+                    "luka_mark": luka_res[0]["mark"] if luka_res else None,
+                    "results": clean_final_res
+                })
+
+            # 2. Qualifikation Entry
+            if quali_results:
+                quali_results.sort(key=lambda r: (
+                    int(r["raw_place"]) if r["raw_place"].isdigit() else 999,
+                    -float(r["mark"]) if r["mark"] not in ["-", None] else 0.0
+                ))
+                clean_quali_res = []
+                for r in quali_results:
+                    p = r["raw_place"]
+                    clean_quali_res.append({
+                        "athlete": r["athlete"],
+                        "country": r["country"],
+                        "date": r["date"],
+                        "mark": r["mark"],
+                        "place": f"{p}. Q" if p else "Q",
+                        "performance_score": r["performance_score"],
+                        "round": "Qualifikation",
+                        "remark": r["remark"],
+                        "wind": r["wind"]
+                    })
+
+                v_marks = [float(r["mark"]) for r in clean_quali_res if r["mark"] not in ["-", None]]
+                luka_res = [r for r in clean_quali_res if "herden" in r["athlete"].lower()]
+                final_competitions.append({
+                    "name": f"{name_with_year} (Qualifikation)",
+                    "raw_name": raw_name,
+                    "round": "Qualifikation",
+                    "year": data["year"],
+                    "category": data["category"],
+                    "venue": data["venue"],
+                    "indoor": data["indoor"],
+                    "dates_seen": sorted(list(quali_dates)),
+                    "results_count": len(clean_quali_res),
+                    "best_mark": max(v_marks) if v_marks else None,
+                    "avg_mark": round(sum(v_marks) / len(v_marks), 2) if v_marks else None,
+                    "marks_over_8m": len([m for m in v_marks if m >= 8.00]),
+                    "luka_mark": luka_res[0]["mark"] if luka_res else None,
+                    "results": clean_quali_res
+                })
+
+        else:
+            # Single-stage or regular meeting (Finale)
+            results_list.sort(key=lambda r: (
+                int(r["raw_place"]) if r["raw_place"].isdigit() else 999,
+                -float(r["mark"]) if r["mark"] not in ["-", None] else 0.0
+            ))
+            clean_res = []
+            for r in results_list:
+                p = r["raw_place"]
+                clean_res.append({
+                    "athlete": r["athlete"],
+                    "country": r["country"],
+                    "date": r["date"],
+                    "mark": r["mark"],
+                    "place": f"{p}." if p else "-",
+                    "performance_score": r["performance_score"],
+                    "round": "Finale",
+                    "remark": r["remark"],
+                    "wind": r["wind"]
+                })
+
+            valid_marks = [float(r["mark"]) for r in clean_res if r["mark"] not in ["-", None]]
+            avg_mark = round(sum(valid_marks) / len(valid_marks), 2) if valid_marks else None
+            best_mark = max(valid_marks) if valid_marks else None
+            marks_over_8m = len([m for m in valid_marks if m >= 8.00])
+            luka_results = [r for r in clean_res if "herden" in r["athlete"].lower()]
+
+            final_competitions.append({
+                "name": name_with_year,
+                "raw_name": data["raw_name"],
+                "round": "Finale",
+                "year": data["year"],
+                "category": data["category"],
+                "venue": data["venue"],
+                "indoor": data["indoor"],
+                "dates_seen": dates_sorted,
+                "results_count": len(clean_res),
+                "best_mark": best_mark,
+                "avg_mark": avg_mark,
+                "marks_over_8m": marks_over_8m,
+                "luka_mark": luka_results[0]["mark"] if luka_results else None,
+                "results": clean_res
+            })
 
     # Sort competitions chronologically descending (newest first)
     final_competitions.sort(key=lambda c: (c["year"], c["dates_seen"][-1] if c["dates_seen"] else ""), reverse=True)
 
-    print(f"Total year-separated competitions: {len(final_competitions)}")
+    print(f"Total year-separated competitions (with Quali/Final separated): {len(final_competitions)}")
     with open(COMP_DB_PATH, "w", encoding="utf-8") as f:
         json.dump({
             "event": "Men's Long Jump",
