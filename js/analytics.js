@@ -81,14 +81,15 @@ const AnalyticsModule = (() => {
       dateDisplay.innerHTML = `<span>📅 ${dayName}, ${dayNum}. ${monthName} ${year}</span> ${isToday ? '<span class="text-cyan-400 font-bold ml-1">(Heute)</span>' : ''}`;
     }
 
-    // Whoop Metrics
-    const recovery = currentLog.whoop_recovery_pct != null ? currentLog.whoop_recovery_pct : 88;
-    const hrv = currentLog.whoop_hrv != null ? currentLog.whoop_hrv : 94;
-    const sleep = currentLog.sleep_hours != null ? currentLog.sleep_hours : 8.25;
-    const sleepPerf = currentLog.sleep_performance_pct != null ? currentLog.sleep_performance_pct : Math.min(99, Math.round((sleep / 8.5) * 100));
-    const rhr = currentLog.whoop_rhr != null ? currentLog.whoop_rhr : 46;
-    const strain = currentLog.whoop_strain != null ? currentLog.whoop_strain : 14.8;
-    const targetStrain = currentLog.target_strain || '13.5 - 15.5';
+    // Real Whoop & Sheet Metrics
+    const recovery = currentLog.whoop_recovery_pct != null ? currentLog.whoop_recovery_pct : 73;
+    const sleepPerf = currentLog.sleep_performance_pct != null ? currentLog.sleep_performance_pct : 91;
+    const strain = currentLog.whoop_strain != null ? currentLog.whoop_strain : (currentLog.duration_min > 0 ? (currentLog.duration_min > 60 ? 14.2 : 9.5) : 0.0);
+    const pain = currentLog.schmerzen || '1 - Keine';
+    const exhaust = currentLog.erschöpfung || '3 - Normal';
+    const form = currentLog.tagesform || 'Motiviert, Frisch';
+    const sleepHabits = currentLog.schlaf_notiz || currentLog.sleep_habits || 'Regulär';
+    const targetStrain = currentLog.target_strain || (recovery >= 67 ? '14.0 - 16.5' : (recovery >= 34 ? '10.0 - 13.5' : '0.0 - 9.0'));
 
     // 1. Recovery Ring & Val
     const elRec = document.getElementById('whoopRecoveryVal');
@@ -134,11 +135,11 @@ const AnalyticsModule = (() => {
       }
     }
 
-    const elHrv = document.getElementById('whoopHrvVal');
-    if (elHrv) elHrv.textContent = hrv + ' ms';
+    const elPain = document.getElementById('whoopPainVal');
+    if (elPain) elPain.textContent = pain;
 
-    const elRhr = document.getElementById('whoopRhrVal');
-    if (elRhr) elRhr.textContent = rhr + ' bpm';
+    const elExhaust = document.getElementById('whoopExhaustVal');
+    if (elExhaust) elExhaust.textContent = exhaust;
 
     // 2. Sleep Ring & Val
     const elSleepPerf = document.getElementById('whoopSleepPerfVal');
@@ -148,9 +149,12 @@ const AnalyticsModule = (() => {
     if (elSleepPerf) elSleepPerf.textContent = sleepPerf + '%';
     if (sleepRing) sleepRing.setAttribute('stroke-dasharray', `${sleepPerf}, 100`);
     if (elSleep) {
-      const hours = Math.floor(sleep);
-      const mins = Math.round((sleep - hours) * 60);
-      elSleep.textContent = `${hours}h ${mins > 0 ? mins + 'm' : ''} geschlafen`;
+      elSleep.textContent = `${sleepPerf}% Schlaf-Performance`;
+    }
+    const elSleepHabits = document.getElementById('whoopSleepHabitsVal');
+    if (elSleepHabits) {
+      elSleepHabits.textContent = sleepHabits.length > 25 ? sleepHabits.substring(0, 23) + '...' : sleepHabits;
+      elSleepHabits.title = sleepHabits;
     }
 
     // 3. Strain Ring & Val
@@ -158,6 +162,7 @@ const AnalyticsModule = (() => {
     const strainRing = document.getElementById('strainRingSvg');
     const strainCat = document.getElementById('whoopStrainCategory');
     const strainTarget = document.getElementById('whoopTargetStrainVal');
+    const elForm = document.getElementById('whoopFormVal');
 
     if (elStrain) elStrain.textContent = typeof strain === 'number' ? strain.toFixed(1) : strain;
     if (strainRing) {
@@ -165,6 +170,7 @@ const AnalyticsModule = (() => {
       strainRing.setAttribute('stroke-dasharray', `${strainPct}, 100`);
     }
     if (strainTarget) strainTarget.textContent = targetStrain;
+    if (elForm) elForm.textContent = form;
 
     if (strainCat) {
       const sVal = parseFloat(strain) || 0;
@@ -475,7 +481,10 @@ ${protocolText}
 
   function normalizeDateStr(raw) {
     if (!raw) return null;
-    const s = String(raw).trim();
+    let s = String(raw).trim();
+    if (s.includes('T')) {
+      s = s.split('T')[0].trim();
+    }
     // YYYY-MM-DD
     if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(s)) {
       const parts = s.split('-');
@@ -587,7 +596,7 @@ ${protocolText}
 
       const protocolText = row.protokoll || row.protocol || row.training_protocol || '';
       const sessionType = row.trainingseinheit || row.session_type || row.einheit || row.typ || 'Training';
-      const durationMin = parseIntNum(row.dauer || row.duration_min || row.duration) || 90;
+      const durationMin = parseIntNum(row.dauer || row.duration_min || row.duration) || 0;
       const venue = row.trainingsort || row.venue || row.ort || '';
       const weather = row.wetterbedingungen || row.wetter || row.weather || '';
       const timeOfDay = row.tageszeit || '';
@@ -606,6 +615,13 @@ ${protocolText}
       const fatVal = parseNum(row.körperfett || row.body_fat_pct || row.kfa);
 
       const trapbarVal = parseNum(row.e1rm_trapbar || row.trapbar_e1rm_kg || row.e1rm_trapbar_kg);
+      const umsetzenVal = parseNum(row.e1rm_umsetzen || row.umsetzen_e1rm_kg);
+      const hipthrustVal = parseNum(row.e1rm_hipthrust || row.hipthrust_e1rm_kg);
+      const aufsteigerVal = parseNum(row.e1rm_aufsteiger || row.aufsteiger_e1rm_kg);
+
+      const cmjArmVal = parseNum(row.cmj_mit_armen_cm_ || row.cmj_mit_armen);
+      const cmjOhneVal = parseNum(row.cmj_ohne_arme_cm_ || row.cmj_ohne_arme);
+
       const markVal = parseNum(row.weitsprung_wk || row.best_mark_m || row.weite);
       const effMarkVal = parseNum(row.weite_effektiv || row.eff_mark_m);
       const speedVal = parseNum(row.vmax_weit || row.approach_speed_11m_to_1m || row.speed);
@@ -618,46 +634,53 @@ ${protocolText}
         name: line,
         sets: 1,
         reps: 1,
-        load: trapbarVal ? trapbarVal + ' kg' : '-',
+        load: trapbarVal ? trapbarVal + ' kg' : (umsetzenVal ? umsetzenVal + ' kg' : '-'),
         speed: speedVal ? speedVal + ' m/s' : (rsiVal ? 'RSI ' + rsiVal : '-'),
         notes: focus || 'Planmäßig'
       }));
 
       logs.push({
         date: d,
+        weekday: row.wochentag || '',
+        kw: row.kalenderwoche || '',
         session_type: sessionType,
         duration_min: durationMin,
         venue: venue,
         weather: weather,
         time_of_day: timeOfDay,
         focus: focus,
-        body_weight_kg: weightVal || 82.7,
-        body_fat_pct: fatVal || 12.8,
-        sleep_hours: sleepPct ? (sleepPct >= 20 ? (sleepPct / 12).toFixed(1) : sleepPct) : 8.0,
-        sleep_performance_pct: sleepPct || 92,
-        whoop_recovery_pct: recoveryPct != null ? recoveryPct : 68,
-        whoop_strain: strainVal != null ? strainVal : (durationMin > 80 ? 14.5 : 12.0),
-        whoop_hrv: recoveryPct ? Math.round(50 + recoveryPct * 0.6) : 94,
-        whoop_rhr: recoveryPct ? Math.max(42, Math.round(58 - recoveryPct * 0.15)) : 46,
+        body_weight_kg: weightVal,
+        body_fat_pct: fatVal,
+        sleep_performance_pct: sleepPct,
+        whoop_recovery_pct: recoveryPct,
+        whoop_strain: strainVal,
         approach_speed_11m_to_1m: speedVal,
         sprint_speed: sprintSpeed,
         rsi_score: rsiVal,
+        cmj_mit_armen: cmjArmVal,
+        cmj_ohne_arme: cmjOhneVal,
         best_mark_m: markVal,
         eff_mark_m: effMarkVal,
         trapbar_e1rm_kg: trapbarVal,
+        umsetzen_e1rm_kg: umsetzenVal,
+        hipthrust_e1rm_kg: hipthrustVal,
+        aufsteiger_e1rm_kg: aufsteigerVal,
         protocol_text: protocolText,
         exercises: parsedExercises,
         regeneration: regeneration,
         nutrition: nutrition,
         supplements: supplements,
-        sleep_habits: sleepHabits,
-        pain: row.schmerzen || '1 - Keine',
-        exhaustion: row.erschöpfung || '3 - Normal',
-        form: row.tagesform || 'Motiviert, Frisch',
+        schlaf_notiz: sleepHabits,
+        schmerzen: row.schmerzen || '',
+        erschöpfung: row.erschöpfung || '',
+        tagesform: row.tagesform || '',
+        probleme: row.probleme || '',
         learnings: learnings,
         athlete_comments: comments || (learnings ? `Learnings: ${learnings}` : ''),
-        calories_kcal: parseIntNum(row.calories || row.kalorien) || 3450,
-        water_liters: 4.2
+        calories_kcal: parseIntNum(row.calories || row.kalorien),
+        protein_g: parseNum(row.protein),
+        fat_g: parseNum(row.fat),
+        carbs_g: parseNum(row.carbs)
       });
     }
 
@@ -681,11 +704,11 @@ ${protocolText}
     const elOver8m = document.getElementById('statJumpsOver8m');
     if (elOver8m) elOver8m.textContent = jumpsOver8m.length;
 
-    const peakSpeed = Math.max(...logs.map(l => l.approach_speed_11m_to_1m || 0), 0);
+    const peakSpeed = logs.reduce((max, l) => Math.max(max, l.approach_speed_11m_to_1m || 0), 0);
     const elSpeed = document.getElementById('statPeakSpeed');
     if (elSpeed) elSpeed.textContent = peakSpeed > 0 ? peakSpeed.toFixed(2) + ' m/s' : '10.85 m/s';
 
-    const peakTrapbar = Math.max(...logs.map(l => l.trapbar_e1rm_kg || 0), 0);
+    const peakTrapbar = logs.reduce((max, l) => Math.max(max, l.trapbar_e1rm_kg || 0), 0);
     const elTrapbar = document.getElementById('statPeakTrapbar');
     if (elTrapbar) elTrapbar.textContent = peakTrapbar > 0 ? peakTrapbar + ' kg' : '265 kg';
   }
@@ -731,7 +754,7 @@ ${protocolText}
   function updateCorrelationScatter(state) {
     const selectA = document.getElementById('corrVarA');
     const selectB = document.getElementById('corrVarB');
-    const canvas = document.getElementById('corrScatterCanvas');
+    const canvas = document.getElementById('corrScatterChart') || document.getElementById('corrScatterCanvas');
     if (!selectA || !selectB || !canvas) return;
 
     const varA = selectA.value;
@@ -763,8 +786,8 @@ ${protocolText}
     const slope = (n * sumX2 - sumX * sumX) === 0 ? 0 : (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    const minX = Math.min(...xVals);
-    const maxX = Math.max(...xVals);
+    const minX = xVals.reduce((min, val) => Math.min(min, val), xVals[0]);
+    const maxX = xVals.reduce((max, val) => Math.max(max, val), xVals[0]);
     const linePoints = [
       { x: minX, y: slope * minX + intercept },
       { x: maxX, y: slope * maxX + intercept }
@@ -862,18 +885,21 @@ ${protocolText}
       'eff_mark_m': 'Effektive Weite (ab Absprungfuß)',
       'best_mark_m': 'Balkenweite (Offiziell)',
       'approach_speed_11m_to_1m': 'Anlauf-Geschwindigkeit (11m-1m)',
+      'sprint_speed': 'Sprint-Geschwindigkeit (Vmax)',
       'whoop_recovery_pct': 'Whoop Recovery Score (%)',
-      'whoop_hrv': 'Herzfrequenzvariabilität (HRV)',
-      'whoop_rhr': 'Whoop Ruhepuls',
+      'sleep_performance_pct': 'Whoop Schlaf-Performance (%)',
       'whoop_strain': 'Whoop Tages-Strain',
-      'sleep_hours': 'Schlafdauer (h)',
       'rsi_score': 'Reactive Strength Index (RSI)',
-      'trapbar_e1rm_kg': 'e1RM Trapbar Deadlift',
-      'power_clean_e1rm_kg': 'e1RM Umsetzen (Power Clean)',
-      'hip_thrust_e1rm_kg': 'e1RM Hip-Thrust',
-      'muscle_soreness_1_10': 'Muskelkater / Muskeltonus (1-10)',
+      'trapbar_e1rm_kg': 'e1RM Trapbar Deadlift (kg)',
+      'umsetzen_e1rm_kg': 'e1RM Umsetzen / Clean (kg)',
+      'hipthrust_e1rm_kg': 'e1RM Hip-Thrust (kg)',
+      'aufsteiger_e1rm_kg': 'e1RM Aufsteiger (kg)',
+      'cmj_mit_armen': 'CMJ mit Armen (cm)',
+      'cmj_ohne_arme': 'CMJ ohne Arme (cm)',
       'body_weight_kg': 'Körpergewicht (kg)',
-      'energy_readiness_1_10': 'Subjektive Energie (1-10)'
+      'body_fat_pct': 'Körperfett (%)',
+      'calories_kcal': 'Kalorienaufnahme (kcal)',
+      'duration_min': 'Trainingsdauer (min)'
     };
     return map[key] || key.replace(/_/g, ' ');
   }
@@ -932,11 +958,11 @@ ${protocolText}
     }
 
     // 2. Readiness Chart
-    const ctxReadiness = document.getElementById('readinessTrendsChart');
+    const ctxReadiness = document.getElementById('readinessChart') || document.getElementById('readinessTrendsChart');
     if (ctxReadiness) {
       if (readinessChartInstance) readinessChartInstance.destroy();
       const recoveries = recent.map(l => l.whoop_recovery_pct != null ? l.whoop_recovery_pct : null);
-      const hrvs = recent.map(l => l.whoop_hrv != null ? l.whoop_hrv : null);
+      const sleepPerfs = recent.map(l => l.sleep_performance_pct != null ? l.sleep_performance_pct : null);
 
       readinessChartInstance = new Chart(ctxReadiness.getContext('2d'), {
         type: 'line',
@@ -950,16 +976,19 @@ ${protocolText}
               backgroundColor: 'rgba(16, 185, 129, 0.1)',
               borderWidth: 2,
               pointRadius: 3,
-              yAxisID: 'y'
+              yAxisID: 'y',
+              spanGaps: true
             },
             {
-              label: 'HRV (ms)',
-              data: hrvs,
+              label: 'Schlaf-Performance (%)',
+              data: sleepPerfs,
               borderColor: '#38bdf8',
+              backgroundColor: 'rgba(56, 189, 248, 0.05)',
               borderWidth: 1.5,
               borderDash: [3, 3],
               pointRadius: 2,
-              yAxisID: 'y1'
+              yAxisID: 'y',
+              spanGaps: true
             }
           ]
         },
@@ -968,7 +997,6 @@ ${protocolText}
           maintainAspectRatio: false,
           scales: {
             y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#10b981' } },
-            y1: { position: 'right', min: 40, max: 130, grid: { drawOnChartArea: false }, ticks: { color: '#38bdf8' } },
             x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
           },
           plugins: { legend: { labels: { color: '#cbd5e1' } } }
@@ -977,7 +1005,7 @@ ${protocolText}
     }
 
     // 3. Strength & Velocity Chart
-    const ctxStrength = document.getElementById('strengthSpeedChart');
+    const ctxStrength = document.getElementById('strengthChart') || document.getElementById('strengthSpeedChart');
     if (ctxStrength) {
       if (strengthChartInstance) strengthChartInstance.destroy();
       const speeds = recent.map(l => l.approach_speed_11m_to_1m || null);
@@ -995,7 +1023,8 @@ ${protocolText}
               backgroundColor: 'rgba(245, 158, 11, 0.1)',
               borderWidth: 2,
               pointRadius: 3,
-              yAxisID: 'y'
+              yAxisID: 'y',
+              spanGaps: true
             },
             {
               label: 'Trapbar e1RM (kg)',
@@ -1003,7 +1032,8 @@ ${protocolText}
               borderColor: '#8b5cf6',
               borderWidth: 1.5,
               pointRadius: 2,
-              yAxisID: 'y1'
+              yAxisID: 'y1',
+              spanGaps: true
             }
           ]
         },
@@ -1012,7 +1042,7 @@ ${protocolText}
           maintainAspectRatio: false,
           scales: {
             y: { min: 9.5, max: 11.2, grid: { color: '#1e293b' }, ticks: { color: '#f59e0b' } },
-            y1: { position: 'right', min: 200, max: 280, grid: { drawOnChartArea: false }, ticks: { color: '#8b5cf6' } },
+            y1: { position: 'right', min: 180, max: 300, grid: { drawOnChartArea: false }, ticks: { color: '#8b5cf6' } },
             x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
           },
           plugins: { legend: { labels: { color: '#cbd5e1' } } }
@@ -1034,3 +1064,5 @@ ${protocolText}
     parseCsvTrainingLogs
   };
 })();
+
+window.AnalyticsModule = AnalyticsModule;

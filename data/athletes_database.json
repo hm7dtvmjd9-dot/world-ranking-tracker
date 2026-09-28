@@ -318,14 +318,15 @@
         },
         {
           "date": "08 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
           "venue": "",
           "category": "GL",
           "mark": "8.65",
           "place": "1.",
           "performance_score": 1451,
           "indoor": false,
-          "wind": "-0.3 m/s"
+          "wind": "-0.3 m/s",
+          "place_display": "1. F"
         },
         {
           "date": "06 JUN 2025",
@@ -620,14 +621,15 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "8.34",
           "place": "2.",
           "performance_score": 1542,
           "indoor": false,
-          "wind": "-0.1 m/s"
+          "wind": "-0.1 m/s",
+          "place_display": "2."
         },
         {
           "date": "17 SEP 2023",
@@ -653,14 +655,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "8.28",
           "place": "1.",
           "performance_score": 1299,
           "indoor": false,
-          "wind": "+0.4 m/s"
+          "wind": "+0.4 m/s",
+          "place_display": "1."
         },
         {
           "date": "13 SEP 2024",
@@ -979,13 +982,14 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "8.19",
           "place": "5.",
           "performance_score": 1430,
-          "indoor": false
+          "indoor": false,
+          "place_display": "5."
         },
         {
           "date": "15 FEB 2023",
@@ -1039,13 +1043,14 @@
         },
         {
           "date": "08 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
           "venue": "",
           "category": "GL",
           "mark": "8.08",
           "place": "6.",
           "performance_score": 1257,
-          "indoor": false
+          "indoor": false,
+          "place_display": "6. F"
         },
         {
           "date": "08 FEB 2026",
@@ -1265,14 +1270,15 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "8.39",
           "place": "1.",
           "performance_score": 1598,
           "indoor": false,
-          "wind": "+0.2 m/s"
+          "wind": "+0.2 m/s",
+          "place_display": "1."
         },
         {
           "date": "17 FEB 2024",
@@ -1362,14 +1368,15 @@
         },
         {
           "date": "08 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
           "venue": "",
           "category": "GL",
           "mark": "8.38",
           "place": "2.",
           "performance_score": 1369,
           "indoor": false,
-          "wind": "-0.5 m/s"
+          "wind": "-0.5 m/s",
+          "place_display": "2. F"
         },
         {
           "date": "08 AUG 2023",
@@ -1609,14 +1616,15 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "8.30",
           "place": "4.",
           "performance_score": 1474,
           "indoor": false,
-          "wind": "-0.2 m/s"
+          "wind": "-0.2 m/s",
+          "place_display": "4."
         },
         {
           "date": "17 SEP 2023",
@@ -1741,25 +1749,27 @@
         },
         {
           "date": "08 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
           "venue": "",
           "category": "GL",
           "mark": "8.31",
           "place": "3.",
           "performance_score": 1338,
           "indoor": false,
-          "wind": "-0.5 m/s"
+          "wind": "-0.5 m/s",
+          "place_display": "3. F"
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "8.41",
           "place": "1.",
           "performance_score": 1270,
           "indoor": false,
-          "wind": "-0.6 m/s"
+          "wind": "-0.6 m/s",
+          "place_display": "1. Q"
         },
         {
           "date": "06 AUG 2024",
@@ -2198,13 +2208,14 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "8.10",
           "place": "5.",
           "performance_score": 1200,
-          "indoor": false
+          "indoor": false,
+          "place_display": "5. Q"
         },
         {
           "date": "04 JUN 2026",
@@ -3063,14 +3074,15 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "8.18",
           "place": "6.",
           "performance_score": 1408,
           "indoor": false,
-          "wind": "-0.2 m/s"
+          "wind": "-0.2 m/s",
+          "place_display": "6."
         },
         {
           "date": "17 NOV 2025",
@@ -3106,13 +3118,14 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "7.98",
           "place": "12.",
           "performance_score": 1203,
-          "indoor": false
+          "indoor": false,
+          "place_display": "12."
         },
         {
           "date": "15 MAR 2023",
@@ -3811,14 +3824,15 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "8.33",
           "place": "3.",
           "performance_score": 1510,
           "indoor": false,
-          "wind": "0.0 m/s"
+          "wind": "0.0 m/s",
+          "place_display": "3."
         },
         {
           "date": "17 MAY 2025",
@@ -3853,14 +3867,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "8.08",
           "place": "8.",
           "performance_score": 1255,
           "indoor": false,
-          "wind": "+0.2 m/s"
+          "wind": "+0.2 m/s",
+          "place_display": "8."
         },
         {
           "date": "15 MAY 2024",
@@ -4564,14 +4579,15 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "8.17",
           "place": "7.",
           "performance_score": 1390,
           "indoor": false,
-          "wind": "+0.4 m/s"
+          "wind": "+0.4 m/s",
+          "place_display": "7."
         },
         {
           "date": "17 MAY 2025",
@@ -4628,14 +4644,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "8.11",
           "place": "6.",
           "performance_score": 1262,
           "indoor": false,
-          "wind": "+1.1 m/s"
+          "wind": "+1.1 m/s",
+          "place_display": "6."
         },
         {
           "date": "15 JUN 2023",
@@ -5405,25 +5422,27 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "7.97",
           "place": "8.",
           "performance_score": 1331,
           "indoor": false,
-          "wind": "+0.1 m/s"
+          "wind": "+0.1 m/s",
+          "place_display": "8."
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "8.21",
           "place": "2.",
           "performance_score": 1284,
           "indoor": false,
-          "wind": "+0.8 m/s"
+          "wind": "+0.8 m/s",
+          "place_display": "2."
         },
         {
           "date": "14 JUN 2026",
@@ -5794,14 +5813,15 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "7.85",
           "place": "9.",
           "performance_score": 1235,
           "indoor": false,
-          "wind": "+0.2 m/s"
+          "wind": "+0.2 m/s",
+          "place_display": "9."
         },
         {
           "date": "17 MAY 2025",
@@ -5837,14 +5857,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "8.15",
           "place": "4.",
           "performance_score": 1270,
           "indoor": false,
-          "wind": "+1.0 m/s"
+          "wind": "+1.0 m/s",
+          "place_display": "4."
         },
         {
           "date": "14 MAR 2025",
@@ -6096,14 +6117,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "7.94",
           "place": "14.",
           "performance_score": 1181,
           "indoor": false,
-          "wind": "+1.1 m/s"
+          "wind": "+1.1 m/s",
+          "place_display": "14."
         },
         {
           "date": "15 FEB 2024",
@@ -6523,14 +6545,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "7.95",
           "place": "13.",
           "performance_score": 1212,
           "indoor": false,
-          "wind": "+0.4 m/s"
+          "wind": "+0.4 m/s",
+          "place_display": "13."
         },
         {
           "date": "15 MAR 2024",
@@ -7015,25 +7038,27 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "7.81",
           "place": "12.",
           "performance_score": 1166,
           "indoor": false,
-          "wind": "+0.1 m/s"
+          "wind": "+0.1 m/s",
+          "place_display": "12."
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "8.13",
           "place": "5.",
           "performance_score": 1266,
           "indoor": false,
-          "wind": "+0.5 m/s"
+          "wind": "+0.5 m/s",
+          "place_display": "5."
         },
         {
           "date": "11 FEB 2024",
@@ -7413,13 +7438,14 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "7.98",
           "place": "11.",
           "performance_score": 1173,
-          "indoor": false
+          "indoor": false,
+          "place_display": "11. Q"
         },
         {
           "date": "07 FEB 2025",
@@ -7990,14 +8016,15 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "8.03",
           "place": "8.",
           "performance_score": 1185,
           "indoor": false,
-          "wind": "-0.3 m/s"
+          "wind": "-0.3 m/s",
+          "place_display": "8. Q"
         },
         {
           "date": "06 JUN 2025",
@@ -8576,14 +8603,15 @@
         },
         {
           "date": "17 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
           "venue": "",
           "category": "OW",
           "mark": "7.85",
           "place": "10.",
           "performance_score": 1189,
           "indoor": false,
-          "wind": "-0.1 m/s"
+          "wind": "-0.1 m/s",
+          "place_display": "10."
         },
         {
           "date": "17 FEB 2024",
@@ -8597,14 +8625,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "8.04",
           "place": "10.",
           "performance_score": 1246,
           "indoor": false,
-          "wind": "+0.7 m/s"
+          "wind": "+0.7 m/s",
+          "place_display": "10."
         },
         {
           "date": "13 MAY 2023",
@@ -11508,14 +11537,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "7.93",
           "place": "16.",
           "performance_score": 1193,
           "indoor": false,
-          "wind": "0.0 m/s"
+          "wind": "0.0 m/s",
+          "place_display": "16."
         },
         {
           "date": "15 JUL 2023",
@@ -11800,14 +11830,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "7.82",
           "place": "22.",
           "performance_score": 1099,
           "indoor": false,
-          "wind": "-0.1 m/s"
+          "wind": "-0.1 m/s",
+          "place_display": "22."
         },
         {
           "date": "14 JUN 2025",
@@ -11864,14 +11895,15 @@
         },
         {
           "date": "08 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
           "venue": "",
           "category": "GL",
           "mark": "8.08",
           "place": "5.",
           "performance_score": 1265,
           "indoor": false,
-          "wind": "+1.0 m/s"
+          "wind": "+1.0 m/s",
+          "place_display": "5. F"
         },
         {
           "date": "08 JUN 2023",
@@ -11897,14 +11929,15 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "7.98",
           "place": "10.",
           "performance_score": 1173,
           "indoor": false,
-          "wind": "+1.1 m/s"
+          "wind": "+1.1 m/s",
+          "place_display": "10. Q"
         },
         {
           "date": "04 JUL 2025",
@@ -12559,14 +12592,15 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "7.89",
           "place": "17.",
           "performance_score": 1115,
           "indoor": false,
-          "wind": "-0.2 m/s"
+          "wind": "-0.2 m/s",
+          "place_display": "17. Q"
         },
         {
           "date": "06 SEP 2024",
@@ -14120,14 +14154,15 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "7.90",
           "place": "15.",
           "performance_score": 1123,
           "indoor": false,
-          "wind": "-1.3 m/s"
+          "wind": "-1.3 m/s",
+          "place_display": "15. Q"
         },
         {
           "date": "05 AUG 2023",
@@ -20649,25 +20684,27 @@
         },
         {
           "date": "08 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
           "venue": "",
           "category": "GL",
           "mark": "8.01",
           "place": "8.",
           "performance_score": 1221,
           "indoor": false,
-          "wind": "-0.3 m/s"
+          "wind": "-0.3 m/s",
+          "place_display": "8. F"
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "8.08",
           "place": "6.",
           "performance_score": 1202,
           "indoor": false,
-          "wind": "-1.2 m/s"
+          "wind": "-1.2 m/s",
+          "place_display": "6. Q"
         },
         {
           "date": "05 JUL 2025",
@@ -22024,14 +22061,15 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "7.94",
           "place": "13.",
           "performance_score": 1125,
           "indoor": false,
-          "wind": "+0.2 m/s"
+          "wind": "+0.2 m/s",
+          "place_display": "13. Q"
         },
         {
           "date": "07 FEB 2024",
@@ -30881,25 +30919,27 @@
         },
         {
           "date": "08 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
           "venue": "",
           "category": "GL",
           "mark": "7.62",
           "place": "10.",
           "performance_score": 1109,
           "indoor": false,
-          "wind": "-0.7 m/s"
+          "wind": "-0.7 m/s",
+          "place_display": "10. F"
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "7.95",
           "place": "12.",
           "performance_score": 1179,
           "indoor": false,
-          "wind": "-2.0 m/s"
+          "wind": "-2.0 m/s",
+          "place_display": "12. Q"
         },
         {
           "date": "07 FEB 2024",
@@ -31096,14 +31136,15 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "7.88",
           "place": "18.",
           "performance_score": 1114,
           "indoor": false,
-          "wind": "-0.4 m/s"
+          "wind": "-0.4 m/s",
+          "place_display": "18. Q"
         },
         {
           "date": "05 APR 2024",
@@ -34134,14 +34175,15 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "7.89",
           "place": "16.",
           "performance_score": 1116,
           "indoor": false,
-          "wind": "-0.4 m/s"
+          "wind": "-0.4 m/s",
+          "place_display": "16. Q"
         },
         {
           "date": "03 JUN 2026",
@@ -35595,13 +35637,14 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "7.92",
           "place": "14.",
           "performance_score": 1107,
-          "indoor": false
+          "indoor": false,
+          "place_display": "14. Q"
         },
         {
           "date": "07 JUN 2023",
@@ -38365,14 +38408,15 @@
         },
         {
           "date": "08 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
           "venue": "",
           "category": "GL",
           "mark": "8.12",
           "place": "4.",
           "performance_score": 1284,
           "indoor": false,
-          "wind": "+0.3 m/s"
+          "wind": "+0.3 m/s",
+          "place_display": "4. F"
         },
         {
           "date": "08 JUL 2023",
@@ -38387,14 +38431,15 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "8.18",
           "place": "2.",
           "performance_score": 1223,
           "indoor": false,
-          "wind": "-1.1 m/s"
+          "wind": "-1.1 m/s",
+          "place_display": "2. Q"
         },
         {
           "date": "06 AUG 2024",
@@ -38787,14 +38832,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "7.92",
           "place": "18.",
           "performance_score": 1120,
           "indoor": false,
-          "wind": "+0.5 m/s"
+          "wind": "+0.5 m/s",
+          "place_display": "18."
         },
         {
           "date": "06 SEP 2024",
@@ -38895,14 +38941,15 @@
         },
         {
           "date": "15 SEP 2025",
-          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
+          "competition": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
           "venue": "",
           "category": "OW",
           "mark": "7.68",
           "place": "27.",
           "performance_score": 1068,
           "indoor": false,
-          "wind": "+0.7 m/s"
+          "wind": "+0.7 m/s",
+          "place_display": "27."
         },
         {
           "date": "13 AUG 2025",
@@ -40957,14 +41004,15 @@
         },
         {
           "date": "08 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
           "venue": "",
           "category": "GL",
           "mark": "8.03",
           "place": "7.",
           "performance_score": 1237,
           "indoor": false,
-          "wind": "-0.5 m/s"
+          "wind": "-0.5 m/s",
+          "place_display": "7. F"
         },
         {
           "date": "08 AUG 2025",
@@ -40979,14 +41027,15 @@
         },
         {
           "date": "07 JUN 2024",
-          "competition": "European Athletics Championships, Stadio Olimpico, Roma",
+          "competition": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
           "venue": "",
           "category": "GL",
           "mark": "8.01",
           "place": "9.",
           "performance_score": 1196,
           "indoor": false,
-          "wind": "-2.8 m/s"
+          "wind": "-2.8 m/s",
+          "place_display": "9. Q"
         },
         {
           "date": "05 SEP 2025",

@@ -354,3 +354,5 @@ const QualificationModule = (() => {
 
   return { render };
 })();
+
+window.QualificationModule = QualificationModule;

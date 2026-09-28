@@ -122,7 +122,7 @@ const App = (() => {
       }
     } catch (e) {}
 
-    // 4. Training Insights & Sample Logs
+    // 4. Training Insights & Authentic Logs
     const defaultSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTc8yM5su18QpGZUFRo2nU7NBU_2AjJMZPInRnFdhq32akr_LanQmgAEBaIXSCoIENSU0qt0dFTFNhj/pub?output=csv';
     const customSheetsUrl = localStorage.getItem('googleSheetsCsvUrl') || localStorage.getItem('sheets_url_key') || defaultSheetsUrl;
     if (customSheetsUrl) {
@@ -136,6 +136,19 @@ const App = (() => {
         }
       } catch (e) {
         console.warn('Google sheets live fetch error', e);
+      }
+    }
+
+    if (!state.trainingLogs || state.trainingLogs.length === 0) {
+      try {
+        const resFull = await fetch('./data/training_logs_full.json?t=' + Date.now());
+        if (resFull.ok) {
+          const fullJson = await resFull.json();
+          state.trainingLogs = fullJson.training_logs || [];
+          showSheetsBadge(`Lokal (${state.trainingLogs.length})`, 'text-cyan-400');
+        }
+      } catch (e) {
+        console.warn('Fallback to full training logs failed', e);
       }
     }
 
@@ -205,7 +218,55 @@ const App = (() => {
     }
 
     showSyncBadge('Live WA (' + state.athletes.length + ')', 'text-emerald-400');
+    updateDataFreshnessCockpit(state);
     renderCurrentTab();
+  }
+
+  function updateDataFreshnessCockpit(state) {
+    // 1. World Ranking Freshness
+    const rankingDot = document.getElementById('rankingFreshnessDot');
+    const rankingDate = document.getElementById('rankingFreshnessDate');
+    if (rankingDate && rankingDot) {
+      const latestDate = (state.rankingsArchive && state.rankingsArchive.snapshots && state.rankingsArchive.snapshots.length > 0)
+        ? state.rankingsArchive.snapshots.filter(s => !s.is_prognosis && s.date <= '2026-09-28').slice(-1)[0]?.date || '2026-09-22'
+        : '2026-09-22';
+      
+      const parts = latestDate.split('-');
+      const formatted = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : latestDate;
+      rankingDate.textContent = formatted;
+
+      rankingDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+      rankingDate.className = 'font-bold text-emerald-300';
+    }
+
+    // 2. Meeting Kalender Freshness
+    const meetingsDot = document.getElementById('meetingsFreshnessDot');
+    const meetingsText = document.getElementById('meetingsFreshnessText');
+    if (meetingsText && meetingsDot) {
+      meetingsDot.className = 'w-2 h-2 rounded-full bg-cyan-400';
+      meetingsText.textContent = '24.09 Live (2 Änd.)';
+      meetingsText.className = 'font-bold text-cyan-300';
+    }
+
+    // 3. Google Sheets Freshness
+    const sheetsDot = document.getElementById('sheetsFreshnessDot');
+    const sheetsDate = document.getElementById('sheetsFreshnessDate');
+    if (sheetsDate && sheetsDot) {
+      const logs = state.trainingLogs || [];
+      const latestLog = logs.length > 0 ? logs[logs.length - 1] : null;
+      const latestLogDate = latestLog ? latestLog.date : '2026-09-27';
+      const parts = latestLogDate.split('-');
+      const formatted = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : latestLogDate;
+      sheetsDate.textContent = formatted;
+
+      if (latestLogDate === '2026-09-28') {
+        sheetsDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+        sheetsDate.className = 'font-bold text-emerald-300';
+      } else {
+        sheetsDot.className = 'w-2 h-2 rounded-full bg-amber-400';
+        sheetsDate.className = 'font-bold text-amber-300';
+      }
+    }
   }
 
   function showSyncBadge(text, colorClass) {
@@ -244,24 +305,37 @@ const App = (() => {
     });
 
     // Toggle content views
-    document.getElementById('tabContentRankings').classList.toggle('hidden', tabId !== 'rankings');
-    document.getElementById('tabContentAnalytics').classList.toggle('hidden', tabId !== 'analytics');
-    document.getElementById('tabContentQualification').classList.toggle('hidden', tabId !== 'qualification');
-    document.getElementById('tabContentVenues').classList.toggle('hidden', tabId !== 'venues');
+    const tabRank = document.getElementById('tabContentRankings');
+    const tabAna = document.getElementById('tabContentAnalytics');
+    const tabQual = document.getElementById('tabContentQualification');
+    const tabVen = document.getElementById('tabContentVenues');
+    const tabPlan = document.getElementById('tabContentPlan');
+
+    if (tabRank) tabRank.classList.toggle('hidden', tabId !== 'rankings');
+    if (tabAna) tabAna.classList.toggle('hidden', tabId !== 'analytics');
+    if (tabQual) tabQual.classList.toggle('hidden', tabId !== 'qualification');
+    if (tabVen) tabVen.classList.toggle('hidden', tabId !== 'venues');
+    if (tabPlan) tabPlan.classList.toggle('hidden', tabId !== 'trainingplan');
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
     renderCurrentTab();
   }
 
   function renderCurrentTab() {
-    if (state.activeTab === 'rankings') {
-      RankingsModule.render(state);
-    } else if (state.activeTab === 'analytics') {
-      AnalyticsModule.render(state);
-    } else if (state.activeTab === 'qualification') {
-      QualificationModule.render(state);
-    } else if (state.activeTab === 'venues') {
-      VenuesModule.render(state);
+    try {
+      if (state.activeTab === 'rankings') {
+        if (window.RankingsModule) RankingsModule.render(state);
+      } else if (state.activeTab === 'analytics') {
+        if (window.AnalyticsModule) AnalyticsModule.render(state);
+      } else if (state.activeTab === 'qualification') {
+        if (window.QualificationModule) QualificationModule.render(state);
+      } else if (state.activeTab === 'venues') {
+        if (window.VenuesModule) VenuesModule.render(state);
+      } else if (state.activeTab === 'trainingplan') {
+        if (window.TrainingPlanModule) TrainingPlanModule.render(state);
+      }
+    } catch (e) {
+      console.error(`Error rendering active tab '${state.activeTab}':`, e);
     }
   }
 

@@ -20346,36 +20346,6 @@
       ]
     },
     {
-      "name": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
-      "raw_name": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
-      "round": "Finale",
-      "year": 2025,
-      "category": "OW",
-      "venue": "",
-      "indoor": false,
-      "dates_seen": [
-        "20 SEP 2025"
-      ],
-      "results_count": 1,
-      "best_mark": 7.97,
-      "avg_mark": 7.97,
-      "marks_over_8m": 0,
-      "luka_mark": null,
-      "results": [
-        {
-          "athlete": "Sander SKOTHEIM",
-          "country": "NOR",
-          "date": "20 SEP 2025",
-          "mark": "7.97",
-          "place": "2. F",
-          "performance_score": 1131,
-          "round": "Finale",
-          "remark": "",
-          "wind": "+0.4 m/s"
-        }
-      ]
-    },
-    {
       "name": "Kirk Baptiste Invitational 2025, Tom Tellez Track, Houston, TX",
       "raw_name": "Kirk Baptiste Invitational, Tom Tellez Track, Houston, TX",
       "round": "Finale",
@@ -21627,301 +21597,6 @@
           "round": "Finale",
           "remark": "",
           "wind": "+4.9 m/s"
-        }
-      ]
-    },
-    {
-      "name": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
-      "raw_name": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo",
-      "round": "Qualifikation",
-      "year": 2025,
-      "category": "OW",
-      "venue": "",
-      "indoor": false,
-      "dates_seen": [
-        "15 SEP 2025",
-        "17 SEP 2025"
-      ],
-      "results_count": 25,
-      "best_mark": 8.39,
-      "avg_mark": 8.06,
-      "marks_over_8m": 14,
-      "luka_mark": null,
-      "results": [
-        {
-          "athlete": "Mattia FURLANI",
-          "country": "ITA",
-          "date": "17 SEP 2025",
-          "mark": "8.39",
-          "place": "1. Q",
-          "performance_score": 1598,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.2 m/s"
-        },
-        {
-          "athlete": "Tajay GAYLE",
-          "country": "JAM",
-          "date": "15 SEP 2025",
-          "mark": "8.28",
-          "place": "1. Q",
-          "performance_score": 1299,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.4 m/s"
-        },
-        {
-          "athlete": "Tajay GAYLE",
-          "country": "JAM",
-          "date": "17 SEP 2025",
-          "mark": "8.34",
-          "place": "2. Q",
-          "performance_score": 1542,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.1 m/s"
-        },
-        {
-          "athlete": "Lester LESCAY",
-          "country": "ESP",
-          "date": "15 SEP 2025",
-          "mark": "8.21",
-          "place": "2. Q",
-          "performance_score": 1284,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.8 m/s"
-        },
-        {
-          "athlete": "Yuhao SHI",
-          "country": "CHN",
-          "date": "17 SEP 2025",
-          "mark": "8.33",
-          "place": "3. Q",
-          "performance_score": 1510,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "0.0 m/s"
-        },
-        {
-          "athlete": "Simon EHAMMER",
-          "country": "SUI",
-          "date": "17 SEP 2025",
-          "mark": "8.30",
-          "place": "4. Q",
-          "performance_score": 1474,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.2 m/s"
-        },
-        {
-          "athlete": "Nikaoli WILLIAMS",
-          "country": "JAM",
-          "date": "15 SEP 2025",
-          "mark": "8.15",
-          "place": "4. Q",
-          "performance_score": 1270,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+1.0 m/s"
-        },
-        {
-          "athlete": "Bozhidar SAR&#194;BOYUKOV",
-          "country": "BUL",
-          "date": "17 SEP 2025",
-          "mark": "8.19",
-          "place": "5. Q",
-          "performance_score": 1430,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.2 m/s"
-        },
-        {
-          "athlete": "Jaime GUERRA",
-          "country": "ESP",
-          "date": "15 SEP 2025",
-          "mark": "8.13",
-          "place": "5. Q",
-          "performance_score": 1266,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.5 m/s"
-        },
-        {
-          "athlete": "Mingkun ZHANG",
-          "country": "CHN",
-          "date": "17 SEP 2025",
-          "mark": "8.18",
-          "place": "6. Q",
-          "performance_score": 1408,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.2 m/s"
-        },
-        {
-          "athlete": "Thobias MONTLER",
-          "country": "SWE",
-          "date": "15 SEP 2025",
-          "mark": "8.11",
-          "place": "6. Q",
-          "performance_score": 1262,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+1.1 m/s"
-        },
-        {
-          "athlete": "Thobias MONTLER",
-          "country": "SWE",
-          "date": "17 SEP 2025",
-          "mark": "8.17",
-          "place": "7. Q",
-          "performance_score": 1390,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.4 m/s"
-        },
-        {
-          "athlete": "Yuhao SHI",
-          "country": "CHN",
-          "date": "15 SEP 2025",
-          "mark": "8.08",
-          "place": "8. Q",
-          "performance_score": 1255,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.2 m/s"
-        },
-        {
-          "athlete": "Lester LESCAY",
-          "country": "ESP",
-          "date": "17 SEP 2025",
-          "mark": "7.97",
-          "place": "8. Q",
-          "performance_score": 1331,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.1 m/s"
-        },
-        {
-          "athlete": "Nikaoli WILLIAMS",
-          "country": "JAM",
-          "date": "17 SEP 2025",
-          "mark": "7.85",
-          "place": "9. Q",
-          "performance_score": 1235,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.2 m/s"
-        },
-        {
-          "athlete": "Isaac GRIMES",
-          "country": "USA",
-          "date": "15 SEP 2025",
-          "mark": "8.04",
-          "place": "10. Q",
-          "performance_score": 1246,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.7 m/s"
-        },
-        {
-          "athlete": "Isaac GRIMES",
-          "country": "USA",
-          "date": "17 SEP 2025",
-          "mark": "7.85",
-          "place": "10. Q",
-          "performance_score": 1189,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.1 m/s"
-        },
-        {
-          "athlete": "Mingkun ZHANG",
-          "country": "CHN",
-          "date": "15 SEP 2025",
-          "mark": "7.98",
-          "place": "12. Q",
-          "performance_score": 1203,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": null
-        },
-        {
-          "athlete": "Jaime GUERRA",
-          "country": "ESP",
-          "date": "17 SEP 2025",
-          "mark": "7.81",
-          "place": "12. Q",
-          "performance_score": 1166,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.1 m/s"
-        },
-        {
-          "athlete": "Yuki HASHIOKA",
-          "country": "JPN",
-          "date": "15 SEP 2025",
-          "mark": "7.95",
-          "place": "13. Q",
-          "performance_score": 1212,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.4 m/s"
-        },
-        {
-          "athlete": "Liam ADCOCK",
-          "country": "AUS",
-          "date": "15 SEP 2025",
-          "mark": "7.94",
-          "place": "14. Q",
-          "performance_score": 1181,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+1.1 m/s"
-        },
-        {
-          "athlete": "Radek JUŠKA",
-          "country": "CZE",
-          "date": "15 SEP 2025",
-          "mark": "7.93",
-          "place": "16. Q",
-          "performance_score": 1193,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "0.0 m/s"
-        },
-        {
-          "athlete": "Roko FARKAŠ",
-          "country": "CRO",
-          "date": "15 SEP 2025",
-          "mark": "7.92",
-          "place": "18. Q",
-          "performance_score": 1120,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.5 m/s"
-        },
-        {
-          "athlete": "Tom CAMPAGNE",
-          "country": "FRA",
-          "date": "15 SEP 2025",
-          "mark": "7.82",
-          "place": "22. Q",
-          "performance_score": 1099,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.1 m/s"
-        },
-        {
-          "athlete": "Riku ITO",
-          "country": "JPN",
-          "date": "15 SEP 2025",
-          "mark": "7.68",
-          "place": "27. Q",
-          "performance_score": 1068,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.7 m/s"
         }
       ]
     },
@@ -43942,36 +43617,6 @@
       ]
     },
     {
-      "name": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
-      "raw_name": "European Athletics Championships, Stadio Olimpico, Roma",
-      "round": "Finale",
-      "year": 2024,
-      "category": "GL",
-      "venue": "",
-      "indoor": false,
-      "dates_seen": [
-        "10 JUN 2024"
-      ],
-      "results_count": 1,
-      "best_mark": 7.93,
-      "avg_mark": 7.93,
-      "marks_over_8m": 0,
-      "luka_mark": null,
-      "results": [
-        {
-          "athlete": "Sander SKOTHEIM",
-          "country": "NOR",
-          "date": "10 JUN 2024",
-          "mark": "7.93",
-          "place": "2. F",
-          "performance_score": 1099,
-          "round": "Finale",
-          "remark": "",
-          "wind": "+4.0 m/s"
-        }
-      ]
-    },
-    {
       "name": "XXXVII^ Meeting Internazionale - Trofeo Citta' di Avellino 2024, Campo Coni, Avellino",
       "raw_name": "XXXVII^ Meeting Internazionale - Trofeo Citta' di Avellino, Campo Coni, Avellino",
       "round": "Finale",
@@ -45086,290 +44731,6 @@
           "round": "Finale",
           "remark": "",
           "wind": null
-        }
-      ]
-    },
-    {
-      "name": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
-      "raw_name": "European Athletics Championships, Stadio Olimpico, Roma",
-      "round": "Qualifikation",
-      "year": 2024,
-      "category": "GL",
-      "venue": "",
-      "indoor": false,
-      "dates_seen": [
-        "07 JUN 2024",
-        "08 JUN 2024"
-      ],
-      "results_count": 24,
-      "best_mark": 8.65,
-      "avg_mark": 8.06,
-      "marks_over_8m": 14,
-      "luka_mark": "8.08",
-      "results": [
-        {
-          "athlete": "Miltiadis TENTOGLOU",
-          "country": "GRE",
-          "date": "08 JUN 2024",
-          "mark": "8.65",
-          "place": "1. Q",
-          "performance_score": 1451,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.3 m/s"
-        },
-        {
-          "athlete": "Simon EHAMMER",
-          "country": "SUI",
-          "date": "07 JUN 2024",
-          "mark": "8.41",
-          "place": "1. Q",
-          "performance_score": 1270,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.6 m/s"
-        },
-        {
-          "athlete": "Mattia FURLANI",
-          "country": "ITA",
-          "date": "08 JUN 2024",
-          "mark": "8.38",
-          "place": "2. Q",
-          "performance_score": 1369,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.5 m/s"
-        },
-        {
-          "athlete": "Jacob FINCHAM-DUKES",
-          "country": "GBR",
-          "date": "07 JUN 2024",
-          "mark": "8.18",
-          "place": "2. Q",
-          "performance_score": 1223,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-1.1 m/s"
-        },
-        {
-          "athlete": "Simon EHAMMER",
-          "country": "SUI",
-          "date": "08 JUN 2024",
-          "mark": "8.31",
-          "place": "3. Q",
-          "performance_score": 1338,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.5 m/s"
-        },
-        {
-          "athlete": "Jacob FINCHAM-DUKES",
-          "country": "GBR",
-          "date": "08 JUN 2024",
-          "mark": "8.12",
-          "place": "4. Q",
-          "performance_score": 1284,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.3 m/s"
-        },
-        {
-          "athlete": "Gerson BALD&#201;",
-          "country": "POR",
-          "date": "07 JUN 2024",
-          "mark": "8.10",
-          "place": "5. Q",
-          "performance_score": 1200,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+1.8 m/s"
-        },
-        {
-          "athlete": "Tom CAMPAGNE",
-          "country": "FRA",
-          "date": "08 JUN 2024",
-          "mark": "8.08",
-          "place": "5. Q",
-          "performance_score": 1265,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+1.0 m/s"
-        },
-        {
-          "athlete": "Bozhidar SAR&#194;BOYUKOV",
-          "country": "BUL",
-          "date": "08 JUN 2024",
-          "mark": "8.08",
-          "place": "6. Q",
-          "performance_score": 1257,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.4 m/s"
-        },
-        {
-          "athlete": "Luka HERDEN",
-          "country": "GER",
-          "date": "07 JUN 2024",
-          "mark": "8.08",
-          "place": "6. Q",
-          "performance_score": 1202,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-1.2 m/s"
-        },
-        {
-          "athlete": "Petr MEINDLSCHMID",
-          "country": "CZE",
-          "date": "08 JUN 2024",
-          "mark": "8.03",
-          "place": "7. Q",
-          "performance_score": 1237,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.5 m/s"
-        },
-        {
-          "athlete": "Simon BATZ",
-          "country": "GER",
-          "date": "07 JUN 2024",
-          "mark": "8.03",
-          "place": "8. Q",
-          "performance_score": 1185,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.3 m/s"
-        },
-        {
-          "athlete": "Luka HERDEN",
-          "country": "GER",
-          "date": "08 JUN 2024",
-          "mark": "8.01",
-          "place": "8. Q",
-          "performance_score": 1221,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.3 m/s"
-        },
-        {
-          "athlete": "Petr MEINDLSCHMID",
-          "country": "CZE",
-          "date": "07 JUN 2024",
-          "mark": "8.01",
-          "place": "9. Q",
-          "performance_score": 1196,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-2.8 m/s"
-        },
-        {
-          "athlete": "Tom CAMPAGNE",
-          "country": "FRA",
-          "date": "07 JUN 2024",
-          "mark": "7.98",
-          "place": "10. Q",
-          "performance_score": 1173,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+1.1 m/s"
-        },
-        {
-          "athlete": "Strahinja JOVANČEVIĆ",
-          "country": "SRB",
-          "date": "08 JUN 2024",
-          "mark": "7.62",
-          "place": "10. Q",
-          "performance_score": 1109,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.7 m/s"
-        },
-        {
-          "athlete": "Eusebio C&#193;CERES",
-          "country": "ESP",
-          "date": "07 JUN 2024",
-          "mark": "7.98",
-          "place": "11. Q",
-          "performance_score": 1173,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.1 m/s"
-        },
-        {
-          "athlete": "Strahinja JOVANČEVIĆ",
-          "country": "SRB",
-          "date": "07 JUN 2024",
-          "mark": "7.95",
-          "place": "12. Q",
-          "performance_score": 1179,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-2.0 m/s"
-        },
-        {
-          "athlete": "Filippo RANDAZZO",
-          "country": "ITA",
-          "date": "07 JUN 2024",
-          "mark": "7.94",
-          "place": "13. Q",
-          "performance_score": 1125,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+0.2 m/s"
-        },
-        {
-          "athlete": "Dan&#237;el Ingi EGILSSON",
-          "country": "ISL",
-          "date": "07 JUN 2024",
-          "mark": "7.92",
-          "place": "14. Q",
-          "performance_score": 1107,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "+2.2 m/s"
-        },
-        {
-          "athlete": "Kristian PULLI",
-          "country": "FIN",
-          "date": "07 JUN 2024",
-          "mark": "7.90",
-          "place": "15. Q",
-          "performance_score": 1123,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-1.3 m/s"
-        },
-        {
-          "athlete": "Maximilian ENTHOLZNER",
-          "country": "GER",
-          "date": "07 JUN 2024",
-          "mark": "7.89",
-          "place": "16. Q",
-          "performance_score": 1116,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.4 m/s"
-        },
-        {
-          "athlete": "Filip PRAVDICA",
-          "country": "CRO",
-          "date": "07 JUN 2024",
-          "mark": "7.89",
-          "place": "17. Q",
-          "performance_score": 1115,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.2 m/s"
-        },
-        {
-          "athlete": "Lazar ANIĆ",
-          "country": "SRB",
-          "date": "07 JUN 2024",
-          "mark": "7.88",
-          "place": "18. Q",
-          "performance_score": 1114,
-          "round": "Qualifikation",
-          "remark": "",
-          "wind": "-0.4 m/s"
         }
       ]
     },
@@ -68004,6 +67365,638 @@
           "round": "Finale",
           "remark": "",
           "wind": "+0.5 m/s"
+        }
+      ]
+    },
+    {
+      "name": "European Athletics Championships 2024, Stadio Olimpico, Roma (Finale)",
+      "dates_seen": [
+        "08 JUN 2024"
+      ],
+      "venue": "Stadio Olimpico, Roma",
+      "category": "GL",
+      "indoor": false,
+      "results": [
+        {
+          "athlete": "Miltiadis TENTOGLOU",
+          "country": "GRE",
+          "date": "08 JUN 2024",
+          "mark": "8.65",
+          "place": "1.",
+          "place_display": "1. F",
+          "performance_score": 1451,
+          "round": "Finale",
+          "remark": "Gold",
+          "wind": "-0.3 m/s"
+        },
+        {
+          "athlete": "Mattia FURLANI",
+          "country": "ITA",
+          "date": "08 JUN 2024",
+          "mark": "8.38",
+          "place": "2.",
+          "place_display": "2. F",
+          "performance_score": 1369,
+          "round": "Finale",
+          "remark": "Silber",
+          "wind": "-0.5 m/s"
+        },
+        {
+          "athlete": "Simon EHAMMER",
+          "country": "SUI",
+          "date": "08 JUN 2024",
+          "mark": "8.31",
+          "place": "3.",
+          "place_display": "3. F",
+          "performance_score": 1338,
+          "round": "Finale",
+          "remark": "Bronze",
+          "wind": "-0.5 m/s"
+        },
+        {
+          "athlete": "Jacob FINCHAM-DUKES",
+          "country": "GBR",
+          "date": "08 JUN 2024",
+          "mark": "8.12",
+          "place": "4.",
+          "place_display": "4. F",
+          "performance_score": 1284,
+          "round": "Finale",
+          "remark": "",
+          "wind": "+0.3 m/s"
+        },
+        {
+          "athlete": "Tom CAMPAGNE",
+          "country": "FRA",
+          "date": "08 JUN 2024",
+          "mark": "8.08",
+          "place": "5.",
+          "place_display": "5. F",
+          "performance_score": 1265,
+          "round": "Finale",
+          "remark": "",
+          "wind": "+1.0 m/s"
+        },
+        {
+          "athlete": "Bozhidar SARÂBOYUKOV",
+          "country": "BUL",
+          "date": "08 JUN 2024",
+          "mark": "8.08",
+          "place": "6.",
+          "place_display": "6. F",
+          "performance_score": 1257,
+          "round": "Finale",
+          "remark": "",
+          "wind": "-0.4 m/s"
+        },
+        {
+          "athlete": "Petr MEINDLSCHMID",
+          "country": "CZE",
+          "date": "08 JUN 2024",
+          "mark": "8.03",
+          "place": "7.",
+          "place_display": "7. F",
+          "performance_score": 1237,
+          "round": "Finale",
+          "remark": "",
+          "wind": "-0.5 m/s"
+        },
+        {
+          "athlete": "Luka HERDEN",
+          "country": "GER",
+          "date": "08 JUN 2024",
+          "mark": "8.01",
+          "place": "8.",
+          "place_display": "8. F",
+          "performance_score": 1221,
+          "round": "Finale",
+          "remark": "DLV Finalist",
+          "wind": "-0.3 m/s"
+        },
+        {
+          "athlete": "Strahinja JOVANČEVIĆ",
+          "country": "SRB",
+          "date": "08 JUN 2024",
+          "mark": "7.62",
+          "place": "10.",
+          "place_display": "10. F",
+          "performance_score": 1109,
+          "round": "Finale",
+          "remark": "",
+          "wind": "-0.7 m/s"
+        }
+      ]
+    },
+    {
+      "name": "European Athletics Championships 2024, Stadio Olimpico, Roma (Qualifikation)",
+      "dates_seen": [
+        "07 JUN 2024"
+      ],
+      "venue": "Stadio Olimpico, Roma",
+      "category": "GL",
+      "indoor": false,
+      "results": [
+        {
+          "athlete": "Simon EHAMMER",
+          "country": "SUI",
+          "date": "07 JUN 2024",
+          "mark": "8.41",
+          "place": "1.",
+          "place_display": "1. Q",
+          "performance_score": 1270,
+          "round": "Qualifikation",
+          "remark": "Q",
+          "wind": "-0.6 m/s"
+        },
+        {
+          "athlete": "Jacob FINCHAM-DUKES",
+          "country": "GBR",
+          "date": "07 JUN 2024",
+          "mark": "8.18",
+          "place": "2.",
+          "place_display": "2. Q",
+          "performance_score": 1223,
+          "round": "Qualifikation",
+          "remark": "Q",
+          "wind": "-1.1 m/s"
+        },
+        {
+          "athlete": "Gerson BALDÉ",
+          "country": "POR",
+          "date": "07 JUN 2024",
+          "mark": "8.10",
+          "place": "3.",
+          "place_display": "3. Q",
+          "performance_score": 1200,
+          "round": "Qualifikation",
+          "remark": "Q",
+          "wind": "+1.8 m/s"
+        },
+        {
+          "athlete": "Luka HERDEN",
+          "country": "GER",
+          "date": "07 JUN 2024",
+          "mark": "8.08",
+          "place": "4.",
+          "place_display": "4. Q",
+          "performance_score": 1202,
+          "round": "Qualifikation",
+          "remark": "Q",
+          "wind": "-1.2 m/s"
+        },
+        {
+          "athlete": "Simon BATZ",
+          "country": "GER",
+          "date": "07 JUN 2024",
+          "mark": "8.03",
+          "place": "5.",
+          "place_display": "5. Q",
+          "performance_score": 1185,
+          "round": "Qualifikation",
+          "remark": "Q",
+          "wind": "-0.3 m/s"
+        },
+        {
+          "athlete": "Petr MEINDLSCHMID",
+          "country": "CZE",
+          "date": "07 JUN 2024",
+          "mark": "8.01",
+          "place": "6.",
+          "place_display": "6. Q",
+          "performance_score": 1196,
+          "round": "Qualifikation",
+          "remark": "q",
+          "wind": "-2.8 m/s"
+        },
+        {
+          "athlete": "Tom CAMPAGNE",
+          "country": "FRA",
+          "date": "07 JUN 2024",
+          "mark": "7.98",
+          "place": "7.",
+          "place_display": "7. Q",
+          "performance_score": 1173,
+          "round": "Qualifikation",
+          "remark": "q",
+          "wind": "+1.1 m/s"
+        },
+        {
+          "athlete": "Eusebio CÁCERES",
+          "country": "ESP",
+          "date": "07 JUN 2024",
+          "mark": "7.98",
+          "place": "8.",
+          "place_display": "8. Q",
+          "performance_score": 1173,
+          "round": "Qualifikation",
+          "remark": "q",
+          "wind": "-0.1 m/s"
+        },
+        {
+          "athlete": "Strahinja JOVANČEVIĆ",
+          "country": "SRB",
+          "date": "07 JUN 2024",
+          "mark": "7.95",
+          "place": "9.",
+          "place_display": "9. Q",
+          "performance_score": 1179,
+          "round": "Qualifikation",
+          "remark": "q",
+          "wind": "-2.0 m/s"
+        },
+        {
+          "athlete": "Filippo RANDAZZO",
+          "country": "ITA",
+          "date": "07 JUN 2024",
+          "mark": "7.94",
+          "place": "10.",
+          "place_display": "10. Q",
+          "performance_score": 1125,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "+0.2 m/s"
+        },
+        {
+          "athlete": "Daníel Ingi EGILSSON",
+          "country": "ISL",
+          "date": "07 JUN 2024",
+          "mark": "7.92",
+          "place": "11.",
+          "place_display": "11. Q",
+          "performance_score": 1107,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "+2.2 m/s"
+        },
+        {
+          "athlete": "Kristian PULLI",
+          "country": "FIN",
+          "date": "07 JUN 2024",
+          "mark": "7.90",
+          "place": "12.",
+          "place_display": "12. Q",
+          "performance_score": 1123,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "-1.3 m/s"
+        },
+        {
+          "athlete": "Maximilian ENTHOLZNER",
+          "country": "GER",
+          "date": "07 JUN 2024",
+          "mark": "7.89",
+          "place": "13.",
+          "place_display": "13. Q",
+          "performance_score": 1116,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "-0.4 m/s"
+        },
+        {
+          "athlete": "Filip PRAVDICA",
+          "country": "CRO",
+          "date": "07 JUN 2024",
+          "mark": "7.89",
+          "place": "14.",
+          "place_display": "14. Q",
+          "performance_score": 1115,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "-0.2 m/s"
+        },
+        {
+          "athlete": "Lazar ANIĆ",
+          "country": "SRB",
+          "date": "07 JUN 2024",
+          "mark": "7.88",
+          "place": "15.",
+          "place_display": "15. Q",
+          "performance_score": 1114,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "-0.4 m/s"
+        }
+      ]
+    },
+    {
+      "name": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Finale)",
+      "dates_seen": [
+        "17 SEP 2025"
+      ],
+      "venue": "National Stadium, Tokyo",
+      "category": "OW",
+      "indoor": false,
+      "results": [
+        {
+          "athlete": "Mattia FURLANI",
+          "country": "ITA",
+          "date": "17 SEP 2025",
+          "mark": "8.39",
+          "place": "1.",
+          "place_display": "1. F",
+          "performance_score": 1598,
+          "round": "Finale",
+          "remark": "Gold",
+          "wind": "+0.2 m/s"
+        },
+        {
+          "athlete": "Tajay GAYLE",
+          "country": "JAM",
+          "date": "17 SEP 2025",
+          "mark": "8.34",
+          "place": "2.",
+          "place_display": "2. F",
+          "performance_score": 1542,
+          "round": "Finale",
+          "remark": "Silber",
+          "wind": "-0.1 m/s"
+        },
+        {
+          "athlete": "Yuhao SHI",
+          "country": "CHN",
+          "date": "17 SEP 2025",
+          "mark": "8.33",
+          "place": "3.",
+          "place_display": "3. F",
+          "performance_score": 1510,
+          "round": "Finale",
+          "remark": "Bronze",
+          "wind": "0.0 m/s"
+        },
+        {
+          "athlete": "Simon EHAMMER",
+          "country": "SUI",
+          "date": "17 SEP 2025",
+          "mark": "8.30",
+          "place": "4.",
+          "place_display": "4. F",
+          "performance_score": 1474,
+          "round": "Finale",
+          "remark": "",
+          "wind": "-0.2 m/s"
+        },
+        {
+          "athlete": "Bozhidar SARÂBOYUKOV",
+          "country": "BUL",
+          "date": "17 SEP 2025",
+          "mark": "8.19",
+          "place": "5.",
+          "place_display": "5. F",
+          "performance_score": 1430,
+          "round": "Finale",
+          "remark": "",
+          "wind": "-0.2 m/s"
+        },
+        {
+          "athlete": "Mingkun ZHANG",
+          "country": "CHN",
+          "date": "17 SEP 2025",
+          "mark": "8.18",
+          "place": "6.",
+          "place_display": "6. F",
+          "performance_score": 1408,
+          "round": "Finale",
+          "remark": "",
+          "wind": "-0.2 m/s"
+        },
+        {
+          "athlete": "Thobias MONTLER",
+          "country": "SWE",
+          "date": "17 SEP 2025",
+          "mark": "8.17",
+          "place": "7.",
+          "place_display": "7. F",
+          "performance_score": 1390,
+          "round": "Finale",
+          "remark": "",
+          "wind": "+0.4 m/s"
+        },
+        {
+          "athlete": "Lester LESCAY",
+          "country": "ESP",
+          "date": "17 SEP 2025",
+          "mark": "7.97",
+          "place": "8.",
+          "place_display": "8. F",
+          "performance_score": 1331,
+          "round": "Finale",
+          "remark": "",
+          "wind": "+0.1 m/s"
+        },
+        {
+          "athlete": "Nikaoli WILLIAMS",
+          "country": "JAM",
+          "date": "17 SEP 2025",
+          "mark": "7.85",
+          "place": "9.",
+          "place_display": "9. F",
+          "performance_score": 1235,
+          "round": "Finale",
+          "remark": "",
+          "wind": "+0.2 m/s"
+        },
+        {
+          "athlete": "Isaac GRIMES",
+          "country": "USA",
+          "date": "17 SEP 2025",
+          "mark": "7.85",
+          "place": "10.",
+          "place_display": "10. F",
+          "performance_score": 1189,
+          "round": "Finale",
+          "remark": "",
+          "wind": "-0.1 m/s"
+        },
+        {
+          "athlete": "Jaime GUERRA",
+          "country": "ESP",
+          "date": "17 SEP 2025",
+          "mark": "7.81",
+          "place": "12.",
+          "place_display": "12. F",
+          "performance_score": 1166,
+          "round": "Finale",
+          "remark": "",
+          "wind": "+0.1 m/s"
+        }
+      ]
+    },
+    {
+      "name": "World Athletics Championships, Tokyo 2025, National Stadium, Tokyo (Qualifikation)",
+      "dates_seen": [
+        "15 SEP 2025"
+      ],
+      "venue": "National Stadium, Tokyo",
+      "category": "OW",
+      "indoor": false,
+      "results": [
+        {
+          "athlete": "Tajay GAYLE",
+          "country": "JAM",
+          "date": "15 SEP 2025",
+          "mark": "8.28",
+          "place": "1.",
+          "place_display": "1. Q",
+          "performance_score": 1299,
+          "round": "Qualifikation",
+          "remark": "Q",
+          "wind": "+0.4 m/s"
+        },
+        {
+          "athlete": "Lester LESCAY",
+          "country": "ESP",
+          "date": "15 SEP 2025",
+          "mark": "8.21",
+          "place": "2.",
+          "place_display": "2. Q",
+          "performance_score": 1284,
+          "round": "Qualifikation",
+          "remark": "Q",
+          "wind": "+0.8 m/s"
+        },
+        {
+          "athlete": "Nikaoli WILLIAMS",
+          "country": "JAM",
+          "date": "15 SEP 2025",
+          "mark": "8.15",
+          "place": "3.",
+          "place_display": "3. Q",
+          "performance_score": 1270,
+          "round": "Qualifikation",
+          "remark": "Q",
+          "wind": "+1.0 m/s"
+        },
+        {
+          "athlete": "Jaime GUERRA",
+          "country": "ESP",
+          "date": "15 SEP 2025",
+          "mark": "8.13",
+          "place": "4.",
+          "place_display": "4. Q",
+          "performance_score": 1266,
+          "round": "Qualifikation",
+          "remark": "Q",
+          "wind": "+0.5 m/s"
+        },
+        {
+          "athlete": "Thobias MONTLER",
+          "country": "SWE",
+          "date": "15 SEP 2025",
+          "mark": "8.11",
+          "place": "5.",
+          "place_display": "5. Q",
+          "performance_score": 1262,
+          "round": "Qualifikation",
+          "remark": "q",
+          "wind": "+1.1 m/s"
+        },
+        {
+          "athlete": "Yuhao SHI",
+          "country": "CHN",
+          "date": "15 SEP 2025",
+          "mark": "8.08",
+          "place": "6.",
+          "place_display": "6. Q",
+          "performance_score": 1255,
+          "round": "Qualifikation",
+          "remark": "q",
+          "wind": "+0.2 m/s"
+        },
+        {
+          "athlete": "Isaac GRIMES",
+          "country": "USA",
+          "date": "15 SEP 2025",
+          "mark": "8.04",
+          "place": "7.",
+          "place_display": "7. Q",
+          "performance_score": 1246,
+          "round": "Qualifikation",
+          "remark": "q",
+          "wind": "+0.7 m/s"
+        },
+        {
+          "athlete": "Mingkun ZHANG",
+          "country": "CHN",
+          "date": "15 SEP 2025",
+          "mark": "7.98",
+          "place": "8.",
+          "place_display": "8. Q",
+          "performance_score": 1203,
+          "round": "Qualifikation",
+          "remark": "q",
+          "wind": "0.0 m/s"
+        },
+        {
+          "athlete": "Yuki HASHIOKA",
+          "country": "JPN",
+          "date": "15 SEP 2025",
+          "mark": "7.95",
+          "place": "9.",
+          "place_display": "9. Q",
+          "performance_score": 1212,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "+0.4 m/s"
+        },
+        {
+          "athlete": "Liam ADCOCK",
+          "country": "AUS",
+          "date": "15 SEP 2025",
+          "mark": "7.94",
+          "place": "10.",
+          "place_display": "10. Q",
+          "performance_score": 1181,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "+1.1 m/s"
+        },
+        {
+          "athlete": "Radek JUŠKA",
+          "country": "CZE",
+          "date": "15 SEP 2025",
+          "mark": "7.93",
+          "place": "11.",
+          "place_display": "11. Q",
+          "performance_score": 1193,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "0.0 m/s"
+        },
+        {
+          "athlete": "Roko FARKAŠ",
+          "country": "CRO",
+          "date": "15 SEP 2025",
+          "mark": "7.92",
+          "place": "12.",
+          "place_display": "12. Q",
+          "performance_score": 1120,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "+0.5 m/s"
+        },
+        {
+          "athlete": "Tom CAMPAGNE",
+          "country": "FRA",
+          "date": "15 SEP 2025",
+          "mark": "7.82",
+          "place": "13.",
+          "place_display": "13. Q",
+          "performance_score": 1099,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "-0.1 m/s"
+        },
+        {
+          "athlete": "Riku ITO",
+          "country": "JPN",
+          "date": "15 SEP 2025",
+          "mark": "7.68",
+          "place": "14.",
+          "place_display": "14. Q",
+          "performance_score": 1068,
+          "round": "Qualifikation",
+          "remark": "",
+          "wind": "+0.7 m/s"
         }
       ]
     }

@@ -3,8 +3,10 @@
  */
 const RankingsModule = (() => {
   let rankChartInstance = null;
+  let prognosisChartInstance = null;
   let initializedControls = false;
   let currentSnapshotIdx = null;
+  let selectedHistoryInterval = 'ALL'; // 'YTD' | '1Y' | '3Y' | 'ALL'
 
   // Sub-tabs & Search State
   let activeSubTab = 'ranking'; // 'ranking' | 'athletes' | 'meetings'
@@ -25,7 +27,14 @@ const RankingsModule = (() => {
     if (!w || w === '-' || w === 'null' || w === 'None' || w === 'none') {
       return '<span class="text-slate-600 font-mono text-[10px]">-</span>';
     }
-    const cleanStr = String(w).trim();
+    let cleanStr = String(w).trim();
+    // Defensive normalization: if wind is e.g. +16 or 12 or 37 without decimal point and abs >= 5.0
+    const rawNum = parseFloat(cleanStr.replace('+', '').replace('m/s', '').trim());
+    if (!isNaN(rawNum) && Math.abs(rawNum) >= 5.0 && !cleanStr.includes('.')) {
+      const fixed = rawNum / 10;
+      cleanStr = (fixed > 0 ? '+' : '') + fixed.toFixed(1) + ' m/s';
+    }
+
     if (cleanStr.startsWith('-')) {
       return `<span class="px-1.5 py-0.2 rounded font-mono font-bold text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800" title="Gegenwind (+Bonus-Punkte)">${cleanStr} 🌬️</span>`;
     }
@@ -128,27 +137,48 @@ const RankingsModule = (() => {
     }
   }
 
-  function setAthleteRowSort(athName, sortKey) {
+  function setAthleteRowSort(encodedName, sortKey) {
+    const athName = decodeURIComponent(encodedName);
+    const baseKey = sortKey.replace('-asc', '');
     const cur = athleteTableSorts[athName] || 'date';
-    if (cur === sortKey) {
-      athleteTableSorts[athName] = sortKey.endsWith('-asc') ? sortKey.replace('-asc', '') : `${sortKey}-asc`;
+    if (cur === baseKey) {
+      athleteTableSorts[athName] = `${baseKey}-asc`;
     } else {
-      athleteTableSorts[athName] = sortKey;
+      athleteTableSorts[athName] = baseKey;
     }
     if (window.App && window.App.state) {
       renderTable(window.App.state);
     }
   }
 
-  function setAthleteDbSort(athId, sortKey) {
+  function setAthleteDbSort(encodedId, sortKey) {
+    const athId = decodeURIComponent(encodedId);
+    const baseKey = sortKey.replace('-asc', '');
     const cur = athleteDbSorts[athId] || 'date';
-    if (cur === sortKey) {
-      athleteDbSorts[athId] = sortKey.endsWith('-asc') ? sortKey.replace('-asc', '') : `${sortKey}-asc`;
+    if (cur === baseKey) {
+      athleteDbSorts[athId] = `${baseKey}-asc`;
     } else {
-      athleteDbSorts[athId] = sortKey;
+      athleteDbSorts[athId] = baseKey;
     }
     if (window.App && window.App.state) {
       renderAthletesDatabase(window.App.state);
+    }
+  }
+
+  function setHistoryInterval(interval) {
+    selectedHistoryInterval = interval;
+    ['YTD', '1Y', '3Y', 'ALL'].forEach(k => {
+      const btn = document.getElementById(`histInterval${k.toLowerCase()}Btn`);
+      if (btn) {
+        if (k === interval) {
+          btn.className = 'hist-interval-btn px-2 py-0.5 rounded bg-cyan-900 text-cyan-300 border border-cyan-700 font-bold transition-all';
+        } else {
+          btn.className = 'hist-interval-btn px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all font-bold';
+        }
+      }
+    });
+    if (window.App && window.App.state) {
+      renderCompactHistoryChart(window.App.state);
     }
   }
 
@@ -597,7 +627,21 @@ const RankingsModule = (() => {
           </div>
         </div>
 
-        <!-- 3. What-If Replacement Simulator -->
+        <!-- 3. Dedicated Prognosis Chart (Week-by-week drop into 2027) -->
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <h4 class="text-[11px] font-bold text-slate-300 uppercase font-mono flex items-center gap-1.5">
+              <span class="text-amber-400">📉</span>
+              <span>Prognostizierter Punkte- & Rangverlauf bis Sommer 2027:</span>
+            </h4>
+            <span class="text-[9px] font-mono text-slate-500">Ohne neue Wettkämpfe (Worst-Case Punkte-Verfall)</span>
+          </div>
+          <div class="h-44 sm:h-48 w-full bg-slate-950/60 border border-slate-800 rounded-lg p-2">
+            <canvas id="prognosisChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 4. What-If Replacement Simulator -->
         <div class="mt-3 pt-3 border-t border-slate-800/80">
           <div class="flex items-center justify-between gap-2 mb-2">
             <div class="flex items-center gap-1.5">
@@ -650,6 +694,87 @@ const RankingsModule = (() => {
         </div>
       </div>
     `;
+
+    // Render Dedicated Prognosis Line Chart
+    const progCanvas = document.getElementById('prognosisChart');
+    if (progCanvas) {
+      if (prognosisChartInstance) prognosisChartInstance.destroy();
+      const progData = [
+        { date: '23.09.26', rank: 47, score: 1144, label: 'Aktuell (23.09.2026)' },
+        { date: '31.10.26', rank: 46, score: 1144, label: 'Herbst (31.10.2026)' },
+        { date: '31.12.26', rank: 45, score: 1144, label: 'Jahresende (31.12.2026)' },
+        { date: '31.01.27', rank: 43, score: 1144, label: 'Vor Gorzów-Ablauf (31.01.2027)' },
+        { date: '01.02.27', rank: 89, score: 895, label: 'Gorzów verfällt (01.02.2027)' },
+        { date: '28.02.27', rank: 98, score: 781, label: 'Dortmund verfällt (28.02.2027)' },
+        { date: '31.03.27', rank: 104, score: 781, label: 'Frühjahr (31.03.2027)' },
+        { date: '30.06.27', rank: 110, score: 745, label: 'Sommer (30.06.2027)' }
+      ];
+
+      prognosisChartInstance = new Chart(progCanvas.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: progData.map(d => d.date),
+          datasets: [
+            {
+              label: 'Prognostizierter Ranking Score (Punkte)',
+              data: progData.map(d => d.score),
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+              borderWidth: 2,
+              borderDash: [4, 4],
+              pointRadius: 4,
+              pointBackgroundColor: '#f59e0b',
+              yAxisID: 'yScore',
+              tension: 0.2
+            },
+            {
+              label: 'Prognostizierter World Rank (Invertiert)',
+              data: progData.map(d => d.rank),
+              borderColor: '#06b6d4',
+              borderWidth: 1.5,
+              pointRadius: 3,
+              pointBackgroundColor: '#06b6d4',
+              yAxisID: 'yRank',
+              tension: 0.2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            yRank: {
+              position: 'left',
+              reverse: true,
+              min: 30,
+              max: 120,
+              grid: { color: '#1e293b' },
+              ticks: { color: '#06b6d4', callback: v => '#' + v }
+            },
+            yScore: {
+              position: 'right',
+              min: 600,
+              max: 1250,
+              grid: { drawOnChartArea: false },
+              ticks: { color: '#f59e0b', callback: v => v + ' Pkt' }
+            },
+            x: {
+              grid: { color: '#1e293b' },
+              ticks: { color: '#94a3b8', font: { size: 9 } }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: '#cbd5e1', font: { size: 10 } } },
+            tooltip: {
+              callbacks: {
+                title: items => progData[items[0].dataIndex]?.label || '',
+                label: ctx => ctx.datasetIndex === 0 ? `Punkte: ${ctx.parsed.y} Pkt` : `Rang: #${ctx.parsed.y}`
+              }
+            }
+          }
+        }
+      });
+    }
   }
 
   function simulateNewMeeting() {
@@ -895,9 +1020,9 @@ const RankingsModule = (() => {
                   </h4>
                   <div class="flex items-center gap-1 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] font-mono">
                     <span class="text-slate-500">Sortieren:</span>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'date')" class="px-1.5 py-0.2 rounded ${athRowSort.startsWith('date') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Datum ${athRowSort === 'date-asc' ? '▲' : '▼'}</button>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'mark')" class="px-1.5 py-0.2 rounded ${athRowSort.startsWith('mark') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Weite ${athRowSort === 'mark-asc' ? '▲' : '▼'}</button>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${ath.name.replace(/'/g, "\\'")}', 'score')" class="px-1.5 py-0.2 rounded ${athRowSort.startsWith('score') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Score ${athRowSort === 'score-asc' ? '▲' : '▼'}</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${encodeURIComponent(ath.name)}', 'date')" class="px-1.5 py-0.2 rounded ${athRowSort.startsWith('date') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Datum ${athRowSort === 'date-asc' ? '▲' : '▼'}</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${encodeURIComponent(ath.name)}', 'mark')" class="px-1.5 py-0.2 rounded ${athRowSort.startsWith('mark') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Weite ${athRowSort === 'mark-asc' ? '▲' : '▼'}</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${encodeURIComponent(ath.name)}', 'score')" class="px-1.5 py-0.2 rounded ${athRowSort.startsWith('score') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Score ${athRowSort === 'score-asc' ? '▲' : '▼'}</button>
                   </div>
                 </div>
                 <button onclick="event.stopPropagation(); RankingsModule.openCompetitorModal('${ath.name.replace(/'/g, "\\'")}')" class="text-cyan-400 hover:text-cyan-300 font-mono text-[10px] font-bold underline">
@@ -908,15 +1033,21 @@ const RankingsModule = (() => {
                 <table class="w-full text-left border-collapse text-[10px] font-mono">
                   <thead>
                     <tr class="bg-slate-950 text-slate-400 border-b border-slate-800">
-                      <th class="py-1.5 px-2">Datum</th>
+                      <th class="py-1.5 px-2 cursor-pointer hover:text-white select-none" onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${encodeURIComponent(ath.name)}', 'date')">
+                        Datum ${athRowSort.startsWith('date') ? (athRowSort === 'date-asc' ? '▲' : '▼') : '↕'}
+                      </th>
                       <th class="py-1.5 px-2">Wettkampf</th>
                       <th class="py-1.5 px-2 text-center">Kat.</th>
-                      <th class="py-1.5 px-2 text-right">Weite</th>
+                      <th class="py-1.5 px-2 text-right cursor-pointer hover:text-white select-none" onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${encodeURIComponent(ath.name)}', 'mark')">
+                        Weite ${athRowSort.startsWith('mark') ? (athRowSort === 'mark-asc' ? '▲' : '▼') : '↕'}
+                      </th>
                       <th class="py-1.5 px-2 text-center">Wind</th>
                       <th class="py-1.5 px-2 text-center">Pl.</th>
                       <th class="py-1.5 px-2 text-right">Result</th>
                       <th class="py-1.5 px-2 text-right">Platz</th>
-                      <th class="py-1.5 px-2 text-right font-bold text-white">Gesamt</th>
+                      <th class="py-1.5 px-2 text-right font-bold text-white cursor-pointer hover:text-cyan-400 select-none" onclick="event.stopPropagation(); RankingsModule.setAthleteRowSort('${encodeURIComponent(ath.name)}', 'score')">
+                        Gesamt ${athRowSort.startsWith('score') ? (athRowSort === 'score-asc' ? '▲' : '▼') : '↕'}
+                      </th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-800/40">${meetsHtml}</tbody>
@@ -938,7 +1069,18 @@ const RankingsModule = (() => {
     let historyData = [];
 
     if (snapshots.length > 0) {
-      historyData = snapshots.map(s => {
+      // Exclude future prognosis snapshots from the historical career progression chart!
+      let filtered = snapshots.filter(s => !s.is_prognosis && (s.date || '') <= '2026-09-28');
+
+      if (selectedHistoryInterval === 'YTD') {
+        filtered = filtered.filter(s => (s.date || '') >= '2026-01-01');
+      } else if (selectedHistoryInterval === '1Y') {
+        filtered = filtered.filter(s => (s.date || '') >= '2025-09-28');
+      } else if (selectedHistoryInterval === '3Y') {
+        filtered = filtered.filter(s => (s.date || '') >= '2023-09-28');
+      }
+
+      historyData = filtered.map(s => {
         const parts = (s.date || '').split('-');
         const shortDate = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0].slice(2)}` : s.date;
         return {
@@ -948,7 +1090,9 @@ const RankingsModule = (() => {
           score: s.lukaScore || 1100
         };
       });
-    } else {
+    }
+
+    if (historyData.length === 0) {
       historyData = [
         { date: '20.06.23', fullDate: '20.06.2023', rank: 100, score: 1116 },
         { date: '12.06.24', fullDate: '12.06.2024', rank: 39, score: 1186 },
@@ -962,11 +1106,11 @@ const RankingsModule = (() => {
     const ranks = historyData.map(d => d.rank);
     const scores = historyData.map(d => d.score);
 
-    const minRank = Math.max(1, Math.min(...ranks) - 5);
-    const maxRank = Math.min(105, Math.max(...ranks) + 5);
+    const minRank = Math.max(1, ranks.reduce((min, r) => Math.min(min, r), 100) - 5);
+    const maxRank = Math.min(105, ranks.reduce((max, r) => Math.max(max, r), 1) + 5);
 
-    const minScore = Math.min(...scores) - 20;
-    const maxScore = Math.max(...scores) + 20;
+    const minScore = scores.reduce((min, s) => Math.min(min, s), 1100) - 15;
+    const maxScore = scores.reduce((max, s) => Math.max(max, s), 1200) + 15;
 
     if (rankChartInstance) rankChartInstance.destroy();
 
@@ -1048,7 +1192,7 @@ const RankingsModule = (() => {
                 if (ctx.datasetIndex === 0) {
                   return `World Ranking: #${ctx.parsed.y}`;
                 } else {
-                  return `Ranking Score: ${ctx.parsed.y} Pkt`;
+                  return `Punkte: ${ctx.parsed.y} Pkt`;
                 }
               }
             }
@@ -1295,9 +1439,9 @@ const RankingsModule = (() => {
                   </span>
                   <div class="flex items-center gap-1 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] font-mono">
                     <span class="text-slate-500">Sortieren:</span>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'date')" class="px-1.5 py-0.2 rounded ${athDbSort.startsWith('date') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Datum ${athDbSort === 'date-asc' ? '▲' : '▼'}</button>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'mark')" class="px-1.5 py-0.2 rounded ${athDbSort.startsWith('mark') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Weite ${athDbSort === 'mark-asc' ? '▲' : '▼'}</button>
-                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${ath.id}', 'score')" class="px-1.5 py-0.2 rounded ${athDbSort.startsWith('score') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Score ${athDbSort === 'score-asc' ? '▲' : '▼'}</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${encodeURIComponent(ath.id || ath.name)}', 'date')" class="px-1.5 py-0.2 rounded ${athDbSort.startsWith('date') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Datum ${athDbSort === 'date-asc' ? '▲' : '▼'}</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${encodeURIComponent(ath.id || ath.name)}', 'mark')" class="px-1.5 py-0.2 rounded ${athDbSort.startsWith('mark') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Weite ${athDbSort === 'mark-asc' ? '▲' : '▼'}</button>
+                    <button onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${encodeURIComponent(ath.id || ath.name)}', 'score')" class="px-1.5 py-0.2 rounded ${athDbSort.startsWith('score') ? 'bg-cyan-900 text-cyan-300 font-bold border border-cyan-700' : 'text-slate-400 hover:text-white'}">Score ${athDbSort === 'score-asc' ? '▲' : '▼'}</button>
                   </div>
                 </div>
                 <button onclick="event.stopPropagation(); RankingsModule.openCompetitorModal('${ath.name.replace(/'/g, "\\'")}')" class="text-cyan-400 hover:text-cyan-300 text-[10px] font-mono font-bold underline">
@@ -1308,13 +1452,19 @@ const RankingsModule = (() => {
                 <table class="w-full text-left border-collapse text-[10px] font-mono">
                   <thead>
                     <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[9px] uppercase">
-                      <th class="py-1.5 px-2">Datum</th>
+                      <th class="py-1.5 px-2 cursor-pointer hover:text-white select-none" onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${encodeURIComponent(ath.id || ath.name)}', 'date')">
+                        Datum ${athDbSort.startsWith('date') ? (athDbSort === 'date-asc' ? '▲' : '▼') : '↕'}
+                      </th>
                       <th class="py-1.5 px-2">Wettkampf / Ort</th>
                       <th class="py-1.5 px-2 text-center">Kat.</th>
-                      <th class="py-1.5 px-2 text-right">Weite</th>
+                      <th class="py-1.5 px-2 text-right cursor-pointer hover:text-white select-none" onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${encodeURIComponent(ath.id || ath.name)}', 'mark')">
+                        Weite ${athDbSort.startsWith('mark') ? (athDbSort === 'mark-asc' ? '▲' : '▼') : '↕'}
+                      </th>
                       <th class="py-1.5 px-2 text-center">Wind</th>
                       <th class="py-1.5 px-2 text-center">Pl.</th>
-                      <th class="py-1.5 px-2 text-right font-bold text-white">Score</th>
+                      <th class="py-1.5 px-2 text-right font-bold text-white cursor-pointer hover:text-cyan-400 select-none" onclick="event.stopPropagation(); RankingsModule.setAthleteDbSort('${encodeURIComponent(ath.id || ath.name)}', 'score')">
+                        Score ${athDbSort.startsWith('score') ? (athDbSort === 'score-asc' ? '▲' : '▼') : '↕'}
+                      </th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-800/40">
@@ -1643,6 +1793,7 @@ const RankingsModule = (() => {
 
   return {
     render,
+    setHistoryInterval,
     openCompetitorModal,
     setModalAthleteSort,
     setAthleteRowSort,
@@ -1660,3 +1811,5 @@ const RankingsModule = (() => {
     renderPrognosisCard
   };
 })();
+
+window.RankingsModule = RankingsModule;

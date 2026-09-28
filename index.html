@@ -73,7 +73,7 @@
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
                 <span class="text-cyan-400">ATHLETICS</span>
                 <span class="ml-1 text-slate-300">INTELLIGENCE</span>
-                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono bg-slate-950 px-1.5 py-0.2 rounded border border-slate-800">v4.0 PWA</span>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono bg-slate-950 px-1.5 py-0.2 rounded border border-slate-800">v4.1 PWA</span>
               </h1>
               <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -87,11 +87,28 @@
         </div>
 
         <div class="flex items-center flex-wrap gap-1.5 justify-between sm:justify-end">
-          <div class="flex items-center gap-1.5 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px]">
-            <span class="text-slate-500 font-bold uppercase text-[9px]">Feed:</span>
-            <span id="jsonStatusBadge" class="font-mono font-bold text-cyan-400">Live WA</span>
-            <span class="text-slate-700">|</span>
-            <span id="sheetsStatusBadge" class="font-mono font-bold text-amber-400">Sample Training</span>
+          <!-- 3-Stream Data Freshness Cockpit -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <!-- 1. World Ranking Stream -->
+            <div id="headerRankingFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer" onclick="App.switchTab('rankings')" title="World Athletics Ranking: Aktualisierung jeden Di/Mi">
+              <span id="rankingFreshnessDot" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="text-slate-500 font-bold text-[9px] uppercase">WA:</span>
+              <span id="rankingFreshnessDate" class="font-bold text-emerald-300">22.09.2026</span>
+            </div>
+
+            <!-- 2. Meeting Kalender Stream -->
+            <div id="headerMeetingsFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer" onclick="App.switchTab('venues')" title="Meeting Kalender & Tour Status">
+              <span id="meetingsFreshnessDot" class="w-2 h-2 rounded-full bg-cyan-400"></span>
+              <span class="text-slate-500 font-bold text-[9px] uppercase">Tour:</span>
+              <span id="meetingsFreshnessText" class="font-bold text-cyan-300">24.09 Live</span>
+            </div>
+
+            <!-- 3. Google Sheets Live Stream -->
+            <div id="headerSheetsFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer" onclick="AnalyticsModule.openSheetsModal()" title="Google Sheets Trainingstagebuch (Täglich um 06:00 Uhr synchronisiert)">
+              <span id="sheetsFreshnessDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+              <span class="text-slate-500 font-bold text-[9px] uppercase">Sheet:</span>
+              <span id="sheetsFreshnessDate" class="font-bold text-amber-300">27.09.2026</span>
+            </div>
           </div>
 
           <button id="toggleConfigBtn" class="px-2.5 py-1 text-[10px] rounded font-bold uppercase tracking-wider border transition-all flex items-center gap-1 bg-slate-950 text-slate-400 border-slate-800 hover:bg-slate-800 hover:text-slate-200">
@@ -134,6 +151,9 @@
         </button>
         <button data-tab="venues" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
           📅 Meeting-Kalender 2027
+        </button>
+        <button data-tab="trainingplan" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
+          📋 Trainingsplan & Archiv
         </button>
       </div>
     </div>
@@ -227,9 +247,9 @@
               <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">WHOOP RECOVERY</span>
               <div id="whoopRecoveryStatus" class="text-xs font-bold font-mono text-emerald-400">Grüner Bereich (Optimal)</div>
               <div class="text-[10px] font-mono text-slate-400 flex items-center gap-2 pt-0.5">
-                <span>HRV: <strong id="whoopHrvVal" class="text-cyan-300">94 ms</strong></span>
+                <span>Schmerzen: <strong id="whoopPainVal" class="text-cyan-300">Keine</strong></span>
                 <span>•</span>
-                <span>RHR: <strong id="whoopRhrVal" class="text-amber-300">46 bpm</strong></span>
+                <span>Erschöpfung: <strong id="whoopExhaustVal" class="text-amber-300">Normal</strong></span>
               </div>
             </div>
           </div>
@@ -242,16 +262,14 @@
                 <path id="sleepRingSvg" class="text-purple-400 transition-all duration-700" stroke-dasharray="94, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center">
-                <span id="whoopSleepPerfVal" class="text-lg font-black font-mono text-white">94%</span>
+                <span id="whoopSleepPerfVal" class="text-lg font-black font-mono text-white">91%</span>
               </div>
             </div>
             <div class="space-y-1">
               <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">SCHLAF-PERFORMANCE</span>
-              <div id="whoopSleepVal" class="text-xs font-bold font-mono text-purple-300">8h 15m geschlafen</div>
+              <div id="whoopSleepVal" class="text-xs font-bold font-mono text-purple-300">91% Performance</div>
               <div class="text-[10px] font-mono text-slate-400 flex items-center gap-2 pt-0.5">
-                <span id="whoopSleepNeedVal">Bedarf: 8h 30m</span>
-                <span>•</span>
-                <span class="text-slate-300">Effizienz: 92%</span>
+                <span>Notiz: <strong id="whoopSleepHabitsVal" class="text-slate-300">Regulär</strong></span>
               </div>
             </div>
           </div>
@@ -271,7 +289,7 @@
               <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">DAY STRAIN (0 - 21)</span>
               <div id="whoopStrainCategory" class="text-xs font-bold font-mono text-cyan-400">Hohe Belastung</div>
               <div class="text-[10px] font-mono text-slate-400 flex items-center gap-2 pt-0.5">
-                <span>Zielbereich: <strong id="whoopTargetStrainVal" class="text-slate-200">13.5 - 15.5</strong></span>
+                <span>Tagesform: <strong id="whoopFormVal" class="text-slate-200">Motiviert, Frisch</strong></span>
               </div>
             </div>
           </div>
@@ -371,12 +389,14 @@
               Ziel-Parameter (Y-Achse / Performance):
             </label>
             <select id="corrVarA" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-cyan-500">
-              <option value="best_mark_m">Balkenweite (m) [Offiziell]</option>
               <option value="eff_mark_m" selected>Effektive Weite (m) [ab Absprungfuß]</option>
-              <option value="approach_speed_11m_to_1m">Anlaufgeschwindigkeit (m/s) [11m-1m]</option>
-              <option value="rsi_score">Reactive Strength Index (RSI)</option>
+              <option value="best_mark_m">Balkenweite (m) [Offiziell]</option>
+              <option value="approach_speed_11m_to_1m">Anlaufgeschwindigkeit Vmax (m/s)</option>
+              <option value="sprint_speed">Sprintgeschwindigkeit Vmax (m/s)</option>
+              <option value="rsi_score">DJ50 Reaktivitätsindex (RSI)</option>
               <option value="trapbar_e1rm_kg">Trapbar Deadlift e1RM (kg)</option>
-              <option value="power_clean_e1rm_kg">Power Clean e1RM (kg)</option>
+              <option value="umsetzen_e1rm_kg">Umsetzen (Power Clean) e1RM (kg)</option>
+              <option value="hipthrust_e1rm_kg">Hip-Thrust e1RM (kg)</option>
             </select>
           </div>
 
@@ -385,12 +405,12 @@
               Einflussfaktor (X-Achse / Readiness & Biometrie):
             </label>
             <select id="corrVarB" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-amber-500">
-              <option value="whoop_recovery_pct">Whoop Recovery Score (%)</option>
-              <option value="whoop_hrv" selected>Herzfrequenzvariabilität (HRV in ms)</option>
-              <option value="sleep_hours">Schlafdauer (Stunden)</option>
-              <option value="muscle_soreness_1_10">Muskelkater / Muskeltonus (1-10)</option>
+              <option value="whoop_recovery_pct" selected>Whoop Recovery Score (%)</option>
+              <option value="sleep_performance_pct">Whoop Schlaf-Performance (%)</option>
+              <option value="whoop_strain">Whoop Day Strain (0-21)</option>
               <option value="body_weight_kg">Körpergewicht (kg)</option>
-              <option value="energy_readiness_1_10">Subjektive Energie (1-10)</option>
+              <option value="body_fat_pct">Körperfett (%)</option>
+              <option value="calories_kcal">Kalorien (kcal)</option>
               <option value="approach_speed_11m_to_1m">Anlauf-Geschwindigkeit (m/s)</option>
             </select>
           </div>
@@ -629,29 +649,38 @@
         </div>
       </div>
 
-      <!-- 🔮 Punkte-Verfall & Ranking-Prognose Cockpit -->
-      <div id="prognosisCockpitContainer"></div>
-
-      <!-- Compact Career Progression Chart (strictly World Athletics grounded data) -->
+      <!-- Compact Career Progression Chart (strictly World Athletics historical grounded data) -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-sm space-y-2">
-        <div class="flex items-center justify-between pb-1.5 border-b border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-slate-800">
           <div>
             <h3 class="text-xs font-black text-white uppercase tracking-wider font-mono flex items-center gap-2">
               <span class="text-cyan-400">📈</span>
-              <span>LUKA HERDEN • WA RANKING-VERLAUF SEIT TOP 100 EINTRITT</span>
+              <span>LUKA HERDEN • WA HISTORISCHER RANKING-VERLAUF (SEIT 20.06.2023)</span>
             </h3>
             <p class="text-[10px] text-slate-400 font-mono mt-0.5">
-              Eintritt 20.06.2023 (#100, 1116 Pkt) ➔ Peak #24 (1194 Pkt) • World Athletics Datenpunkte
+              Eintritt #100 (1116 Pkt) ➔ Peak #24 (1194 Pkt) • Exklusiv historische Datenpunkte ohne Prognose-Verzerrung
             </p>
           </div>
-          <span class="text-[9px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-            Hallen-PB: 8.18m (Gorzów) • Freiluft-PB: 8.14m (Inneringen)
-          </span>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <!-- Dynamic Interval Buttons (Broker style: YTD, 1J, 3J, Max) -->
+            <div class="flex items-center gap-1 bg-slate-950 p-0.5 rounded-lg border border-slate-800 text-[10px] font-mono">
+              <button onclick="RankingsModule.setHistoryInterval('YTD')" id="histIntervalYtdBtn" class="hist-interval-btn px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all font-bold">YTD (Saison)</button>
+              <button onclick="RankingsModule.setHistoryInterval('1Y')" id="histInterval1yBtn" class="hist-interval-btn px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all font-bold">1 Jahr</button>
+              <button onclick="RankingsModule.setHistoryInterval('3Y')" id="histInterval3yBtn" class="hist-interval-btn px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all font-bold">3 Jahre</button>
+              <button onclick="RankingsModule.setHistoryInterval('ALL')" id="histIntervalAllBtn" class="hist-interval-btn px-2 py-0.5 rounded bg-cyan-900 text-cyan-300 border border-cyan-700 font-bold transition-all">Max</button>
+            </div>
+            <span class="text-[9px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 hidden sm:inline-block">
+              Hallen-PB: 8.18m • Freiluft-PB: 8.14m
+            </span>
+          </div>
         </div>
-        <div class="h-44 sm:h-52 w-full pt-1">
+        <div class="h-48 sm:h-56 w-full pt-1">
           <canvas id="historyChart"></canvas>
         </div>
       </div>
+
+      <!-- 🔮 Punkte-Verfall & Ranking-Prognose Cockpit in eigener Kachel -->
+      <div id="prognosisCockpitContainer"></div>
 
       <!-- Filter Bar -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 shadow-sm space-y-2">
@@ -961,6 +990,22 @@
         </div>
       </div>
 
+      <!-- Wöchentliche Meeting-Änderungen & Status-Updates Notice -->
+      <div id="calendarChangelogNotice" class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-start gap-2.5 shadow-sm text-xs font-mono">
+        <span class="text-base">🔔</span>
+        <div class="flex-1 space-y-1">
+          <div class="flex items-center justify-between flex-wrap gap-1">
+            <span class="font-bold text-cyan-300 uppercase">WÖCHENTLICHE MEETING-ÄNDERUNGEN & TOUR-UPDATES</span>
+            <span class="text-[10px] text-slate-400">Stand: KW 39 / 24.09.2026</span>
+          </div>
+          <ul class="text-[11px] text-slate-300 space-y-0.5 list-disc list-inside">
+            <li><strong class="text-emerald-400">Neu bestätigt:</strong> CMCM Luxembourg (17. Jan 2027) & Gorzów Jump Festival (30. Jan 2027) – Men's Long Jump Kat. B/Silver.</li>
+            <li><strong class="text-cyan-400">Disziplin-Filter:</strong> ISTAF Indoor Berlin (12. Feb 2027) führt 2027 ausschließlich Frauen-Weitsprung und ist ausgeblendet.</li>
+            <li><strong class="text-amber-400">Terminverschiebung:</strong> Meeting Madrid Indoor (WIT Gold) terminiert auf 19. Feb 2027.</li>
+          </ul>
+        </div>
+      </div>
+
       <!-- Filter & Discipline Focus Bar -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         <!-- Men's LJ Discipline Toggle -->
@@ -987,6 +1032,11 @@
       <div id="calendarScheduleContainer" class="space-y-4">
         <!-- Populated by venues.js -->
       </div>
+    </div>
+
+    <!-- ================= TAB 5: TRAININGSPLAN & MEHRJAHRES-BLOCKARCHIV (2019 - 2026) ================= -->
+    <div id="tabContentPlan" class="hidden space-y-4">
+      <!-- Populated dynamically by js/training_plan.js -->
     </div>
 
     <!-- ================= TOP 100 COMPETITOR DETAIL & COMPARISON MODAL ================= -->
@@ -1173,6 +1223,10 @@
       <span class="text-lg">📅</span>
       <span class="text-[10px] font-mono tracking-tight">Kalender</span>
     </button>
+    <button data-tab="trainingplan" class="mobile-dock-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-500 hover:text-slate-300 font-medium transition-all">
+      <span class="text-lg">📋</span>
+      <span class="text-[10px] font-mono tracking-tight">Plan & Archiv</span>
+    </button>
   </nav>
 
   <!-- Load Modular Application Logic -->
@@ -1180,6 +1234,7 @@
   <script src="js/analytics.js"></script>
   <script src="js/qualification.js"></script>
   <script src="js/venues.js"></script>
+  <script src="js/training_plan.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

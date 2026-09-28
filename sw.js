@@ -1,4 +1,4 @@
-const CACHE_NAME = 'athletics-intel-v2';
+const CACHE_NAME = 'athletics-intel-v4.1';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -12,9 +12,15 @@ const STATIC_ASSETS = [
   './js/analytics.js',
   './js/qualification.js',
   './js/venues.js',
+  './js/training_plan.js',
+  './data/ranking_latest.json',
+  './data/rankings_archive.json',
+  './data/athletes_database.json',
+  './data/competitions_database.json',
   './data/calendar_2027.json',
   './data/luka_history.json',
-  './data/venues_database.json'
+  './data/venues_database.json',
+  './data/training_logs_full.json'
 ];
 
 self.addEventListener('install', (event) => {

@@ -540,3 +540,5 @@ const VenuesModule = (() => {
 
   return { render, openMeetingInfoModal, copyManagerPitchById, resetFilters, toggleMeetingRow };
 })();
+
+window.VenuesModule = VenuesModule;
