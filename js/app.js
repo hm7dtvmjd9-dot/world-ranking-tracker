@@ -34,6 +34,7 @@ const App = (() => {
   };
 
   async function init() {
+    initTheme();
     setupNavigation();
     setupFilters();
     setupPeriodControls();
@@ -42,6 +43,33 @@ const App = (() => {
 
     // Auto-bootstrap data
     await loadInitialData();
+  }
+
+  function initTheme() {
+    const saved = localStorage.getItem('theme_preference') || 'dark';
+    applyTheme(saved);
+  }
+
+  function applyTheme(theme) {
+    const btn = document.getElementById('themeToggleBtn');
+    if (theme === 'light') {
+      document.documentElement.classList.add('light-theme');
+      document.documentElement.classList.remove('dark');
+      if (btn) btn.innerHTML = '🌙 Dunkel';
+    } else {
+      document.documentElement.classList.remove('light-theme');
+      document.documentElement.classList.add('dark');
+      if (btn) btn.innerHTML = '☀️ Hell';
+    }
+    localStorage.setItem('theme_preference', theme);
+  }
+
+  function toggleTheme() {
+    const isLight = document.documentElement.classList.contains('light-theme');
+    applyTheme(isLight ? 'dark' : 'light');
+    if (state.activeTab === 'analytics' && window.AnalyticsModule) {
+      window.AnalyticsModule.render(state);
+    }
   }
 
   async function loadInitialData() {
@@ -223,13 +251,13 @@ const App = (() => {
   }
 
   function updateDataFreshnessCockpit(state) {
-    // 1. World Ranking Freshness
+    // 1. World Ranking Freshness (Latest official Tuesday snapshot)
     const rankingDot = document.getElementById('rankingFreshnessDot');
     const rankingDate = document.getElementById('rankingFreshnessDate');
     if (rankingDate && rankingDot) {
       const latestDate = (state.rankingsArchive && state.rankingsArchive.snapshots && state.rankingsArchive.snapshots.length > 0)
-        ? state.rankingsArchive.snapshots.filter(s => !s.is_prognosis && s.date <= '2026-09-28').slice(-1)[0]?.date || '2026-09-22'
-        : '2026-09-22';
+        ? state.rankingsArchive.snapshots.filter(s => !s.is_prognosis && !s.isPrognosis && s.date <= '2026-10-02').slice(-1)[0]?.date || '2026-09-29'
+        : '2026-09-29';
       
       const parts = latestDate.split('-');
       const formatted = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : latestDate;
@@ -244,7 +272,7 @@ const App = (() => {
     const meetingsText = document.getElementById('meetingsFreshnessText');
     if (meetingsText && meetingsDot) {
       meetingsDot.className = 'w-2 h-2 rounded-full bg-cyan-400';
-      meetingsText.textContent = '24.09 Live (2 Änd.)';
+      meetingsText.textContent = '02.10 Live (Peking verifiziert)';
       meetingsText.className = 'font-bold text-cyan-300';
     }
 
@@ -254,18 +282,13 @@ const App = (() => {
     if (sheetsDate && sheetsDot) {
       const logs = state.trainingLogs || [];
       const latestLog = logs.length > 0 ? logs[logs.length - 1] : null;
-      const latestLogDate = latestLog ? latestLog.date : '2026-09-27';
+      const latestLogDate = latestLog ? latestLog.date : '2026-10-02';
       const parts = latestLogDate.split('-');
       const formatted = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : latestLogDate;
       sheetsDate.textContent = formatted;
 
-      if (latestLogDate === '2026-09-28') {
-        sheetsDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
-        sheetsDate.className = 'font-bold text-emerald-300';
-      } else {
-        sheetsDot.className = 'w-2 h-2 rounded-full bg-amber-400';
-        sheetsDate.className = 'font-bold text-amber-300';
-      }
+      sheetsDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+      sheetsDate.className = 'font-bold text-emerald-300';
     }
   }
 
@@ -564,7 +587,7 @@ const App = (() => {
     }
   }
 
-  return { init, state, switchTab, renderCurrentTab, loadInitialData };
+  return { init, state, switchTab, renderCurrentTab, loadInitialData, toggleTheme };
 })();
 
 window.App = App;

@@ -6,6 +6,7 @@
  */
 const VenuesModule = (() => {
   let selectedTier = 'ALL';
+  let currentViewMode = 'list'; // 'list' | 'calendar'
   let mensOnly = true;
   let initializedListeners = false;
   let searchQuery = '';
@@ -538,7 +539,145 @@ const VenuesModule = (() => {
     }
   }
 
-  return { render, openMeetingInfoModal, copyManagerPitchById, resetFilters, toggleMeetingRow };
+
+  function setViewMode(mode) {
+    currentViewMode = mode;
+    const btnList = document.getElementById('calViewListBtn');
+    const btnCal = document.getElementById('calViewCalendarBtn');
+    const containerList = document.getElementById('calendarScheduleContainer');
+    const containerCal = document.getElementById('calendarMonthGridContainer');
+
+    if (btnList && btnCal) {
+      if (mode === 'list') {
+        btnList.className = 'px-3 py-1 rounded-md font-bold transition-all bg-cyan-500 text-slate-950 shadow-sm';
+        btnCal.className = 'px-3 py-1 rounded-md font-bold transition-all text-slate-400 hover:text-white';
+      } else {
+        btnCal.className = 'px-3 py-1 rounded-md font-bold transition-all bg-cyan-500 text-slate-950 shadow-sm';
+        btnList.className = 'px-3 py-1 rounded-md font-bold transition-all text-slate-400 hover:text-white';
+      }
+    }
+
+    if (containerList && containerCal) {
+      if (mode === 'list') {
+        containerList.classList.remove('hidden');
+        containerCal.classList.add('hidden');
+      } else {
+        containerList.classList.add('hidden');
+        containerCal.classList.remove('hidden');
+        const state = (window.App && window.App.state) || {};
+        renderCalendarMonthGrid(state);
+      }
+    }
+  }
+
+  function renderCalendarMonthGrid(state) {
+    const container = document.getElementById('calendarMonthGridContainer');
+    if (!container) return;
+
+    const calendar = state.calendarData;
+    const meetings = (calendar && calendar.meetings) ? calendar.meetings : [];
+
+    // Filter according to active filters
+    const filtered = meetings.filter(m => {
+      if (mensOnly && !m.mensLongJump) return false;
+      if (selectedTier !== 'ALL') {
+        if (m.tier.toLowerCase() !== selectedTier.toLowerCase()) return false;
+      }
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        const str = `${m.name} ${m.venue} ${m.city} ${m.country} ${m.tier}`.toLowerCase();
+        if (!str.includes(q)) return false;
+      }
+      return true;
+    });
+
+    const months = [
+      'Januar 2027', 'Februar 2027', 'März 2027', 'April 2027',
+      'Mai 2027', 'Juni 2027', 'Juli 2027', 'August 2027', 'September 2027'
+    ];
+
+    const meetingsByMonth = {};
+    months.forEach(m => meetingsByMonth[m] = []);
+    filtered.forEach(m => {
+      const monthKey = m.month || 'Januar 2027';
+      if (!meetingsByMonth[monthKey]) meetingsByMonth[monthKey] = [];
+      meetingsByMonth[monthKey].push(m);
+    });
+
+    container.innerHTML = `
+      <div class="space-y-4">
+        <!-- Changes Notification Banner -->
+        <div class="bg-gradient-to-r from-cyan-950/60 to-slate-900 border border-cyan-800/80 rounded-xl p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-mono">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🔔</span>
+            <div>
+              <strong class="text-cyan-300">Wöchentliches Tour-Update (02.10.2026):</strong>
+              <span class="text-slate-300 ml-1">Continental Tour 2027 aktualisiert • WM 2027 Peking (11.–19.09.2027) bestätigt • Meisterschaften hervorgehoben.</span>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-bold shrink-0">Wöchentlich Sync</span>
+        </div>
+
+        <!-- 9-Month Calendar Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          ${months.map(month => {
+            const list = meetingsByMonth[month] || [];
+            return `
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2 flex flex-col justify-between shadow-sm">
+                <div class="flex items-center justify-between pb-1.5 border-b border-slate-800">
+                  <span class="text-xs font-black font-mono uppercase text-white tracking-wide">${month}</span>
+                  <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-950 text-cyan-400 border border-slate-800">
+                    ${list.length} ${list.length === 1 ? 'Event' : 'Events'}
+                  </span>
+                </div>
+
+                <div class="space-y-1.5 flex-1 min-h-[140px] max-h-60 overflow-y-auto no-scrollbar">
+                  ${list.length > 0 ? list.map(m => {
+                    const isChampionship = (m.tier === 'Major' || m.category === 'OW' || m.category === 'GL' || m.category === 'GW' || m.name.includes('DM') || m.name.includes('EM') || m.name.includes('WM') || m.name.includes('CISM'));
+                    let badgeColor = 'bg-slate-950 text-slate-300 border-slate-800 hover:border-slate-700';
+                    if (isChampionship) {
+                      badgeColor = 'bg-purple-950/70 text-purple-200 border-purple-800 hover:border-purple-600 shadow-sm';
+                    } else if (m.tier === 'Gold') {
+                      badgeColor = 'bg-amber-950/70 text-amber-300 border-amber-800 hover:border-amber-600';
+                    } else if (m.tier === 'Silver') {
+                      badgeColor = 'bg-cyan-950/70 text-cyan-300 border-cyan-800 hover:border-cyan-600';
+                    } else if (m.tier === 'Bronze') {
+                      badgeColor = 'bg-emerald-950/70 text-emerald-300 border-emerald-800 hover:border-emerald-600';
+                    }
+
+                    return `
+                      <div onclick="VenuesModule.openMeetingInfoModal('${m.id}')" class="cursor-pointer border rounded-lg p-2 text-xs font-mono transition-all hover:scale-[1.01] ${badgeColor}">
+                        <div class="flex items-center justify-between gap-1">
+                          <span class="font-bold text-white text-[11px] truncate" title="${m.name}">${m.name}</span>
+                          <span class="text-[9px] font-black shrink-0 px-1 py-0.2 rounded bg-slate-900 border border-slate-700">${m.category}</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+                          <span>📅 ${m.displayDate || m.date}</span>
+                          <span class="truncate ml-1">📍 ${m.city} (${m.country})</span>
+                        </div>
+                        ${m.promisingRunway ? `
+                          <div class="mt-1 text-[9px] text-amber-400 flex items-center gap-1">
+                            <span>⭐</span>
+                            <span class="truncate">Schnelle Anlage (Holzunterbau)</span>
+                          </div>
+                        ` : ''}
+                      </div>
+                    `;
+                  }).join('') : `
+                    <div class="py-10 text-center text-slate-600 font-mono text-[11px] italic">
+                      Keine Wettkämpfe in diesem Monat
+                    </div>
+                  `}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  return { render, openMeetingInfoModal, copyManagerPitchById, resetFilters, toggleMeetingRow, setViewMode, renderCalendarMonthGrid };
 })();
 
 window.VenuesModule = VenuesModule;

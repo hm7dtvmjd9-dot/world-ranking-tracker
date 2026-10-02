@@ -1,6 +1,6 @@
 {
   "season": "2027 World Athletics Tour & Championships",
-  "target_discipline": "Men's Long Jump (Weitsprung Männer)",
+  "target_discipline": "Men's Long Jump (Weitsprung M\u00e4nner)",
   "scraped_at": "2026-09-24",
   "official_sources": [
     "World Athletics: World Indoor Tour 2027 Calendar & Organiser Details",
@@ -8,8 +8,8 @@
     "European Athletics & DLV Official 2027 Championships Roadmap"
   ],
   "strict_discipline_filter": "Includes competitions offering Men's Long Jump and relevant championships for DLV cadre.",
-  "total_meetings": 40,
-  "promising_runways_count": 26,
+  "total_meetings": 39,
+  "promising_runways_count": 25,
   "meetings": [
     {
       "id": "wa-7244492",
@@ -30,9 +30,9 @@
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. B Silver)",
       "promisingRunway": false,
-      "runwayNote": "Solides Silver-Meeting mit stabiler Infrastruktur (Kat. B). 70 Bonuspunkte für den Sieg.",
+      "runwayNote": "Solides Silver-Meeting mit stabiler Infrastruktur (Kat. B). 70 Bonuspunkte f\u00fcr den Sieg.",
       "lukaHistory": [],
       "topHistoricalMarks": [
         7.84,
@@ -52,20 +52,20 @@
         }
       ],
       "disciplinesMen": [
-        "400m sh",
+        "60mH",
+        "3000m sh",
+        "Long Jump",
         "1500m sh",
         "800m sh",
-        "3000m sh",
-        "60mH",
-        "Long Jump"
+        "400m sh"
       ],
       "disciplinesWomen": [
-        "60m",
-        "1500m sh",
-        "800m sh",
+        "60mH",
         "200m sh",
-        "Pole Vault",
-        "60mH"
+        "1500m sh",
+        "60m",
+        "800m sh",
+        "Pole Vault"
       ]
     },
     {
@@ -75,21 +75,21 @@
       "displayDate": "19. JAN 2027",
       "month": "Januar 2027",
       "year": 2027,
-      "name": "Aarhus SPRINT’n’JUMP",
+      "name": "Aarhus SPRINT\u2019n\u2019JUMP",
       "tour": "World Athletics Indoor Tour 2027",
       "tier": "Bronze",
       "category": "C",
       "subgroup": "Bronze",
-      "venue": "Aarhus Atletik og Løbeakademi",
-      "city": "Århus",
+      "venue": "Aarhus Atletik og L\u00f8beakademi",
+      "city": "\u00c5rhus",
       "country": "DEN",
       "indoor": true,
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. C Bronze)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.07,
@@ -114,15 +114,15 @@
         }
       ],
       "disciplinesMen": [
+        "Long Jump",
         "60m",
-        "60mH",
-        "Long Jump"
+        "60mH"
       ],
       "disciplinesWomen": [
+        "Long Jump",
         "Triple Jump",
         "60m",
-        "60mH",
-        "Long Jump"
+        "60mH"
       ]
     },
     {
@@ -144,9 +144,9 @@
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. C Bronze)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         7.74,
@@ -166,17 +166,17 @@
         }
       ],
       "disciplinesMen": [
-        "60m",
-        "1500m sh",
-        "Pole Vault",
         "60mH",
-        "Long Jump"
+        "Long Jump",
+        "1500m sh",
+        "60m",
+        "Pole Vault"
       ],
       "disciplinesWomen": [
+        "800m sh",
         "400m sh",
         "60m",
-        "60mH",
-        "800m sh"
+        "60mH"
       ]
     },
     {
@@ -198,9 +198,9 @@
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. D Challenger)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [],
       "websiteUrl": "www.lacerdgas-chemnitz.de",
@@ -208,26 +208,26 @@
       "liveStreamingUrl": "N/A",
       "contactPersons": [
         {
-          "name": "Schönlebe, Thomas",
+          "name": "Sch\u00f6nlebe, Thomas",
           "email": "Thomas.schoenlebe@lacerdgas-chemnitz.de",
           "phone": "+491723759059",
           "title": "General matters"
         }
       ],
       "disciplinesMen": [
-        "60m",
         "Triple Jump",
-        "Pole Vault",
-        "200m sh",
         "3000m sh",
-        "Long Jump"
+        "Long Jump",
+        "200m sh",
+        "60m",
+        "Pole Vault"
       ],
       "disciplinesWomen": [
+        "60mH",
+        "200m sh",
         "60m",
         "800m sh",
-        "Triple Jump",
-        "200m sh",
-        "60mH"
+        "Triple Jump"
       ]
     },
     {
@@ -249,9 +249,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. C Bronze)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         7.93,
@@ -272,19 +272,19 @@
         }
       ],
       "disciplinesMen": [
-        "60m",
-        "High Jump",
-        "300mH",
         "60mH",
-        "Long Jump"
+        "300mH",
+        "Long Jump",
+        "High Jump",
+        "60m"
       ],
       "disciplinesWomen": [
-        "60m",
-        "Shot Put",
-        "High Jump",
-        "300mH",
         "60mH",
-        "Long Jump"
+        "300mH",
+        "Shot Put",
+        "Long Jump",
+        "High Jump",
+        "60m"
       ]
     },
     {
@@ -306,9 +306,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. A Gold)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. A Gold)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.45m, 9x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.45m, 9x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.45,
@@ -335,21 +335,21 @@
         }
       ],
       "disciplinesMen": [
-        "60m",
         "60mH",
-        "Shot Put",
         "3000m sh",
-        "400m sh",
-        "Long Jump"
+        "Shot Put",
+        "Long Jump",
+        "60m",
+        "400m sh"
       ],
       "disciplinesWomen": [
-        "60m",
-        "1500m sh",
-        "800m sh",
-        "High Jump",
-        "Triple Jump",
         "60mH",
-        "Long Jump"
+        "Long Jump",
+        "High Jump",
+        "1500m sh",
+        "60m",
+        "800m sh",
+        "Triple Jump"
       ]
     },
     {
@@ -364,16 +364,16 @@
       "tier": "Silver",
       "category": "B",
       "subgroup": "Silver",
-      "venue": "Velódromo Luis Puig",
+      "venue": "Vel\u00f3dromo Luis Puig",
       "city": "Valencia",
       "country": "ESP",
       "indoor": true,
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. B Silver)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.19m, 3x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.19m, 3x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.19,
@@ -400,18 +400,18 @@
         }
       ],
       "disciplinesMen": [
+        "60mH",
+        "Long Jump",
         "1500m sh",
         "800m sh",
-        "Triple Jump",
-        "60mH",
-        "Long Jump"
+        "Triple Jump"
       ],
       "disciplinesWomen": [
+        "3000m sh",
+        "Long Jump",
         "60m",
         "800m sh",
-        "Triple Jump",
-        "3000m sh",
-        "Long Jump"
+        "Triple Jump"
       ]
     },
     {
@@ -426,16 +426,16 @@
       "tier": "Silver",
       "category": "B",
       "subgroup": "Silver",
-      "venue": "Stadium Miramas Métropole",
+      "venue": "Stadium Miramas M\u00e9tropole",
       "city": "Miramas",
       "country": "FRA",
       "indoor": true,
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. B Silver)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.19m, 2x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.19m, 2x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.19,
@@ -457,10 +457,10 @@
       ],
       "disciplinesMen": [
         "60mH",
-        "800m sh",
         "Shot Put",
-        "400m sh",
-        "Long Jump"
+        "Long Jump",
+        "800m sh",
+        "400m sh"
       ],
       "disciplinesWomen": [
         "1500m sh",
@@ -475,21 +475,21 @@
       "displayDate": "30. JAN 2027",
       "month": "Januar 2027",
       "year": 2027,
-      "name": "Gorzów Jump Festival",
+      "name": "Gorz\u00f3w Jump Festival",
       "tour": "World Athletics Indoor Tour 2027",
       "tier": "Silver",
       "category": "B",
       "subgroup": "Silver",
-      "venue": "Arena Gorzów",
-      "city": "Gorzów Wielkopolski",
+      "venue": "Arena Gorz\u00f3w",
+      "city": "Gorz\u00f3w Wielkopolski",
       "country": "POL",
       "indoor": true,
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. B Silver)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Hervorragende Anlaufdynamik: Luka sprang hier 8,18m in 2026, Lescay 8,03m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Hervorragende Anlaufdynamik: Luka sprang hier 8,18m in 2026, Lescay 8,03m)",
       "lukaHistory": [
         {
           "mark": 8.18,
@@ -517,12 +517,12 @@
         }
       ],
       "disciplinesMen": [
-        "High Jump",
-        "Long Jump"
+        "Long Jump",
+        "High Jump"
       ],
       "disciplinesWomen": [
-        "High Jump",
-        "Long Jump"
+        "Long Jump",
+        "High Jump"
       ]
     },
     {
@@ -544,9 +544,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. D Challenger)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [],
       "websiteUrl": null,
@@ -560,23 +560,23 @@
           "title": "General matters"
         },
         {
-          "name": "Marija Šestak",
+          "name": "Marija \u0160estak",
           "email": "marija.sestak@atletska-zveza.si",
           "phone": "+38615206912",
           "title": "Meeting Director"
         }
       ],
       "disciplinesMen": [
-        "1500m sh",
         "400m sh",
-        "800m sh",
-        "Long Jump"
+        "Long Jump",
+        "1500m sh",
+        "800m sh"
       ],
       "disciplinesWomen": [
-        "60mH",
         "400m sh",
-        "800m sh",
-        "Long Jump"
+        "Long Jump",
+        "60mH",
+        "800m sh"
       ]
     },
     {
@@ -591,16 +591,16 @@
       "tier": "Gold",
       "category": "A",
       "subgroup": "Gold",
-      "venue": "Atletická hala",
+      "venue": "Atletick\u00e1 hala",
       "city": "Ostrava",
       "country": "CZE",
       "indoor": true,
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. A Gold)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. A Gold)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.34m, 27x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.34m, 27x \u00fcber 8,00m)",
       "lukaHistory": [
         {
           "mark": 7.75,
@@ -646,20 +646,20 @@
         }
       ],
       "disciplinesMen": [
-        "400m sh",
+        "60mH",
+        "Long Jump",
         "Mile sh",
         "800m sh",
-        "Pole Vault",
-        "60mH",
-        "Long Jump"
+        "400m sh",
+        "Pole Vault"
       ],
       "disciplinesWomen": [
-        "400m sh",
+        "60mH",
+        "3000m sh",
         "60m",
         "800m sh",
-        "Pole Vault",
-        "3000m sh",
-        "60mH"
+        "400m sh",
+        "Pole Vault"
       ]
     },
     {
@@ -681,9 +681,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. D Challenger)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.06,
@@ -709,44 +709,44 @@
         }
       ],
       "disciplinesMen": [
-        "5000m",
-        "3000mSC",
-        "Long Jump",
-        "800m",
+        "1500m",
         "110mH",
-        "200m",
-        "4x400m",
+        "800m",
+        "5000m",
+        "Javelin Throw",
+        "Shot Put",
+        "Long Jump",
         "100m",
         "High Jump",
-        "400m",
+        "4x400m",
+        "200m",
+        "10,000m",
         "Triple Jump",
-        "1500m",
-        "Shot Put",
-        "Javelin Throw",
+        "3000mSC",
         "4x100m",
-        "Discus Throw",
-        "10,000m"
+        "400m",
+        "Discus Throw"
       ],
       "disciplinesWomen": [
-        "Hammer Throw",
-        "High Jump",
-        "Triple Jump",
-        "5000m",
-        "100mH",
         "800m",
-        "200m",
+        "Shot Put",
         "100m",
-        "400mH",
+        "10,000m",
         "400m",
         "Discus Throw",
-        "10,000m",
+        "5000m",
+        "Long Jump",
         "3000mSC",
-        "4x400m",
-        "4x100m",
-        "Shot Put",
-        "Javelin Throw",
         "1500m",
-        "Long Jump"
+        "Hammer Throw",
+        "Javelin Throw",
+        "High Jump",
+        "4x400m",
+        "100mH",
+        "400mH",
+        "200m",
+        "Triple Jump",
+        "4x100m"
       ]
     },
     {
@@ -768,9 +768,9 @@
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. D Challenger)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.29m, 11x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.29m, 11x \u00fcber 8,00m)",
       "lukaHistory": [
         {
           "mark": 7.88,
@@ -791,7 +791,7 @@
       "liveStreamingUrl": "TBC",
       "contactPersons": [
         {
-          "name": "IVAN PABLO SANMARTÍN CARREIRA",
+          "name": "IVAN PABLO SANMART\u00cdN CARREIRA",
           "email": "SECRETARIA@ATLETISMO.GAL",
           "phone": "+34981291683",
           "title": "General matters"
@@ -799,8 +799,8 @@
       ],
       "disciplinesMen": [
         "400m sh",
-        "800m sh",
-        "Long Jump"
+        "Long Jump",
+        "800m sh"
       ],
       "disciplinesWomen": [
         "Shot Put",
@@ -827,9 +827,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. B Silver)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.48m, 17x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.48m, 17x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.48,
@@ -849,7 +849,7 @@
           "title": "General matters"
         },
         {
-          "name": "Jérôme VILLON",
+          "name": "J\u00e9r\u00f4me VILLON",
           "email": "international@athle.fr",
           "phone": "+33685792974",
           "title": "Meeting Director"
@@ -862,15 +862,15 @@
         }
       ],
       "disciplinesMen": [
-        "60m",
-        "60mH",
+        "Pole Vault",
         "Long Jump",
-        "Pole Vault"
+        "60m",
+        "60mH"
       ],
       "disciplinesWomen": [
+        "Long Jump",
         "60m",
-        "60mH",
-        "Long Jump"
+        "60mH"
       ]
     },
     {
@@ -892,9 +892,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. D Challenger)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.06,
@@ -920,43 +920,43 @@
         }
       ],
       "disciplinesMen": [
-        "5000m",
-        "Long Jump",
-        "800m",
-        "110mH",
-        "200m",
-        "4x400m",
-        "100m",
-        "400mH",
-        "400m",
-        "Javelin Throw",
         "1500m",
-        "Shot Put",
-        "Triple Jump",
+        "400mH",
         "Pole Vault",
+        "110mH",
+        "800m",
+        "5000m",
+        "Javelin Throw",
+        "Shot Put",
+        "Long Jump",
+        "100m",
         "High Jump",
+        "4x400m",
+        "200m",
+        "10,000m",
+        "Triple Jump",
         "4x100m",
-        "Discus Throw",
-        "10,000m"
+        "400m",
+        "Discus Throw"
       ],
       "disciplinesWomen": [
-        "5000m",
-        "100mH",
-        "Long Jump",
+        "1500m",
+        "400mH",
         "800m",
+        "5000m",
+        "Javelin Throw",
+        "Shot Put",
+        "Long Jump",
+        "100m",
+        "High Jump",
         "4x400m",
         "200m",
-        "100m",
-        "400mH",
-        "400m",
-        "High Jump",
-        "1500m",
+        "10,000m",
         "Triple Jump",
-        "Shot Put",
-        "Javelin Throw",
         "4x100m",
+        "400m",
         "Discus Throw",
-        "10,000m"
+        "100mH"
       ]
     },
     {
@@ -971,16 +971,16 @@
       "tier": "Silver",
       "category": "B",
       "subgroup": "National Championships",
-      "venue": "Helmut-Körnig-Halle",
+      "venue": "Helmut-K\u00f6rnig-Halle",
       "city": "Dortmund",
       "country": "GER",
       "indoor": true,
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Nationale Meisterschaft (Kat. B Silver) • 60 Bonuspunkte für Sieg",
+      "status": "Nationale Meisterschaft (Kat. B Silver) \u2022 60 Bonuspunkte f\u00fcr Sieg",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Dortmund Helmut-Körnig-Halle: Luka sprang hier mehrfach > 7.90m, DM-Goldbahn)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Dortmund Helmut-K\u00f6rnig-Halle: Luka sprang hier mehrfach > 7.90m, DM-Goldbahn)",
       "lukaHistory": [
         {
           "mark": 7.92,
@@ -1049,9 +1049,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. C Bronze)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         7.91,
@@ -1077,28 +1077,28 @@
         }
       ],
       "disciplinesMen": [
-        "110mH",
-        "200m",
+        "1500m",
         "Hammer Throw",
+        "110mH",
+        "Shot Put",
+        "Long Jump",
         "100m",
         "High Jump",
+        "200m",
         "Triple Jump",
-        "Shot Put",
-        "4x100m",
-        "1500m",
-        "Long Jump"
+        "4x100m"
       ],
       "disciplinesWomen": [
-        "100mH",
+        "1500m",
         "Hammer Throw",
-        "200m",
+        "Shot Put",
+        "Long Jump",
         "100m",
         "High Jump",
+        "200m",
         "Triple Jump",
-        "Shot Put",
         "4x100m",
-        "1500m",
-        "Long Jump"
+        "100mH"
       ]
     },
     {
@@ -1120,9 +1120,9 @@
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. A Gold)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. A Gold)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.16,
@@ -1149,24 +1149,24 @@
         }
       ],
       "disciplinesMen": [
+        "1500m",
         "800m",
-        "200m",
-        "3000m",
+        "Long Jump",
         "100m",
         "High Jump",
+        "200m",
+        "3000m",
         "400m",
-        "1500m",
-        "Discus Throw",
-        "Long Jump"
+        "Discus Throw"
       ],
       "disciplinesWomen": [
-        "100mH",
-        "3000m",
-        "200m",
-        "High Jump",
         "1500m",
+        "High Jump",
+        "200m",
+        "3000m",
         "Pole Vault",
-        "Discus Throw"
+        "Discus Throw",
+        "100mH"
       ]
     },
     {
@@ -1176,21 +1176,21 @@
       "displayDate": "26. FEB 2027",
       "month": "Februar 2027",
       "year": 2027,
-      "name": "Meeting Metz Moselle Athlélor Crédit Mutuel",
+      "name": "Meeting Metz Moselle Athl\u00e9lor Cr\u00e9dit Mutuel",
       "tour": "World Athletics Indoor Tour 2027",
       "tier": "Silver",
       "category": "B",
       "subgroup": "Silver",
-      "venue": "L'Anneau-Halle d'athlétisme de Metz",
+      "venue": "L'Anneau-Halle d'athl\u00e9tisme de Metz",
       "city": "Metz",
       "country": "FRA",
       "indoor": true,
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. B Silver)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.39m, 1x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.39m, 1x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.39,
@@ -1212,22 +1212,22 @@
       ],
       "disciplinesMen": [
         "60mH",
+        "3000m sh",
+        "Long Jump",
         "1500m sh",
         "800m sh",
-        "Pole Vault",
-        "3000m sh",
         "400m sh",
-        "Long Jump"
+        "Pole Vault"
       ],
       "disciplinesWomen": [
-        "60m",
         "60mH",
-        "1500m sh",
-        "800m sh",
-        "200m sh",
-        "Pole Vault",
         "3000m sh",
-        "400m sh"
+        "200m sh",
+        "1500m sh",
+        "60m",
+        "800m sh",
+        "400m sh",
+        "Pole Vault"
       ]
     },
     {
@@ -1235,23 +1235,23 @@
       "wa_id": 9902,
       "date": "2027-03-05",
       "displayDate": "05. MRZ 2027",
-      "month": "März 2027",
+      "month": "M\u00e4rz 2027",
       "year": 2027,
       "name": "European Athletics Indoor Championships 2027 (Hallen-EM)",
       "tour": "European Athletics Indoor Championships",
       "tier": "Gold",
       "category": "GL",
       "subgroup": "European Championships",
-      "venue": "Velódromo Luis Puig",
+      "venue": "Vel\u00f3dromo Luis Puig",
       "city": "Valencia",
       "country": "ESP",
       "indoor": true,
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Europameisterschaft (Kat. GL Gold) • 140 Bonuspunkte für Sieg",
+      "status": "Europameisterschaft (Kat. GL Gold) \u2022 140 Bonuspunkte f\u00fcr Sieg",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Hallen-EM Valencia: Schneller Hallenbelag im Velódromo Luis Puig)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Hallen-EM Valencia: Schneller Hallenbelag im Vel\u00f3dromo Luis Puig)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.3,
@@ -1293,7 +1293,7 @@
       "wa_id": 7244900,
       "date": "2027-03-13",
       "displayDate": "13. MRZ 2027",
-      "month": "März 2027",
+      "month": "M\u00e4rz 2027",
       "year": 2027,
       "name": "Hezekiel Sepeng Invitational",
       "tour": "World Athletics Continental Tour 2027",
@@ -1307,9 +1307,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. C Bronze)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.06m, 3x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.06m, 3x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.06,
@@ -1336,26 +1336,26 @@
         }
       ],
       "disciplinesMen": [
-        "800m",
+        "1500m",
+        "400mH",
         "110mH",
+        "800m",
+        "Javelin Throw",
+        "Long Jump",
+        "100m",
         "200m",
         "4x100m",
-        "100m",
-        "400m",
-        "400mH",
-        "1500m",
-        "Javelin Throw",
-        "Long Jump"
+        "400m"
       ],
       "disciplinesWomen": [
-        "100mH",
         "800m",
+        "Javelin Throw",
+        "Long Jump",
+        "100m",
         "200m",
         "4x100m",
-        "100m",
-        "Javelin Throw",
         "400m",
-        "Long Jump"
+        "100mH"
       ]
     },
     {
@@ -1363,23 +1363,23 @@
       "wa_id": 9903,
       "date": "2027-03-19",
       "displayDate": "19. MRZ 2027",
-      "month": "März 2027",
+      "month": "M\u00e4rz 2027",
       "year": 2027,
       "name": "World Athletics Indoor Championships 2027 (Hallen-WM)",
       "tour": "World Athletics Series",
       "tier": "World Athletics Series",
       "category": "GW",
       "subgroup": "World Championships",
-      "venue": "Arena Toruń",
-      "city": "Toruń",
+      "venue": "Arena Toru\u0144",
+      "city": "Toru\u0144",
       "country": "POL",
       "indoor": true,
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Weltmeisterschaft (Kat. GW) • 170 Bonuspunkte für Sieg",
+      "status": "Weltmeisterschaft (Kat. GW) \u2022 170 Bonuspunkte f\u00fcr Sieg",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Arena Toruń ist weltbekannt für weite Sprünge und High-Speed Anlauf)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Arena Toru\u0144 ist weltbekannt f\u00fcr weite Spr\u00fcnge und High-Speed Anlauf)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.4,
@@ -1421,7 +1421,7 @@
       "wa_id": 7242002,
       "date": "2027-03-27",
       "displayDate": "27. MRZ 2027",
-      "month": "März 2027",
+      "month": "M\u00e4rz 2027",
       "year": 2027,
       "name": "The Copper Spike Challenge - The Charge | Series III",
       "tour": "World Athletics Continental Tour 2027",
@@ -1435,9 +1435,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. C Bronze)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.06,
@@ -1463,51 +1463,110 @@
         }
       ],
       "disciplinesMen": [
-        "Hammer Throw",
-        "3000m",
-        "High Jump",
-        "Triple Jump",
         "800m",
-        "200m",
+        "Shot Put",
         "100m",
-        "400mH",
+        "10,000m",
         "400m",
         "Discus Throw",
-        "10,000m",
+        "Long Jump",
         "3000mSC",
-        "4x400m",
-        "110mH",
-        "4x100m",
-        "Shot Put",
-        "Javelin Throw",
         "1500m",
-        "Long Jump"
+        "Hammer Throw",
+        "110mH",
+        "Javelin Throw",
+        "High Jump",
+        "3000m",
+        "4x400m",
+        "400mH",
+        "200m",
+        "Triple Jump",
+        "4x100m"
       ],
       "disciplinesWomen": [
-        "5000m",
-        "100mH",
-        "3000mSC",
-        "Long Jump",
+        "1500m",
         "800m",
-        "4x400m",
-        "200m",
+        "5000m",
+        "Javelin Throw",
+        "Shot Put",
+        "Long Jump",
         "100m",
         "High Jump",
-        "400m",
+        "4x400m",
+        "200m",
+        "10,000m",
         "Triple Jump",
-        "1500m",
-        "Shot Put",
-        "Javelin Throw",
+        "3000mSC",
         "4x100m",
+        "400m",
         "Discus Throw",
-        "10,000m"
+        "100mH"
+      ]
+    },
+    {
+      "id": "wa-7244597",
+      "wa_id": 7244597,
+      "date": "2027-04-03",
+      "displayDate": "03. APR 2027",
+      "month": "April 2027",
+      "year": 2027,
+      "name": "Road-To-Botswana Golden Grand Prix",
+      "tour": "World Athletics Continental Tour 2027",
+      "tier": "Challenger",
+      "category": "D",
+      "subgroup": "Challenger",
+      "venue": "National Stadium",
+      "city": "Gaborone",
+      "country": "BOT",
+      "indoor": false,
+      "mensLongJump": true,
+      "womensLongJump": false,
+      "standardEligible": false,
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. D Challenger)",
+      "promisingRunway": true,
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.34m, 29x \u00fcber 8,00m)",
+      "lukaHistory": [],
+      "topHistoricalMarks": [
+        8.34,
+        8.34,
+        8.26,
+        8.26,
+        8.24
+      ],
+      "websiteUrl": null,
+      "resultsPageUrl": null,
+      "liveStreamingUrl": null,
+      "contactPersons": [
+        {
+          "name": "Glody Dube",
+          "email": "glodydube@hotmail.com",
+          "phone": "+26771679555",
+          "title": "General matters"
+        }
+      ],
+      "disciplinesMen": [
+        "400mH",
+        "800m",
+        "Long Jump",
+        "100m",
+        "High Jump",
+        "200m",
+        "400m"
+      ],
+      "disciplinesWomen": [
+        "400mH",
+        "800m",
+        "Javelin Throw",
+        "Shot Put",
+        "100m",
+        "400m"
       ]
     },
     {
       "id": "wa-7242001",
       "wa_id": 7242001,
-      "date": "2027-04-03",
-      "displayDate": "03. APR 2027",
+      "date": "2027-04-10",
+      "displayDate": "10. APR 2027",
       "month": "April 2027",
       "year": 2027,
       "name": "Copper Spike Challenge - The Strike | Series IV",
@@ -1522,9 +1581,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. C Bronze)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.06,
@@ -1550,92 +1609,33 @@
         }
       ],
       "disciplinesMen": [
-        "3000mSC",
+        "1500m",
+        "Javelin Throw",
+        "Shot Put",
         "Long Jump",
-        "200m",
         "100m",
         "High Jump",
-        "Shot Put",
-        "Javelin Throw",
-        "1500m",
-        "10,000m"
+        "200m",
+        "10,000m",
+        "3000mSC"
       ],
       "disciplinesWomen": [
-        "3000mSC",
-        "Long Jump",
-        "200m",
-        "100m",
-        "High Jump",
-        "Shot Put",
-        "Javelin Throw",
         "1500m",
-        "10,000m"
-      ]
-    },
-    {
-      "id": "wa-7244597",
-      "wa_id": 7244597,
-      "date": "2027-04-03",
-      "displayDate": "03. APR 2027",
-      "month": "April 2027",
-      "year": 2027,
-      "name": "Road-To-Botswana Golden Grand Prix",
-      "tour": "World Athletics Continental Tour 2027",
-      "tier": "Challenger",
-      "category": "D",
-      "subgroup": "Challenger",
-      "venue": "National Stadium",
-      "city": "Gaborone",
-      "country": "BOT",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.34m, 29x über 8,00m)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.34,
-        8.34,
-        8.26,
-        8.26,
-        8.24
-      ],
-      "websiteUrl": null,
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "Glody Dube",
-          "email": "glodydube@hotmail.com",
-          "phone": "+26771679555",
-          "title": "General matters"
-        }
-      ],
-      "disciplinesMen": [
-        "800m",
-        "200m",
-        "100m",
-        "400mH",
-        "400m",
-        "High Jump",
-        "Long Jump"
-      ],
-      "disciplinesWomen": [
-        "800m",
-        "100m",
-        "400mH",
-        "400m",
+        "Javelin Throw",
         "Shot Put",
-        "Javelin Throw"
+        "Long Jump",
+        "100m",
+        "High Jump",
+        "200m",
+        "10,000m",
+        "3000mSC"
       ]
     },
     {
       "id": "wa-7242000",
       "wa_id": 7242000,
-      "date": "2027-04-04",
-      "displayDate": "04. APR 2027",
+      "date": "2027-04-11",
+      "displayDate": "11. APR 2027",
       "month": "April 2027",
       "year": 2027,
       "name": "The Copper Spike - The Final | Series V",
@@ -1650,9 +1650,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. B Silver)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.32m, 12x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.32m, 12x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.32,
@@ -1679,147 +1679,36 @@
         }
       ],
       "disciplinesMen": [
+        "1500m",
+        "Hammer Throw",
+        "800m",
         "5000m",
+        "Javelin Throw",
+        "Shot Put",
         "Long Jump",
-        "800m",
-        "Hammer Throw",
-        "200m",
-        "4x400m",
         "100m",
         "High Jump",
-        "400m",
+        "4x400m",
+        "200m",
+        "10,000m",
         "Triple Jump",
-        "1500m",
-        "Shot Put",
-        "Javelin Throw",
         "4x100m",
-        "Discus Throw",
-        "10,000m"
+        "400m",
+        "Discus Throw"
       ],
       "disciplinesWomen": [
         "800m",
-        "4x400m",
-        "200m",
+        "Javelin Throw",
+        "Shot Put",
+        "Long Jump",
         "100m",
         "High Jump",
-        "400m",
-        "Triple Jump",
-        "Shot Put",
-        "Javelin Throw",
-        "4x100m",
-        "Discus Throw",
-        "Long Jump"
-      ]
-    },
-    {
-      "id": "wa-7246633",
-      "wa_id": 7246633,
-      "date": "2027-04-09",
-      "displayDate": "09. APR 2027",
-      "month": "April 2027",
-      "year": 2027,
-      "name": "Troféu Adhemar Ferreira da Silva Loterias Caixa de Atletismo",
-      "tour": "World Athletics Continental Tour 2027",
-      "tier": "Challenger",
-      "category": "D",
-      "subgroup": "Challenger",
-      "venue": "Estádio Olímpico do Ibirapuera - Ícaro de Castro Melo",
-      "city": "São Paulo",
-      "country": "BRA",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.35m, 32x über 8,00m)",
-      "lukaHistory": [
-        {
-          "mark": 7.88,
-          "year": 2025,
-          "date": "14 AUG 2025",
-          "place": "3."
-        }
-      ],
-      "topHistoricalMarks": [
-        8.35,
-        8.35,
-        8.29,
-        8.29,
-        8.24
-      ],
-      "websiteUrl": null,
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "Fabiano Paiva",
-          "email": "fabianopaiva@cbat.org.br",
-          "phone": "+5511997109989",
-          "title": "General matters"
-        },
-        {
-          "name": "Joana Costa",
-          "email": "joanacosta@cbat.org.br",
-          "phone": "+5511986232224",
-          "title": "Meeting Director"
-        },
-        {
-          "name": "Joana Costa",
-          "email": "eventos@cbat.org.br",
-          "phone": "+5511986232224",
-          "title": "Athletes Liaison"
-        }
-      ],
-      "disciplinesMen": [
-        "Hammer Throw",
-        "10,000m Walk",
-        "High Jump",
-        "Triple Jump",
-        "Pole Vault",
-        "5000m",
-        "800m",
-        "200m",
-        "100m",
-        "400mH",
-        "400m",
-        "Discus Throw",
-        "5000m Walk",
-        "10,000m",
-        "3000mSC",
         "4x400m",
-        "110mH",
-        "4x100m",
-        "Shot Put",
-        "Javelin Throw",
-        "1500m",
-        "Decathlon",
-        "Long Jump"
-      ],
-      "disciplinesWomen": [
-        "Hammer Throw",
-        "10,000m Walk",
-        "Heptathlon",
-        "High Jump",
-        "Triple Jump",
-        "Pole Vault",
-        "5000m",
-        "100mH",
-        "800m",
         "200m",
-        "100m",
-        "400mH",
-        "400m",
-        "Discus Throw",
-        "5000m Walk",
-        "10,000m",
-        "3000mSC",
-        "4x400m",
+        "Triple Jump",
         "4x100m",
-        "Shot Put",
-        "Javelin Throw",
-        "1500m",
-        "Long Jump"
+        "400m",
+        "Discus Throw"
       ]
     },
     {
@@ -1841,9 +1730,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. B Silver)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.30m, 7x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.30m, 7x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.3,
@@ -1876,25 +1765,25 @@
         }
       ],
       "disciplinesMen": [
-        "800m",
+        "300m",
         "110mH",
+        "800m",
+        "Shot Put",
+        "Long Jump",
+        "100m",
         "200m",
         "3000m",
-        "100m",
-        "300m",
-        "Shot Put",
-        "4x100m",
-        "Long Jump"
+        "4x100m"
       ],
       "disciplinesWomen": [
-        "100mH",
-        "800m",
-        "100m",
         "300m",
         "400mH",
+        "800m",
         "Javelin Throw",
+        "Long Jump",
+        "100m",
         "4x100m",
-        "Long Jump"
+        "100mH"
       ]
     },
     {
@@ -1916,9 +1805,9 @@
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. B Silver)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.34m, 29x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.34m, 29x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.34,
@@ -1945,21 +1834,21 @@
         }
       ],
       "disciplinesMen": [
-        "800m",
-        "200m",
-        "100m",
         "400mH",
-        "400m",
+        "800m",
+        "Long Jump",
+        "100m",
         "High Jump",
-        "Long Jump"
+        "200m",
+        "400m"
       ],
       "disciplinesWomen": [
-        "800m",
-        "100m",
         "400mH",
-        "400m",
+        "800m",
+        "Javelin Throw",
         "Shot Put",
-        "Javelin Throw"
+        "100m",
+        "400m"
       ]
     },
     {
@@ -1981,9 +1870,9 @@
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. A Gold)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. A Gold)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.04,
@@ -2014,32 +1903,32 @@
         }
       ],
       "disciplinesMen": [
-        "5000m",
-        "3000mSC",
-        "800m",
+        "1500m",
+        "400mH",
         "110mH",
+        "800m",
+        "5000m",
+        "Javelin Throw",
+        "Long Jump",
+        "100m",
         "200m",
         "3000m",
-        "100m",
-        "400mH",
-        "400m",
-        "Javelin Throw",
-        "1500m",
-        "Long Jump"
+        "3000mSC",
+        "400m"
       ],
       "disciplinesWomen": [
-        "5000m",
-        "100mH",
-        "3000mSC",
+        "1500m",
+        "400mH",
         "800m",
+        "5000m",
+        "Javelin Throw",
+        "100m",
+        "High Jump",
         "200m",
         "3000m",
-        "100m",
-        "400mH",
+        "3000mSC",
         "400m",
-        "High Jump",
-        "1500m",
-        "Javelin Throw"
+        "100mH"
       ]
     },
     {
@@ -2061,9 +1950,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. D Challenger)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.34m, 29x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.34m, 29x \u00fcber 8,00m)",
       "lukaHistory": [
         {
           "mark": 7.75,
@@ -2112,20 +2001,20 @@
         "Long Jump"
       ],
       "disciplinesWomen": [
-        "60m",
-        "100mH",
-        "Hammer Throw",
-        "100m",
         "300m",
-        "High Jump",
-        "1000m",
-        "Triple Jump",
-        "Javelin Throw",
-        "4x100m",
-        "600m",
         "60mH",
+        "Hammer Throw",
+        "1000m",
+        "Javelin Throw",
         "2000m",
-        "Long Jump"
+        "Long Jump",
+        "100m",
+        "600m",
+        "High Jump",
+        "60m",
+        "Triple Jump",
+        "4x100m",
+        "100mH"
       ]
     },
     {
@@ -2147,9 +2036,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. C Bronze)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.15m, 2x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.15m, 2x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.15,
@@ -2170,28 +2059,28 @@
         }
       ],
       "disciplinesMen": [
-        "800m",
+        "1500m",
+        "Hammer Throw",
         "110mH",
+        "800m",
+        "Shot Put",
+        "Long Jump",
+        "100m",
         "200m",
         "3000m",
-        "Hammer Throw",
-        "100m",
-        "Shot Put",
-        "400m",
         "Triple Jump",
-        "1500m",
         "4x100m",
-        "Long Jump"
+        "400m"
       ],
       "disciplinesWomen": [
-        "800m",
-        "Hammer Throw",
-        "200m",
-        "100m",
         "400mH",
-        "400m",
+        "Hammer Throw",
+        "800m",
+        "Long Jump",
+        "100m",
+        "200m",
         "Triple Jump",
-        "Long Jump"
+        "400m"
       ]
     },
     {
@@ -2201,21 +2090,21 @@
       "displayDate": "04. JUN 2027",
       "month": "Juni 2027",
       "year": 2027,
-      "name": "9th Irena Szewińska Memorial",
+      "name": "9th Irena Szewi\u0144ska Memorial",
       "tour": "World Athletics Continental Tour 2027",
       "tier": "Gold",
       "category": "A",
       "subgroup": "Gold",
-      "venue": "Zdzisław Krzyszkowiak Stadium",
+      "venue": "Zdzis\u0142aw Krzyszkowiak Stadium",
       "city": "Bydgoszcz",
       "country": "POL",
       "indoor": false,
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. A Gold)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. A Gold)",
       "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "runwayNote": "Solide Wettkampfanlage mit regul\u00e4ren Bedingungen",
       "lukaHistory": [],
       "topHistoricalMarks": [
         7.75,
@@ -2226,35 +2115,35 @@
       "liveStreamingUrl": "TBC",
       "contactPersons": [
         {
-          "name": "Krzysztof Wolsztyński",
+          "name": "Krzysztof Wolszty\u0144ski",
           "email": "office@bydgoszczcup.pl",
           "phone": "+48602335947",
           "title": "General matters"
         },
         {
-          "name": "Marta Świniarek",
+          "name": "Marta \u015awiniarek",
           "email": "office@bydgoszczcup.pl",
           "phone": "+48600236751",
           "title": "Athletes Liaison"
         }
       ],
       "disciplinesMen": [
-        "3000mSC",
-        "800m",
         "110mH",
+        "800m",
+        "Long Jump",
         "100m",
-        "400m",
         "Pole Vault",
-        "Discus Throw",
-        "Long Jump"
+        "3000mSC",
+        "400m",
+        "Discus Throw"
       ],
       "disciplinesWomen": [
-        "100mH",
+        "1500m",
         "800m",
         "100m",
         "400m",
-        "1500m",
-        "Discus Throw"
+        "Discus Throw",
+        "100mH"
       ]
     },
     {
@@ -2276,9 +2165,9 @@
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. A Gold)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. A Gold)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.29m, 14x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.29m, 14x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.29,
@@ -2292,7 +2181,7 @@
       "liveStreamingUrl": null,
       "contactPersons": [
         {
-          "name": "Natko Bošnjak",
+          "name": "Natko Bo\u0161njak",
           "email": "natko@zagreb-meeting.com",
           "phone": "+385992534727",
           "title": "General matters"
@@ -2305,26 +2194,26 @@
         }
       ],
       "disciplinesMen": [
-        "800m",
-        "110mH",
-        "200m",
-        "Hammer Throw",
-        "Shot Put",
         "1500m",
-        "Discus Throw",
-        "Long Jump"
+        "Hammer Throw",
+        "110mH",
+        "800m",
+        "Shot Put",
+        "Long Jump",
+        "200m",
+        "Discus Throw"
       ],
       "disciplinesWomen": [
-        "100mH",
+        "400mH",
         "800m",
+        "Javelin Throw",
+        "100m",
+        "High Jump",
         "200m",
         "3000m",
-        "100m",
-        "400mH",
-        "400m",
-        "High Jump",
         "Triple Jump",
-        "Javelin Throw"
+        "400m",
+        "100mH"
       ]
     },
     {
@@ -2346,9 +2235,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Militär-Weltmeisterschaft (Kat. C Bronze) • 40 Bonuspunkte für Sieg",
+      "status": "Milit\u00e4r-Weltmeisterschaft (Kat. C Bronze) \u2022 40 Bonuspunkte f\u00fcr Sieg",
       "promisingRunway": true,
-      "runwayNote": "Bundeswehr-Spitzensportförderung: Luka Herden als Sportsoldat startberechtigt",
+      "runwayNote": "Bundeswehr-Spitzensportf\u00f6rderung: Luka Herden als Sportsoldat startberechtigt",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.08,
@@ -2359,7 +2248,7 @@
       ],
       "contactPersons": [
         {
-          "name": "Bundeswehr Sportförderung / CISM",
+          "name": "Bundeswehr Sportf\u00f6rderung / CISM",
           "email": "sportfoerderung@bundeswehr.org",
           "phone": "+49 2241 15-0",
           "title": "Spitzensportbetreuung"
@@ -2402,9 +2291,9 @@
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. A Gold)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. A Gold)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.24m, 5x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.24m, 5x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.24,
@@ -2437,20 +2326,20 @@
         }
       ],
       "disciplinesMen": [
-        "800m",
-        "110mH",
-        "100m",
         "1500m",
+        "110mH",
+        "800m",
+        "Long Jump",
+        "100m",
         "Pole Vault",
-        "Discus Throw",
-        "Long Jump"
+        "Discus Throw"
       ],
       "disciplinesWomen": [
-        "100mH",
+        "1500m",
         "800m",
-        "100m",
         "Shot Put",
-        "1500m"
+        "100m",
+        "100mH"
       ]
     },
     {
@@ -2466,15 +2355,15 @@
       "category": "A",
       "subgroup": "Team Championships",
       "venue": "Silesian Stadium",
-      "city": "Chorzów",
+      "city": "Chorz\u00f3w",
       "country": "POL",
       "indoor": false,
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Team-Europameisterschaft (Kat. A Gold) • 100 Bonuspunkte für Sieg",
+      "status": "Team-Europameisterschaft (Kat. A Gold) \u2022 100 Bonuspunkte f\u00fcr Sieg",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Chorzów Silesian Stadium: Weitsprung-Erfolge & hohe Platzierungspunkte)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Chorz\u00f3w Silesian Stadium: Weitsprung-Erfolge & hohe Platzierungspunkte)",
       "lukaHistory": [
         {
           "mark": 8.01,
@@ -2537,9 +2426,9 @@
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Nationale Meisterschaft (Kat. B Silver) • 60 Bonuspunkte für Sieg",
+      "status": "Nationale Meisterschaft (Kat. B Silver) \u2022 60 Bonuspunkte f\u00fcr Sieg",
       "promisingRunway": true,
-      "runwayNote": "Nationale Meisterschaft: 60 Bonuspunkte für den Sieg, Pflichttermin für DLV-Kader",
+      "runwayNote": "Nationale Meisterschaft: 60 Bonuspunkte f\u00fcr den Sieg, Pflichttermin f\u00fcr DLV-Kader",
       "lukaHistory": [
         {
           "mark": 8.14,
@@ -2596,21 +2485,21 @@
       "displayDate": "11. AUG 2027",
       "month": "August 2027",
       "year": 2027,
-      "name": "Gyulai István Memorial - Hungarian Athletics Grand Prix",
+      "name": "Gyulai Istv\u00e1n Memorial - Hungarian Athletics Grand Prix",
       "tour": "World Athletics Continental Tour 2027",
       "tier": "Gold",
       "category": "A",
       "subgroup": "Gold",
-      "venue": "Nemzeti Atlétikai Központ",
+      "venue": "Nemzeti Atl\u00e9tikai K\u00f6zpont",
       "city": "Budapest",
       "country": "HUN",
       "indoor": false,
       "mensLongJump": true,
       "womensLongJump": false,
       "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. A Gold)",
+      "status": "Verifiziert: Weitsprung M\u00e4nner \u2705 (Kat. A Gold)",
       "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.54m, 33x über 8,00m)",
+      "runwayNote": "Anlage vielversprechend \u2b50 (Historisch weite Spr\u00fcnge: Bestmarke 8.54m, 33x \u00fcber 8,00m)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.54,
@@ -2631,8 +2520,8 @@
     {
       "id": "champ-wm-outdoor-2027",
       "wa_id": 9907,
-      "date": "2027-08-27",
-      "displayDate": "27. AUG 2027",
+      "date": "2027-09-11",
+      "displayDate": "11. - 19. SEP 2027",
       "month": "August 2027",
       "year": 2027,
       "name": "World Athletics Championships 2027 (Freiluft-WM)",
@@ -2640,16 +2529,16 @@
       "tier": "World Athletics Series",
       "category": "OW",
       "subgroup": "World Championships",
-      "venue": "National Stadium",
-      "city": "Tokyo",
-      "country": "JPN",
+      "venue": "National Stadium (Bird's Nest)",
+      "city": "Peking (Beijing)",
+      "country": "CHN",
       "indoor": false,
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
-      "status": "Weltmeisterschaft (Kat. OW) • 350 Bonuspunkte für Sieg (300 Pkt Silber)",
+      "status": "Weltmeisterschaft (Kat. OW) \u2022 350 Bonuspunkte f\u00fcr Sieg (300 Pkt Silber)",
       "promisingRunway": true,
-      "runwayNote": "Höchste Wertungskategorie weltweit: 350 Bonuspunkte für Platz 1, 300 Pkt für Silber",
+      "runwayNote": "H\u00f6chste Wertungskategorie weltweit: World Athletics Championships Beijing 2027 im legend\u00e4ren Vogelnest (350 Bonuspunkte f\u00fcr Sieg, 300 Pkt f\u00fcr Silber)",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.65,
@@ -2684,7 +2573,9 @@
       ],
       "websiteUrl": "https://worldathletics.org/competitions/world-athletics-championships",
       "resultsPageUrl": null,
-      "liveStreamingUrl": null
+      "liveStreamingUrl": null,
+      "endDate": "2027-09-19",
+      "organizerWebsite": "https://worldathletics.org/competitions/world-athletics-championships/beijing2027"
     }
   ]
 }

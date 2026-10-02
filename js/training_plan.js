@@ -9,16 +9,16 @@
  */
 const TrainingPlanModule = (() => {
   let activeView = 'week'; // 'week' | 'month' | 'block' | 'search'
-  let currentWeekStart = '2026-09-21'; // Monday of the active week
-  let currentMonthYear = '2026-09';
-  let activeBlockPreset = 'hallenaufbau'; // 'hallenaufbau' | 'hallenvorbereitung' | 'sommeraufbau' | 'sommerwk'
-  let activeBlockYears = [2026, 2025, 2024, 2023];
+  let currentWeekStart = '2026-09-28'; // Monday of KW 40 // Monday of the active week
+  let currentMonthYear = '2026-10';
+  let activeBlockPreset = 'aufbau_herbst'; // 'hallenaufbau' | 'hallenvorbereitung' | 'sommeraufbau' | 'sommerwk'
+  let activeBlockYears = [2026, 2025, 2024, 2023, 2022, 2021, 2020];
   let planSearchQuery = '';
 
   function initWeekStart() {
     const d = new Date();
     // Use simulation reference 2026-09-28 (Monday)
-    currentWeekStart = '2026-09-21';
+    currentWeekStart = '2026-09-28';
   }
 
   function getMondayOfDate(dStr) {
@@ -182,23 +182,26 @@ const TrainingPlanModule = (() => {
       return `
         <div class="flex items-center gap-2 flex-wrap text-xs font-mono">
           <span class="text-slate-400 font-bold uppercase">Trainingsblock:</span>
-          <button onclick="TrainingPlanModule.setBlockPreset('hallenaufbau')" class="px-2.5 py-1 rounded transition-all font-bold ${activeBlockPreset === 'hallenaufbau' ? 'bg-cyan-600 text-slate-950 border border-cyan-400' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
-            🍂 Hallenaufbau (KW 40 - 51)
+          <button onclick="TrainingPlanModule.setBlockPreset('aufbau_herbst')" class="px-2 py-1 rounded transition-all font-bold ${activeBlockPreset === 'aufbau_herbst' ? 'bg-cyan-600 text-slate-950 border border-cyan-400' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
+            🍂 Aufbau (Aug-Nov / KW 32-47)
           </button>
-          <button onclick="TrainingPlanModule.setBlockPreset('hallenvorbereitung')" class="px-2.5 py-1 rounded transition-all font-bold ${activeBlockPreset === 'hallenvorbereitung' ? 'bg-cyan-600 text-slate-950 border border-cyan-400' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
-            ❄️ Hallensaison (KW 01 - 08)
+          <button onclick="TrainingPlanModule.setBlockPreset('hallenvorbereitung_dez')" class="px-2 py-1 rounded transition-all font-bold ${activeBlockPreset === 'hallenvorbereitung_dez' ? 'bg-cyan-600 text-slate-950 border border-cyan-400' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
+            ❄️ Vorbereitung (Dez / KW 48-52)
           </button>
-          <button onclick="TrainingPlanModule.setBlockPreset('sommeraufbau')" class="px-2.5 py-1 rounded transition-all font-bold ${activeBlockPreset === 'sommeraufbau' ? 'bg-cyan-600 text-slate-950 border border-cyan-400' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
-            🌱 Sommeraufbau (KW 12 - 20)
+          <button onclick="TrainingPlanModule.setBlockPreset('hallensaison_jan_mar')" class="px-2 py-1 rounded transition-all font-bold ${activeBlockPreset === 'hallensaison_jan_mar' ? 'bg-cyan-600 text-slate-950 border border-cyan-400' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
+            🏟️ Hallensaison (Jan-Mär / KW 01-10)
           </button>
-          <button onclick="TrainingPlanModule.setBlockPreset('sommerwk')" class="px-2.5 py-1 rounded transition-all font-bold ${activeBlockPreset === 'sommerwk' ? 'bg-cyan-600 text-slate-950 border border-cyan-400' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
-            ☀️ Hauptwettkampf (KW 21 - 32)
+          <button onclick="TrainingPlanModule.setBlockPreset('sommervorbereitung_mar_apr')" class="px-2 py-1 rounded transition-all font-bold ${activeBlockPreset === 'sommervorbereitung_mar_apr' ? 'bg-cyan-600 text-slate-950 border border-cyan-400' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
+            🌱 Sommervorbereitung (Mär-Apr / KW 11-17)
+          </button>
+          <button onclick="TrainingPlanModule.setBlockPreset('sommersaison_mai_aug')" class="px-2 py-1 rounded transition-all font-bold ${activeBlockPreset === 'sommersaison_mai_aug' ? 'bg-cyan-600 text-slate-950 border border-cyan-400' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
+            ☀️ Sommersaison (Mai-Aug / KW 18-35)
           </button>
         </div>
 
         <div class="flex items-center gap-1.5 text-xs font-mono">
           <span class="text-slate-400">Vergleichsjahre:</span>
-          ${[2026, 2025, 2024, 2023, 2022].map(y => `
+          ${[2026, 2025, 2024, 2023, 2022, 2021, 2020].map(y => `
             <button onclick="TrainingPlanModule.toggleBlockYear(${y})" class="px-2 py-0.5 rounded text-[11px] font-mono font-bold transition-all ${activeBlockYears.includes(y) ? 'bg-amber-950 text-amber-300 border border-amber-700' : 'bg-slate-950 text-slate-500 border border-slate-800'}">
               ${y}
             </button>
@@ -251,7 +254,7 @@ const TrainingPlanModule = (() => {
       const dateIso = addDays(currentWeekStart, d.offset);
       const dayLogs = logsByDate[dateIso] || [];
       const hasSession = dayLogs.length > 0;
-      const isToday = dateIso === '2026-09-28';
+      const isToday = dateIso === '2026-10-02';
 
       return `
         <div class="bg-slate-900 border ${isToday ? 'border-cyan-500/80 shadow-md shadow-cyan-500/10' : 'border-slate-800'} rounded-xl p-3 sm:p-4 space-y-3">
@@ -380,13 +383,24 @@ ${protocolText}
     for (let day = 1; day <= daysInMonth; day++) {
       const dateIso = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       const dayLogs = logsByDate[dateIso] || [];
-      const isToday = dateIso === '2026-09-28';
+      const isToday = dateIso === '2026-10-02';
 
       cellsHtml += `
         <div onclick="TrainingPlanModule.openInReadinessTab('${dateIso}')" class="bg-slate-900 border ${isToday ? 'border-cyan-500 bg-cyan-950/20' : 'border-slate-800 hover:border-slate-700'} rounded-lg p-2 flex flex-col justify-between min-h-[95px] cursor-pointer transition-all hover:bg-slate-850">
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono font-bold ${isToday ? 'text-cyan-400 font-black' : 'text-slate-300'}">${day}</span>
-            ${dayLogs.length > 0 ? `<span class="w-2 h-2 rounded-full ${dayLogs.some(l => (l.session_type || '').includes('Sprung')) ? 'bg-amber-400' : 'bg-emerald-400'}"></span>` : ''}
+            ${(() => {
+              const rec = dayLogs.find(l => l.whoop_recovery_pct != null)?.whoop_recovery_pct;
+              if (rec != null) {
+                if (rec >= 67) return `<span class="w-2 h-2 rounded-full bg-emerald-400" title="Whoop Recovery: ${rec}% (Optimal)"></span>`;
+                if (rec >= 34) return `<span class="w-2 h-2 rounded-full bg-amber-400" title="Whoop Recovery: ${rec}% (Moderat)"></span>`;
+                return `<span class="w-2 h-2 rounded-full bg-rose-400" title="Whoop Recovery: ${rec}% (Regenerativ)"></span>`;
+              }
+              if (dayLogs.length > 0 && dayLogs.some(l => (l.duration_min || 0) > 0)) {
+                return '<span class="w-2 h-2 rounded-full bg-cyan-400" title="Trainingseinheit absolviert"></span>';
+              }
+              return '';
+            })()}
           </div>
 
           <div class="space-y-1 my-1">
@@ -417,55 +431,68 @@ ${protocolText}
     `;
   }
 
-  // ================= 3. MEHRJAHRES-BLOCKVERGLEICH =================
+  // ================= 3. MEHRJAHRES-BLOCKVERGLEICH (2020 - 2026) =================
   function renderBlockComparisonView(state) {
     const logs = state.trainingLogs || [];
 
-    // Define week ranges for presets
     const presetRanges = {
-      'hallenaufbau': { minKw: 40, maxKw: 51, title: 'Hallenaufbau (Herbst / ZNS-Akkumulation)' },
-      'hallenvorbereitung': { minKw: 1, maxKw: 8, title: 'Spezifische Hallenvorbereitung & Hallensaison' },
-      'sommeraufbau': { minKw: 12, maxKw: 20, title: 'Sommeraufbau & Spezifische Zubringer' },
-      'sommerwk': { minKw: 21, maxKw: 32, title: 'Hauptwettkampfphase Sommer (DM, EM, WM, Olympia)' }
+      'aufbau_herbst': { minKw: 32, maxKw: 47, title: 'Allgemeiner Aufbau (August - November / KW 32 - 47)' },
+      'hallenvorbereitung_dez': { minKw: 48, maxKw: 52, title: 'Spezifische Hallenvorbereitung (Dezember / KW 48 - 52)' },
+      'hallensaison_jan_mar': { minKw: 1, maxKw: 10, title: 'Hallensaison / Wettkämpfe (Januar - März / KW 01 - 10)' },
+      'sommervorbereitung_mar_apr': { minKw: 11, maxKw: 17, title: 'Sommervorbereitung (März - April / KW 11 - 17)' },
+      'sommersaison_mai_aug': { minKw: 18, maxKw: 35, title: 'Sommer-Wettkampfsaison (Mai - August / KW 18 - 35)' }
     };
 
-    const curPreset = presetRanges[activeBlockPreset] || presetRanges['hallenaufbau'];
+    const curPreset = presetRanges[activeBlockPreset] || presetRanges['aufbau_herbst'];
 
-    // Group logs by year and compute stats
+    // Group logs by year and compute stats (strictly excluding rest days from session count)
     const yearStats = activeBlockYears.map(year => {
       const yearLogs = logs.filter(l => {
         if (!l.date || !l.date.startsWith(String(year))) return false;
-        // Parse week number
         const kwStr = getWeekNumber(l.date);
         const kwNum = parseInt(kwStr.replace(/[^\d]/g, ''), 10);
         return kwNum >= curPreset.minKw && kwNum <= curPreset.maxKw;
       });
 
-      const totalSessions = yearLogs.length;
-      const totalMinutes = yearLogs.reduce((sum, l) => sum + (l.duration_min || 0), 0);
-      const jumps = yearLogs.filter(l => l.best_mark_m || l.eff_mark_m);
-      const bestMark = yearLogs.reduce((max, l) => Math.max(max, l.best_mark_m || 0), 0);
-      const peakSpeed = yearLogs.reduce((max, l) => Math.max(max, l.approach_speed_11m_to_1m || 0), 0);
+      // Filter real sessions (Frei ist keine Einheit!)
+      const realSessions = yearLogs.filter(l => {
+        const sType = (l.session_type || '').toLowerCase();
+        const f = (l.focus || '').toLowerCase();
+        const dur = l.duration_min || 0;
+        return dur > 0 && !sType.includes('frei') && !sType.includes('ruhetag') && !sType.includes('pause') && !f.includes('frei') && !f.includes('ruhetag');
+      });
+
+      const totalSessions = realSessions.length;
+      const totalMinutes = realSessions.reduce((sum, l) => sum + (l.duration_min || 0), 0);
+      
+      // Peak 4 main lifts
+      const peakUmsetzen = yearLogs.reduce((max, l) => Math.max(max, l.umzetten_e1rm_kg || 0), 0);
+      const peakHipthrust = yearLogs.reduce((max, l) => Math.max(max, l.hipthrust_e1rm_kg || 0), 0);
       const peakTrapbar = yearLogs.reduce((max, l) => Math.max(max, l.trapbar_e1rm_kg || 0), 0);
+      const peakAufsteiger = yearLogs.reduce((max, l) => Math.max(max, l.aufsteiger_e1rm_kg || 0), 0);
+
+      const peakSpeed = yearLogs.reduce((max, l) => Math.max(max, l.approach_speed_11m_to_1m || 0), 0);
       const recoveries = yearLogs.map(l => l.whoop_recovery_pct).filter(v => v != null);
       const avgRecovery = recoveries.length > 0 ? Math.round(recoveries.reduce((a, b) => a + b, 0) / recoveries.length) : null;
 
       return {
         year,
         logs: yearLogs,
+        realSessions,
         totalSessions,
         totalMinutes,
-        jumpsCount: jumps.length,
-        bestMark: bestMark > 0 ? bestMark.toFixed(2) + 'm' : '-',
-        peakSpeed: peakSpeed > 0 ? peakSpeed.toFixed(2) + ' m/s' : '-',
+        peakUmsetzen: peakUmsetzen > 0 ? peakUmsetzen + ' kg' : '-',
+        peakHipthrust: peakHipthrust > 0 ? peakHipthrust + ' kg' : '-',
         peakTrapbar: peakTrapbar > 0 ? peakTrapbar + ' kg' : '-',
+        peakAufsteiger: peakAufsteiger > 0 ? peakAufsteiger + ' kg' : '-',
+        peakSpeed: peakSpeed > 0 ? peakSpeed.toFixed(2) + ' m/s' : '-',
         avgRecovery: avgRecovery != null ? avgRecovery + '%' : '-'
       };
     });
 
     return `
       <div class="space-y-4">
-        <!-- Comparative KPI Matrix -->
+        <!-- Comparative KPI Matrix with 4 Main Lifts -->
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm space-y-3">
           <div class="flex items-center justify-between pb-2 border-b border-slate-800">
             <div>
@@ -473,7 +500,7 @@ ${protocolText}
                 📊 BLOCK-VERGLEICH: ${curPreset.title.toUpperCase()}
               </h3>
               <p class="text-[10px] text-slate-400 font-mono mt-0.5">
-                Vergleich der gleichen Vorbereitungsphase (KW ${curPreset.minKw} - ${curPreset.maxKw}) über ${activeBlockYears.join(', ')}
+                Nur echte Trainingseinheiten gezählt (Ruhetage/Frei exkludiert) • Kraftentwicklung der 4 Hauptübungen über 7 Jahre
               </p>
             </div>
           </div>
@@ -483,12 +510,14 @@ ${protocolText}
               <thead>
                 <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
                   <th class="py-2 px-3">Jahr</th>
-                  <th class="py-2 px-3 text-center">Einheiten</th>
+                  <th class="py-2 px-3 text-center">Einheiten (Netto)</th>
                   <th class="py-2 px-3 text-center">Gesamtdauer</th>
-                  <th class="py-2 px-3 text-center">Ø Whoop Recovery</th>
-                  <th class="py-2 px-3 text-right">Top Weite</th>
-                  <th class="py-2 px-3 text-right">Peak Vmax Anlauf</th>
-                  <th class="py-2 px-3 text-right">Peak Trapbar e1RM</th>
+                  <th class="py-2 px-3 text-center">Ø Recovery</th>
+                  <th class="py-2 px-3 text-right text-amber-400">Peak Umsetzen</th>
+                  <th class="py-2 px-3 text-right text-rose-400">Peak Hip-Thrust</th>
+                  <th class="py-2 px-3 text-right text-purple-400">Peak Trapbar</th>
+                  <th class="py-2 px-3 text-right text-emerald-400">Peak Aufsteiger</th>
+                  <th class="py-2 px-3 text-right">Anlauf-Vmax</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800/40">
@@ -498,9 +527,11 @@ ${protocolText}
                     <td class="py-2.5 px-3 text-center text-cyan-400 font-bold">${ys.totalSessions}</td>
                     <td class="py-2.5 px-3 text-center text-slate-300">${ys.totalMinutes} min</td>
                     <td class="py-2.5 px-3 text-center text-emerald-400 font-bold">${ys.avgRecovery}</td>
-                    <td class="py-2.5 px-3 text-right font-black text-amber-400 text-sm">${ys.bestMark}</td>
-                    <td class="py-2.5 px-3 text-right text-cyan-300 font-bold">${ys.peakSpeed}</td>
-                    <td class="py-2.5 px-3 text-right text-purple-300 font-bold">${ys.peakTrapbar}</td>
+                    <td class="py-2.5 px-3 text-right font-black text-amber-300">${ys.peakUmsetzen}</td>
+                    <td class="py-2.5 px-3 text-right font-black text-rose-300">${ys.peakHipthrust}</td>
+                    <td class="py-2.5 px-3 text-right font-black text-purple-300">${ys.peakTrapbar}</td>
+                    <td class="py-2.5 px-3 text-right font-black text-emerald-300">${ys.peakAufsteiger}</td>
+                    <td class="py-2.5 px-3 text-right font-bold text-cyan-400">${ys.peakSpeed}</td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -508,33 +539,55 @@ ${protocolText}
           </div>
         </div>
 
-        <!-- Detailed Week-by-Week & Weekday Progression Alignment -->
+        <!-- Scrollable Multi-Year Parallel Weekly Browser -->
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm space-y-3">
-          <h4 class="text-xs font-bold text-white uppercase font-mono tracking-wider">
-            📅 Detaillierte Einheiten nach Kalenderwochen & Wochentagen
-          </h4>
-          <div class="space-y-3">
-            ${yearStats.map(ys => `
-              <div class="border border-slate-800 rounded-lg p-3 bg-slate-950/60 space-y-2">
-                <div class="flex items-center justify-between text-xs font-mono font-bold text-cyan-400 border-b border-slate-800 pb-1.5">
-                  <span>Jahr ${ys.year} • ${ys.totalSessions} Einheiten im Block</span>
-                  <span class="text-slate-400 text-[10px]">KW ${curPreset.minKw} bis KW ${curPreset.maxKw}</span>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 pt-1">
-                  ${ys.logs.slice(0, 9).map(l => `
-                    <div class="bg-slate-900 border border-slate-800/80 rounded p-2 text-xs font-mono space-y-1">
-                      <div class="flex items-center justify-between text-[10px]">
-                        <span class="text-slate-400">${l.weekday || ''} ${formatDisplayDate(l.date)}</span>
-                        ${getSessionBadge(l.session_type)}
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div>
+              <h3 class="text-xs font-black text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                <span>🔄</span>
+                <span>PARALLELER MEHRJAHRES-WOCHENBROWSER (KW-VERGLEICH 2020 - 2026)</span>
+              </h3>
+              <p class="text-[10px] text-slate-400 font-mono mt-0.5">
+                Horizontal scrollbare Übersicht der gleichen Trainingswoche über alle aktiven Vergleichsjahre
+              </p>
+            </div>
+          </div>
+
+          <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+            ${activeBlockYears.map(yr => {
+              const kwMatchLogs = logs.filter(l => {
+                if (!l.date || !l.date.startsWith(String(yr))) return false;
+                const kwStr = getWeekNumber(l.date);
+                const kwNum = parseInt(kwStr.replace(/[^\d]/g, ''), 10);
+                return kwNum === 40; // Default to KW 40 (Aktuelle Kalenderwoche)
+              });
+
+              return `
+                <div class="min-w-[280px] sm:min-w-[320px] bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 flex flex-col justify-between">
+                  <div class="flex items-center justify-between pb-1.5 border-b border-slate-800">
+                    <span class="font-bold text-white font-mono text-sm">Jahr ${yr} • KW 40</span>
+                    <span class="text-[10px] font-mono text-cyan-400">${kwMatchLogs.length} Einheiten</span>
+                  </div>
+
+                  <div class="space-y-2 flex-1 max-h-72 overflow-y-auto no-scrollbar">
+                    ${kwMatchLogs.length > 0 ? kwMatchLogs.map(l => `
+                      <div class="bg-slate-900/80 border border-slate-800/80 rounded p-2 text-xs font-mono space-y-1">
+                        <div class="flex items-center justify-between">
+                          <span class="font-bold text-white text-[11px]">${l.date} (${l.weekday || ''})</span>
+                          <span class="text-[10px] text-cyan-300 font-bold">${l.session_type || 'Training'}</span>
+                        </div>
+                        ${l.focus ? `<div class="text-[10px] text-slate-400">Schwerpunkt: <strong class="text-slate-200">${l.focus}</strong></div>` : ''}
+                        ${l.protocol_text ? `<div class="text-[10px] text-slate-400 line-clamp-2 italic bg-slate-950/60 p-1 rounded">"${l.protocol_text}"</div>` : ''}
                       </div>
-                      <div class="font-bold text-white text-[11px] truncate">${l.focus || l.session_type || 'Training'}</div>
-                      ${l.protocol_text ? `<p class="text-[10px] text-slate-400 line-clamp-2">${l.protocol_text.split('\n')[0]}</p>` : ''}
-                    </div>
-                  `).join('')}
+                    `).join('') : `
+                      <div class="py-8 text-center text-slate-600 font-mono text-xs italic">
+                        Keine protokollierten Einheiten für KW 40 / ${yr}
+                      </div>
+                    `}
+                  </div>
                 </div>
-                ${ys.logs.length > 9 ? `<div class="text-[10px] font-mono text-slate-500 italic text-right">+${ys.logs.length - 9} weitere Einheiten in diesem Block</div>` : ''}
-              </div>
-            `).join('')}
+              `;
+            }).join('')}
           </div>
         </div>
       </div>
@@ -623,7 +676,7 @@ ${l.protocol_text}
   }
 
   function jumpToCurrentWeek() {
-    currentWeekStart = '2026-09-21';
+    currentWeekStart = '2026-09-28';
     if (window.App && window.App.state) {
       render(window.App.state);
     }

@@ -56,9 +56,67 @@
     ::-webkit-scrollbar-thumb:hover { background: #334155; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ================= LIGHT THEME COMPATIBILITY ================= */
+    .light-theme {
+      background-color: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    .light-theme body {
+      background-color: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    .light-theme header {
+      background-color: rgba(255, 255, 255, 0.95) !important;
+      border-color: #e2e8f0 !important;
+    }
+    .light-theme .bg-slate-950 {
+      background-color: #f1f5f9 !important;
+      border-color: #e2e8f0 !important;
+    }
+    .light-theme .bg-slate-900 {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    }
+    .light-theme .bg-slate-800 {
+      background-color: #e2e8f0 !important;
+      color: #1e293b !important;
+    }
+    .light-theme .border-slate-800,
+    .light-theme .border-slate-700 {
+      border-color: #cbd5e1 !important;
+    }
+    .light-theme .text-white {
+      color: #0f172a !important;
+    }
+    .light-theme .text-slate-200 {
+      color: #1e293b !important;
+    }
+    .light-theme .text-slate-300 {
+      color: #334155 !important;
+    }
+    .light-theme .text-slate-400,
+    .light-theme .text-slate-500 {
+      color: #64748b !important;
+    }
+    .light-theme input,
+    .light-theme select {
+      background-color: #ffffff !important;
+      color: #0f172a !important;
+      border-color: #cbd5e1 !important;
+    }
+    .light-theme .tab-btn.active {
+      background-color: #ffffff !important;
+      color: #0284c7 !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    }
+    .light-theme tr:hover {
+      background-color: #f8fafc !important;
+    }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-200 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
+<body class="bg-slate-950 text-slate-200 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-slate-950 transition-colors duration-200">
 
   <!-- ================= TOP HEADER / DESKTOP NAVIGATION ================= -->
   <header class="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
@@ -73,7 +131,7 @@
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
                 <span class="text-cyan-400">ATHLETICS</span>
                 <span class="ml-1 text-slate-300">INTELLIGENCE</span>
-                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono bg-slate-950 px-1.5 py-0.2 rounded border border-slate-800">v4.1 PWA</span>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono bg-slate-950 px-1.5 py-0.2 rounded border border-slate-800">v5.0 PWA</span>
               </h1>
               <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -93,23 +151,28 @@
             <div id="headerRankingFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer" onclick="App.switchTab('rankings')" title="World Athletics Ranking: Aktualisierung jeden Di/Mi">
               <span id="rankingFreshnessDot" class="w-2 h-2 rounded-full bg-emerald-400"></span>
               <span class="text-slate-500 font-bold text-[9px] uppercase">WA:</span>
-              <span id="rankingFreshnessDate" class="font-bold text-emerald-300">22.09.2026</span>
+              <span id="rankingFreshnessDate" class="font-bold text-emerald-300">29.09.2026</span>
             </div>
 
             <!-- 2. Meeting Kalender Stream -->
             <div id="headerMeetingsFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer" onclick="App.switchTab('venues')" title="Meeting Kalender & Tour Status">
               <span id="meetingsFreshnessDot" class="w-2 h-2 rounded-full bg-cyan-400"></span>
               <span class="text-slate-500 font-bold text-[9px] uppercase">Tour:</span>
-              <span id="meetingsFreshnessText" class="font-bold text-cyan-300">24.09 Live</span>
+              <span id="meetingsFreshnessText" class="font-bold text-cyan-300">02.10 Live</span>
             </div>
 
             <!-- 3. Google Sheets Live Stream -->
             <div id="headerSheetsFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer" onclick="AnalyticsModule.openSheetsModal()" title="Google Sheets Trainingstagebuch (Täglich um 06:00 Uhr synchronisiert)">
-              <span id="sheetsFreshnessDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+              <span id="sheetsFreshnessDot" class="w-2 h-2 rounded-full bg-emerald-400"></span>
               <span class="text-slate-500 font-bold text-[9px] uppercase">Sheet:</span>
-              <span id="sheetsFreshnessDate" class="font-bold text-amber-300">27.09.2026</span>
+              <span id="sheetsFreshnessDate" class="font-bold text-emerald-300">02.10.2026</span>
             </div>
           </div>
+
+          <!-- Theme Toggle Button -->
+          <button id="themeToggleBtn" onclick="App.toggleTheme()" class="px-2.5 py-1 text-[10px] rounded font-bold uppercase tracking-wider border transition-all flex items-center gap-1 bg-slate-950 text-slate-300 border-slate-800 hover:bg-slate-800 hover:text-white" title="Design wechseln (Hell / Dunkel)">
+            ☀️ Hell
+          </button>
 
           <button id="toggleConfigBtn" class="px-2.5 py-1 text-[10px] rounded font-bold uppercase tracking-wider border transition-all flex items-center gap-1 bg-slate-950 text-slate-400 border-slate-800 hover:bg-slate-800 hover:text-slate-200">
             ⚙️ Config
@@ -321,42 +384,84 @@
         </div>
       </div>
 
-      <!-- 3. Tägliches Journal & Wohlbefinden (Notizen, Gewicht, Ernährung) -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3 shadow-sm">
-        <div class="flex items-center gap-2 pb-2 border-b border-slate-800">
-          <span class="text-base">📖</span>
-          <h3 class="text-xs font-bold uppercase tracking-wider text-white font-mono">
-            TAGESJOURNAL & BIO-METRIKEN (AUS TABELLENSPALTEN)
-          </h3>
+      <!-- 3. Tägliches Journal & Bio-Metriken (Interaktive Regeneration, Supplements & Gewicht) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-sm">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="text-base">📖</span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white font-mono">
+              TAGESJOURNAL & BIO-METRIKEN (REGENERATION, ERNÄHRUNG & INTERAKTIVES GEWICHT)
+            </h3>
+          </div>
+          <span class="text-[10px] text-slate-500 font-mono hidden sm:inline">Klicke auf Werte oder Maßnahmen für Zeitverläufe & Kalender</span>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-          <!-- Bodyweight -->
-          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-1">
-            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Körpergewicht</span>
-            <div id="journalWeightVal" class="text-xl font-black font-mono text-cyan-400">78.4 kg</div>
-            <span class="text-[10px] font-mono text-slate-500">Optimum für Wettkampf</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <!-- 1. Clickable Bodyweight Card -->
+          <div onclick="AnalyticsModule.openWeightModal()" class="cursor-pointer group hover:border-cyan-500 transition-all bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1 relative overflow-hidden shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-slate-400 font-mono uppercase font-bold">Körpergewicht</span>
+              <span class="text-[9px] text-cyan-400 font-mono font-bold group-hover:underline flex items-center gap-0.5">
+                📈 Verlauf
+              </span>
+            </div>
+            <div id="journalWeightVal" class="text-2xl font-black font-mono text-cyan-400 group-hover:text-cyan-300 transition-colors">78.4 kg</div>
+            <div id="journalWeightSub" class="text-[10px] font-mono text-slate-500 flex items-center justify-between pt-0.5">
+              <span>Optimum für Wettkampf</span>
+              <span class="text-cyan-500/80 text-[9px]">1W - Max ↗</span>
+            </div>
           </div>
 
-          <!-- Nutrition & Hydration -->
-          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-1">
-            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Ernährung & Wasser</span>
-            <div id="journalNutritionVal" class="text-sm font-bold font-mono text-emerald-400">3.450 kcal • 4.2L</div>
-            <span class="text-[10px] font-mono text-slate-500">Kreatin, Omega-3, Elektrolyte</span>
+          <!-- 2. Nutrition & Hydration -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Ernährung & Kalorien</span>
+            <div id="journalNutritionVal" class="text-sm font-bold font-mono text-emerald-400 truncate">3.450 kcal • 4.2L</div>
+            <div id="journalNutritionMacros" class="text-[10px] font-mono text-slate-500 truncate">180g P • 70g F • 450g C • Diszipliniert</div>
           </div>
 
-          <!-- Soreness & Energy -->
-          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-1">
-            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Muskelkater / ZNS</span>
+          <!-- 3. Soreness & Energy -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Muskelkater / ZNS-Status</span>
             <div id="journalSorenessVal" class="text-sm font-bold font-mono text-amber-300">Soreness: 2/10 • Energie: 9/10</div>
             <span class="text-[10px] font-mono text-slate-500">ZNS frisch, Beine schmerzfrei</span>
           </div>
 
-          <!-- Athlete Notes -->
-          <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-1">
-            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Tagesnotiz / Kommentar</span>
-            <div id="journalNotesVal" class="text-xs font-sans text-slate-200 line-clamp-3 italic">
+          <!-- 4. Athlete Notes -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Tagesnotiz / Tagesform</span>
+            <div id="journalNotesVal" class="text-xs font-sans text-slate-200 line-clamp-2 italic">
               "Sehr gute Anlaufdynamik, Druck am Brett konstant."
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Supplements & Regeneration Blocks (with Calendar Insight Click) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+          <!-- Supplements Section -->
+          <div class="bg-slate-950 border border-slate-800/90 rounded-xl p-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold font-mono uppercase text-cyan-400 flex items-center gap-1.5">
+                <span>💊</span>
+                <span>Eingenommene Supplements</span>
+              </span>
+              <span class="text-[9px] text-slate-500 font-mono">Klicke für Kalender-Historie</span>
+            </div>
+            <div id="journalSupplementsContainer" class="flex flex-wrap gap-1.5">
+              <!-- Rendered dynamically as clickable chips by analytics.js -->
+            </div>
+          </div>
+
+          <!-- Regeneration Measures Section -->
+          <div class="bg-slate-950 border border-slate-800/90 rounded-xl p-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold font-mono uppercase text-emerald-400 flex items-center gap-1.5">
+                <span>🧊</span>
+                <span>Regenerations-Maßnahmen</span>
+              </span>
+              <span class="text-[9px] text-slate-500 font-mono">Klicke für Kalender-Historie</span>
+            </div>
+            <div id="journalRegenerationContainer" class="flex flex-wrap gap-1.5">
+              <!-- Rendered dynamically as clickable chips by analytics.js -->
             </div>
           </div>
         </div>
@@ -368,10 +473,10 @@
           <div>
             <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-1.5 font-mono">
               <span class="text-cyan-400">🔬</span>
-              <span>INTERAKTIVER FAKTOREN- & KORRELATIONS-EXPLORER (64 VARIABLEN)</span>
+              <span>INTERAKTIVER FAKTOREN- & KORRELATIONS-EXPLORER (ZIEL: WEITSPRUNG WK & RECOVERY)</span>
             </h3>
             <p class="text-[11px] text-slate-400 font-mono mt-0.5">
-              Wähle zwei beliebige Parameter und berechne ihren exakten statistischen Zusammenhang (Pearson r) über 7 Jahre Training.
+              Untersuche den Einfluss von Training, Kraft, Regeneration & Biometrie auf die Zielvariablen über 7 Jahre (2019-2026).
             </p>
           </div>
           <div class="flex items-center gap-2">
@@ -386,25 +491,27 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1">
             <label class="text-[10px] font-bold font-mono uppercase text-cyan-400 block">
-              Ziel-Parameter (Y-Achse / Performance):
+              Ziel-Parameter (Y-Achse / Absolute Zielvariable & Performance):
             </label>
-            <select id="corrVarA" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-cyan-500">
-              <option value="eff_mark_m" selected>Effektive Weite (m) [ab Absprungfuß]</option>
-              <option value="best_mark_m">Balkenweite (m) [Offiziell]</option>
-              <option value="approach_speed_11m_to_1m">Anlaufgeschwindigkeit Vmax (m/s)</option>
-              <option value="sprint_speed">Sprintgeschwindigkeit Vmax (m/s)</option>
+            <select id="corrVarA" onchange="AnalyticsModule.onCorrelationParamChanged()" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-cyan-500">
+              <option value="weitsprung_wk" selected>🎯 Weitsprung WK (m) [Absolute Zielvariable]</option>
+              <option value="whoop_recovery_pct">⚡ Whoop Recovery Score (%) [Tägliche ZNS-Readiness]</option>
+              <option value="eff_mark_m">Effektive Weite (m) [ab Absprung]</option>
+              <option value="approach_speed_11m_to_1m">Anlauf-Geschwindigkeit Vmax (m/s)</option>
+              <option value="sprint_speed">Sprint-Geschwindigkeit Vmax (m/s)</option>
               <option value="rsi_score">DJ50 Reaktivitätsindex (RSI)</option>
-              <option value="trapbar_e1rm_kg">Trapbar Deadlift e1RM (kg)</option>
-              <option value="umsetzen_e1rm_kg">Umsetzen (Power Clean) e1RM (kg)</option>
+              <option value="umsetzen_e1rm_kg">Umsetzen e1RM (kg)</option>
               <option value="hipthrust_e1rm_kg">Hip-Thrust e1RM (kg)</option>
+              <option value="trapbar_e1rm_kg">Trapbar Deadlift e1RM (kg)</option>
+              <option value="aufsteiger_e1rm_kg">Aufsteiger e1RM (kg)</option>
             </select>
           </div>
 
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1">
             <label class="text-[10px] font-bold font-mono uppercase text-amber-400 block">
-              Einflussfaktor (X-Achse / Readiness & Biometrie):
+              Einflussfaktor (X-Achse / Readiness, Kraft, Ernährung & Regeneration):
             </label>
-            <select id="corrVarB" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-amber-500">
+            <select id="corrVarB" onchange="AnalyticsModule.onCorrelationParamChanged()" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-amber-500">
               <option value="whoop_recovery_pct" selected>Whoop Recovery Score (%)</option>
               <option value="sleep_performance_pct">Whoop Schlaf-Performance (%)</option>
               <option value="whoop_strain">Whoop Day Strain (0-21)</option>
@@ -412,6 +519,12 @@
               <option value="body_fat_pct">Körperfett (%)</option>
               <option value="calories_kcal">Kalorien (kcal)</option>
               <option value="approach_speed_11m_to_1m">Anlauf-Geschwindigkeit (m/s)</option>
+              <option value="umsetzen_e1rm_kg">Umsetzen e1RM (kg)</option>
+              <option value="hipthrust_e1rm_kg">Hip-Thrust e1RM (kg)</option>
+              <option value="trapbar_e1rm_kg">Trapbar e1RM (kg)</option>
+              <option value="aufsteiger_e1rm_kg">Aufsteiger e1RM (kg)</option>
+              <option value="regeneration_freq">Regenerations-Maßnahmen (Frequenz)</option>
+              <option value="supplements_freq">Supplements (Frequenz)</option>
             </select>
           </div>
         </div>
@@ -425,96 +538,86 @@
         <div id="corrInsightBox" class="bg-slate-950/80 border border-slate-800 rounded-lg p-3 text-xs text-slate-300 font-sans flex items-start gap-2.5">
           <span class="text-base">💡</span>
           <div>
-            <strong id="corrInsightTitle" class="text-cyan-300 font-mono block">Starke positive Korrelation (r = +0.78):</strong>
+            <strong id="corrInsightTitle" class="text-cyan-300 font-mono block">Starke positive Korrelation:</strong>
             <span id="corrInsightText" class="text-slate-400 text-[11px] leading-relaxed">
-              Höhere HRV-Werte (> 85 ms) korrelieren signifikant mit größeren effektiven Weiten. Ein erholtes Nervensystem ermöglicht eine schnellere Kraftentfaltung am Brett.
+              Langfristige Regenerationsgewohnheiten und maximale Kraftwerte zeigen signifikanten Einfluss auf Spitzenweiten im Wettkampf.
             </span>
           </div>
         </div>
       </div>
 
-      <!-- 7-Year Database Highlights -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
-        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-          <span class="text-[10px] text-slate-400 uppercase font-mono font-bold block">Dokumentierte Einheiten</span>
-          <span id="statTotalSessions" class="text-xl font-black font-mono text-cyan-400 mt-1 block">75</span>
-          <span class="text-[9px] text-slate-500 font-mono">2019 - 2026 Archiv</span>
-        </div>
-        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-          <span class="text-[10px] text-slate-400 uppercase font-mono font-bold block">Erfasste Sprünge</span>
-          <span id="statTotalJumps" class="text-xl font-black font-mono text-white mt-1 block">35</span>
-          <span class="text-[9px] text-slate-500 font-mono">Effektive Weiten</span>
-        </div>
-        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-          <span class="text-[10px] text-slate-400 uppercase font-mono font-bold block">Sprünge &gt;= 8.00m</span>
-          <span id="statJumpsOver8m" class="text-xl font-black font-mono text-amber-400 mt-1 block">19</span>
-          <span class="text-[9px] text-slate-500 font-mono">Weltklasse-Weiten</span>
-        </div>
-        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-          <span class="text-[10px] text-slate-400 uppercase font-mono font-bold block">Peak Anlauf-Speed</span>
-          <span id="statPeakSpeed" class="text-xl font-black font-mono text-emerald-400 mt-1 block">10.85 m/s</span>
-          <span class="text-[9px] text-slate-500 font-mono">Laser 11m-1m Zone</span>
-        </div>
-        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl col-span-2 sm:col-span-1">
-          <span class="text-[10px] text-slate-400 uppercase font-mono font-bold block">Peak Trapbar e1RM</span>
-          <span id="statPeakTrapbar" class="text-xl font-black font-mono text-purple-400 mt-1 block">265 kg</span>
-          <span class="text-[9px] text-slate-500 font-mono">Maximalkraft-Basis</span>
-        </div>
-      </div>
-
-      <!-- 8.00m+ Driver Prerequisites -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-3">
-        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+      <!-- DEDICATED KRAFTTRAINING DER 4 HAUPTÜBUNGEN & LEISTUNGSDIAGNOSTIK TILE -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-slate-800">
           <div>
-            <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-1.5">
-              <span class="text-amber-400">⚡</span>
-              <span>8.00m+ PERFORMANCE PREREQUISITES (ERFOLGSFAKTOREN)</span>
+            <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 font-mono">
+              <span class="text-amber-400">🏋️</span>
+              <span>KRAFTTRAINING DER 4 HAUPTÜBUNGEN & LEISTUNGSDIAGNOSTIK</span>
             </h3>
             <p class="text-[11px] text-slate-400 font-mono mt-0.5">
-              Statistischer Vergleich: Einheiten mit Sprüngen &gt;= 8.00m gegenüber Einheiten &lt; 8.00m
+              Historische e1RM-Entwicklung: Umsetzen, Hip-Thrust, Trapbar, Aufsteiger • Leistungsdiagnostik-Zubringer
             </p>
           </div>
-          <span class="text-[9px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-            64-Variablen Python Engine
-          </span>
-        </div>
-        <div id="eightMeterDriversGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-          <!-- Populated by analytics.js -->
-        </div>
-      </div>
 
-      <!-- Charts Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
-        <!-- Chart 1: Jump Marks -->
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2 lg:col-span-3">
-          <div class="flex items-center justify-between">
-            <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
-              📈 Wettkampf- & Trainingssprünge (Balkenweite vs. Effektive Weite)
-            </h3>
-            <span class="text-[10px] text-cyan-400 font-mono">Letzte 40 Einheiten</span>
-          </div>
-          <div class="h-64 w-full pt-1">
-            <canvas id="compMarksChart"></canvas>
+          <!-- Interval Selector Buttons -->
+          <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[10px] font-mono flex-wrap">
+            <span class="text-slate-500 px-1 font-bold">Zeitraum:</span>
+            <button onclick="AnalyticsModule.setStrengthInterval('1W')" id="strengthBtn1W" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">1W</button>
+            <button onclick="AnalyticsModule.setStrengthInterval('1M')" id="strengthBtn1M" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">1M</button>
+            <button onclick="AnalyticsModule.setStrengthInterval('3M')" id="strengthBtn3M" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">3M</button>
+            <button onclick="AnalyticsModule.setStrengthInterval('6M')" id="strengthBtn6M" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">6M</button>
+            <button onclick="AnalyticsModule.setStrengthInterval('1Y')" id="strengthBtn1Y" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">1J</button>
+            <button onclick="AnalyticsModule.setStrengthInterval('3Y')" id="strengthBtn3Y" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">3J</button>
+            <button onclick="AnalyticsModule.setStrengthInterval('5Y')" id="strengthBtn5Y" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">5J</button>
+            <button onclick="AnalyticsModule.setStrengthInterval('ALL')" id="strengthBtnALL" class="px-2 py-0.5 rounded bg-cyan-600 text-slate-950 font-black transition-all">Max</button>
           </div>
         </div>
 
-        <!-- Chart 2: Whoop Recovery & Sleep -->
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2 lg:col-span-2">
-          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
-            💤 Whoop Recovery (%), Schlaf (h) & Bereitschaft
-          </h3>
-          <div class="h-56 w-full pt-1">
-            <canvas id="readinessChart"></canvas>
-          </div>
+        <!-- Exercise Visibility Filter Chips -->
+        <div class="flex items-center gap-1.5 flex-wrap text-[10px] font-mono">
+          <span class="text-slate-500">Übungen:</span>
+          <button onclick="AnalyticsModule.toggleStrengthExercise('ALL')" id="filterExALL" class="px-2 py-0.5 rounded bg-slate-800 text-white font-bold border border-slate-700">Alle 4 Übungen</button>
+          <button onclick="AnalyticsModule.toggleStrengthExercise('umsetzen')" id="filterExUmsetzen" class="px-2 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-800/80">Umsetzen</button>
+          <button onclick="AnalyticsModule.toggleStrengthExercise('hipthrust')" id="filterExHipthrust" class="px-2 py-0.5 rounded bg-rose-950/60 text-rose-300 border border-rose-800/80">Hip-Thrust</button>
+          <button onclick="AnalyticsModule.toggleStrengthExercise('trapbar')" id="filterExTrapbar" class="px-2 py-0.5 rounded bg-purple-950/60 text-purple-300 border border-purple-800/80">Trapbar</button>
+          <button onclick="AnalyticsModule.toggleStrengthExercise('aufsteiger')" id="filterExAufsteiger" class="px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-800/80">Aufsteiger</button>
         </div>
 
-        <!-- Chart 3: 1RM Strength -->
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2">
-          <h3 class="font-bold text-white text-xs uppercase tracking-wider font-mono">
-            🏋️ e1RM Kraftwerte (Trapbar, Umsetzen, Hip-Thrust)
-          </h3>
-          <div class="h-56 w-full pt-1">
-            <canvas id="strengthChart"></canvas>
+        <!-- 4-Lifts Chart Canvas -->
+        <div class="h-64 sm:h-72 w-full pt-1">
+          <canvas id="strengthDiagnosticsChart"></canvas>
+        </div>
+
+        <!-- Leistungsdiagnostik Zubringer KPIs -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-1">
+          <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-0.5">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">DJ50 Reaktivität</span>
+            <span id="diagKpiRsi" class="text-lg font-black font-mono text-cyan-400 block">2.85 W/kg</span>
+            <span class="text-[9px] text-slate-500 font-mono">RSI Stützzeit &lt; 150ms</span>
+          </div>
+
+          <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-0.5">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">CMJ mit Armen</span>
+            <span id="diagKpiCmjArm" class="text-lg font-black font-mono text-amber-400 block">82.0 cm</span>
+            <span class="text-[9px] text-slate-500 font-mono">Peak Sprunghöhe</span>
+          </div>
+
+          <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-0.5">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">CMJ ohne Arme</span>
+            <span id="diagKpiCmjOhne" class="text-lg font-black font-mono text-emerald-400 block">74.5 cm</span>
+            <span class="text-[9px] text-slate-500 font-mono">Isolierte Beinkraft</span>
+          </div>
+
+          <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-0.5">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Anlauf-Vmax</span>
+            <span id="diagKpiAnlaufSpeed" class="text-lg font-black font-mono text-purple-400 block">10.85 m/s</span>
+            <span class="text-[9px] text-slate-500 font-mono">Laser 11m-1m Zone (39.1 km/h)</span>
+          </div>
+
+          <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-0.5 col-span-2 sm:col-span-1">
+            <span class="text-[10px] text-slate-400 font-mono uppercase font-bold block">Sprint Vmax</span>
+            <span id="diagKpiSprintSpeed" class="text-lg font-black font-mono text-rose-400 block">10.42 m/s</span>
+            <span class="text-[9px] text-slate-500 font-mono">30m fliegend</span>
           </div>
         </div>
       </div>
@@ -1008,17 +1111,29 @@
 
       <!-- Filter & Discipline Focus Bar -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-        <!-- Men's LJ Discipline Toggle -->
-        <label class="flex items-center gap-2 cursor-pointer select-none">
-          <input id="filterMensLjOnly" type="checkbox" checked class="w-4 h-4 rounded bg-slate-950 border-slate-700 text-cyan-500 focus:ring-0 focus:ring-offset-0 cursor-pointer accent-cyan-500" />
-          <span class="text-xs font-mono font-bold text-white flex items-center gap-1.5">
-            <span>Nur Männer-Weitsprung anzeigen</span>
-            <span class="text-[10px] text-cyan-400 font-normal">(Exkludiert Frauen-exklusive Events wie ISTAF Berlin)</span>
-          </span>
-        </label>
+        <div class="flex items-center gap-3 flex-wrap">
+          <!-- View Toggle (List vs Calendar View) -->
+          <div class="flex items-center gap-1 font-mono text-xs bg-slate-950 p-1 rounded-lg border border-slate-800">
+            <button id="calViewListBtn" onclick="VenuesModule.setViewMode('list')" class="px-2.5 py-1 rounded text-[10px] font-bold bg-cyan-600 text-white transition-all shadow-sm">
+              📋 Liste
+            </button>
+            <button id="calViewCalendarBtn" onclick="VenuesModule.setViewMode('calendar')" class="px-2.5 py-1 rounded text-[10px] font-bold text-slate-400 hover:text-white transition-all">
+              📅 Monatskalender
+            </button>
+          </div>
+
+          <!-- Men's LJ Discipline Toggle -->
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input id="filterMensLjOnly" type="checkbox" checked class="w-4 h-4 rounded bg-slate-950 border-slate-700 text-cyan-500 focus:ring-0 focus:ring-offset-0 cursor-pointer accent-cyan-500" />
+            <span class="text-xs font-mono font-bold text-white flex items-center gap-1.5">
+              <span>Nur Männer-Weitsprung</span>
+              <span class="text-[10px] text-cyan-400 font-normal hidden sm:inline">(Exkludiert Frauen-exklusive Events)</span>
+            </span>
+          </label>
+        </div>
 
         <!-- Tier Filter Buttons -->
-        <div class="flex items-center gap-1 font-mono text-xs">
+        <div class="flex items-center gap-1 font-mono text-xs flex-wrap">
           <span class="text-[10px] text-slate-400 font-bold uppercase mr-1">Tier:</span>
           <button data-tier="ALL" class="cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold bg-cyan-600 text-white shadow-sm">ALLE</button>
           <button data-tier="Gold" class="cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold text-amber-300 border border-amber-800 bg-slate-950 hover:bg-slate-800">GOLD</button>
@@ -1028,8 +1143,13 @@
         </div>
       </div>
 
-      <!-- Calendar Schedule View (Grouped by Month) -->
+      <!-- VIEW 1: Calendar Schedule View (Grouped by Month - List) -->
       <div id="calendarScheduleContainer" class="space-y-4">
+        <!-- Populated by venues.js -->
+      </div>
+
+      <!-- VIEW 2: Interactive Month Grid & Overlap Radar (Calendar Grid) -->
+      <div id="calendarMonthGridContainer" class="hidden space-y-4">
         <!-- Populated by venues.js -->
       </div>
     </div>
@@ -1199,6 +1319,123 @@
               Speichern & Synchronisieren 💾
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= INTERACTIVE BODY WEIGHT HISTORY MODAL ================= -->
+    <div id="weightHistoryModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl space-y-4 p-4 sm:p-5">
+        <div class="flex items-start justify-between pb-3 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2 py-0.5 rounded text-xs font-black font-mono bg-cyan-950 text-cyan-300 border border-cyan-800">BIO-METRIK</span>
+              <h2 class="text-base sm:text-lg font-black text-white font-mono">KÖRPERGEWICHTS-VERLAUF • LUKA HERDEN</h2>
+            </div>
+            <p class="text-[11px] text-slate-400 font-mono mt-0.5">Historischer Gewichtsverlauf & Wettkampfgewicht (2019 - 2026)</p>
+          </div>
+          <button onclick="document.getElementById('weightHistoryModal').classList.add('hidden')" class="text-slate-400 hover:text-white p-1 text-lg">✕</button>
+        </div>
+
+        <!-- Interval Selector -->
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[10px] font-mono flex-wrap">
+            <span class="text-slate-500 px-1 font-bold">Zeitraum:</span>
+            <button onclick="AnalyticsModule.setWeightInterval('1W')" id="weightBtn1W" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">1W</button>
+            <button onclick="AnalyticsModule.setWeightInterval('1M')" id="weightBtn1M" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">1M</button>
+            <button onclick="AnalyticsModule.setWeightInterval('3M')" id="weightBtn3M" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">3M</button>
+            <button onclick="AnalyticsModule.setWeightInterval('6M')" id="weightBtn6M" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">6M</button>
+            <button onclick="AnalyticsModule.setWeightInterval('1Y')" id="weightBtn1Y" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">1J</button>
+            <button onclick="AnalyticsModule.setWeightInterval('3Y')" id="weightBtn3Y" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">3J</button>
+            <button onclick="AnalyticsModule.setWeightInterval('5Y')" id="weightBtn5Y" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">5J</button>
+            <button onclick="AnalyticsModule.setWeightInterval('ALL')" id="weightBtnALL" class="px-2 py-0.5 rounded bg-cyan-600 text-slate-950 font-black transition-all">Max</button>
+          </div>
+          <span id="weightDataCountBadge" class="text-[10px] font-mono text-cyan-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            612 Messwerte
+          </span>
+        </div>
+
+        <!-- Weight Stats Tiles -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center font-mono">
+          <div class="bg-slate-950 border border-slate-800 p-2 rounded-lg">
+            <span class="text-[9px] text-slate-500 uppercase block">Aktuell</span>
+            <span id="modalWeightCurrent" class="text-sm font-black text-cyan-400">- kg</span>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 p-2 rounded-lg">
+            <span class="text-[9px] text-slate-500 uppercase block">Min / Max</span>
+            <span id="modalWeightMinMax" class="text-sm font-black text-white">- / - kg</span>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 p-2 rounded-lg">
+            <span class="text-[9px] text-slate-500 uppercase block">Ø Durchschnitt</span>
+            <span id="modalWeightAvg" class="text-sm font-black text-emerald-400">- kg</span>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 p-2 rounded-lg">
+            <span class="text-[9px] text-slate-500 uppercase block">Trend (Δ)</span>
+            <span id="modalWeightDelta" class="text-sm font-black text-amber-400">- kg</span>
+          </div>
+        </div>
+
+        <!-- Weight Chart Canvas -->
+        <div class="h-64 sm:h-72 w-full pt-1">
+          <canvas id="modalWeightChart"></canvas>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button onclick="document.getElementById('weightHistoryModal').classList.add('hidden')" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-mono font-bold">
+            Schließen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SUPPLEMENTS & REGENERATION CALENDAR INSIGHT MODAL ================= -->
+    <div id="insightCalendarModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl space-y-4 p-4 sm:p-5">
+        <div class="flex items-start justify-between pb-3 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span id="insightModalBadge" class="px-2 py-0.5 rounded text-xs font-black font-mono bg-emerald-950 text-emerald-300 border border-emerald-800">REGENERATION</span>
+              <h2 id="insightModalTitle" class="text-base sm:text-lg font-black text-white font-mono">INSIGHTS: LYMPHOMAT</h2>
+            </div>
+            <p id="insightModalSub" class="text-[11px] text-slate-400 font-mono mt-0.5">Dokumentierte Termine & Korrelation mit Whoop Recovery</p>
+          </div>
+          <button onclick="document.getElementById('insightCalendarModal').classList.add('hidden')" class="text-slate-400 hover:text-white p-1 text-lg">✕</button>
+        </div>
+
+        <!-- Metric KPI Tiles -->
+        <div class="grid grid-cols-3 gap-2 text-center font-mono">
+          <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg">
+            <span class="text-[9px] text-slate-500 uppercase block">Gesamt-Einträge</span>
+            <span id="insightKpiTotal" class="text-base font-black text-cyan-400">48x</span>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg">
+            <span class="text-[9px] text-slate-500 uppercase block">Letzte 30 Tage</span>
+            <span id="insightKpiRecent" class="text-base font-black text-amber-400">8x</span>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg">
+            <span class="text-[9px] text-slate-500 uppercase block">Ø Recovery</span>
+            <span id="insightKpiRecovery" class="text-base font-black text-emerald-400">76%</span>
+          </div>
+        </div>
+
+        <!-- Filter Month / Year -->
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-xs font-mono font-bold text-slate-300">📅 Dokumentierte Termine im Kalender:</span>
+          <select id="insightYearSelect" onchange="AnalyticsModule.onInsightYearChanged(this.value)" class="bg-slate-950 border border-slate-700 text-xs font-mono rounded px-2 py-1 text-cyan-300 focus:outline-none focus:border-cyan-500">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <!-- Calendar Heat Grid / List Container -->
+        <div id="insightCalendarGridContainer" class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-3 max-h-64 overflow-y-auto no-scrollbar">
+          <!-- Populated dynamically by analytics.js -->
+        </div>
+
+        <div class="pt-2 flex justify-between items-center text-xs">
+          <span id="insightNote" class="text-[11px] text-slate-400 font-mono">Tipp: Regelmäßige Protokollierung optimiert die Pearson-Korrelation.</span>
+          <button onclick="document.getElementById('insightCalendarModal').classList.add('hidden')" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-mono font-bold">
+            Schließen
+          </button>
         </div>
       </div>
     </div>

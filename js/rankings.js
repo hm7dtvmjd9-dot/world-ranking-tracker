@@ -27,22 +27,82 @@ const RankingsModule = (() => {
     if (!w || w === '-' || w === 'null' || w === 'None' || w === 'none') {
       return '<span class="text-slate-600 font-mono text-[10px]">-</span>';
     }
-    let cleanStr = String(w).trim();
-    // Defensive normalization: if wind is e.g. +16 or 12 or 37 without decimal point and abs >= 5.0
-    const rawNum = parseFloat(cleanStr.replace('+', '').replace('m/s', '').trim());
-    if (!isNaN(rawNum) && Math.abs(rawNum) >= 5.0 && !cleanStr.includes('.')) {
-      const fixed = rawNum / 10;
-      cleanStr = (fixed > 0 ? '+' : '') + fixed.toFixed(1) + ' m/s';
+    let str = String(w).trim();
+    let num = parseFloat(str.replace(/[^\d.-]/g, ''));
+    if (isNaN(num)) return '<span class="text-slate-600 font-mono text-[10px]">-</span>';
+
+    // If magnitude >= 4.0 m/s, it's missing decimal point (e.g. 16 -> 1.6 m/s, -12 -> -1.2 m/s)
+    if (Math.abs(num) >= 4.0) {
+      num = num / 10;
+    }
+    const sign = num > 0 ? '+' : (num < 0 ? '-' : '');
+    const formatted = `${sign}${Math.abs(num).toFixed(1)} m/s`;
+
+    if (num < 0) {
+      return `<span class="px-1.5 py-0.2 rounded font-mono font-bold text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800" title="Gegenwind (${formatted})">${formatted} 🌬️</span>`;
+    }
+    if (num > 2.05) {
+      return `<span class="px-1.5 py-0.2 rounded font-mono font-bold text-[9px] bg-amber-950 text-amber-300 border border-amber-800" title="Rückenwind über +2.0 m/s (${formatted})">${formatted}</span>`;
+    }
+    return `<span class="text-slate-300 font-mono text-[9px]">${formatted}</span>`;
+  }
+
+  function formatPlaceBadge(c) {
+    if (!c) return '<span class="text-slate-500 font-mono text-[10px]">-</span>';
+    let place = String(c.place_display || c.place || '-').trim();
+    const compName = (c.competition || '').toLowerCase();
+    const dateStr = String(c.date || '').toUpperCase();
+
+    let isQuali = false;
+    let isFinal = false;
+
+    if (place.includes('Q') || (c.round === 'Q') || compName.includes('quali') || compName.includes('qualification')) {
+      isQuali = true;
+    } else if (place.includes('F') || (c.round === 'F') || compName.includes('finale')) {
+      isFinal = true;
     }
 
-    if (cleanStr.startsWith('-')) {
-      return `<span class="px-1.5 py-0.2 rounded font-mono font-bold text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800" title="Gegenwind (+Bonus-Punkte)">${cleanStr} 🌬️</span>`;
+    // Olympic Games Paris 2024
+    if (compName.includes('olympic') || compName.includes('paris')) {
+      if (dateStr.includes('04 AUG') || dateStr.includes('4 AUG') || dateStr.includes('2024-08-04')) {
+        isQuali = true;
+      } else if (dateStr.includes('06 AUG') || dateStr.includes('6 AUG') || dateStr.includes('2024-08-06')) {
+        isFinal = true;
+      }
     }
-    const val = parseFloat(cleanStr.replace('+', '').replace('m/s', ''));
-    if (!isNaN(val) && val > 2.05) {
-      return `<span class="px-1.5 py-0.2 rounded font-mono font-bold text-[9px] bg-amber-950 text-amber-300 border border-amber-800" title="Rückenwind über +2.0 m/s">${cleanStr}</span>`;
+    // European Championships Rome 2024
+    if (compName.includes('roma') || compName.includes('rome') || compName.includes('rom')) {
+      if (dateStr.includes('07 JUN') || dateStr.includes('7 JUN') || dateStr.includes('2024-06-07')) {
+        isQuali = true;
+      } else if (dateStr.includes('08 JUN') || dateStr.includes('8 JUN') || dateStr.includes('2024-06-08')) {
+        isFinal = true;
+      }
     }
-    return `<span class="text-slate-300 font-mono text-[9px]">${cleanStr}</span>`;
+    // World Championships Tokyo 2025
+    if (compName.includes('tokyo') || compName.includes('tokio')) {
+      if (dateStr.includes('13 SEP') || dateStr.includes('14 SEP') || dateStr.includes('2025-09-13') || dateStr.includes('2025-09-14')) {
+        isQuali = true;
+      } else if (dateStr.includes('15 SEP') || dateStr.includes('2025-09-15')) {
+        isFinal = true;
+      }
+    }
+
+    const numPart = place.replace(/[^\d.]/g, '');
+    const cleanNum = numPart ? (numPart.endsWith('.') ? numPart : numPart + '.') : place;
+
+    if (isQuali) {
+      return `<span class="px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/80 font-bold text-[9px]" title="Qualifikationswettkampf">${cleanNum} Q</span>`;
+    }
+    if (isFinal) {
+      return `<span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/80 font-bold text-[9px]" title="Finalwettkampf">${cleanNum} F</span>`;
+    }
+    if (place.includes('Q')) {
+      return `<span class="px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/80 font-bold text-[9px]">${place}</span>`;
+    }
+    if (place.includes('F')) {
+      return `<span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/80 font-bold text-[9px]">${place}</span>`;
+    }
+    return `<span class="font-bold text-slate-200">${place}</span>`;
   }
 
   function parseAthleteDob(dobStr) {
@@ -183,11 +243,20 @@ const RankingsModule = (() => {
   }
 
   function setModalAthleteSort(sortKey) {
-    currentModalSort = sortKey;
+    const baseKey = sortKey.replace('-asc', '');
+    if (currentModalSort === baseKey) {
+      currentModalSort = `${baseKey}-asc`;
+    } else {
+      currentModalSort = baseKey;
+    }
     ['date', 'mark', 'score'].forEach(k => {
       const btn = document.getElementById('modalSort' + k.charAt(0).toUpperCase() + k.slice(1) + 'Btn');
       if (btn) {
-        if (k === sortKey) {
+        const isCurrent = currentModalSort.startsWith(k);
+        const isAsc = currentModalSort === `${k}-asc`;
+        const label = k === 'date' ? 'Datum' : (k === 'mark' ? 'Weite' : 'Score');
+        btn.textContent = `${label} ${isCurrent ? (isAsc ? '▲' : '▼') : '↕'}`;
+        if (isCurrent) {
           btn.className = 'px-2 py-0.5 rounded bg-cyan-900 text-cyan-300 font-bold border border-cyan-700 transition-all';
         } else {
           btn.className = 'px-2 py-0.5 rounded bg-slate-950 text-slate-400 hover:text-white border border-slate-800 transition-all';
@@ -349,9 +418,21 @@ const RankingsModule = (() => {
 
       slider.min = 0;
       slider.max = archive.snapshots.length - 1;
-      slider.value = archive.snapshots.length - 1;
-      currentSnapshotIdx = archive.snapshots.length - 1;
-      sel.value = currentSnapshotIdx;
+
+      // Enforce default snapshot to the latest official snapshot (never future prognosis)
+      let defaultIdx = 0;
+      for (let i = archive.snapshots.length - 1; i >= 0; i--) {
+        const s = archive.snapshots[i];
+        if (!s.is_prognosis && !s.isPrognosis && (s.date || '') <= '2026-10-02') {
+          defaultIdx = i;
+          break;
+        }
+      }
+
+      currentSnapshotIdx = defaultIdx;
+      slider.value = defaultIdx;
+      sel.value = defaultIdx;
+      loadSnapshot(state, defaultIdx);
 
       sel.onchange = () => {
         const idx = parseInt(sel.value);
@@ -995,11 +1076,7 @@ const RankingsModule = (() => {
               <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${m.mark}m</td>
               <td class="py-1.5 px-2 text-center">${formatWindBadge(m.wind)}</td>
               <td class="py-1.5 px-2 text-center text-slate-300">
-                ${m.place_display ? (
-                  m.place_display.includes('Q') ? `<span class="px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/80 font-bold text-[9px]">${m.place_display}</span>` :
-                  m.place_display.includes('F') ? `<span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/80 font-bold text-[9px]">${m.place_display}</span>` :
-                  `<span class="font-bold">${m.place_display}</span>`
-                ) : (m.place || '-')}
+                ${formatPlaceBadge(m)}
               </td>
               <td class="py-1.5 px-2 text-right text-slate-300">${m.result_score || '-'}</td>
               <td class="py-1.5 px-2 text-right text-slate-300">${m.placing_score || '-'}</td>
@@ -1070,7 +1147,7 @@ const RankingsModule = (() => {
 
     if (snapshots.length > 0) {
       // Exclude future prognosis snapshots from the historical career progression chart!
-      let filtered = snapshots.filter(s => !s.is_prognosis && (s.date || '') <= '2026-09-28');
+      let filtered = snapshots.filter(s => !s.is_prognosis && (s.date || '') <= '2026-10-02');
 
       if (selectedHistoryInterval === 'YTD') {
         filtered = filtered.filter(s => (s.date || '') >= '2026-01-01');
@@ -1295,7 +1372,7 @@ const RankingsModule = (() => {
             <td class="py-2 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span></td>
             <td class="py-2 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m</td>
             <td class="py-2 px-2 text-center">${formatWindBadge(c.wind)}</td>
-            <td class="py-2 px-2 text-center text-slate-300">${c.place || '-'}</td>
+            <td class="py-2 px-2 text-center text-slate-300">${formatPlaceBadge(c)}</td>
             <td class="py-2 px-2 text-right font-black text-amber-400">${c.performance_score || c.result_score || '-'} Pkt</td>
           </tr>
         `).join('');
@@ -1479,11 +1556,7 @@ const RankingsModule = (() => {
                         <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m</td>
                         <td class="py-1.5 px-2 text-center">${formatWindBadge(c.wind)}</td>
                         <td class="py-1.5 px-2 text-center text-slate-300">
-                          ${c.place_display ? (
-                            c.place_display.includes('Q') ? `<span class="px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/80 font-bold text-[9px]">${c.place_display}</span>` :
-                            c.place_display.includes('F') ? `<span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/80 font-bold text-[9px]">${c.place_display}</span>` :
-                            `<span class="font-bold">${c.place_display}</span>`
-                          ) : (c.place || '-')}
+                          ${formatPlaceBadge(c)}
                         </td>
                         <td class="py-1.5 px-2 text-right font-black text-amber-400">${c.performance_score || '-'} Pkt</td>
                       </tr>

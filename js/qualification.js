@@ -163,7 +163,8 @@ const QualificationModule = (() => {
         quotaStatus = 'quota_full';
       }
 
-      return { ...ath, periodRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot };
+            const isNew = ath.is_new_entrant || (ath.rankDelta != null && ath.rankDelta >= 15);
+      return { ...ath, periodRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot, isNewEntrant: isNew };
     });
 
     renderKpiTiles(state, processedList);
@@ -270,7 +271,15 @@ const QualificationModule = (() => {
       tr.innerHTML = `
         <td class="py-2 px-3 text-center font-bold text-slate-300">#${idx + 1}</td>
         <td class="py-2 px-3 text-center">
-          ${ath.quotaRank ? `<span class="inline-flex items-center px-2 py-0.5 rounded font-bold text-[10px] ${ath.quotaRank <= state.periodFieldSize ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">#${ath.quotaRank}</span>` : `<span class="text-[9px] text-slate-500 italic">Slot ${ath.nationSlot}</span>`}
+          ${ath.quotaRank ? `
+            <div class="inline-flex items-center gap-1">
+              <span class="inline-flex items-center px-2 py-0.5 rounded font-bold text-[10px] ${ath.quotaRank <= state.periodFieldSize ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">#${ath.quotaRank}</span>
+              ${ath.rankDelta && ath.rankDelta > 0 ? `<span class="text-emerald-400 font-black text-[9px]">▲+${ath.rankDelta}</span>` : ''}
+              ${ath.rankDelta && ath.rankDelta < 0 ? `<span class="text-rose-400 font-black text-[9px]">▼${ath.rankDelta}</span>` : ''}
+              ${ath.rankDelta === 0 ? '<span class="text-slate-500 text-[9px]">±0</span>' : ''}
+              ${ath.isNewEntrant ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[8px] font-black">NEU</span>' : ''}
+            </div>
+          ` : `<span class="text-[9px] text-slate-500 italic">Slot ${ath.nationSlot}</span>`}
         </td>
         <td class="py-2 px-3">
           <div class="flex items-center gap-1.5 flex-wrap">
