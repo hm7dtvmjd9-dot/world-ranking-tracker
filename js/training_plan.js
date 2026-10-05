@@ -9,30 +9,50 @@
  */
 const TrainingPlanModule = (() => {
   let activeView = 'week'; // 'week' | 'month' | 'block' | 'search'
-  let currentWeekStart = '2026-09-28'; // Monday of KW 40 // Monday of the active week
+  let currentWeekStart = '2026-10-05'; // Monday of KW 41 (Aktuelle Kalenderwoche)
   let currentMonthYear = '2026-10';
   let activeBlockPreset = 'aufbau_herbst'; // 'hallenaufbau' | 'hallenvorbereitung' | 'sommeraufbau' | 'sommerwk'
-  let activeBlockYears = [2026, 2025, 2024, 2023, 2022, 2021, 2020];
+  let activeBlockYears = [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019];
   let planSearchQuery = '';
+  let initializedWeek = false;
 
-  function initWeekStart() {
-    const d = new Date();
-    // Use simulation reference 2026-09-28 (Monday)
-    currentWeekStart = '2026-09-28';
+  function initWeekStart(state) {
+    if (initializedWeek) return;
+    const logs = (state && state.trainingLogs) || [];
+    if (logs.length > 0) {
+      const dates = logs.map(l => l.date).filter(Boolean);
+      const latest = dates[dates.length - 1];
+      if (latest) {
+        currentWeekStart = getMondayOfDate(latest);
+      }
+    } else {
+      currentWeekStart = '2026-10-05';
+    }
+    initializedWeek = true;
   }
 
   function getMondayOfDate(dStr) {
-    const d = new Date(dStr);
+    if (!dStr) return '2026-10-05';
+    const parts = dStr.split('-');
+    const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
     const day = d.getDay();
-    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-    const mon = new Date(d.setDate(diff));
-    return mon.toISOString().split('T')[0];
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    const mon = new Date(d.getFullYear(), d.getMonth(), diff);
+    const y = mon.getFullYear();
+    const m = String(mon.getMonth() + 1).padStart(2, '0');
+    const dayNum = String(mon.getDate()).padStart(2, '0');
+    return `${y}-${m}-${dayNum}`;
   }
 
   function addDays(dStr, days) {
-    const d = new Date(dStr);
+    if (!dStr) return '';
+    const parts = dStr.split('-');
+    const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
     d.setDate(d.getDate() + days);
-    return d.toISOString().split('T')[0];
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const dayNum = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${dayNum}`;
   }
 
   function formatDisplayDate(isoStr) {
@@ -138,8 +158,11 @@ const TrainingPlanModule = (() => {
           <button onclick="TrainingPlanModule.navigateWeek(1)" class="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs font-mono font-bold transition-all">
             Nächste Woche ▶
           </button>
-          <button onclick="TrainingPlanModule.jumpToCurrentWeek()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono font-bold transition-all">
-            📍 Aktuelle Woche (Sep 2026)
+          <button onclick="TrainingPlanModule.jumpToWeek('2026-10-05')" class="px-2.5 py-1 rounded transition-all text-xs font-mono font-bold ${currentWeekStart === '2026-10-05' ? 'bg-cyan-600 text-slate-950 font-black' : 'bg-slate-950 text-cyan-400 border border-slate-800 hover:bg-slate-800'}">
+            📍 KW 41 (Aktuell: 05.10. - 11.10.)
+          </button>
+          <button onclick="TrainingPlanModule.jumpToWeek('2026-09-28')" class="px-2.5 py-1 rounded transition-all text-xs font-mono font-bold ${currentWeekStart === '2026-09-28' ? 'bg-cyan-600 text-slate-950 font-black' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
+            📋 KW 40 (Vorwoche: 28.09. - 04.10.)
           </button>
         </div>
 
@@ -539,51 +562,208 @@ ${protocolText}
           </div>
         </div>
 
-        <!-- Scrollable Multi-Year Parallel Weekly Browser -->
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <!-- ================= VERTIKAL GESTAPELTE MEHRJAHRES-ZEILEN (2026 BIS 2019) ================= -->
+        <div class="space-y-4 pt-1">
+          <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-cyan-950/40 border border-slate-800 rounded-xl p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
               <h3 class="text-xs font-black text-white uppercase tracking-wider font-mono flex items-center gap-2">
                 <span>🔄</span>
-                <span>PARALLELER MEHRJAHRES-WOCHENBROWSER (KW-VERGLEICH 2020 - 2026)</span>
+                <span>PARALLELER MEHRJAHRES-TAGESBROWSER (2026 BIS 2019 UNTEREINANDER)</span>
               </h3>
-              <p class="text-[10px] text-slate-400 font-mono mt-0.5">
-                Horizontal scrollbare Übersicht der gleichen Trainingswoche über alle aktiven Vergleichsjahre
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">
+                Jedes Jahr als eigenständige Zeile • Tage horizontal nebeneinander • Unabhängig voneinander nach links und rechts wischbar
               </p>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-mono">
+              <span class="text-slate-400 text-[11px]">Tipp:</span>
+              <span class="text-cyan-300 bg-slate-950 px-2.5 py-1 rounded border border-slate-800 text-[10px]">
+                2026 auf Anfang Oktober stellen & 2025 auf Mitte Oktober wischen für direkten Block-Vergleich!
+              </span>
             </div>
           </div>
 
-          <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
-            ${activeBlockYears.map(yr => {
-              const kwMatchLogs = logs.filter(l => {
-                if (!l.date || !l.date.startsWith(String(yr))) return false;
-                const kwStr = getWeekNumber(l.date);
-                const kwNum = parseInt(kwStr.replace(/[^\d]/g, ''), 10);
-                return kwNum === 40; // Default to KW 40 (Aktuelle Kalenderwoche)
+          <!-- Stacking each year from 2026 down to 2019 -->
+          <div class="space-y-3.5">
+            ${[2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019].map(yr => {
+              // Group logs of this year by date
+              const yearLogsByDate = {};
+              logs.forEach(l => {
+                if (l.date && l.date.startsWith(String(yr))) {
+                  yearLogsByDate[l.date] = l;
+                }
               });
 
+              // Generate consecutive calendar days from Sep 1 to Nov 15 (covering all of September, October, and mid-November)
+              const startDate = new Date(yr, 8, 1); // 01. September
+              const endDate = new Date(yr, 10, 15); // 15. November
+              const dayCards = [];
+
+              let cur = new Date(startDate);
+              while (cur <= endDate) {
+                const y = cur.getFullYear();
+                const m = String(cur.getMonth() + 1).padStart(2, '0');
+                const d = String(cur.getDate()).padStart(2, '0');
+                const dateIso = `${y}-${m}-${d}`;
+
+                const log = yearLogsByDate[dateIso] || null;
+                const dObj = new Date(cur);
+                const dayNames = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+                const dayName = dayNames[dObj.getDay()];
+                const kwStr = getWeekNumber(dateIso);
+                const isToday = dateIso === '2026-10-05' || dateIso === '2026-10-02';
+
+                dayCards.push({
+                  dateIso,
+                  displayDate: `${dayName}, ${d}.${m}.`,
+                  kwStr,
+                  isToday,
+                  log
+                });
+
+                cur.setDate(cur.getDate() + 1);
+              }
+
+              // Compute stats for October of this year
+              const octLogs = logs.filter(l => l.date && l.date.startsWith(`${yr}-10-`));
+              const octRecoveries = octLogs.map(l => l.whoop_recovery_pct).filter(v => v != null);
+              const avgOctRec = octRecoveries.length > 0 ? Math.round(octRecoveries.reduce((a, b) => a + b, 0) / octRecoveries.length) : null;
+              const isRefYear = yr === 2025;
+
               return `
-                <div class="min-w-[280px] sm:min-w-[320px] bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 flex flex-col justify-between">
-                  <div class="flex items-center justify-between pb-1.5 border-b border-slate-800">
-                    <span class="font-bold text-white font-mono text-sm">Jahr ${yr} • KW 40</span>
-                    <span class="text-[10px] font-mono text-cyan-400">${kwMatchLogs.length} Einheiten</span>
+                <div class="bg-slate-900 border ${isRefYear ? 'border-amber-600/70 shadow-lg shadow-amber-950/20' : yr === 2026 ? 'border-cyan-600/70 shadow-lg shadow-cyan-950/20' : 'border-slate-800'} rounded-xl p-3 sm:p-4 space-y-2.5">
+                  <!-- Row Header & Controls -->
+                  <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 pb-2 border-b border-slate-800">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="px-2.5 py-0.5 rounded text-xs font-mono font-black ${
+                        yr === 2026 ? 'bg-cyan-950 text-cyan-300 border border-cyan-800' :
+                        yr === 2025 ? 'bg-amber-950 text-amber-300 border border-amber-800' :
+                        'bg-slate-950 text-slate-300 border border-slate-800'
+                      }">
+                        JAHR ${yr}
+                      </span>
+                      ${yr === 2026 ? '<span class="px-1.5 py-0.2 rounded bg-cyan-900/60 text-cyan-300 text-[10px] font-mono font-bold">AKTUELLE SAISON</span>' : ''}
+                      ${yr === 2025 ? '<span class="px-1.5 py-0.2 rounded bg-amber-900/60 text-amber-300 text-[10px] font-mono font-bold">⭐ LUKA TRAININGS-REFERENZ (MITTE OKT)</span>' : ''}
+                      <span class="text-[11px] font-mono text-slate-400">
+                        ${octLogs.length} Einheiten im Okt ${avgOctRec != null ? `• Ø ${avgOctRec}% Recovery` : ''}
+                      </span>
+                    </div>
+
+                    <!-- Jump Pills & Track Navigation for this specific Year Row -->
+                    <div class="flex items-center gap-1.5 flex-wrap font-mono text-[10px]">
+                      <span class="text-slate-500 mr-0.5">Sprung:</span>
+                      <button onclick="TrainingPlanModule.jumpYearTrackToDate(${yr}, '${yr}-10-01')" class="px-2 py-0.5 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-all">
+                        📅 Okt Anfang
+                      </button>
+                      <button onclick="TrainingPlanModule.jumpYearTrackToDate(${yr}, '${yr}-10-13')" class="px-2.5 py-0.5 rounded bg-cyan-950 hover:bg-cyan-900 text-cyan-300 font-bold border border-cyan-800 transition-all">
+                        ⚡ Mitte Okt (10.-20.10.)
+                      </button>
+                      <button onclick="TrainingPlanModule.jumpYearTrackToDate(${yr}, '${yr}-10-25')" class="px-2 py-0.5 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-all">
+                        Ende Okt
+                      </button>
+                      <button onclick="TrainingPlanModule.jumpYearTrackToDate(${yr}, '${yr}-09-15')" class="px-2 py-0.5 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-all">
+                        🍂 Sep / Aufbau
+                      </button>
+
+                      <div class="flex items-center gap-1 ml-1 border-l border-slate-800 pl-1.5">
+                        <button onclick="TrainingPlanModule.scrollYearTrack(${yr}, -450)" class="px-2 py-0.5 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 font-bold text-xs" title="Nach links wischen">
+                          ◀
+                        </button>
+                        <button onclick="TrainingPlanModule.scrollYearTrack(${yr}, 450)" class="px-2 py-0.5 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 font-bold text-xs" title="Nach rechts wischen">
+                          ▶
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
-                  <div class="space-y-2 flex-1 max-h-72 overflow-y-auto no-scrollbar">
-                    ${kwMatchLogs.length > 0 ? kwMatchLogs.map(l => `
-                      <div class="bg-slate-900/80 border border-slate-800/80 rounded p-2 text-xs font-mono space-y-1">
-                        <div class="flex items-center justify-between">
-                          <span class="font-bold text-white text-[11px]">${l.date} (${l.weekday || ''})</span>
-                          <span class="text-[10px] text-cyan-300 font-bold">${l.session_type || 'Training'}</span>
+                  <!-- Horizontal Swipeable Track (Days side-by-side, independent scroll) -->
+                  <div 
+                    id="yearTrack_${yr}" 
+                    class="flex gap-2.5 overflow-x-auto pb-3 pt-1 scroll-smooth no-scrollbar select-none cursor-grab active:cursor-grabbing px-1"
+                    style="scroll-snap-type: x mandatory;"
+                  >
+                    ${dayCards.map(dc => {
+                      const l = dc.log;
+                      const hasSession = l != null;
+                      const isFrei = !hasSession || (l.session_type || '').toLowerCase().includes('frei') || (l.session_type || '').toLowerCase().includes('ruhetag') || ((l.duration_min || 0) === 0 && !l.protocol_text);
+                      const rec = l?.whoop_recovery_pct;
+                      const sleep = l?.sleep_performance_pct;
+                      const strain = l?.whoop_strain;
+                      const weight = l?.body_weight_kg;
+
+                      return `
+                        <div 
+                          id="dayCard_${yr}_${dc.dateIso}" 
+                          class="w-[245px] sm:w-[275px] shrink-0 bg-slate-950 border ${
+                            dc.isToday ? 'border-cyan-500 shadow-lg shadow-cyan-500/10 ring-1 ring-cyan-500' :
+                            hasSession && !isFrei ? 'border-slate-800 hover:border-slate-700' :
+                            'border-slate-900/80 bg-slate-950/60'
+                          } rounded-xl p-2.5 space-y-2 flex flex-col justify-between transition-all"
+                          style="scroll-snap-align: start;"
+                        >
+                          <!-- Card Top Bar: Date & KW -->
+                          <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/80 font-mono text-xs">
+                            <div class="flex items-center gap-1.5">
+                              <span class="font-black ${dc.isToday ? 'text-cyan-400' : 'text-white'}">${dc.displayDate}</span>
+                              <span class="text-[10px] text-slate-400 font-sans">${dc.dateIso.split('-')[0]}</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                              <span class="px-1.5 py-0.2 rounded text-[9px] bg-slate-900 text-slate-400 border border-slate-800 font-bold">${dc.kwStr}</span>
+                              ${dc.isToday ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[8px] font-black">HEUTE</span>' : ''}
+                            </div>
+                          </div>
+
+                          <!-- Card Body: Session Info or Rest Day -->
+                          <div class="space-y-1.5 flex-1 flex flex-col justify-between font-mono text-xs">
+                            ${(!hasSession || isFrei) ? `
+                              <div class="py-4 text-center space-y-1">
+                                <span class="text-lg">🧘‍♂️</span>
+                                <div class="text-[11px] text-slate-500 font-mono italic">Ruhetag / Erholung</div>
+                              </div>
+                            ` : `
+                              <div class="space-y-1">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                  ${getSessionBadge(l.session_type)}
+                                  ${l.focus ? `<span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-slate-900 text-amber-300 border border-amber-900/40 truncate max-w-[150px]">${l.focus}</span>` : ''}
+                                </div>
+
+                                <div class="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
+                                  ${l.duration_min > 0 ? `<span>⏱️ ${l.duration_min} min</span>` : '<span></span>'}
+                                  ${l.venue ? `<span class="truncate ml-1 text-cyan-400">📍 ${l.venue}</span>` : '<span></span>'}
+                                </div>
+                              </div>
+                            `}
+
+                            <!-- Whoop Biometrics Row -->
+                            ${(rec != null || sleep != null || weight != null) ? `
+                              <div class="flex items-center justify-between text-[10px] font-mono bg-slate-900/90 px-2 py-1 rounded border border-slate-800/80">
+                                ${rec != null ? `
+                                  <span class="font-bold ${rec >= 67 ? 'text-emerald-400' : (rec >= 34 ? 'text-amber-400' : 'text-rose-400')}">
+                                    ${rec}% Rec
+                                  </span>
+                                ` : '<span class="text-slate-600">-</span>'}
+                                ${sleep != null ? `<span class="text-cyan-300 text-[9px]">💤 ${sleep}%</span>` : ''}
+                                ${weight != null ? `<span class="text-amber-300 font-bold text-[9px]">⚖️ ${weight}kg</span>` : ''}
+                              </div>
+                            ` : ''}
+
+                            <!-- Protocol Text Snippet -->
+                            ${l && l.protocol_text ? `
+                              <div class="text-[10px] text-slate-300 line-clamp-2 italic bg-slate-900/60 border border-slate-800/60 p-1.5 rounded leading-relaxed whitespace-pre-line" title="${l.protocol_text}">
+                                "${l.protocol_text}"
+                              </div>
+                            ` : ''}
+                          </div>
+
+                          <!-- Card Footer: Direct Link to Tab 1 Readiness -->
+                          <div class="pt-1.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-slate-500">${l?.trainer ? '👤 Trainer vor Ort' : ''}</span>
+                            <button onclick="TrainingPlanModule.openInReadinessTab('${dc.dateIso}')" class="text-cyan-400 hover:text-cyan-300 font-bold underline">
+                              In Tab 1 öffnen ➔
+                            </button>
+                          </div>
                         </div>
-                        ${l.focus ? `<div class="text-[10px] text-slate-400">Schwerpunkt: <strong class="text-slate-200">${l.focus}</strong></div>` : ''}
-                        ${l.protocol_text ? `<div class="text-[10px] text-slate-400 line-clamp-2 italic bg-slate-950/60 p-1 rounded">"${l.protocol_text}"</div>` : ''}
-                      </div>
-                    `).join('') : `
-                      <div class="py-8 text-center text-slate-600 font-mono text-xs italic">
-                        Keine protokollierten Einheiten für KW 40 / ${yr}
-                      </div>
-                    `}
+                      `;
+                    }).join('')}
                   </div>
                 </div>
               `;
@@ -592,6 +772,77 @@ ${protocolText}
         </div>
       </div>
     `;
+
+    // Attach drag & swipe listeners and set initial horizontal alignment for comparison
+    setTimeout(() => {
+      [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019].forEach(yr => {
+        attachTrackDragListeners(yr);
+      });
+      // Align 2026 to early October and 2025 to mid-October for immediate parallel comparison
+      jumpYearTrackToDate(2026, '2026-10-02');
+      jumpYearTrackToDate(2025, '2025-10-13');
+    }, 100);
+  }
+
+  function scrollYearTrack(yr, offset) {
+    const el = document.getElementById(`yearTrack_${yr}`);
+    if (el) {
+      el.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  }
+
+  function jumpYearTrackToDate(yr, dateTarget) {
+    const card = document.getElementById(`dayCard_${yr}_${dateTarget}`);
+    const track = document.getElementById(`yearTrack_${yr}`);
+    if (card && track) {
+      const left = card.offsetLeft - track.offsetLeft - 15;
+      track.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+    }
+  }
+
+  function attachTrackDragListeners(yr) {
+    const track = document.getElementById(`yearTrack_${yr}`);
+    if (!track) return;
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    track.addEventListener('mousedown', (e) => {
+      isDown = true;
+      track.classList.add('cursor-grabbing');
+      startX = e.pageX - track.offsetLeft;
+      scrollLeft = track.scrollLeft;
+    });
+
+    track.addEventListener('mouseleave', () => {
+      isDown = false;
+      track.classList.remove('cursor-grabbing');
+    });
+
+    track.addEventListener('mouseup', () => {
+      isDown = false;
+      track.classList.remove('cursor-grabbing');
+    });
+
+    track.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - track.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      track.scrollLeft = scrollLeft - walk;
+    });
+  }
+
+  function jumpToWeek(mondayStr) {
+    currentWeekStart = mondayStr;
+    const state = (window.App && window.App.state) || {};
+    render(state);
+  }
+
+  function jumpToCurrentWeek() {
+    currentWeekStart = '2026-10-05';
+    const state = (window.App && window.App.state) || {};
+    render(state);
   }
 
   // ================= 4. VOLLTEXT PROTOKOLL-SUCHE =================
@@ -772,7 +1023,10 @@ ${l.protocol_text}
     toggleBlockYear,
     onSearchInput,
     clearSearch,
-    openInReadinessTab
+    openInReadinessTab,
+    scrollYearTrack,
+    jumpYearTrackToDate,
+    jumpToWeek
   };
 })();
 

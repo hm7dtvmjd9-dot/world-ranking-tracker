@@ -1,11 +1,97 @@
 Name,Date,Wochentag,Kalenderwoche,Trainingseinheit,Schwerpunkt,Dauer,Trainingsort,Wetterbedingungen,Tageszeit,Trainer,Protokoll,Recovery,Sleep,Strain,Fokus,Leistung,Erschöpfung,Schmerzen,Tagesform,Probleme,Learnings,e1RM Aufsteiger,e1RM Hip-Thrust,e1RM Trapbar,e1RM Umsetzen,Weitsprung WK,Vmax_Sprint_Ort,Vmax_Sprint,30m fliegend,60m WK,100m WK,Notion_Page_ID,Regeneration,Ernährung,Supplements,Sozial,Schlaf,Körpergewicht,Körperfett,Calories,Protein,Fat,Carbs,CMJ mit Armen,CMJ ohne Arme,DJ50 Reaktivität [W/kg],DJ50 Stütz [s],Achilles L Strain [%],Achilles R Strain [%],Achilles L Kraft [Nm],Achilles R Kraft [Nm],Achilles L Stiffness [Nm/%],Achilles R Stiffness [Nm/%],Weite effektiv,Wind,Entfernung 4L,Abstand Sprungbein Standbein,Geschwindigkeitsbilanz,V_Vertikal,Anlaufschritte,Vmax_Weit,Vmax_Weit_Ort
-9/27/2026,2026-09-27,Sunday,2026-W40,,,0,,,,FALSE,,73,91,,,,,,,,,,,,,,,,,,,3e855485-caa7-8063-b184-f7892e40dbe5,,,,,"Anderes Bett, Unterbrechung, Bett geteilt, Hot-Shower",,,,,,,,,,,,,,,,,,,,,,,,,
+10/4/2026,2026-10-04,Sunday,2026-W41,,,0,,,,FALSE,,80,100,,,,,,,,,,,,,,,,,,,3ef55485-caa7-80ea-af85-cb7c6b235c68,,,,,"Unterbrechung, Gelesen, Bett geteilt, Hot-Shower, Kopfhörer",82.95,12.5,,,,,,,,,,,,,,,,,,,,,,,
+10/3/2026,2026-10-03T11:07:00.000+02:00,Saturday,2026-W40,Ausdauer,Sekundenläufe,132,Frankfurt,Draußen - Sonnig,🌅 Vormittag,TRUE,,82,100,11.9,2 - Normal,2 - Okay,1 - Hoch,1 - Keine,,,,,,,,,,,,,,3ee55485-caa7-80ef-8f71-c1d1ab810e18,"Libido, Kalte Dusche, Blackroll, Dehnen, Outdoor-Time, Meditation",⭐⭐ Okay / Im Soll,"Koffein, Magnesium, Multivitamin, Zink, Kreatin, Omega-3, Vit D","Freunde, Reisestress","Unterbrechung, Gelesen",82.95,12.6,2660,138,117,263,,,,,,,,,,,,,,,,,,,
+10/2/2026,2026-10-02T16:51:00.000+02:00,Friday,2026-W40,"Sprint, Sprung","Tempos, Plyos",88,MTG Halle,Halle,☀️ Nachmittag,FALSE,"400m EL, Mobi, Kordi kurz
+
+Plyos 2 Sätze 15m
+vorwärts
+einbeinig vorwärts
+einbeinig seitlich 
+A-Skips
+B-Skips
+HPL
+5 Froschsprünge
+
+4x60m
+3x100m
+3x80m
+85%
+LP: 2min
+SP: 8min
+
+Cable Rotation 3x8 10kg",93,100,7.6,1 - Unkonzentriert,3 - Gut,2 - Anstrengend,1 - Keine,Unmotiviert,,,,,,,,,,,,,3ed55485-caa7-804d-a3ee-d0ab7eff4372,,⭐⭐⭐ Diszipliniert,"Magnesium, Multivitamin, Zink, Kreatin, Omega-3, B12, Vit D",,"Unterbrechung, Gelesen, Bett geteilt, Late Meal",82.3,12.3,2258,109,88,261,,,,,,,,,,,,,,,,,,,
+10/1/2026,2026-10-01T17:44:00.000+02:00,Thursday,2026-W40,Stabi,,119,Frankfurt,Draußen - Regen,☀️ Nachmittag,TRUE,"1 Runde EL, Mobi
+Hürdenkordi 6 Hürden
+
+2x Entengänge
+vorwärts / rückwarts
+vorwärts / rückwärts mit Zwischenschritt
+seitlich links / rechts
+hoch-runter vorwärts / rückwärts
+Ausfallschritte vorwärts / rückwärts
+
+2x Stabizirkel 10 Wiederholungen
+Bauchlage Medball nach vorne
+Crunches mit Medball
+Klappmesser
+Penguins
+Windshiels
+Glute Bridge
+Dead Bugs
+Supermans
+
+2x Stabizirkel 10 Wiederholungen
+Overhead Squat Medball
+Kniestand gegengleich lösen
+Pistol Squat vorwärts
+Rückenlage Cycles
+Pistol Squat rückwärts
+Worlds greatest Stretch",51,96,10.6,2 - Normal,2 - Okay,2 - Anstrengend,2 - Wenig,,,,,,,,,,,,,,3ec55485-caa7-8097-bc6d-ed1520b3230f,"Libido, Blackroll, Lympho, Outdoor-Time",⭐⭐⭐ Diszipliniert,"Magnesium, Multivitamin, Zink, Kreatin, Omega-3, B12, Vit D","Freunde, Reisestress","Gelesen, Bett geteilt, Nasenpflaster",82.3,12.4,2228,138,84,229,,,,,,,,,,,,,,,,,,,
+9/30/2026,2026-09-30T17:52:00.000+02:00,Wednesday,2026-W40,"Regeneration, Tempos","Tempos, Yoga",90,Frankfurt,Draußen - Sonnig,☀️ Nachmittag,TRUE,"1 Runde EL, Mobi, Kordi
+3x150/120/80m I3
+LP: 50m gehen
+SP: 4min
+
+20min Mobility Yoga",78,90,8.8,2 - Normal,2 - Okay,2 - Anstrengend,1 - Keine,,,,,,,,,,,,,,3eb55485-caa7-8072-91f6-c82af1e14ce7,"Dehnen, Outdoor-Time, Meditation",⭐⭐ Okay / Im Soll,"Magnesium, Zink, Multivitamin, Kreatin, Omega-3, Vit D","Freunde, Reisestress, Beziehungsstress","Unterbrechung, Bett geteilt, Gelesen",82.75,12.6,,,,,,,,,,,,,,,,,,,,,,,
+9/29/2026,2026-09-29T15:08:00.000+02:00,Tuesday,2026-W40,Kraft,,81,MTG Halle,Halle,☀️ Nachmittag,FALSE,"FCT vertikal 3x
+(Trapbar 3x 120kg
+Drop-Jumps 4x
+Hantelsprünge 4x 30kg
+Assisted Jumps 4x)
+
+Hip-Thrust 3x8 80kg
+Aufroller 3x8
+Ausfallschritte Smith Machine 3x8 50kg
+Wade Smith Machine 3x15 50kg
+Nordics 3x6
+Fußheber 3x8 10kg",82,97,13.9,2 - Normal,2 - Okay,2 - Anstrengend,2 - Wenig,,"Unterer Rücken, Gluteus R","Ausfallschritte waren das schlimmste
+Etwas unteren Rücken/Gluteus verhärtet",,101.3,132,,,,,,,,3ea55485-caa7-808e-9c0a-d1e97f78d661,"Libido, Kalte Dusche, Blackroll, Spaziergang, Dehnen, Outdoor-Time, Meditation",⭐⭐ Okay / Im Soll,"Koffein, Magnesium, Multivitamin, Zink, Kreatin, Omega-3, B12, Vit D, Elektrolyte",Freunde,"Bett geteilt, Hot-Shower, Late Meal",81.95,12.6,4079,188,140,523,,,,,,,,,,,,,,,,,,,
+9/28/2026,2026-09-28T18:38:00.000+02:00,Monday,2026-W40,"Sprint, Sprung",Koordination,109,Frankfurt,Draußen - Sonnig,🌙 Abend,TRUE,"1 Runde EL, Mobi, Kordi
+2x60m Rollen
+
+1080 4kg isoton
+2x30m ZWL Skippings
+1x20 Keilchen KHL frei (6 Fuß Abstand)
+2x30m HPL
+2x30m KHL
+1x20 Keilchen KHL frei
+2x30m SPL
+2x40m Hinke
+1x li, 1xre
+1x20 Keilchen KHL frei
+2x30m Pen 1
+1 x li, 1 x re 
+
+Abläufe
+2x30/40/50m (druckvoll auf Technik, 85%) 
+LP 2', SP 8’",63,95,9.9,3 - Konzentriert,3 - Gut,3 - Normal,1 - Keine,Motiviert,,"Hohe Hüfte, Linker Arm nach hinten weiter durchschwingen",,,,,,,,,,,3e955485-caa7-8019-9ae4-f9aef4911dd4,"Blackroll, Dehnen, Outdoor-Time, Meditation",⭐⭐⭐ Diszipliniert,"Magnesium, Multivitamin, Zink, Kreatin, Omega-3, Vit D","Freunde, Reisestress","Unterbrechung, Bett geteilt, Hot-Shower, Heiß",83.1,12.6,1767,76,82,178,,,,,,,,,,,,,,,,,,,
+9/27/2026,2026-09-27,Sunday,2026-W40,Frei,,0,,,,FALSE,,73,91,6.1,,,,,,,,,,,,,,,,,,3e855485-caa7-8063-b184-f7892e40dbe5,"Outdoor-Time, Spaziergang, Urlaub, Blackroll",⭐⭐ Okay / Im Soll,"Magnesium, Zink, Koffein","Freunde, Reisestress","Anderes Bett, Unterbrechung, Bett geteilt, Hot-Shower",,,,,,,,,,,,,,,,,,,,,,,,,
 9/26/2026,2026-09-26T09:15:00.000+02:00,Saturday,2026-W39,Tempos,Sekundenläufe,49,Franklin,Draußen - Sonnig,,FALSE,"Sekundenläufe
 3x(30”/45”/60”) 20”/100m
 LP: 2min
 SP: 8min
 3x100m: 15”/100m
-LP: 2min",42,100,10.3,2 - Normal,2 - Okay,2 - Anstrengend,1 - Keine,,,,,,,,,,,,,,3e855485-caa7-808e-b8da-f55832240c52,"Outdoor-Time, Spaziergang, Libido, Sauna",⭐⭐ Okay / Im Soll,"Koffein, Multivitamin, Kreatin, Omega-3, Vit D",Reisestress,"Bett geteilt, Hot-Shower",82.3,12.6,,,,,,,,,,,,,,,,,,,,,,,
+LP: 2min",42,100,10.3,2 - Normal,2 - Okay,2 - Anstrengend,1 - Keine,,,,,,,,,,,,,,3e855485-caa7-808e-b8da-f55832240c52,"Outdoor-Time, Spaziergang, Libido, Sauna, Urlaub",⭐⭐ Okay / Im Soll,"Koffein, Multivitamin, Kreatin, Omega-3, Vit D",Reisestress,"Bett geteilt, Hot-Shower",82.3,12.6,,,,,,,,,,,,,,,,,,,,,,,
 9/25/2026,2026-09-25,Friday,2026-W39,Frei,,0,,,,FALSE,,60,96,2.5,,,,,,,,,,,,,,,,,,3e655485-caa7-8044-919f-c9c577451051,,⭐⭐ Okay / Im Soll,"Magnesium, Multivitamin, Zink, Kreatin, Omega-3, B12, Vit D","Freunde, Reisestress","Anderes Bett, Unterbrechung, Gelesen",82.3,12.6,2561,79,117,301,,,,,,,,,,,,,,,,,,,
 9/24/2026,2026-09-24T18:01:00.000+02:00,Thursday,2026-W39,Stabi,Stabi,127,Frankfurt,Draußen - Sonnig,🌙 Abend,TRUE,"800m EL, Mobi, Kordi
 3x80m 70%
@@ -2673,23 +2759,28 @@ Wade 3x8",,,,,,,,,,,,,,,,,,,,,31f55485-caa7-8031-a93d-ca1376f84951,,,,,,81.1,12.
 10/8/2024,2024-10-08,Tuesday,2024-W41,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,31f55485-caa7-80a0-b4e8-cb9234cd901a,Urlaub,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 10/7/2024,2024-10-07,Monday,2024-W41,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,31f55485-caa7-8075-8a8a-fd8fa66a5277,Urlaub,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 10/6/2024,2024-10-06,Sunday,2024-W41,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,31f55485-caa7-801d-bc5a-c6ea277d68c6,,,,,,81.5,12.4,,,,,,,,,,,,,,,,,,,,,,,
-10/5/2024,2024-10-05,Saturday,2024-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,31f55485-caa7-8078-80bb-cf9d07e20133,,,,,,81.1,12.3,,,,,,,,,,,,,,,,,,,,,,,
-10/4/2024,2024-10-04,Friday,2024-W40,Regeneration,NI,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,31f55485-caa7-80df-af9b-cfdd6da632e5,,,,,,81.1,12.2,,,,,,,,,,,,,,,,,,,,,,,
-10/3/2024,2024-10-03,Thursday,2024-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,31f55485-caa7-809b-a108-fee055e7ff8a,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-10/2/2024,2024-10-02,Wednesday,2024-W40,Kraft,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,31f55485-caa7-805e-9e27-dca3d2a60f93,,,,,,81.1,12.4,,,,,,,,,,,,,,,,,,,,,,,
-10/1/2024,2024-10-01,Tuesday,2024-W40,Regeneration,NI,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,31f55485-caa7-8009-8c69-dc0bdb8241e8,,,,,,81.1,12.4,,,,,,,,,,,,,,,,,,,,,,,
-9/30/2024,2024-09-30,Monday,2024-W40,Kraft,,0,,,,FALSE,"2min rad
-Trapbar 8/7/6
-2x15 Wade
-2x15 Beuger e
-3x8 Lunges e
+10/5/2024,2024-10-05,Saturday,2024-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,31f55485-caa7-8078-80bb-cf9d07e20133,,,,,"Heiß, Gelesen, Bett geteilt, Zahnspange, Schlafmaske",81.1,12.3,,,,,,,,,,,,,,,,,,,,,,,
+10/4/2024,2024-10-04T15:12:00.000+02:00,Friday,2024-W40,Regeneration,NI,54,MTG Halle,,☀️ Nachmittag,FALSE,,86,87,11.8,,,,,,Achilles L,,,,,,,,,,,,31f55485-caa7-80df-af9b-cfdd6da632e5,"Dehnen, Libido, Kalte Dusche",,"Kreatin, Vit D",,"Bett geteilt, Hot-Shower, Schlafmaske",81.1,12.2,,,,,,,,,,,,,,,,,,,,,,,
+10/3/2024,2024-10-03,Thursday,2024-W40,Frei,,0,,,,FALSE,,71,78,13.3,,,,,,,,,,,,,,,,,,31f55485-caa7-809b-a108-fee055e7ff8a,"Spaziergang, Outdoor-Time, Kalte Dusche",,Koffein,"Me-Time, Reisestress, Beziehungsstress","Anderes Bett, Hot-Shower, Schlafmaske",,,,,,,,,,,,,,,,,,,,,,,,,
+10/2/2024,2024-10-02T17:25:00.000+02:00,Wednesday,2024-W40,Kraft,,77,MS Halle,,☀️ Nachmittag,FALSE,"Umsetzen 6/5/4 60/70/80kg
+Adduktor 3x12 70kg
+Abduktor 3x12 60kg
+Klimmzüge 3x6
+Box-Jump 3x6
+Hüftbeuger 3x8 50kg",59,84,15.5,,,,,,,,,,,90.7,,,,,,,31f55485-caa7-805e-9e27-dca3d2a60f93,"Spaziergang, Outdoor-Time, Libido",,"Kreatin, Vit D","Freunde, Me-Time, Reisestress","Late Meal, Bett geteilt, Zahnspange, Schlafmaske",81.1,12.4,,,,,,,,,,,,,,,,,,,,,,,
+10/1/2024,2024-10-01T16:54:00.000+02:00,Tuesday,2024-W40,Regeneration,NI,58,Franklin,,☀️ Nachmittag,FALSE,,69,95,11.5,,,,,,Achilles L,,,,,,,,,,,,31f55485-caa7-8009-8c69-dc0bdb8241e8,"Dehnen, Outdoor-Time, Kalte Dusche",,"Greens, Kreatin, Vit D",,"Heiß, Gelesen, Bett geteilt, Schlafmaske",81.1,12.4,,,,,,,,,,,,,,,,,,,,,,,
+9/30/2024,2024-09-30T15:19:00.000+02:00,Monday,2024-W40,Kraft,,59,MTG Halle,Halle,☀️ Nachmittag,FALSE,"2min rad
+Trapbar 8/7/6 70/70/80kg
+2x15 Wade 40kg
+2x15 Beuger 20kg
+3x16 Lunges 10kg
 3x6 Aufroller
-3x8 Hipthrust
-3x10 Push up",,,,,,,,,,,,,,,,,,,,,31e55485-caa7-804b-81b0-db529ccbdc04,,,,,,80.75,12.4,,,,,,,,,,,,,,,,,,,,,,,
-9/29/2024,2024-09-29,Sunday,2024-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,31e55485-caa7-80f7-a1bc-c48f1561ea38,"Dehnen, Spaziergang, Outdoor-Time",,,,,81.55,12.6,,,,,,,,,,,,,,,,,,,,,,,
-9/28/2024,2024-09-28,Saturday,2024-W39,Regeneration,,0,,,,FALSE,"20min rad
+3x8 Hipthrust 60kg
+3x10 Push up",62,99,13.8,,,,,,,,,76,96,,,,,,,,31e55485-caa7-804b-81b0-db529ccbdc04,"Dehnen, Outdoor-Time",,"Greens, Magnesium, Kreatin, Vit D",,"Gelesen, Bett geteilt, Schlafmaske",80.75,12.4,,,,,,,,,,,,,,,,,,,,,,,
+9/29/2024,2024-09-29,Sunday,2024-W40,Frei,,0,,,,FALSE,,75,100,8.6,,,,,,Kopfschmerzen,,,,,,,,,,,,31e55485-caa7-80f7-a1bc-c48f1561ea38,"Dehnen, Spaziergang, Outdoor-Time, Kalte Dusche",,"Greens, Kreatin",Freunde,"Gelesen, Bett geteilt, Zahnspange, Schlafmaske",81.55,12.6,,,,,,,,,,,,,,,,,,,,,,,
+9/28/2024,2024-09-28T18:25:00.000+02:00,Saturday,2024-W39,Regeneration,,25,MTG Halle,,🌙 Abend,FALSE,"20min rad
 frei trainieren
-Lunges etc.",,,,,,,,,,,,,,,,,,,,,31e55485-caa7-8024-adb4-dcc69ad155ee,Dehnen,,,,"Gelesen, Bett geteilt, Schlafmaske",82,12.6,,,,,,,,,,,,,,,,,,,,,,,
+Lunges etc.",63,100,10.2,,,,,,,,,,,,,,,,,,31e55485-caa7-8024-adb4-dcc69ad155ee,"Dehnen, Outdoor-Time, Libido",,Greens,,"Gelesen, Bett geteilt, Schlafmaske",82,12.6,,,,,,,,,,,,,,,,,,,,,,,
 9/27/2024,2024-09-27,Friday,2024-W39,Frei,,0,,,,FALSE,,46,100,6.8,,,,,,,,,,,,,,,,,,31e55485-caa7-8050-812b-cfcd94839830,"Dehnen, Kalte Dusche",,,Beziehungsstress,"Bett geteilt, Zahnspange, Schlafmaske",82.25,12.6,,,,,,,,,,,,,,,,,,,,,,,
 9/26/2024,2024-09-26,Thursday,2024-W39,Frei,,0,,,,FALSE,,41,100,9.5,,,,,,Achilles L,,,,,,,,,,,,31e55485-caa7-806c-822f-c604bceb6bd1,"Spaziergang, Outdoor-Time, Dehnen, Libido",,,Freunde,"Late Meal, Gelesen, Bett geteilt, Schlafmaske",83.4,12.8,,,,,,,,,,,,,,,,,,,,,,,
 9/25/2024,2024-09-25,Wednesday,2024-W39,Frei,,0,,,,FALSE,,61,100,8.1,,,,,,Achilles L,,,,,,,,,,,,31e55485-caa7-804e-afd4-ff4333c4460f,"Spaziergang, Outdoor-Time, Physio, Kalte Dusche",,,,"Bett geteilt, Schlafmaske",82.9,12.6,,,,,,,,,,,,,,,,,,,,,,,
@@ -4217,20 +4308,22 @@ Seitliche Squatjumps 
 Übersteiger 15 Hürden
 Bauchrollen
 Froschsprünge 
-Auslaufen 6x60m Steigern von Lauf zu Lauf ohne Pause",,,,,,,,,,,,,,,,,,,,,30a55485-caa7-8086-976e-dedc3709baaa,,,,,,80.15,12.8,,,,,,,,,,,,,,,,,,,,,,,
-10/4/2023,2023-10-04,Wednesday,2023-W40,Regeneration,,0,,,,FALSE,"Hüftmobilität
+Auslaufen 6x60m Steigern von Lauf zu Lauf ohne Pause",,,,,,,,,,,,,,,,,,,,,30a55485-caa7-8086-976e-dedc3709baaa,,,,,"Late Meal, Bett geteilt",80.15,12.8,,,,,,,,,,,,,,,,,,,,,,,
+10/4/2023,2023-10-04T17:05:00.000+02:00,Wednesday,2023-W40,"Regeneration, Kraft",,119,MS Halle,,☀️ Nachmittag,FALSE,"Hüftmobilität
 Sprintgymnastik 
 Hürdenkoordi mit Medball
 Hürdensprüge 3x4x 10 Hü.
 Sprunglauf 8 x12er 
-Hüftbeuger 6x12 sek
-Hiptrust 5x5
+
+Hüftbeuger 6x12 sek 16kg
+Hiptrust 5x5 70/120/120/120/120kg
 5x4 Beuger exzentrisch (Hüfte bleibt 90grad gebeugt ) - schräger Kasten 
 4x60m steigernd bis (60-80%) Auslaufen 
-5x10sek Rittersitz",,,,,,,,,,,,,,,,,,,,,30a55485-caa7-8094-8bda-d4419850c3fc,,,,,,80.15,12.5,,,,,,,,,,,,,,,,,,,,,,,
-10/3/2023,2023-10-03,Tuesday,2023-W40,Tempos,,0,,,,FALSE,"Variation Erwärmung (2x4-5 je Seite)
+5x10sek Rittersitz",41,88,14,,,,,,,,,140,,,,,,,,,30a55485-caa7-8094-8bda-d4419850c3fc,"Dehnen, Outdoor-Time, Libido, Meditation",,,Beziehungsstress,Bett geteilt,80.15,12.5,,,,,,,,,,,,,,,,,,,,,,,
+10/3/2023,2023-10-03T10:09:00.000+02:00,Tuesday,2023-W40,Tempos,,120,MS Halle,,🌅 Vormittag,FALSE,"Variation Erwärmung (2x4-5 je Seite)
 Mit Signal
-Vorlage: Klatschen, Vorne-Hinten, Armarbeit, Tap-Line (Beide Seiten), Fokus Armarbeit (schnell mit Aufrrichten)Tapping, Tapping Beuger, Tapping Schere
+Vorlage: Klatschen, Vorne-Hinten, Armarbeit, Tap-Line (Beide Seiten), Fokus Armarbeit (schnell mit Aufrrichten)
+Tapping, Tapping Beuger, Tapping Schere
 Jumps am Kasten
 Kneehigh, Anfersen, Scher, Hiphigh, Kneedrive im Wechsel
 Jumps zwischen/ auf Kasten:
@@ -4248,34 +4341,38 @@ Lp: 60 sek 
 Lp: 40 sek
 Sp 10 min 
 
-6x5 Kniebeuge Font tief 
-6x5 Beinpresse umsprünge
-6x5 Adduktor",,,,,,,,,,,,,,,,,,,,,30a55485-caa7-80c8-be7c-c4b1f2179e65,,,,,,80.85,12.7,,,,,,,,,,,,,,,,,,,,,,,
-10/2/2023,2023-10-02,Monday,2023-W40,"Sprint, Kraft",ZWL,0,,,,FALSE,"Erwärmung: 60m/60m/40m/40m
-6x3x4 Startschritte (Umlenkrolle)
-6x15m (70% KöGe)
+6x5 Kniebeuge Front tief 70kg
+6x5 Beinpresse umsprünge 80/60/60/60/60/60kg
+6x5 Adduktor 105kg",47,92,15.9,,,,,,,,,,,,,,,,,,30a55485-caa7-80c8-be7c-c4b1f2179e65,"Dehnen, Outdoor-Time, Libido",,"Probiotika, Kreatin, Vit D",Freunde,"Late Meal, Bett geteilt",80.85,12.7,,,,,,,,,,,,,,,,,,,,,,,
+10/2/2023,2023-10-02T18:04:00.000+02:00,Monday,2023-W40,"Sprint, Kraft",ZWL,148,,,🌙 Abend,FALSE,"Erwärmung: 60m/60m/40m/40m
+6x3x4 Startschritte (Umlenkrolle) 25kg
+6x15m (70% KöGe) 50kg
 5x20 Ablauf technisch (85-90%)
-Umsetzen vom Boden 5x5
-Kreuzheben 5x5
-Ausfallschrittsprünge mit Zusatzgewicht (10-15kg) 5x5 je Seite",,,,,,,,,,,,,,,,,,,,,30a55485-caa7-80f7-b278-cc80f52269cc,,,,,,80.85,12.6,,,,,,,,,,,,,,,,,,,,,,,
-10/1/2023,2023-10-01,Sunday,2023-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,30a55485-caa7-808c-b65b-e92e910d7af3,,,,,,80.35,12.4,,,,,,,,,,,,,,,,,,,,,,,
-9/30/2023,2023-09-30,Saturday,2023-W39,Tempos,,0,,,,FALSE,"Variation Erwärmung (2x4-5 je Seite)
-Mit Signal
-Vorlage: Klatschen, Vorne-Hinten, Armarbeit, Tap-Line (Beide Seiten), Fokus Armarbeit (schnell mit Aufrrichten)Tapping, Tapping Beuger, Tapping Schere
-Jumps am Kasten
+
+Umsetzen vom Boden 5x5 70kg
+Kreuzheben 5x5 110kg
+Ausfallschrittsprünge mit Zusatzgewicht (10-15kg) 5x5 je Seite 14kg",63,100,16.4,,,,,,,,,,,81.7,,,,,,,30a55485-caa7-80f7-b278-cc80f52269cc,Dehnen,,"Multivitamin, Probiotika, Kreatin, Vit D",,Bett geteilt,80.85,12.6,,,,,,,,,,,,,,,,,,,,,,,
+10/1/2023,2023-10-01,Sunday,2023-W40,Frei,,0,,,,FALSE,,86,92,7.4,,,,,,,,,,,,,,,,,,30a55485-caa7-808c-b65b-e92e910d7af3,"Dehnen, Outdoor-Time, Libido",,,,"Late Meal, Heiß, Bett geteilt",80.35,12.4,,,,,,,,,,,,,,,,,,,,,,,
+9/30/2023,2023-09-30T10:09:00.000+02:00,Saturday,2023-W39,"Tempos, Kraft",,116,MS Halle,,🌅 Vormittag,FALSE,"Variation Erwärmung (2x4-5 je Seite)
+Mit Signal:
+Vorlage: Klatschen, Vorne-Hinten, Armarbeit, Tap-Line (Beide Seiten), Fokus Armarbeit (schnell mit Aufrrichten)
+Tapping, Tapping Beuger, Tapping Schere
+Jumps am Kasten:
 Kneehigh, Anfersen, Scher, Hiphigh, Kneedrive im Wechsel
 Jumps zwischen/ auf Kasten:
 Grätsche, Ablauf, Startssprünge
-Track
+Track:
 Ausfallschritt-Ablauf-Wechselsprünge (Henk's) 
 
 TL (Lang) (70%Lang & 90% die 50er)
 3x (250/50/200/120/50)
 Lp: Hopserlauf SP: 12min
-5x5 Umsetzten in Kniebeuge 
-Nordic Hamstring 5x6 (Zusatzgewicht)
-5x6 Adduktor/ Abduktor",,,,,,,,,,,,,,,,,,,,,30a55485-caa7-80be-8fba-cae92c03e890,,,,,,80.35,12.6,,,,,,,,,,,,,,,,,,,,,,,
-9/29/2023,2023-09-29,Friday,2023-W39,"Sprung, Kraft",,0,,,,FALSE,"30x30m Koordination ohne Pause!
+
+5x5 Umsetzten in Kniebeuge 60kg
+Nordic Hamstring 5x6 (4x5) (Zusatzgewicht)
+5x6 (5x5) Adduktor 105/90/90/90/90kg
+5x6 (5x5) Abduktor 80/60/80/80/80kg",74,75,16.3,,,,,,,,,,,70,,,,,,,30a55485-caa7-80be-8fba-cae92c03e890,"Libido, Outdoor-Time",,Koffein,"Freunde, Reisestress","Late Meal, Bett geteilt",80.35,12.6,,,,,,,,,,,,,,,,,,,,,,,
+9/29/2023,2023-09-29T17:05:00.000+02:00,Friday,2023-W39,"Sprung, Kraft",,151,MS Halle,,☀️ Nachmittag,FALSE,"30x30m Koordination ohne Pause!
 Mit Zusatz wie Fußmanschette, Medball, Stab, Gewichtsweste etc. auch Tauschen 
 
 125 Sprünge (Luka +1 Durchgang)
@@ -4283,12 +4380,12 @@ Mit Zusatz wie Fußmanschette, Medball, Stab, Gewichtsweste etc. auch Tauschen 
 5x5er Hop beid. in die Grube
 Dropjumps zwischen den Kästen (5x10 je Seite)
 
-Kolkov Sqaud 4x5
-Wade Exzentrisch 4x5
-6x8 Medball schocken im Wurfkäfig
-6x8 Bodenbombe
-Beuger exzentrisch 5x4 mit Zusatz ",,,,,,,,,,,,,,,,,,,,,30a55485-caa7-805b-849c-f2dba0f0b6b8,,,,,,79.4,12.5,,,,,,,,,,,,,,,,,,,,,,,
-9/28/2023,2023-09-28,Thursday,2023-W39,Zirkel,,0,,,,FALSE,"Zirkel 5x20 sek (je Seite) (Pause 15sek)
+Klokov Sqaud 4x5 75kg
+Wade Exzentrisch 4x5 210kg
+6x8 Medball schocken im Wurfkäfig 5kg
+6x8 Bodenbombe 5kg
+Beuger exzentrisch 5x4 mit Zusatz ",92,88,15.3,,,,,,,,,,,,,,,,,,30a55485-caa7-805b-849c-f2dba0f0b6b8,Outdoor-Time,,"Koffein, Multivitamin, Kreatin, Vit D",Freunde,"Late Meal, Bett geteilt",79.4,12.5,,,,,,,,,,,,,,,,,,,,,,,
+9/28/2023,2023-09-28T18:14:00.000+02:00,Thursday,2023-W39,Zirkel,,141,MS Halle,,🌙 Abend,FALSE,"Zirkel 5x20 sek (je Seite) (Pause 15sek)
 Ausfallschritte Frequent
 Seitliche Liegestützsprünge
 Aufsteiger am Kasten (gestrecktes Bein)
@@ -4302,7 +4399,8 @@ Seitliche Squatjumps 
 Übersteiger 15 Hürden
 Bauchrollen
 Farmers Walk (Hexa) - (Schleife) 2 Bars 
-Auslaufen 6x60m Steigern von Lauf zu Lauf ohne Pause",,,,,,,,,,,,,,,,,,,,,30a55485-caa7-800c-8e2f-dcb702b5b25f,,,,,"Late Meal, Bett geteilt",79.9,12.5,,,,,,,,,,,,,,,,,,,,,,,
+
+Auslaufen 6x60m Steigern von Lauf zu Lauf ohne Pause",93,93,16.8,,,,,,,,,,,,,,,,,,30a55485-caa7-800c-8e2f-dcb702b5b25f,"Outdoor-Time, Spaziergang, Meditation, Dehnen, Physio",,"Koffein, Multivitamin, Kreatin, Vit D",,"Late Meal, Bett geteilt",79.9,12.5,,,,,,,,,,,,,,,,,,,,,,,
 9/27/2023,2023-09-27T18:04:00.000+02:00,Wednesday,2023-W39,Regeneration,,108,MS Halle,,🌙 Abend,FALSE,"Hüftmobilität
 Sprintgymnastik / Hipmobility – Rittersitz (Glut.)
 Hürdenkoordi mit Medball (20min)
@@ -4506,7 +4604,7 @@ Lp: 10sek 
 
 oder laut Plan:
 
-Kolkov-Kniebuge 6x5
+Klokov-Kniebuge 6x5
 6x4 Medballschocken (Hoch)
 Hüftbeuger mit Kettlebelt 6x12sek
 Hiptrust 6x5
@@ -6272,7 +6370,7 @@ Valerji 5x6
 4x60m steigernd bis (60-80%) Auslaufen 
 6x8 Medball schocken 5kg
 6x8 Bodenbombe 5kg",,,,,,,,,,,,,,,,,,,,,3c355485-caa7-8098-99ce-fb7e7f1311ac,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-10/4/2022,2022-10-04,Tuesday,2022-W41,"Sprint, Kraft",,0,,,,FALSE,"5x50m
+10/4/2022,2022-10-04T18:00:00.000+02:00,Tuesday,2022-W41,"Sprint, Kraft",,105,MS Halle,,🌙 Abend,FALSE,"5x50m
 Lp: 20 sek
 5x40m
 Lp 15 sek
@@ -6282,20 +6380,21 @@ Lp: 45 sek 
 Lp: 30 sek
 
 Sp 10 min 
+
 4x6 Kniebeuge Font tief 60kg
 4x6 Beinpresse umsprünge 45kg
-4x6 Adduktor 10kg",,,,,,,,,,,,,,,,,,,,,3c355485-caa7-8041-b1a9-fb5b7b2bdc84,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-10/3/2022,2022-10-03,Monday,2022-W41,"Sprint, Kraft",,0,,,,FALSE,"ZWL (Spikes nicht vergessen)
-2x60m zur Erwärmung 
+4x6 Adduktor 10kg",,,,,,,,,,,,,,,,,,,,,3c355485-caa7-8041-b1a9-fb5b7b2bdc84,,,,,,76.15,12,,,,,,,,,,,,,,,,,,,,,,,
+10/3/2022,2022-10-03T18:00:00.000+02:00,Monday,2022-W41,"Sprint, Kraft",,127,MS Halle,,🌙 Abend,FALSE,"ZWL (Spikes nicht vergessen)
+2x60m zur Erwärmung (laut Plan 60/50/40/30m)
 6x15m Pushbull+45kg (70% KöGe) 
 6x15m ZWL+25kg (50%KöGe)
 4x30 Ablauf technisch
 
 Ausstoßen 5x6 30kg
-Kreuzheben 5x6 80kg
-Ausfallschrittsprünge mit Zusatzgewicht (10-15kg) 6x6 je Seite 9kg Kurzhanteln",,,,,,,,,,,,,,,,,,,,,3c355485-caa7-80a2-9fc4-c477849f17a2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Kreuzheben 5x6 70/70/70/70/80kg
+Ausfallschrittsprünge mit Zusatzgewicht (10-15kg) 6x6 je Seite 9kg Kurzhanteln",,,,,,,,,,,,,,,,,,,,,3c355485-caa7-80a2-9fc4-c477849f17a2,,,,,,76.7,12,,,,,,,,,,,,,,,,,,,,,,,
 10/2/2022,2022-10-02,Sunday,2022-W41,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3c355485-caa7-8090-989d-fe67b218b9d6,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-10/1/2022,2022-10-01,Saturday,2022-W40,Frei,,0,,,,FALSE,Frei Urlaub,,,,,,,,,,,,,,,,,,,,,3c355485-caa7-807e-b93d-d3d311c74db9,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+10/1/2022,2022-10-01,Saturday,2022-W40,Frei,,0,,,,FALSE,Frei Urlaub,,,,,,,,,,,,,,,,,,,,,3c355485-caa7-807e-b93d-d3d311c74db9,,,,Reisestress,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
 9/30/2022,2022-09-30,Friday,2022-W40,Frei,,0,,,,FALSE,"Frei Urlaub oder:
 
 Kraftzirkel 3x12 Wdh.
@@ -6311,17 +6410,18 @@ Frontaltwists 
 Seitliche Squatjumps 
 Übersteiger 15 Hürden
 
-8x50m Steigern ohne Pause",,,,,,,,,,,,,,,,,,,,,3c355485-caa7-8084-93df-c2ab464cce3b,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+8x50m Steigern ohne Pause",,,,,,,,,,,,,,,,,,,,,3c355485-caa7-8084-93df-c2ab464cce3b,"Spaziergang, Outdoor-Time, Urlaub",,,,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
 9/29/2022,2022-09-29,Thursday,2022-W40,Frei,,0,,,,FALSE,"Frei Urlaub oder:
 
 30x30m Koordination ohne Pause!
+
 100 Sprünge
 6x10er Sprunglauf
 4x5er Hop beid. in die Grube
 Aussprünge an Stufe (6x6 Je Seite)
 
 Nordic Hams 5x6 
-6x12 Liegestütz ",,,,,,,,,,,,,,,,,,,,,3c355485-caa7-8007-b06a-fa272ec46403,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+6x12 Liegestütz ",,,,,,,,,,,,,,,,,,,,,3c355485-caa7-8007-b06a-fa272ec46403,"Spaziergang, Outdoor-Time, Urlaub",,,,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
 9/28/2022,2022-09-28,Wednesday,2022-W40,Frei,,0,,,,FALSE,"Frei Urlaub oder:
 
 Hüftmobilität
@@ -6334,7 +6434,7 @@ Hiptrust 5x6
 Valerji 5x6
 4x60m steigernd bis (60-80%) Auslaufen 
 6x8 Medball schocken 
-6x8 Bodenbombe",,,,,,,,,,,,,,,,,,,,,3c355485-caa7-804d-9f31-e91bb6d938ea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+6x8 Bodenbombe",,,,,,,,,,,,0,,,,,,,,,3c355485-caa7-804d-9f31-e91bb6d938ea,"Outdoor-Time, Spaziergang, Urlaub",,,,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
 9/27/2022,2022-09-27,Tuesday,2022-W40,Frei,,0,,,,FALSE,"Frei Urlaub oder:
 
 ZWL (Spikes nicht vergessen)
@@ -7292,28 +7392,30 @@ multitakeoffs
 8x 5er drill
 5x5 beuger ex
 Klimmzüge hinten 8/7/6/6",,,,,,,,,,,,,,,,,,,,,3c455485-caa7-8064-9bc0-f67623e33d25,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-10/4/2021,2021-10-04,Monday,2021-W41,"Sprint, Kraft",,0,,,,FALSE,"2x60m
+10/4/2021,2021-10-04T17:00:00.000+02:00,Monday,2021-W41,"Sprint, Kraft",,135,MS Halle,,☀️ Nachmittag,FALSE,"2x60m
 Sprintgymnastik
 4x2x8 umlenkrolle 30kg
 4x15m push-bull 60kg
 
-5x5 
-umsetzen boden 80kg
-Kastensprünge exz 17.5kg kurzhantel
-hip thrust 120kg
-6x10er Sprunglauf",,,,,,,,,,,,,,,,,,,,,3c455485-caa7-802c-a520-ebe952c5b85f,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-10/3/2021,2021-10-03,Sunday,2021-W41,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3c455485-caa7-804a-83d1-f5bdfffbd4d4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-10/2/2021,2021-10-02,Saturday,2021-W40,"Tempos, Kraft",,0,,,,FALSE,"4x3x200m 40s
+umsetzen boden 80kg 5x5
+Kastensprünge exz 17.5kg kurzhantel 5x5
+hip thrust 120kg 5x5
+6x10er Sprunglauf",,,,2 - Normal,3 - Gut,2 - Anstrengend,2 - Wenig,,,,,140,,93.3,,,,,,,3c455485-caa7-802c-a520-ebe952c5b85f,Dehnen,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+10/3/2021,2021-10-03,Sunday,2021-W41,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3c455485-caa7-804a-83d1-f5bdfffbd4d4,Dehnen,,,"Freunde, Reisestress",Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
+10/2/2021,2021-10-02T10:00:00.000+02:00,Saturday,2021-W40,"Tempos, Kraft",,91,MS Halle,,🌅 Vormittag,FALSE,"4x3x200m 40s
 lp: gehen
 sp: 8min
+
 4x5 umsetzen -> squad 70kg
-3x8 klimmzüge",,,,,,,,,,,,,,,,,,,,,3c455485-caa7-803c-8e2b-cad8488a3045,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-10/1/2021,2021-10-01,Friday,2021-W40,Sprint,,0,,,,FALSE,"8x10m 47,5kg
+3x8 klimmzüge",,,,,,,,,,,,,,81.7,,,,,,,3c455485-caa7-803c-8e2b-cad8488a3045,,,,"Freunde, Reisestress",,,,,,,,,,,,,,,,,,,,,,,,,,
+10/1/2021,2021-10-01T17:06:00.000+02:00,Friday,2021-W40,Sprint,,104,MS Halle,,☀️ Nachmittag,FALSE,"8x10m 47,5kg
 4x5er ablaufsprünge
+
 30x30m kordi
 weste manschetten
+
 4x5 adduktor/abduktor",,,,,,,,,,,,,,,,,,,,,3c455485-caa7-806f-bade-f2b7280d42e2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-9/30/2021,2021-09-30,Thursday,2021-W40,Zirkel,,0,,,,FALSE,"3x12
+9/30/2021,2021-09-30T17:00:00.000+02:00,Thursday,2021-W40,Zirkel,,89,MS Halle,,☀️ Nachmittag,FALSE,"3x12
 Ausfallschritte frequent
 seitl liegestützsprünge
 medball zu boden
@@ -7326,18 +7428,17 @@ seitl tiefes gehen
 elefantengehen
 hacke zieht
 
-3x120m",,,,,,,,,,,,,,,,,,,,,3c455485-caa7-8013-b850-fed8220eb75b,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-9/29/2021,2021-09-29,Wednesday,2021-W40,"Sprint, Kraft",,0,,,,FALSE,"3x5x60m
+3x120m",,,,,,,,,,,,,,,,,,,,,3c455485-caa7-8013-b850-fed8220eb75b,,,,"Freunde, Arbeitsstress",,,,,,,,,,,,,,,,,,,,,,,,,,
+9/29/2021,2021-09-29T17:07:00.000+02:00,Wednesday,2021-W40,"Sprint, Kraft",,122,MS Halle,,☀️ Nachmittag,FALSE,"3x5x60m
 1./ 2. spikes
 lp: 30s
 sp: 8min
 
-5x5
-Kolkov 65kg
-5x6 shiabaky",,,,,,,,,,,,,,,,,,,,,3c455485-caa7-802a-a771-fd45f3b0b5b3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-9/28/2021,2021-09-28,Tuesday,2021-W40,Sprung,,0,,,,FALSE,"warm-up
+Klokov 65kg 5x5
+5x6 tscherbakis",,,,,,,,,,,,,,,,,,,,,3c455485-caa7-802a-a771-fd45f3b0b5b3,,,,"Freunde, Arbeitsstress",,,,,,,,,,,,,,,,,,,,,,,,,,
+9/28/2021,2021-09-28T18:00:00.000+02:00,Tuesday,2021-W40,Sprung,,129,MS Halle,,🌙 Abend,FALSE,"warm-up
 takeoffs
-5x5 beuger exz",,,,,,,,,,,,,,,,,,,,,3c455485-caa7-80d8-88ec-f4d8f5e9092f,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+5x5 beuger exz",,,,,,,,,,,,,,,,,,,,,3c455485-caa7-80d8-88ec-f4d8f5e9092f,,,,"Freunde, Arbeitsstress",,,,,,,,,,,,,,,,,,,,,,,,,,
 9/27/2021,2021-09-27T18:00:00.000+02:00,Monday,2021-W40,"Kraft, Sprint",,118,MS Halle,,🌙 Abend,FALSE,"8x2x8 Startschritte
 30kg umlenkrolle
 
@@ -7961,6 +8062,13 @@ Einbeinläufe
 Hütchenläufe mit Medball 3kg
 4x2 runden Hürdenübersteiger 
 Seilchen",,,,4 - Flow,3 - Gut,,1 - Keine,,,"gut beweglich, keine Probleme",,,,,,,,,,,3be55485-caa7-800d-8a07-e7cdcdc74ab7,Dehnen,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+10/4/2020,2020-10-04,Sunday,2020-W41,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3ef55485-caa7-80aa-9e88-dbb66d37bbbe,"Spaziergang, Outdoor-Time, Urlaub",,,Freunde,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
+10/3/2020,2020-10-03,Saturday,2020-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3ee55485-caa7-8000-9cd6-df41272ede23,"Spaziergang, Outdoor-Time, Urlaub",,,Freunde,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
+10/2/2020,2020-10-02,Friday,2020-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3ed55485-caa7-80dc-a1a1-e157b0a2d7a0,"Spaziergang, Outdoor-Time, Urlaub",,,Freunde,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
+10/1/2020,2020-10-01,Thursday,2020-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3ec55485-caa7-80d7-976a-cac6c9f3fedc,"Spaziergang, Outdoor-Time, Urlaub",,,Freunde,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
+9/30/2020,2020-09-30,Wednesday,2020-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3eb55485-caa7-8047-9f54-cdf7b2eb259d,"Spaziergang, Outdoor-Time, Urlaub",,,Freunde,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
+9/29/2020,2020-09-29,Tuesday,2020-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3ea55485-caa7-80ee-9d8a-ef684d94d51b,"Spaziergang, Outdoor-Time, Urlaub",,,Freunde,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
+9/28/2020,2020-09-28,Monday,2020-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3e955485-caa7-807f-94a8-efcc06abc95a,"Spaziergang, Outdoor-Time, Urlaub",,,Freunde,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
 9/27/2020,2020-09-27,Sunday,2020-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3e855485-caa7-8012-b522-edeaae765b61,"Spaziergang, Outdoor-Time, Urlaub",,,Freunde,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
 9/26/2020,2020-09-26,Saturday,2020-W39,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3e855485-caa7-8097-afe1-c7c905aa982a,"Spaziergang, Outdoor-Time, Urlaub",,,Freunde,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
 9/25/2020,2020-09-25,Friday,2020-W39,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3e655485-caa7-80cf-a3d5-fd67a2d98c1f,"Outdoor-Time, Spaziergang, Urlaub",,,Freunde,Anderes Bett,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -8144,6 +8252,13 @@ Weit: 7.10m +0.6m/s",,,,,,,,,,,,,,,7.10,,,,,11.16,2ca55485-caa7-8079-b624-d3452b
 4/5/2020,2020-04-05,Sunday,2020-W15,,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,33a55485-caa7-80b8-a4ba-da5db0325824,,,,,,81.05,12.6,,,,,,,,,,,,,,,,,,,,,,,
 2/15/2020,2020-02-15,Saturday,2020-W07,Wettkampf,,0,MS Halle,,,FALSE,"60m: 7.08s
 60m: 7.06s",,,,,,,,,,,,,,,,,,,7.06,,35e55485-caa7-8085-bbb0-ca81bd209d9d,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+10/4/2019,2019-10-04,Friday,2019-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3ef55485-caa7-8026-a34c-d3e5753d246c,Physio,,,,,77.4,12.1,,,,,,,,,,,,,,,,,,,,,,,
+10/3/2019,2019-10-03,Thursday,2019-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3ee55485-caa7-801b-b62a-d3b171040b8d,,,,,,77.4,12.5,,,,,,,,,,,,,,,,,,,,,,,
+10/2/2019,2019-10-02,Wednesday,2019-W40,,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3ed55485-caa7-8031-a4c4-dfba08b7117e,,,,,,78.15,12.4,,,,,,,,,,,,,,,,,,,,,,,
+10/1/2019,2019-10-01,Tuesday,2019-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3ec55485-caa7-80b6-8768-d74874bc6686,,,,,,77.7,12.4,,,,,,,,,,,,,,,,,,,,,,,
+9/30/2019,2019-09-30,Monday,2019-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3eb55485-caa7-8026-a3d5-dde0edd55d61,Physio,,,,,77.7,12.3,,,,,,,,,,,,,,,,,,,,,,,
+9/29/2019,2019-09-29,Sunday,2019-W40,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3ea55485-caa7-8002-826b-f382159eed9b,,,,,,78.35,12.5,,,,,,,,,,,,,,,,,,,,,,,
+9/28/2019,2019-09-28,Saturday,2019-W39,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3e955485-caa7-806a-9473-cc2a7eb5df57,,,,,,78.85,12.4,,,,,,,,,,,,,,,,,,,,,,,
 9/27/2019,2019-09-27,Friday,2019-W39,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3e855485-caa7-80c2-9f5c-e6077622edb5,Physio,,,,,80.5,12.5,,,,,,,,,,,,,,,,,,,,,,,
 9/26/2019,2019-09-26,Thursday,2019-W39,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3e855485-caa7-80cb-b546-ce9755fb289c,,,,,,81.3,12.6,,,,,,,,,,,,,,,,,,,,,,,
 9/25/2019,2019-09-25,Wednesday,2019-W39,Frei,,0,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,3e655485-caa7-8085-aa7c-d125928f2733,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -8383,3 +8498,4 @@ Hoch: 1.30m
 5/22/2011,2011-05-22,Sunday,2011-W22,Wettkampf,,0,,,,FALSE,"Ballwurf: 42m
 Weit: 4,23m
 60m Hürden: 13,34s",,,,,,,,,,,,,,,4.23,,,,,,35c55485-caa7-8069-9ffa-de50f6db954d,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+

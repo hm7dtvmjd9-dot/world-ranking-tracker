@@ -152,7 +152,9 @@ const VenuesModule = (() => {
 
     // Tier badge colors
     let tierBadge = 'bg-slate-800 text-slate-300 border-slate-700';
-    if (m.tier === 'Gold' || m.tier === 'World Athletics Series') {
+    if (m.tier === 'Diamond League') {
+      tierBadge = 'bg-cyan-950 text-cyan-300 border-cyan-500 shadow-sm';
+    } else if (m.tier === 'Gold' || m.tier === 'World Athletics Series') {
       tierBadge = 'bg-amber-950 text-amber-300 border-amber-700';
     } else if (m.tier === 'Silver') {
       tierBadge = 'bg-cyan-950 text-cyan-300 border-cyan-700';
@@ -570,15 +572,52 @@ const VenuesModule = (() => {
     }
   }
 
+  let activeCalendarMonth = 'Januar 2027';
+  let showAllMonthsInGrid = false;
+
+  function setCalendarMonth(mName) {
+    activeCalendarMonth = mName;
+    const state = (window.App && window.App.state) || {};
+    renderCalendarMonthGrid(state);
+  }
+
+  function nextCalendarMonth() {
+    const months = [
+      'Januar 2027', 'Februar 2027', 'März 2027', 'April 2027',
+      'Mai 2027', 'Juni 2027', 'Juli 2027', 'August 2027', 'September 2027'
+    ];
+    const idx = months.indexOf(activeCalendarMonth);
+    if (idx !== -1 && idx < months.length - 1) {
+      setCalendarMonth(months[idx + 1]);
+    }
+  }
+
+  function prevCalendarMonth() {
+    const months = [
+      'Januar 2027', 'Februar 2027', 'März 2027', 'April 2027',
+      'Mai 2027', 'Juni 2027', 'Juli 2027', 'August 2027', 'September 2027'
+    ];
+    const idx = months.indexOf(activeCalendarMonth);
+    if (idx > 0) {
+      setCalendarMonth(months[idx - 1]);
+    }
+  }
+
+  function toggleShowAllMonths() {
+    showAllMonthsInGrid = !showAllMonthsInGrid;
+    const state = (window.App && window.App.state) || {};
+    renderCalendarMonthGrid(state);
+  }
+
   function renderCalendarMonthGrid(state) {
     const container = document.getElementById('calendarMonthGridContainer');
     if (!container) return;
 
     const calendar = state.calendarData;
-    const meetings = (calendar && calendar.meetings) ? calendar.meetings : [];
+    const rawMeetings = (calendar && calendar.meetings) ? calendar.meetings : [];
 
     // Filter according to active filters
-    const filtered = meetings.filter(m => {
+    const filtered = rawMeetings.filter(m => {
       if (mensOnly && !m.mensLongJump) return false;
       if (selectedTier !== 'ALL') {
         if (m.tier.toLowerCase() !== selectedTier.toLowerCase()) return false;
@@ -591,93 +630,331 @@ const VenuesModule = (() => {
       return true;
     });
 
+    // Sort chronologically and compute pauses / rest days between consecutive meetings across the season
+    const sorted = [...filtered].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+    sorted.forEach((m, idx) => {
+      if (idx > 0) {
+        const prev = sorted[idx - 1];
+        const diffDays = Math.round((new Date(m.date) - new Date(prev.date)) / 86400000);
+        m.gapSincePrev = diffDays;
+        m.prevMeetingName = prev.city || prev.name;
+      } else {
+        m.gapSincePrev = null;
+        m.prevMeetingName = null;
+      }
+      if (idx < sorted.length - 1) {
+        const next = sorted[idx + 1];
+        const diffDays = Math.round((new Date(next.date) - new Date(m.date)) / 86400000);
+        m.gapUntilNext = diffDays;
+        m.nextMeetingName = next.city || next.name;
+      } else {
+        m.gapUntilNext = null;
+        m.nextMeetingName = null;
+      }
+    });
+
     const months = [
       'Januar 2027', 'Februar 2027', 'März 2027', 'April 2027',
       'Mai 2027', 'Juni 2027', 'Juli 2027', 'August 2027', 'September 2027'
     ];
 
-    const meetingsByMonth = {};
-    months.forEach(m => meetingsByMonth[m] = []);
-    filtered.forEach(m => {
-      const monthKey = m.month || 'Januar 2027';
-      if (!meetingsByMonth[monthKey]) meetingsByMonth[monthKey] = [];
-      meetingsByMonth[monthKey].push(m);
+    const monthConfig = {
+      'Januar 2027': { year: 2027, month: 1, days: 31 },
+      'Februar 2027': { year: 2027, month: 2, days: 28 },
+      'März 2027': { year: 2027, month: 3, days: 31 },
+      'April 2027': { year: 2027, month: 4, days: 30 },
+      'Mai 2027': { year: 2027, month: 5, days: 31 },
+      'Juni 2027': { year: 2027, month: 6, days: 30 },
+      'Juli 2027': { year: 2027, month: 7, days: 31 },
+      'August 2027': { year: 2027, month: 8, days: 31 },
+      'September 2027': { year: 2027, month: 9, days: 30 }
+    };
+
+    const meetingsByDate = {};
+    sorted.forEach(m => {
+      if (m.date) {
+        if (!meetingsByDate[m.date]) meetingsByDate[m.date] = [];
+        meetingsByDate[m.date].push(m);
+      }
     });
+
+    const monthsToRender = showAllMonthsInGrid ? months : [activeCalendarMonth];
+
+    // Build Month Selector Controls
+    const monthSelectorHtml = `
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 shadow-md space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">🗓️</span>
+            <div>
+              <h3 class="text-xs font-black text-white uppercase font-mono tracking-wider">
+                MEETING-MONATSKALENDER (WOCHENANSICHT MO–SO)
+              </h3>
+              <p class="text-[10px] text-slate-400 font-mono">
+                Wochenraster mit Farbkodierung der Meetingkategorien & Visualisierung der Wettkampfpausen
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="VenuesModule.prevCalendarMonth()" class="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-mono font-bold transition-all">
+              ◀ Vorheriger
+            </button>
+            <button onclick="VenuesModule.toggleShowAllMonths()" class="px-3 py-1 rounded text-xs font-mono font-bold transition-all ${
+              showAllMonthsInGrid ? 'bg-cyan-600 text-slate-950 font-black' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+            }">
+              ${showAllMonthsInGrid ? '✓ Alle 9 Monate aktiv' : 'Alle 9 Monate anzeigen'}
+            </button>
+            <button onclick="VenuesModule.nextCalendarMonth()" class="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-mono font-bold transition-all">
+              Nächster ▶
+            </button>
+          </div>
+        </div>
+
+        <!-- Month Navigation Tabs -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs font-mono">
+          ${months.map(mName => {
+            const mCount = sorted.filter(m => m.month === mName).length;
+            const isActive = !showAllMonthsInGrid && activeCalendarMonth === mName;
+            return `
+              <button onclick="VenuesModule.setCalendarMonth('${mName}')" class="px-3 py-1 rounded-lg shrink-0 font-bold transition-all flex items-center gap-1.5 ${
+                isActive ? 'bg-cyan-500 text-slate-950 font-black shadow-md' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+              }">
+                <span>${mName.replace(' 2027', '')}</span>
+                <span class="text-[9px] px-1 py-0.2 rounded ${isActive ? 'bg-slate-950 text-cyan-300' : 'bg-slate-900 text-slate-500'}">
+                  ${mCount}
+                </span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+
+    // Render Month Grids
+    const gridsHtml = monthsToRender.map(mName => {
+      const cfg = monthConfig[mName] || { year: 2027, month: 1, days: 31 };
+      const monthMeetings = sorted.filter(m => m.month === mName);
+
+      // Compute statistics on pause duration for this month
+      const monthGaps = monthMeetings.map(m => m.gapSincePrev).filter(g => g != null);
+      const avgGap = monthGaps.length > 0 ? (monthGaps.reduce((a, b) => a + b, 0) / monthGaps.length).toFixed(1) : '-';
+      const minGap = monthGaps.length > 0 ? Math.min(...monthGaps) : '-';
+      const maxGap = monthGaps.length > 0 ? Math.max(...monthGaps) : '-';
+
+      // First day of month (Monday=0 ... Sunday=6)
+      const firstDayDate = new Date(cfg.year, cfg.month - 1, 1);
+      const firstDayWeekday = firstDayDate.getDay(); // 0 is Sunday
+      const startOffset = (firstDayWeekday === 0 ? 6 : firstDayWeekday - 1);
+
+      // Generate grid cells
+      let cellsHtml = '';
+
+      // Leading padding cells from previous month
+      for (let i = 0; i < startOffset; i++) {
+        cellsHtml += `
+          <div class="bg-slate-950/30 border border-slate-900/60 rounded-xl p-2 min-h-[110px] opacity-25 hidden sm:block"></div>
+        `;
+      }
+
+      // Actual days of the month
+      for (let d = 1; d <= cfg.days; d++) {
+        const dateIso = `${cfg.year}-${String(cfg.month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const dayMeetings = meetingsByDate[dateIso] || [];
+        const hasMeeting = dayMeetings.length > 0;
+
+        // Day of week for responsive labels
+        const dObj = new Date(cfg.year, cfg.month - 1, d);
+        const dayNames = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+        const dayName = dayNames[dObj.getDay()];
+
+        cellsHtml += `
+          <div class="rounded-xl p-2 flex flex-col justify-between transition-all min-h-[115px] sm:min-h-[135px] border ${
+            hasMeeting ? 'bg-slate-900/90 border-slate-700 shadow-md ring-1 ring-cyan-500/20' : 'bg-slate-950/60 border-slate-850/80 hover:border-slate-800'
+          }">
+            <!-- Day Top Bar -->
+            <div class="flex items-center justify-between pb-1 border-b border-slate-800/60 text-xs font-mono">
+              <div class="flex items-center gap-1">
+                <span class="font-black ${hasMeeting ? 'text-white' : 'text-slate-400'}">${d}.</span>
+                <span class="text-[10px] text-slate-500 font-sans">${dayName}</span>
+              </div>
+              ${hasMeeting ? `
+                <span class="px-1.5 py-0.2 rounded text-[9px] font-black font-mono bg-cyan-950 text-cyan-300 border border-cyan-800">
+                  ${dayMeetings.length} WK
+                </span>
+              ` : `
+                <span class="text-[9px] text-slate-600 font-mono hidden sm:inline">Pause</span>
+              `}
+            </div>
+
+            <!-- Meetings Content or Rest Day Indicator -->
+            <div class="space-y-1.5 my-1 flex-1 flex flex-col justify-center">
+              ${hasMeeting ? dayMeetings.map(m => {
+                const isDiamond = m.tier === 'Diamond League';
+                const isChampionship = (m.tier === 'Major' || m.tier === 'World Athletics Series' || m.category === 'OW' || m.category === 'GL' || m.category === 'GW' || m.name.includes('DM') || m.name.includes('EM') || m.name.includes('WM') || m.name.includes('CISM'));
+                const isGold = m.tier === 'Gold';
+                const isSilver = m.tier === 'Silver';
+                const isBronze = m.tier === 'Bronze';
+
+                // Color-coded Category Badge
+                let badgeStyle = 'bg-slate-850 border-slate-700 text-slate-300';
+                let catBadge = `<span class="px-1 py-0.2 rounded text-[8px] font-black bg-slate-900 border border-slate-700 text-slate-300">Kat. ${m.category}</span>`;
+                
+                if (isDiamond) {
+                  badgeStyle = 'bg-cyan-950/90 border-cyan-500/90 text-cyan-200 shadow-sm shadow-cyan-950/50 hover:border-cyan-400';
+                  catBadge = `<span class="px-1.5 py-0.2 rounded text-[8px] font-black bg-cyan-900 border border-cyan-400 text-cyan-200">💎 DL • ${m.category}</span>`;
+                } else if (isChampionship) {
+                  badgeStyle = 'bg-purple-950/90 border-purple-500/90 text-purple-200 shadow-sm shadow-purple-950/50 hover:border-purple-400';
+                  catBadge = `<span class="px-1.5 py-0.2 rounded text-[8px] font-black bg-purple-900 border border-purple-400 text-purple-200">🏆 ${m.category}</span>`;
+                } else if (isGold) {
+                  badgeStyle = 'bg-amber-950/90 border-amber-500/90 text-amber-200 hover:border-amber-400';
+                  catBadge = `<span class="px-1 py-0.2 rounded text-[8px] font-black bg-amber-900 border border-amber-500 text-amber-200">🥇 Gold • ${m.category}</span>`;
+                } else if (isSilver) {
+                  badgeStyle = 'bg-slate-900 border-cyan-700 text-cyan-300 hover:border-cyan-500';
+                  catBadge = `<span class="px-1 py-0.2 rounded text-[8px] font-black bg-cyan-950 border border-cyan-800 text-cyan-300">🥈 Silver • ${m.category}</span>`;
+                } else if (isBronze) {
+                  badgeStyle = 'bg-emerald-950/90 border-emerald-600 text-emerald-200 hover:border-emerald-400';
+                  catBadge = `<span class="px-1 py-0.2 rounded text-[8px] font-black bg-emerald-900 border border-emerald-600 text-emerald-200">🥉 Bronze • ${m.category}</span>`;
+                } else {
+                  badgeStyle = 'bg-blue-950/90 border-blue-700 text-blue-200 hover:border-blue-500';
+                  catBadge = `<span class="px-1 py-0.2 rounded text-[8px] font-black bg-blue-900 border border-blue-700 text-blue-200">🔹 Chall. • ${m.category}</span>`;
+                }
+
+                return `
+                  <div onclick="VenuesModule.openMeetingInfoModal('${m.id}')" class="cursor-pointer border rounded-lg p-2 font-mono text-[11px] transition-all hover:scale-[1.02] space-y-1 ${badgeStyle}">
+                    <div class="flex items-center justify-between gap-1">
+                      <span class="font-bold text-white text-[10px] sm:text-[11px] leading-tight line-clamp-2" title="${m.name}">
+                        ${m.name}
+                      </span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-[9px] text-slate-300">
+                      <span class="font-mono">📍 ${m.city} (${m.country})</span>
+                      ${catBadge}
+                    </div>
+
+                    ${m.promisingRunway ? `
+                      <div class="text-[8px] font-bold text-amber-400 flex items-center gap-1">
+                        <span>⭐</span>
+                        <span>Schnelle Bahn</span>
+                      </div>
+                    ` : ''}
+
+                    <!-- Pause Tracker Badge -->
+                    ${m.gapSincePrev != null ? `
+                      <div class="text-[8px] px-1 py-0.2 rounded bg-slate-950/80 border border-slate-700/60 text-slate-300 font-mono flex items-center justify-between" title="${m.gapSincePrev} Tage Pause seit ${m.prevMeetingName}">
+                        <span>⚡ ${m.gapSincePrev} Tage Pause</span>
+                        <span class="text-slate-500 truncate ml-1">seit ${m.prevMeetingName}</span>
+                      </div>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('') : `
+                <div class="py-4 text-center text-slate-700 font-mono text-[10px] select-none">
+                  —
+                </div>
+              `}
+            </div>
+
+            <!-- Footer: Next Gap Indicator -->
+            ${hasMeeting && dayMeetings[0]?.gapUntilNext != null ? `
+              <div class="pt-0.5 border-t border-slate-800/50 text-[8px] font-mono text-slate-400 text-right">
+                ⏳ Noch ${dayMeetings[0].gapUntilNext} Tage bis nächstes Event
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      return `
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-lg space-y-3">
+          <!-- Month Header & Pause Barometer -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-base font-black font-mono uppercase text-white tracking-wider">${mName}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
+                  ${monthMeetings.length} ${monthMeetings.length === 1 ? 'Wettkampf' : 'Wettkämpfe'}
+                </span>
+              </div>
+              <p class="text-[10px] font-mono text-slate-400 mt-0.5">
+                Vollständige Wochenansicht Montag bis Sonntag • Kalenderwochen des Monats
+              </p>
+            </div>
+
+            <!-- Rest Period & Rhythm Barometer -->
+            <div class="flex items-center gap-2 flex-wrap font-mono text-[10px]">
+              <div class="bg-slate-950 px-2.5 py-1 rounded border border-slate-800 flex items-center gap-1.5">
+                <span class="text-slate-400">Ø Pause:</span>
+                <span class="font-bold text-cyan-300">${avgGap} ${avgGap !== '-' ? 'Tage' : ''}</span>
+              </div>
+              ${minGap !== '-' ? `
+                <div class="bg-slate-950 px-2.5 py-1 rounded border border-slate-800 flex items-center gap-1.5">
+                  <span class="text-slate-400">Min / Max Pause:</span>
+                  <span class="font-bold text-amber-300">${minGap} / ${maxGap} Tage</span>
+                </div>
+              ` : ''}
+              <div class="bg-slate-950 px-2.5 py-1 rounded border border-slate-800 flex items-center gap-1.5">
+                <span class="text-slate-400">DL & Majors:</span>
+                <span class="font-bold text-purple-300">
+                  ${monthMeetings.filter(m => m.tier === 'Diamond League' || m.tier === 'Major' || m.tier === 'World Athletics Series' || m.category === 'OW' || m.category === 'GL').length}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekday Headers (Mo, Di, Mi, Do, Fr, Sa, So) -->
+          <div class="grid grid-cols-2 sm:grid-cols-7 gap-1.5 text-center font-mono font-bold text-xs text-slate-400 pb-1.5 border-b border-slate-800">
+            <div class="hidden sm:block py-1 rounded bg-slate-950/60 text-slate-300">Montag (Mo)</div>
+            <div class="hidden sm:block py-1 rounded bg-slate-950/60 text-slate-300">Dienstag (Di)</div>
+            <div class="hidden sm:block py-1 rounded bg-slate-950/60 text-slate-300">Mittwoch (Mi)</div>
+            <div class="hidden sm:block py-1 rounded bg-slate-950/60 text-slate-300">Donnerstag (Do)</div>
+            <div class="hidden sm:block py-1 rounded bg-slate-950/60 text-slate-300">Freitag (Fr)</div>
+            <div class="hidden sm:block py-1 rounded bg-slate-950/60 text-cyan-300">Samstag (Sa)</div>
+            <div class="hidden sm:block py-1 rounded bg-slate-950/60 text-cyan-300">Sonntag (So)</div>
+          </div>
+
+          <!-- Month Grid Cells -->
+          <div class="grid grid-cols-1 sm:grid-cols-7 gap-1.5">
+            ${cellsHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
 
     container.innerHTML = `
       <div class="space-y-4">
         <!-- Changes Notification Banner -->
         <div class="bg-gradient-to-r from-cyan-950/60 to-slate-900 border border-cyan-800/80 rounded-xl p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-mono">
           <div class="flex items-center gap-2">
-            <span class="text-base">🔔</span>
+            <span class="text-base">💎</span>
             <div>
-              <strong class="text-cyan-300">Wöchentliches Tour-Update (02.10.2026):</strong>
-              <span class="text-slate-300 ml-1">Continental Tour 2027 aktualisiert • WM 2027 Peking (11.–19.09.2027) bestätigt • Meisterschaften hervorgehoben.</span>
+              <strong class="text-cyan-300">Tour- & Diamond League Update 2027:</strong>
+              <span class="text-slate-300 ml-1">Wanda Diamond League Meetings mit Weitsprung Männer integriert • Pausenberechnung aktiv • Kalenderwochen Mo–So.</span>
             </div>
           </div>
-          <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-bold shrink-0">Wöchentlich Sync</span>
+          <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-bold shrink-0">Wöchentlich verifiziert</span>
         </div>
 
-        <!-- 9-Month Calendar Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          ${months.map(month => {
-            const list = meetingsByMonth[month] || [];
-            return `
-              <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2 flex flex-col justify-between shadow-sm">
-                <div class="flex items-center justify-between pb-1.5 border-b border-slate-800">
-                  <span class="text-xs font-black font-mono uppercase text-white tracking-wide">${month}</span>
-                  <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-950 text-cyan-400 border border-slate-800">
-                    ${list.length} ${list.length === 1 ? 'Event' : 'Events'}
-                  </span>
-                </div>
-
-                <div class="space-y-1.5 flex-1 min-h-[140px] max-h-60 overflow-y-auto no-scrollbar">
-                  ${list.length > 0 ? list.map(m => {
-                    const isChampionship = (m.tier === 'Major' || m.category === 'OW' || m.category === 'GL' || m.category === 'GW' || m.name.includes('DM') || m.name.includes('EM') || m.name.includes('WM') || m.name.includes('CISM'));
-                    let badgeColor = 'bg-slate-950 text-slate-300 border-slate-800 hover:border-slate-700';
-                    if (isChampionship) {
-                      badgeColor = 'bg-purple-950/70 text-purple-200 border-purple-800 hover:border-purple-600 shadow-sm';
-                    } else if (m.tier === 'Gold') {
-                      badgeColor = 'bg-amber-950/70 text-amber-300 border-amber-800 hover:border-amber-600';
-                    } else if (m.tier === 'Silver') {
-                      badgeColor = 'bg-cyan-950/70 text-cyan-300 border-cyan-800 hover:border-cyan-600';
-                    } else if (m.tier === 'Bronze') {
-                      badgeColor = 'bg-emerald-950/70 text-emerald-300 border-emerald-800 hover:border-emerald-600';
-                    }
-
-                    return `
-                      <div onclick="VenuesModule.openMeetingInfoModal('${m.id}')" class="cursor-pointer border rounded-lg p-2 text-xs font-mono transition-all hover:scale-[1.01] ${badgeColor}">
-                        <div class="flex items-center justify-between gap-1">
-                          <span class="font-bold text-white text-[11px] truncate" title="${m.name}">${m.name}</span>
-                          <span class="text-[9px] font-black shrink-0 px-1 py-0.2 rounded bg-slate-900 border border-slate-700">${m.category}</span>
-                        </div>
-                        <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
-                          <span>📅 ${m.displayDate || m.date}</span>
-                          <span class="truncate ml-1">📍 ${m.city} (${m.country})</span>
-                        </div>
-                        ${m.promisingRunway ? `
-                          <div class="mt-1 text-[9px] text-amber-400 flex items-center gap-1">
-                            <span>⭐</span>
-                            <span class="truncate">Schnelle Anlage (Holzunterbau)</span>
-                          </div>
-                        ` : ''}
-                      </div>
-                    `;
-                  }).join('') : `
-                    <div class="py-10 text-center text-slate-600 font-mono text-[11px] italic">
-                      Keine Wettkämpfe in diesem Monat
-                    </div>
-                  `}
-                </div>
-              </div>
-            `;
-          }).join('')}
-        </div>
+        ${monthSelectorHtml}
+        ${gridsHtml}
       </div>
     `;
   }
 
-  return { render, openMeetingInfoModal, copyManagerPitchById, resetFilters, toggleMeetingRow, setViewMode, renderCalendarMonthGrid };
+  return {
+    render,
+    openMeetingInfoModal,
+    copyManagerPitchById,
+    resetFilters,
+    toggleMeetingRow,
+    setViewMode,
+    renderCalendarMonthGrid,
+    setCalendarMonth,
+    nextCalendarMonth,
+    prevCalendarMonth,
+    toggleShowAllMonths
+  };
 })();
 
 window.VenuesModule = VenuesModule;
