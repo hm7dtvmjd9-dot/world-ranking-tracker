@@ -8,8 +8,8 @@
     "European Athletics & DLV Official 2027 Championships Roadmap"
   ],
   "strict_discipline_filter": "Includes competitions offering Men's Long Jump and relevant championships for DLV cadre.",
-  "total_meetings": 48,
-  "promising_runways_count": 34,
+  "total_meetings": 43,
+  "promising_runways_count": 27,
   "meetings": [
     {
       "id": "wa-7244492",
@@ -52,20 +52,20 @@
         }
       ],
       "disciplinesMen": [
-        "60mH",
-        "3000m sh",
         "Long Jump",
-        "1500m sh",
+        "3000m sh",
         "800m sh",
-        "400m sh"
+        "60mH",
+        "400m sh",
+        "1500m sh"
       ],
       "disciplinesWomen": [
-        "60mH",
         "200m sh",
-        "1500m sh",
         "60m",
+        "Pole Vault",
         "800m sh",
-        "Pole Vault"
+        "60mH",
+        "1500m sh"
       ]
     },
     {
@@ -114,15 +114,15 @@
         }
       ],
       "disciplinesMen": [
+        "60mH",
         "Long Jump",
-        "60m",
-        "60mH"
+        "60m"
       ],
       "disciplinesWomen": [
-        "Long Jump",
+        "60mH",
         "Triple Jump",
-        "60m",
-        "60mH"
+        "Long Jump",
+        "60m"
       ]
     },
     {
@@ -166,17 +166,17 @@
         }
       ],
       "disciplinesMen": [
-        "60mH",
         "Long Jump",
-        "1500m sh",
+        "Pole Vault",
         "60m",
-        "Pole Vault"
+        "60mH",
+        "1500m sh"
       ],
       "disciplinesWomen": [
-        "800m sh",
+        "60mH",
         "400m sh",
-        "60m",
-        "60mH"
+        "800m sh",
+        "60m"
       ]
     },
     {
@@ -216,18 +216,18 @@
       ],
       "disciplinesMen": [
         "Triple Jump",
-        "3000m sh",
-        "Long Jump",
         "200m sh",
+        "Long Jump",
+        "Pole Vault",
         "60m",
-        "Pole Vault"
+        "3000m sh"
       ],
       "disciplinesWomen": [
-        "60mH",
+        "Triple Jump",
         "200m sh",
         "60m",
         "800m sh",
-        "Triple Jump"
+        "60mH"
       ]
     },
     {
@@ -272,19 +272,19 @@
         }
       ],
       "disciplinesMen": [
-        "60mH",
+        "High Jump",
         "300mH",
         "Long Jump",
-        "High Jump",
-        "60m"
+        "60m",
+        "60mH"
       ],
       "disciplinesWomen": [
-        "60mH",
-        "300mH",
-        "Shot Put",
-        "Long Jump",
         "High Jump",
-        "60m"
+        "300mH",
+        "Long Jump",
+        "60m",
+        "Shot Put",
+        "60mH"
       ]
     },
     {
@@ -335,21 +335,21 @@
         }
       ],
       "disciplinesMen": [
-        "60mH",
-        "3000m sh",
-        "Shot Put",
         "Long Jump",
         "60m",
+        "3000m sh",
+        "Shot Put",
+        "60mH",
         "400m sh"
       ],
       "disciplinesWomen": [
-        "60mH",
-        "Long Jump",
         "High Jump",
-        "1500m sh",
+        "Triple Jump",
+        "Long Jump",
         "60m",
         "800m sh",
-        "Triple Jump"
+        "60mH",
+        "1500m sh"
       ]
     },
     {
@@ -400,18 +400,18 @@
         }
       ],
       "disciplinesMen": [
-        "60mH",
+        "Triple Jump",
         "Long Jump",
-        "1500m sh",
         "800m sh",
-        "Triple Jump"
+        "60mH",
+        "1500m sh"
       ],
       "disciplinesWomen": [
-        "3000m sh",
+        "Triple Jump",
         "Long Jump",
         "60m",
-        "800m sh",
-        "Triple Jump"
+        "3000m sh",
+        "800m sh"
       ]
     },
     {
@@ -456,16 +456,141 @@
         }
       ],
       "disciplinesMen": [
-        "60mH",
-        "Shot Put",
         "Long Jump",
+        "Shot Put",
         "800m sh",
+        "60mH",
         "400m sh"
       ],
       "disciplinesWomen": [
-        "1500m sh",
+        "60mH",
         "60m",
-        "60mH"
+        "1500m sh"
+      ]
+    },
+    {
+      "id": "wa-7247084",
+      "wa_id": 7247084,
+      "date": "2027-01-29",
+      "displayDate": "29. JAN 2027",
+      "month": "Januar 2027",
+      "year": 2027,
+      "name": "DeLoss Dodds Invitational",
+      "tour": "World Athletics Indoor Tour 2027",
+      "tier": "Bronze",
+      "category": "C",
+      "subgroup": "Bronze",
+      "venue": "Cliff Rovelto Indoor Track",
+      "city": "KS",
+      "country": "USA",
+      "indoor": true,
+      "mensLongJump": true,
+      "womensLongJump": true,
+      "standardEligible": true,
+      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "promisingRunway": false,
+      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "lukaHistory": [],
+      "topHistoricalMarks": [
+        8.09,
+        7.98,
+        7.87,
+        7.87,
+        7.76
+      ],
+      "websiteUrl": null,
+      "resultsPageUrl": null,
+      "liveStreamingUrl": null,
+      "contactPersons": [
+        {
+          "name": "Christopher Goodwin",
+          "email": "cgoodwin@kstatesports.com",
+          "phone": "+17854736661",
+          "title": "General matters"
+        }
+      ],
+      "disciplinesMen": [
+        "High Jump",
+        "Long Jump",
+        "Triple Jump"
+      ],
+      "disciplinesWomen": [
+        "Triple Jump",
+        "Long Jump",
+        "Pole Vault"
+      ]
+    },
+    {
+      "id": "wa-7247083",
+      "wa_id": 7247083,
+      "date": "2027-01-29",
+      "displayDate": "29. JAN 2027",
+      "month": "Januar 2027",
+      "year": 2027,
+      "name": "PNC Lenny Lyles Invitational",
+      "tour": "World Athletics Indoor Tour 2027",
+      "tier": "Bronze",
+      "category": "C",
+      "subgroup": "Bronze",
+      "venue": "Norton Sports Center",
+      "city": "KY",
+      "country": "USA",
+      "indoor": true,
+      "mensLongJump": true,
+      "womensLongJump": true,
+      "standardEligible": true,
+      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "promisingRunway": false,
+      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "lukaHistory": [],
+      "topHistoricalMarks": [
+        7.86,
+        7.79
+      ],
+      "websiteUrl": null,
+      "resultsPageUrl": null,
+      "liveStreamingUrl": null,
+      "contactPersons": [
+        {
+          "name": "Wyatt Rhoads",
+          "email": "wyatt@gocards.com",
+          "phone": "+15154503478",
+          "title": "General matters"
+        }
+      ],
+      "disciplinesMen": [
+        "Mile sh",
+        "High Jump",
+        "Triple Jump",
+        "Weight Throw",
+        "4x400m sh",
+        "200m sh",
+        "Long Jump",
+        "60m",
+        "Pole Vault",
+        "3000m sh",
+        "800m sh",
+        "Shot Put",
+        "5000m sh",
+        "60mH",
+        "400m sh"
+      ],
+      "disciplinesWomen": [
+        "Mile sh",
+        "High Jump",
+        "Triple Jump",
+        "Weight Throw",
+        "4x400m sh",
+        "200m sh",
+        "Long Jump",
+        "60m",
+        "Pole Vault",
+        "3000m sh",
+        "800m sh",
+        "Shot Put",
+        "5000m sh",
+        "60mH",
+        "400m sh"
       ]
     },
     {
@@ -517,12 +642,12 @@
         }
       ],
       "disciplinesMen": [
-        "Long Jump",
-        "High Jump"
+        "High Jump",
+        "Long Jump"
       ],
       "disciplinesWomen": [
-        "Long Jump",
-        "High Jump"
+        "High Jump",
+        "Long Jump"
       ]
     },
     {
@@ -567,16 +692,92 @@
         }
       ],
       "disciplinesMen": [
-        "400m sh",
         "Long Jump",
-        "1500m sh",
-        "800m sh"
+        "400m sh",
+        "800m sh",
+        "1500m sh"
       ],
       "disciplinesWomen": [
+        "60mH",
         "400m sh",
         "Long Jump",
-        "60mH",
         "800m sh"
+      ]
+    },
+    {
+      "id": "wa-7247085",
+      "wa_id": 7247085,
+      "date": "2027-01-31",
+      "displayDate": "31. JAN 2027",
+      "month": "Januar 2027",
+      "year": 2027,
+      "name": "Sound Invite",
+      "tour": "World Athletics Indoor Tour 2027",
+      "tier": "Silver",
+      "category": "B",
+      "subgroup": "Silver",
+      "venue": "JDL Fast Track",
+      "city": "NC",
+      "country": "USA",
+      "indoor": true,
+      "mensLongJump": true,
+      "womensLongJump": true,
+      "standardEligible": true,
+      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
+      "promisingRunway": true,
+      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.12m, 3x über 8,00m)",
+      "lukaHistory": [],
+      "topHistoricalMarks": [
+        8.12,
+        8.12,
+        8.05,
+        7.98,
+        7.95
+      ],
+      "websiteUrl": "https://www.soundrunning.run/invite",
+      "resultsPageUrl": "https://www.soundrunning.run/invite",
+      "liveStreamingUrl": "https://www.soundrunning.run/invite",
+      "contactPersons": [
+        {
+          "name": "Jesse Williams",
+          "email": "jesse@soundrunning.run",
+          "phone": "+15865535638",
+          "title": "General matters"
+        }
+      ],
+      "disciplinesMen": [
+        "Mile sh",
+        "High Jump",
+        "Triple Jump",
+        "Weight Throw",
+        "200m sh",
+        "Long Jump",
+        "60m",
+        "Pole Vault",
+        "3000m sh",
+        "800m sh",
+        "Shot Put",
+        "5000m sh",
+        "60mH",
+        "400m sh",
+        "1500m sh"
+      ],
+      "disciplinesWomen": [
+        "Mile sh",
+        "High Jump",
+        "Triple Jump",
+        "Weight Throw",
+        "200m sh",
+        "Long Jump",
+        "60m",
+        "Pole Vault",
+        "3000m sh",
+        "800m sh",
+        "Shot Put",
+        "5000m sh",
+        "60mH",
+        "400m sh",
+        "1500m sh"
       ]
     },
     {
@@ -646,20 +847,20 @@
         }
       ],
       "disciplinesMen": [
-        "60mH",
-        "Long Jump",
         "Mile sh",
+        "Long Jump",
+        "Pole Vault",
         "800m sh",
-        "400m sh",
-        "Pole Vault"
+        "60mH",
+        "400m sh"
       ],
       "disciplinesWomen": [
-        "60mH",
-        "3000m sh",
+        "Pole Vault",
         "60m",
+        "3000m sh",
         "800m sh",
-        "400m sh",
-        "Pole Vault"
+        "60mH",
+        "400m sh"
       ]
     },
     {
@@ -709,44 +910,44 @@
         }
       ],
       "disciplinesMen": [
-        "1500m",
-        "110mH",
-        "800m",
-        "5000m",
-        "Javelin Throw",
-        "Shot Put",
-        "Long Jump",
-        "100m",
-        "High Jump",
-        "4x400m",
-        "200m",
-        "10,000m",
-        "Triple Jump",
-        "3000mSC",
-        "4x100m",
         "400m",
-        "Discus Throw"
+        "High Jump",
+        "Discus Throw",
+        "4x400m",
+        "Triple Jump",
+        "110mH",
+        "4x100m",
+        "200m",
+        "Long Jump",
+        "800m",
+        "10,000m",
+        "Javelin Throw",
+        "3000mSC",
+        "Shot Put",
+        "100m",
+        "5000m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "800m",
-        "Shot Put",
-        "100m",
-        "10,000m",
-        "400m",
-        "Discus Throw",
-        "5000m",
-        "Long Jump",
-        "3000mSC",
-        "1500m",
-        "Hammer Throw",
-        "Javelin Throw",
+        "Triple Jump",
+        "100mH",
         "High Jump",
         "4x400m",
-        "100mH",
         "400mH",
+        "Hammer Throw",
+        "Shot Put",
+        "1500m",
+        "4x100m",
         "200m",
-        "Triple Jump",
-        "4x100m"
+        "10,000m",
+        "Javelin Throw",
+        "3000mSC",
+        "5000m",
+        "400m",
+        "Discus Throw",
+        "Long Jump",
+        "800m",
+        "100m"
       ]
     },
     {
@@ -798,13 +999,13 @@
         }
       ],
       "disciplinesMen": [
-        "400m sh",
         "Long Jump",
+        "400m sh",
         "800m sh"
       ],
       "disciplinesWomen": [
-        "Shot Put",
         "60mH",
+        "Shot Put",
         "800m sh"
       ]
     },
@@ -862,15 +1063,15 @@
         }
       ],
       "disciplinesMen": [
-        "Pole Vault",
+        "60mH",
         "Long Jump",
-        "60m",
-        "60mH"
+        "Pole Vault",
+        "60m"
       ],
       "disciplinesWomen": [
+        "60mH",
         "Long Jump",
-        "60m",
-        "60mH"
+        "60m"
       ]
     },
     {
@@ -920,43 +1121,43 @@
         }
       ],
       "disciplinesMen": [
-        "1500m",
-        "400mH",
-        "Pole Vault",
-        "110mH",
-        "800m",
-        "5000m",
-        "Javelin Throw",
-        "Shot Put",
-        "Long Jump",
-        "100m",
-        "High Jump",
-        "4x400m",
-        "200m",
-        "10,000m",
-        "Triple Jump",
-        "4x100m",
-        "400m",
-        "Discus Throw"
-      ],
-      "disciplinesWomen": [
-        "1500m",
-        "400mH",
-        "800m",
-        "5000m",
-        "Javelin Throw",
-        "Shot Put",
-        "Long Jump",
-        "100m",
-        "High Jump",
-        "4x400m",
-        "200m",
-        "10,000m",
-        "Triple Jump",
-        "4x100m",
         "400m",
         "Discus Throw",
-        "100mH"
+        "High Jump",
+        "4x400m",
+        "Triple Jump",
+        "110mH",
+        "4x100m",
+        "200m",
+        "Long Jump",
+        "Pole Vault",
+        "800m",
+        "10,000m",
+        "400mH",
+        "Javelin Throw",
+        "Shot Put",
+        "100m",
+        "5000m",
+        "1500m"
+      ],
+      "disciplinesWomen": [
+        "400m",
+        "High Jump",
+        "Discus Throw",
+        "4x400m",
+        "Triple Jump",
+        "4x100m",
+        "100mH",
+        "200m",
+        "Long Jump",
+        "800m",
+        "10,000m",
+        "400mH",
+        "Javelin Throw",
+        "Shot Put",
+        "100m",
+        "5000m",
+        "1500m"
       ]
     },
     {
@@ -1077,28 +1278,28 @@
         }
       ],
       "disciplinesMen": [
-        "1500m",
-        "Hammer Throw",
-        "110mH",
-        "Shot Put",
-        "Long Jump",
-        "100m",
         "High Jump",
-        "200m",
         "Triple Jump",
-        "4x100m"
+        "110mH",
+        "4x100m",
+        "200m",
+        "Long Jump",
+        "Hammer Throw",
+        "Shot Put",
+        "100m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "1500m",
-        "Hammer Throw",
-        "Shot Put",
-        "Long Jump",
-        "100m",
         "High Jump",
-        "200m",
         "Triple Jump",
         "4x100m",
-        "100mH"
+        "100mH",
+        "200m",
+        "Long Jump",
+        "Hammer Throw",
+        "Shot Put",
+        "100m",
+        "1500m"
       ]
     },
     {
@@ -1149,24 +1350,24 @@
         }
       ],
       "disciplinesMen": [
-        "1500m",
-        "800m",
-        "Long Jump",
-        "100m",
+        "400m",
         "High Jump",
+        "Discus Throw",
         "200m",
         "3000m",
-        "400m",
-        "Discus Throw"
+        "Long Jump",
+        "800m",
+        "100m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "1500m",
         "High Jump",
-        "200m",
-        "3000m",
-        "Pole Vault",
         "Discus Throw",
-        "100mH"
+        "100mH",
+        "3000m",
+        "200m",
+        "Pole Vault",
+        "1500m"
       ]
     },
     {
@@ -1211,23 +1412,23 @@
         }
       ],
       "disciplinesMen": [
-        "60mH",
-        "3000m sh",
         "Long Jump",
-        "1500m sh",
+        "Pole Vault",
+        "3000m sh",
         "800m sh",
+        "60mH",
         "400m sh",
-        "Pole Vault"
+        "1500m sh"
       ],
       "disciplinesWomen": [
-        "60mH",
-        "3000m sh",
         "200m sh",
-        "1500m sh",
         "60m",
+        "Pole Vault",
+        "3000m sh",
         "800m sh",
+        "60mH",
         "400m sh",
-        "Pole Vault"
+        "1500m sh"
       ]
     },
     {
@@ -1336,26 +1537,26 @@
         }
       ],
       "disciplinesMen": [
-        "1500m",
-        "400mH",
+        "400m",
+        "4x100m",
         "110mH",
+        "200m",
+        "Long Jump",
         "800m",
         "Javelin Throw",
-        "Long Jump",
+        "400mH",
         "100m",
-        "200m",
-        "4x100m",
-        "400m"
+        "1500m"
       ],
       "disciplinesWomen": [
-        "800m",
-        "Javelin Throw",
-        "Long Jump",
-        "100m",
-        "200m",
-        "4x100m",
         "400m",
-        "100mH"
+        "4x100m",
+        "100mH",
+        "200m",
+        "Long Jump",
+        "Javelin Throw",
+        "800m",
+        "100m"
       ]
     },
     {
@@ -1463,44 +1664,113 @@
         }
       ],
       "disciplinesMen": [
-        "800m",
+        "Triple Jump",
+        "110mH",
+        "High Jump",
+        "4x400m",
+        "3000m",
+        "400mH",
+        "Hammer Throw",
         "Shot Put",
-        "100m",
+        "1500m",
+        "4x100m",
+        "200m",
         "10,000m",
+        "Javelin Throw",
+        "3000mSC",
         "400m",
         "Discus Throw",
         "Long Jump",
-        "3000mSC",
-        "1500m",
-        "Hammer Throw",
-        "110mH",
-        "Javelin Throw",
-        "High Jump",
-        "3000m",
-        "4x400m",
-        "400mH",
-        "200m",
-        "Triple Jump",
-        "4x100m"
+        "800m",
+        "100m"
       ],
       "disciplinesWomen": [
-        "1500m",
-        "800m",
-        "5000m",
-        "Javelin Throw",
-        "Shot Put",
-        "Long Jump",
-        "100m",
-        "High Jump",
-        "4x400m",
-        "200m",
-        "10,000m",
-        "Triple Jump",
-        "3000mSC",
-        "4x100m",
         "400m",
+        "High Jump",
         "Discus Throw",
-        "100mH"
+        "4x400m",
+        "Triple Jump",
+        "4x100m",
+        "100mH",
+        "200m",
+        "Long Jump",
+        "800m",
+        "10,000m",
+        "Javelin Throw",
+        "3000mSC",
+        "Shot Put",
+        "100m",
+        "5000m",
+        "1500m"
+      ]
+    },
+    {
+      "id": "wa-7242001",
+      "wa_id": 7242001,
+      "date": "2027-04-03",
+      "displayDate": "03. APR 2027",
+      "month": "April 2027",
+      "year": 2027,
+      "name": "Copper Spike Challenge - The Strike | Series IV",
+      "tour": "World Athletics Continental Tour 2027",
+      "tier": "Bronze",
+      "category": "C",
+      "subgroup": "Bronze",
+      "venue": "Levy Mwanawasa Stadion",
+      "city": "Ndola",
+      "country": "ZAM",
+      "indoor": false,
+      "mensLongJump": true,
+      "womensLongJump": true,
+      "standardEligible": true,
+      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
+      "promisingRunway": false,
+      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
+      "lukaHistory": [],
+      "topHistoricalMarks": [
+        8.06,
+        7.94,
+        7.86,
+        7.78
+      ],
+      "websiteUrl": "www.sportronics.co.zm",
+      "resultsPageUrl": "www.sportronics.co.zm/results/CSCSeriesIV",
+      "liveStreamingUrl": null,
+      "contactPersons": [
+        {
+          "name": "John Chizu",
+          "email": "info@sportronics.co.zm",
+          "phone": "+260977330516",
+          "title": "General matters"
+        },
+        {
+          "name": "Elton Zulu",
+          "email": "info@sportronics.co.zm",
+          "phone": "+260950401406",
+          "title": "Meeting Director"
+        }
+      ],
+      "disciplinesMen": [
+        "High Jump",
+        "200m",
+        "Long Jump",
+        "10,000m",
+        "Javelin Throw",
+        "3000mSC",
+        "Shot Put",
+        "100m",
+        "1500m"
+      ],
+      "disciplinesWomen": [
+        "High Jump",
+        "200m",
+        "Long Jump",
+        "10,000m",
+        "Javelin Throw",
+        "3000mSC",
+        "Shot Put",
+        "100m",
+        "1500m"
       ]
     },
     {
@@ -1545,97 +1815,28 @@
         }
       ],
       "disciplinesMen": [
-        "400mH",
-        "800m",
-        "Long Jump",
-        "100m",
+        "400m",
         "High Jump",
         "200m",
-        "400m"
+        "Long Jump",
+        "800m",
+        "400mH",
+        "100m"
       ],
       "disciplinesWomen": [
-        "400mH",
+        "400m",
         "800m",
         "Javelin Throw",
+        "400mH",
         "Shot Put",
-        "100m",
-        "400m"
-      ]
-    },
-    {
-      "id": "wa-7242001",
-      "wa_id": 7242001,
-      "date": "2027-04-10",
-      "displayDate": "10. APR 2027",
-      "month": "April 2027",
-      "year": 2027,
-      "name": "Copper Spike Challenge - The Strike | Series IV",
-      "tour": "World Athletics Continental Tour 2027",
-      "tier": "Bronze",
-      "category": "C",
-      "subgroup": "Bronze",
-      "venue": "Levy Mwanawasa Stadion",
-      "city": "Ndola",
-      "country": "ZAM",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. C Bronze)",
-      "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.06,
-        7.94,
-        7.86,
-        7.78
-      ],
-      "websiteUrl": "www.sportronics.co.zm",
-      "resultsPageUrl": "www.sportronics.co.zm/results/CSCSeriesIV",
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "John Chizu",
-          "email": "info@sportronics.co.zm",
-          "phone": "+260977330516",
-          "title": "General matters"
-        },
-        {
-          "name": "Elton Zulu",
-          "email": "info@sportronics.co.zm",
-          "phone": "+260950401406",
-          "title": "Meeting Director"
-        }
-      ],
-      "disciplinesMen": [
-        "1500m",
-        "Javelin Throw",
-        "Shot Put",
-        "Long Jump",
-        "100m",
-        "High Jump",
-        "200m",
-        "10,000m",
-        "3000mSC"
-      ],
-      "disciplinesWomen": [
-        "1500m",
-        "Javelin Throw",
-        "Shot Put",
-        "Long Jump",
-        "100m",
-        "High Jump",
-        "200m",
-        "10,000m",
-        "3000mSC"
+        "100m"
       ]
     },
     {
       "id": "wa-7242000",
       "wa_id": 7242000,
-      "date": "2027-04-11",
-      "displayDate": "11. APR 2027",
+      "date": "2027-04-04",
+      "displayDate": "04. APR 2027",
       "month": "April 2027",
       "year": 2027,
       "name": "The Copper Spike - The Final | Series V",
@@ -1679,36 +1880,147 @@
         }
       ],
       "disciplinesMen": [
-        "1500m",
-        "Hammer Throw",
-        "800m",
-        "5000m",
-        "Javelin Throw",
-        "Shot Put",
-        "Long Jump",
-        "100m",
+        "400m",
         "High Jump",
+        "Discus Throw",
         "4x400m",
-        "200m",
-        "10,000m",
         "Triple Jump",
         "4x100m",
-        "400m",
-        "Discus Throw"
+        "200m",
+        "Long Jump",
+        "800m",
+        "10,000m",
+        "Javelin Throw",
+        "Hammer Throw",
+        "Shot Put",
+        "100m",
+        "5000m",
+        "1500m"
       ],
       "disciplinesWomen": [
+        "400m",
+        "High Jump",
+        "Discus Throw",
+        "4x400m",
+        "Triple Jump",
+        "4x100m",
+        "200m",
+        "Long Jump",
         "800m",
         "Javelin Throw",
         "Shot Put",
-        "Long Jump",
-        "100m",
-        "High Jump",
-        "4x400m",
-        "200m",
+        "100m"
+      ]
+    },
+    {
+      "id": "wa-7246633",
+      "wa_id": 7246633,
+      "date": "2027-04-09",
+      "displayDate": "09. APR 2027",
+      "month": "April 2027",
+      "year": 2027,
+      "name": "Troféu Adhemar Ferreira da Silva Loterias Caixa de Atletismo",
+      "tour": "World Athletics Continental Tour 2027",
+      "tier": "Challenger",
+      "category": "D",
+      "subgroup": "Challenger",
+      "venue": "Estádio Olímpico do Ibirapuera - Ícaro de Castro Melo",
+      "city": "São Paulo",
+      "country": "BRA",
+      "indoor": false,
+      "mensLongJump": true,
+      "womensLongJump": true,
+      "standardEligible": false,
+      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
+      "promisingRunway": true,
+      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.35m, 32x über 8,00m)",
+      "lukaHistory": [
+        {
+          "mark": 7.88,
+          "year": 2025,
+          "date": "14 AUG 2025",
+          "place": "3."
+        }
+      ],
+      "topHistoricalMarks": [
+        8.35,
+        8.35,
+        8.29,
+        8.29,
+        8.24
+      ],
+      "websiteUrl": null,
+      "resultsPageUrl": null,
+      "liveStreamingUrl": null,
+      "contactPersons": [
+        {
+          "name": "Fabiano Paiva",
+          "email": "fabianopaiva@cbat.org.br",
+          "phone": "+5511997109989",
+          "title": "General matters"
+        },
+        {
+          "name": "Joana Costa",
+          "email": "joanacosta@cbat.org.br",
+          "phone": "+5511986232224",
+          "title": "Meeting Director"
+        },
+        {
+          "name": "Joana Costa",
+          "email": "eventos@cbat.org.br",
+          "phone": "+5511986232224",
+          "title": "Athletes Liaison"
+        }
+      ],
+      "disciplinesMen": [
+        "Decathlon",
         "Triple Jump",
+        "110mH",
+        "High Jump",
+        "5000m Walk",
+        "4x400m",
+        "400mH",
+        "Hammer Throw",
+        "Shot Put",
+        "1500m",
+        "10,000m Walk",
         "4x100m",
+        "200m",
+        "Pole Vault",
+        "10,000m",
+        "Javelin Throw",
+        "3000mSC",
+        "5000m",
         "400m",
-        "Discus Throw"
+        "Discus Throw",
+        "Long Jump",
+        "800m",
+        "100m"
+      ],
+      "disciplinesWomen": [
+        "Triple Jump",
+        "100mH",
+        "Heptathlon",
+        "High Jump",
+        "5000m Walk",
+        "4x400m",
+        "400mH",
+        "Hammer Throw",
+        "Shot Put",
+        "1500m",
+        "10,000m Walk",
+        "4x100m",
+        "200m",
+        "Pole Vault",
+        "10,000m",
+        "Javelin Throw",
+        "3000mSC",
+        "5000m",
+        "400m",
+        "Discus Throw",
+        "Long Jump",
+        "800m",
+        "100m"
       ]
     },
     {
@@ -1765,25 +2077,25 @@
         }
       ],
       "disciplinesMen": [
-        "300m",
         "110mH",
-        "800m",
-        "Shot Put",
-        "Long Jump",
-        "100m",
+        "4x100m",
         "200m",
         "3000m",
-        "4x100m"
+        "Long Jump",
+        "800m",
+        "300m",
+        "Shot Put",
+        "100m"
       ],
       "disciplinesWomen": [
+        "4x100m",
+        "100mH",
+        "Long Jump",
+        "800m",
         "300m",
         "400mH",
-        "800m",
         "Javelin Throw",
-        "Long Jump",
-        "100m",
-        "4x100m",
-        "100mH"
+        "100m"
       ]
     },
     {
@@ -1834,21 +2146,21 @@
         }
       ],
       "disciplinesMen": [
-        "400mH",
-        "800m",
-        "Long Jump",
-        "100m",
+        "400m",
         "High Jump",
         "200m",
-        "400m"
+        "Long Jump",
+        "800m",
+        "400mH",
+        "100m"
       ],
       "disciplinesWomen": [
-        "400mH",
+        "400m",
         "800m",
         "Javelin Throw",
+        "400mH",
         "Shot Put",
-        "100m",
-        "400m"
+        "100m"
       ]
     },
     {
@@ -1903,32 +2215,32 @@
         }
       ],
       "disciplinesMen": [
-        "1500m",
-        "400mH",
+        "400m",
         "110mH",
-        "800m",
-        "5000m",
-        "Javelin Throw",
-        "Long Jump",
-        "100m",
         "200m",
         "3000m",
+        "Long Jump",
+        "800m",
+        "Javelin Throw",
+        "400mH",
         "3000mSC",
-        "400m"
+        "100m",
+        "5000m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "1500m",
-        "400mH",
-        "800m",
-        "5000m",
-        "Javelin Throw",
-        "100m",
+        "400m",
         "High Jump",
+        "100mH",
         "200m",
         "3000m",
+        "800m",
+        "Javelin Throw",
+        "400mH",
         "3000mSC",
-        "400m",
-        "100mH"
+        "100m",
+        "5000m",
+        "1500m"
       ]
     },
     {
@@ -2001,20 +2313,20 @@
         "Long Jump"
       ],
       "disciplinesWomen": [
+        "High Jump",
+        "2000m",
+        "Triple Jump",
+        "4x100m",
+        "100mH",
+        "600m",
+        "Long Jump",
+        "60m",
+        "Javelin Throw",
         "300m",
         "60mH",
         "Hammer Throw",
         "1000m",
-        "Javelin Throw",
-        "2000m",
-        "Long Jump",
-        "100m",
-        "600m",
-        "High Jump",
-        "60m",
-        "Triple Jump",
-        "4x100m",
-        "100mH"
+        "100m"
       ]
     },
     {
@@ -2059,143 +2371,29 @@
         }
       ],
       "disciplinesMen": [
-        "1500m",
-        "Hammer Throw",
+        "400m",
+        "Triple Jump",
         "110mH",
-        "800m",
-        "Shot Put",
-        "Long Jump",
-        "100m",
+        "4x100m",
         "200m",
         "3000m",
-        "Triple Jump",
-        "4x100m",
-        "400m"
+        "Long Jump",
+        "800m",
+        "Hammer Throw",
+        "Shot Put",
+        "100m",
+        "1500m"
       ],
       "disciplinesWomen": [
+        "400m",
+        "Triple Jump",
+        "200m",
+        "Long Jump",
+        "800m",
         "400mH",
         "Hammer Throw",
-        "800m",
-        "Long Jump",
-        "100m",
-        "200m",
-        "Triple Jump",
-        "400m"
+        "100m"
       ]
-    },
-    {
-      "id": "dl-doha-2027",
-      "wa_id": 8801,
-      "date": "2027-05-14",
-      "displayDate": "14. MAI 2027",
-      "month": "Mai 2027",
-      "year": 2027,
-      "name": "Doha Diamond League 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "venue": "Qatar Sports Club / Suhaim bin Hamad Stadium",
-      "city": "Doha",
-      "country": "QAT",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Wanda Diamond League • Kat. GW)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Doha: Schneller Belag, oft optimaler Rückenwind, Kat. GW mit 100 Bonuspunkten für den Sieg)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.48,
-        8.36,
-        8.24,
-        8.15,
-        8.08
-      ],
-      "contactPersons": [
-        {
-          "name": "Qatar Athletics Federation",
-          "email": "info@qatarathletics.com",
-          "phone": "+974 4494 4444",
-          "title": "Meeting Management"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump",
-        "100m",
-        "200m",
-        "400m",
-        "High Jump",
-        "Discus Throw"
-      ],
-      "disciplinesWomen": [
-        "Pole Vault",
-        "800m",
-        "3000m",
-        "100m Hurdles",
-        "Shot Put"
-      ],
-      "websiteUrl": "https://doha.diamondleague.com",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null
-    },
-    {
-      "id": "dl-eugene-2027",
-      "wa_id": 8802,
-      "date": "2027-05-29",
-      "displayDate": "29. MAI 2027",
-      "month": "Mai 2027",
-      "year": 2027,
-      "name": "Prefontaine Classic (Eugene Diamond League) 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "venue": "Hayward Field",
-      "city": "Eugene (OR)",
-      "country": "USA",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Wanda Diamond League • Kat. GW)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Hayward Field: Legendäre Mondo-Bahn, optimale Elastizität und Rebound)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.52,
-        8.35,
-        8.28,
-        8.18,
-        8.11
-      ],
-      "contactPersons": [
-        {
-          "name": "Prefontaine Classic Organizing Committee",
-          "email": "info@preclassic.com",
-          "phone": "+1 541 346 5438",
-          "title": "Elite Athlete Liaison"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump",
-        "100m",
-        "400m",
-        "Mile",
-        "110m Hurdles",
-        "Shot Put"
-      ],
-      "disciplinesWomen": [
-        "100m",
-        "800m",
-        "5000m",
-        "Pole Vault",
-        "Discus Throw"
-      ],
-      "websiteUrl": "https://eugene.diamondleague.com",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null
     },
     {
       "id": "wa-7244281",
@@ -2242,22 +2440,22 @@
         }
       ],
       "disciplinesMen": [
-        "110mH",
-        "800m",
-        "Long Jump",
-        "100m",
-        "Pole Vault",
-        "3000mSC",
-        "400m",
-        "Discus Throw"
-      ],
-      "disciplinesWomen": [
-        "1500m",
-        "800m",
-        "100m",
         "400m",
         "Discus Throw",
-        "100mH"
+        "110mH",
+        "Long Jump",
+        "Pole Vault",
+        "800m",
+        "3000mSC",
+        "100m"
+      ],
+      "disciplinesWomen": [
+        "400m",
+        "Discus Throw",
+        "100mH",
+        "800m",
+        "100m",
+        "1500m"
       ]
     },
     {
@@ -2308,26 +2506,26 @@
         }
       ],
       "disciplinesMen": [
-        "1500m",
-        "Hammer Throw",
+        "Discus Throw",
         "110mH",
-        "800m",
-        "Shot Put",
-        "Long Jump",
         "200m",
-        "Discus Throw"
+        "Long Jump",
+        "800m",
+        "Hammer Throw",
+        "Shot Put",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "400mH",
-        "800m",
-        "Javelin Throw",
-        "100m",
+        "400m",
         "High Jump",
+        "Triple Jump",
+        "100mH",
         "200m",
         "3000m",
-        "Triple Jump",
-        "400m",
-        "100mH"
+        "800m",
+        "Javelin Throw",
+        "400mH",
+        "100m"
       ]
     },
     {
@@ -2440,77 +2638,21 @@
         }
       ],
       "disciplinesMen": [
-        "1500m",
+        "Discus Throw",
         "110mH",
-        "800m",
         "Long Jump",
-        "100m",
         "Pole Vault",
-        "Discus Throw"
+        "800m",
+        "100m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "1500m",
+        "100mH",
         "800m",
         "Shot Put",
         "100m",
-        "100mH"
+        "1500m"
       ]
-    },
-    {
-      "id": "dl-oslo-2027",
-      "wa_id": 8803,
-      "date": "2027-06-17",
-      "displayDate": "17. JUN 2027",
-      "month": "Juni 2027",
-      "year": 2027,
-      "name": "Bislett Games (Oslo Diamond League) 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "venue": "Bislett Stadion",
-      "city": "Oslo",
-      "country": "NOR",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Wanda Diamond League • Kat. GW)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Bislett Stadion: Schneller Belag, kompaktes Stadion mit elektrischer Atmosphäre)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.44,
-        8.32,
-        8.21,
-        8.12,
-        8.05
-      ],
-      "contactPersons": [
-        {
-          "name": "Bislett Alliance",
-          "email": "bislett@bislett.no",
-          "phone": "+47 22 59 18 00",
-          "title": "Athlete Director"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump",
-        "100m",
-        "400m Hurdles",
-        "5000m",
-        "Pole Vault"
-      ],
-      "disciplinesWomen": [
-        "200m",
-        "800m",
-        "400m Hurdles",
-        "High Jump",
-        "Triple Jump"
-      ],
-      "websiteUrl": "https://oslo.diamondleague.com",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null
     },
     {
       "id": "champ-team-em-2027",
@@ -2649,177 +2791,6 @@
       "liveStreamingUrl": null
     },
     {
-      "id": "dl-stockholm-2027",
-      "wa_id": 8804,
-      "date": "2027-07-04",
-      "displayDate": "04. JUL 2027",
-      "month": "Juli 2027",
-      "year": 2027,
-      "name": "BAUHAUS-galan (Stockholm Diamond League) 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "venue": "Stockholms Olympiastadion",
-      "city": "Stockholm",
-      "country": "SWE",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Wanda Diamond League • Kat. GW)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Stockholms Olympiastadion: Windgeschützt durch historische Backsteinmauern)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.4,
-        8.29,
-        8.18,
-        8.1,
-        8.04
-      ],
-      "contactPersons": [
-        {
-          "name": "BAUHAUS-galan Athletes Office",
-          "email": "info@bauhausgalan.se",
-          "phone": "+46 8 545 159 00",
-          "title": "Meeting Management"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump",
-        "200m",
-        "800m",
-        "400m Hurdles",
-        "Pole Vault",
-        "Discus Throw"
-      ],
-      "disciplinesWomen": [
-        "100m",
-        "1500m",
-        "3000m Steeple",
-        "High Jump",
-        "Shot Put"
-      ],
-      "websiteUrl": "https://stockholm.diamondleague.com",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null
-    },
-    {
-      "id": "dl-monaco-2027",
-      "wa_id": 8805,
-      "date": "2027-07-16",
-      "displayDate": "16. JUL 2027",
-      "month": "Juli 2027",
-      "year": 2027,
-      "name": "Herculis EBS (Monaco Diamond League) 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "venue": "Stade Louis II",
-      "city": "Monaco",
-      "country": "MON",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Wanda Diamond League • Kat. GW)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Stade Louis II: Schwimmender Unterbau, maximaler Katapulteffekt, Weltrekord-Anlage)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.5,
-        8.42,
-        8.31,
-        8.22,
-        8.15
-      ],
-      "contactPersons": [
-        {
-          "name": "Fédération Monégasque d'Athlétisme",
-          "email": "contact@herculis.com",
-          "phone": "+377 92 05 42 60",
-          "title": "Athletes Department"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump",
-        "100m",
-        "400m",
-        "800m",
-        "110m Hurdles",
-        "High Jump"
-      ],
-      "disciplinesWomen": [
-        "100m",
-        "400m",
-        "1500m",
-        "Pole Vault",
-        "Triple Jump"
-      ],
-      "websiteUrl": "https://monaco.diamondleague.com",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null
-    },
-    {
-      "id": "dl-london-2027",
-      "wa_id": 8806,
-      "date": "2027-07-25",
-      "displayDate": "25. JUL 2027",
-      "month": "Juli 2027",
-      "year": 2027,
-      "name": "London Athletics Meet (London Diamond League) 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "venue": "London Stadium (Queen Elizabeth Olympic Park)",
-      "city": "London",
-      "country": "GBR",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Wanda Diamond League • Kat. GW)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (London Olympic Stadium: Bis zu 60.000 Zuschauer, Mondo Super X Belag)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.45,
-        8.34,
-        8.25,
-        8.16,
-        8.09
-      ],
-      "contactPersons": [
-        {
-          "name": "British Athletics Events",
-          "email": "major-events@britishathletics.org.uk",
-          "phone": "+44 121 713 8400",
-          "title": "Athlete Director"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump",
-        "100m",
-        "400m",
-        "800m",
-        "110m Hurdles",
-        "Shot Put"
-      ],
-      "disciplinesWomen": [
-        "200m",
-        "800m",
-        "5000m",
-        "Pole Vault",
-        "Javelin Throw"
-      ],
-      "websiteUrl": "https://london.diamondleague.com",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null
-    },
-    {
       "id": "wa-7231707",
       "wa_id": 7231707,
       "date": "2027-08-11",
@@ -2859,196 +2830,10 @@
       "disciplinesWomen": []
     },
     {
-      "id": "dl-silesia-2027",
-      "wa_id": 8807,
-      "date": "2027-08-22",
-      "displayDate": "22. AUG 2027",
-      "month": "August 2027",
-      "year": 2027,
-      "name": "Silesia Kamila Skolimowska Memorial (Diamond League) 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "venue": "Silesian Stadium (Stadion Śląski)",
-      "city": "Chorzów",
-      "country": "POL",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Wanda Diamond League • Kat. GW)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Stadion Śląski: Polnischer Spitzenbelag, Luka sprang hier bereits 8.01m)",
-      "lukaHistory": [
-        {
-          "mark": 8.01,
-          "year": 2023,
-          "date": "24. JUN 2023",
-          "place": "3. F"
-        }
-      ],
-      "topHistoricalMarks": [
-        8.46,
-        8.38,
-        8.27,
-        8.19,
-        8.12
-      ],
-      "contactPersons": [
-        {
-          "name": "Fundacja Kamili Skolimowskiej",
-          "email": "biuro@memorialkamili.pl",
-          "phone": "+48 22 834 50 00",
-          "title": "General Director"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump",
-        "100m",
-        "400m",
-        "3000m",
-        "Pole Vault",
-        "Shot Put"
-      ],
-      "disciplinesWomen": [
-        "100m",
-        "400m Hurdles",
-        "1500m",
-        "High Jump",
-        "Hammer Throw"
-      ],
-      "websiteUrl": "https://silesia.diamondleague.com",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null
-    },
-    {
-      "id": "dl-lausanne-2027",
-      "wa_id": 8808,
-      "date": "2027-08-26",
-      "displayDate": "26. AUG 2027",
-      "month": "August 2027",
-      "year": 2027,
-      "name": "Athletissima Lausanne (Diamond League) 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "venue": "Stade Olympique de la Pontaise",
-      "city": "Lausanne",
-      "country": "SUI",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Wanda Diamond League • Kat. GW)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Lausanne: ~500m Höhenlage mit leicht reduziertem Luftwiderstand, Top-Weiten)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.56,
-        8.39,
-        8.29,
-        8.17,
-        8.11
-      ],
-      "contactPersons": [
-        {
-          "name": "Athletissima Association",
-          "email": "info@athletissima.ch",
-          "phone": "+41 21 881 54 00",
-          "title": "Meeting Director"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump",
-        "200m",
-        "800m",
-        "110m Hurdles",
-        "Pole Vault",
-        "Javelin"
-      ],
-      "disciplinesWomen": [
-        "100m",
-        "400m",
-        "3000m",
-        "High Jump"
-      ],
-      "websiteUrl": "https://lausanne.diamondleague.com",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null
-    },
-    {
-      "id": "dl-zurich-final-2027",
-      "wa_id": 8809,
-      "date": "2027-09-02",
-      "displayDate": "02. SEP 2027",
-      "month": "September 2027",
-      "year": 2027,
-      "name": "Weltklasse Zürich (Wanda Diamond League Final) 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "DF",
-      "subgroup": "Diamond League Final",
-      "venue": "Letzigrund Stadium",
-      "city": "Zürich",
-      "country": "SUI",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": true,
-      "status": "Wanda Diamond League FINALE ✅ (Kat. DF • 130 Bonuspunkte für Sieg & Diamond Trophy)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Letzigrund: Legendäre Bahn, das olympische Finale an einem Abend, Kat. DF Höchstkategorie)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.65,
-        8.53,
-        8.42,
-        8.3,
-        8.23
-      ],
-      "contactPersons": [
-        {
-          "name": "Verein Weltklasse Zürich",
-          "email": "office@weltklassezuerich.ch",
-          "phone": "+41 44 497 22 22",
-          "title": "Co-Meeting Director"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump",
-        "100m",
-        "200m",
-        "400m",
-        "1500m",
-        "110m Hurdles",
-        "400m Hurdles",
-        "High Jump",
-        "Pole Vault",
-        "Shot Put",
-        "Javelin"
-      ],
-      "disciplinesWomen": [
-        "100m",
-        "200m",
-        "400m",
-        "800m",
-        "5000m",
-        "100m Hurdles",
-        "Pole Vault",
-        "Triple Jump",
-        "Discus"
-      ],
-      "websiteUrl": "https://zurich.diamondleague.com",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null
-    },
-    {
       "id": "champ-wm-outdoor-2027",
       "wa_id": 9907,
-      "date": "2027-09-11",
-      "displayDate": "11. - 19. SEP 2027",
+      "date": "2027-08-27",
+      "displayDate": "27. AUG 2027",
       "month": "August 2027",
       "year": 2027,
       "name": "World Athletics Championships 2027 (Freiluft-WM)",
@@ -3056,16 +2841,16 @@
       "tier": "World Athletics Series",
       "category": "OW",
       "subgroup": "World Championships",
-      "venue": "National Stadium (Bird's Nest)",
-      "city": "Peking (Beijing)",
-      "country": "CHN",
+      "venue": "National Stadium",
+      "city": "Tokyo",
+      "country": "JPN",
       "indoor": false,
       "mensLongJump": true,
       "womensLongJump": true,
       "standardEligible": true,
       "status": "Weltmeisterschaft (Kat. OW) • 350 Bonuspunkte für Sieg (300 Pkt Silber)",
       "promisingRunway": true,
-      "runwayNote": "Höchste Wertungskategorie weltweit: World Athletics Championships Beijing 2027 im legendären Vogelnest (350 Bonuspunkte für Sieg, 300 Pkt für Silber)",
+      "runwayNote": "Höchste Wertungskategorie weltweit: 350 Bonuspunkte für Platz 1, 300 Pkt für Silber",
       "lukaHistory": [],
       "topHistoricalMarks": [
         8.65,
@@ -3100,10 +2885,7 @@
       ],
       "websiteUrl": "https://worldathletics.org/competitions/world-athletics-championships",
       "resultsPageUrl": null,
-      "liveStreamingUrl": null,
-      "endDate": "2027-09-19",
-      "organizerWebsite": "https://worldathletics.org/competitions/world-athletics-championships/beijing2027"
+      "liveStreamingUrl": null
     }
-  ],
-  "diamond_league_meetings_count": 9
+  ]
 }
