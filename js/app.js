@@ -251,13 +251,15 @@ const App = (() => {
   }
 
   function updateDataFreshnessCockpit(state) {
+    const todayStr = new Date().toISOString().split('T')[0];
+
     // 1. World Ranking Freshness (Latest official Tuesday snapshot)
     const rankingDot = document.getElementById('rankingFreshnessDot');
     const rankingDate = document.getElementById('rankingFreshnessDate');
     if (rankingDate && rankingDot) {
       const latestDate = (state.rankingsArchive && state.rankingsArchive.snapshots && state.rankingsArchive.snapshots.length > 0)
-        ? state.rankingsArchive.snapshots.filter(s => !s.is_prognosis && !s.isPrognosis && s.date <= '2026-10-02').slice(-1)[0]?.date || '2026-09-29'
-        : '2026-09-29';
+        ? state.rankingsArchive.snapshots.filter(s => !s.is_prognosis && !s.isPrognosis && s.date <= todayStr).slice(-1)[0]?.date || '2026-10-06'
+        : '2026-10-06';
       
       const parts = latestDate.split('-');
       const formatted = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : latestDate;
@@ -272,7 +274,7 @@ const App = (() => {
     const meetingsText = document.getElementById('meetingsFreshnessText');
     if (meetingsText && meetingsDot) {
       meetingsDot.className = 'w-2 h-2 rounded-full bg-cyan-400';
-      meetingsText.textContent = '02.10 Live (Peking verifiziert)';
+      meetingsText.textContent = '09.10 Live (DL & Peking)';
       meetingsText.className = 'font-bold text-cyan-300';
     }
 
@@ -282,7 +284,7 @@ const App = (() => {
     if (sheetsDate && sheetsDot) {
       const logs = state.trainingLogs || [];
       const latestLog = logs.length > 0 ? logs[logs.length - 1] : null;
-      const latestLogDate = latestLog ? latestLog.date : '2026-10-02';
+      const latestLogDate = latestLog ? latestLog.date : '2026-10-08';
       const parts = latestLogDate.split('-');
       const formatted = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : latestLogDate;
       sheetsDate.textContent = formatted;
@@ -563,11 +565,160 @@ const App = (() => {
     document.getElementById('periodValueHeaderCol').textContent = state.periodMode === 'ranking' ? 'Ø Score (Zeitraum)' : 'Toplist Weite / SB';
   }
 
+  function openRefreshModal() {
+    const modal = document.getElementById('refreshHubModal');
+    if (modal) modal.classList.remove('hidden');
+  }
+
+  function closeRefreshModal() {
+    const modal = document.getElementById('refreshHubModal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  async function hardReloadApp() {
+    showToast('🚀 Bereinige Cache & lade neueste App-Version...', 'cyan');
+    try {
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          await reg.unregister();
+        }
+      }
+    } catch (e) {
+      console.warn('Cache clear error:', e);
+    }
+    const cleanUrl = window.location.origin + window.location.pathname;
+    window.location.href = cleanUrl + '?nocache=' + Date.now();
+  }
+
+  async function refreshScraper(type) {
+    const statusEl = document.getElementById('refreshHubStatusText');
+    const setStatus = (txt) => {
+      if (statusEl) statusEl.textContent = txt;
+      showToast(txt, 'cyan');
+    };
+
+    try {
+      if (type === 'rankings' || type === 'all') {
+        setStatus('🌍 Lade neueste World Athletics Ranking-Daten...');
+        const t = Date.now();
+        const resLatest = await fetch('./data/ranking_latest.json?t=' + t);
+        if (resLatest.ok) {
+          const rawJson = await resLatest.json();
+          const rawList = rawJson.athletes || (Array.isArray(rawJson) ? rawJson : []);
+          state.athletes = rawList.map((ath, idx) => {
+            const meetings = ath.counted_competitions || ath.countingMeetings || [];
+            let sb = 0;
+            meetings.forEach(m => {
+              const markVal = parseFloat(m.mark);
+              if (!isNaN(markVal) && markVal > sb) sb = markVal;
+            });
+            return {
+              id: ath.profile_url || ath.athlete_id || 'ath-' + idx,
+              originalRank: parseInt(ath.rank) || idx + 1,
+              name: ath.name || '',
+              nation: ath.country || ath.nation || '',
+              dob: ath.dob || '',
+              sb: sb > 0 ? sb : null,
+              totalScore: parseInt(ath.ranking_score || ath.total_score || 0),
+              countingMeetings: meetings
+            };
+          });
+        }
+        const resArch = await fetch('./data/rankings_archive.json?t=' + t);
+        if (resArch.ok) {
+          state.rankingsArchive = await resArch.json();
+        }
+      }
+
+      if (type === 'meetings' || type === 'all') {
+        setStatus('📅 Lade aktualisierten Tour- & Diamond-League Kalender...');
+        const t = Date.now();
+        const resCal = await fetch('./data/calendar_2027.json?t=' + t);
+        if (resCal.ok) {
+          state.calendarData = await resCal.json();
+        }
+        const resVen = await fetch('./data/venues_database.json?t=' + t);
+        if (resVen.ok) {
+          state.venuesData = await resVen.json();
+        }
+      }
+
+      if (type === 'sheets' || type === 'all') {
+        setStatus('📊 Rufe Google Sheets Trainingsdaten live ab...');
+        const defaultSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTc8yM5su18QpGZUFRo2nU7NBU_2AjJMZPInRnFdhq32akr_LanQmgAEBaIXSCoIENSU0qt0dFTFNhj/pub?output=csv';
+        const customSheetsUrl = localStorage.getItem('googleSheetsCsvUrl') || localStorage.getItem('sheets_url_key') || defaultSheetsUrl;
+        let loaded = false;
+        try {
+          const resSheet = await fetch(customSheetsUrl + (customSheetsUrl.includes('?') ? '&' : '?') + '_t=' + Date.now());
+          if (resSheet.ok) {
+            const csvText = await resSheet.text();
+            state.trainingLogs = AnalyticsModule.parseCsvTrainingLogs(csvText);
+            loaded = true;
+          }
+        } catch (e) {
+          console.warn('Sheets live fetch warning:', e);
+        }
+        if (!loaded) {
+          const resFull = await fetch('./data/training_logs_full.json?t=' + Date.now());
+          if (resFull.ok) {
+            const fullJson = await resFull.json();
+            state.trainingLogs = fullJson.training_logs || [];
+          }
+        }
+      }
+
+      updateDataFreshnessCockpit(state);
+      renderCurrentTab();
+      setStatus('✅ Erfolgreich synchronisiert (' + new Date().toLocaleTimeString('de-DE') + ')');
+    } catch (err) {
+      console.error('Refresh error:', err);
+      setStatus('❌ Fehler beim Aktualisieren: ' + err.message);
+    }
+  }
+
+  function showToast(msg, color) {
+    let toast = document.getElementById('appNotificationToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'appNotificationToast';
+      document.body.appendChild(toast);
+    }
+    toast.className = 'fixed bottom-16 right-4 z-50 px-4 py-2.5 rounded-xl shadow-2xl font-mono text-xs flex items-center gap-2 transition-all transform duration-300 opacity-100 bg-slate-900 border border-cyan-500 text-cyan-300';
+    toast.innerHTML = `<span>⚡</span><span>${msg}</span>`;
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => {
+      toast.classList.add('opacity-0');
+      toast.classList.remove('opacity-100');
+    }, 4000);
+  }
+
   function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('[PWA] ServiceWorker registered with scope:', reg.scope))
+        navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
+          .then(reg => {
+            console.log('[PWA] ServiceWorker registered with scope:', reg.scope);
+            reg.update();
+            document.addEventListener('visibilitychange', () => {
+              if (document.visibilityState === 'visible') reg.update();
+            });
+            reg.onupdatefound = () => {
+              const worker = reg.installing;
+              if (worker) {
+                worker.onstatechange = () => {
+                  if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                    const banner = document.getElementById('pwaUpdateBanner');
+                    if (banner) banner.classList.remove('hidden');
+                  }
+                };
+              }
+            };
+          })
           .catch(err => console.warn('[PWA] ServiceWorker registration failed:', err));
       });
     }
@@ -587,7 +738,19 @@ const App = (() => {
     }
   }
 
-  return { init, state, switchTab, renderCurrentTab, loadInitialData, toggleTheme };
+  return { 
+    init, 
+    state, 
+    switchTab, 
+    renderCurrentTab, 
+    loadInitialData, 
+    toggleTheme,
+    openRefreshModal,
+    closeRefreshModal,
+    hardReloadApp,
+    refreshScraper,
+    showToast
+  };
 })();
 
 window.App = App;

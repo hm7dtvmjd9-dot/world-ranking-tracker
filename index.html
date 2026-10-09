@@ -118,6 +118,20 @@
 </head>
 <body class="bg-slate-950 text-slate-200 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-slate-950 transition-colors duration-200">
 
+  <!-- ================= PWA UPDATE AVAILABLE BANNER ================= -->
+  <div id="pwaUpdateBanner" class="hidden bg-cyan-950 border-b border-cyan-500 text-cyan-200 px-4 py-2 text-xs font-mono flex items-center justify-between sticky top-0 z-50 shadow-lg">
+    <div class="flex items-center gap-2">
+      <span class="text-base animate-pulse">✨</span>
+      <span><strong>Neues Update verfügbar (v5.2)!</strong> Ein neues Release mit aktuellen Scraper-Daten steht bereit.</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="App.hardReloadApp()" class="px-3 py-1 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black rounded text-[11px] shadow-sm">
+        Jetzt aktualisieren ➔
+      </button>
+      <button onclick="document.getElementById('pwaUpdateBanner').classList.add('hidden')" class="text-slate-400 hover:text-white p-1 text-sm">✕</button>
+    </div>
+  </div>
+
   <!-- ================= TOP HEADER / DESKTOP NAVIGATION ================= -->
   <header class="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
@@ -131,7 +145,7 @@
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
                 <span class="text-cyan-400">ATHLETICS</span>
                 <span class="ml-1 text-slate-300">INTELLIGENCE</span>
-                <span class="ml-1.5 text-[9px] font-bold text-slate-500 font-mono bg-slate-950 px-1.5 py-0.2 rounded border border-slate-800">v5.0 PWA</span>
+                <span class="ml-1.5 text-[9px] font-bold text-cyan-300 font-mono bg-cyan-950 px-1.5 py-0.2 rounded border border-cyan-800">v5.2 LIVE (09.10.)</span>
               </h1>
               <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[9px] font-mono text-cyan-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -145,27 +159,27 @@
         </div>
 
         <div class="flex items-center flex-wrap gap-1.5 justify-between sm:justify-end">
-          <!-- 3-Stream Data Freshness Cockpit -->
+          <!-- 3-Stream Data Freshness Cockpit (Klickbar für Refresh Hub) -->
           <div class="flex items-center gap-1.5 flex-wrap">
             <!-- 1. World Ranking Stream -->
-            <div id="headerRankingFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer" onclick="App.switchTab('rankings')" title="World Athletics Ranking: Aktualisierung jeden Di/Mi">
+            <div id="headerRankingFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer hover:border-cyan-500 transition-all" onclick="App.openRefreshModal()" title="World Athletics Ranking: Klicke für Scraper & Refresh-Details">
               <span id="rankingFreshnessDot" class="w-2 h-2 rounded-full bg-emerald-400"></span>
               <span class="text-slate-500 font-bold text-[9px] uppercase">WA:</span>
-              <span id="rankingFreshnessDate" class="font-bold text-emerald-300">29.09.2026</span>
+              <span id="rankingFreshnessDate" class="font-bold text-emerald-300">06.10.2026</span>
             </div>
 
             <!-- 2. Meeting Kalender Stream -->
-            <div id="headerMeetingsFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer" onclick="App.switchTab('venues')" title="Meeting Kalender & Tour Status">
+            <div id="headerMeetingsFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer hover:border-cyan-500 transition-all" onclick="App.openRefreshModal()" title="Meeting Kalender & Tour Status: Klicke für Details">
               <span id="meetingsFreshnessDot" class="w-2 h-2 rounded-full bg-cyan-400"></span>
               <span class="text-slate-500 font-bold text-[9px] uppercase">Tour:</span>
-              <span id="meetingsFreshnessText" class="font-bold text-cyan-300">02.10 Live</span>
+              <span id="meetingsFreshnessText" class="font-bold text-cyan-300">09.10 Live</span>
             </div>
 
             <!-- 3. Google Sheets Live Stream -->
-            <div id="headerSheetsFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer" onclick="AnalyticsModule.openSheetsModal()" title="Google Sheets Trainingstagebuch (Täglich um 06:00 Uhr synchronisiert)">
+            <div id="headerSheetsFeedBadge" class="flex items-center gap-1 px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono cursor-pointer hover:border-cyan-500 transition-all" onclick="App.openRefreshModal()" title="Google Sheets Trainingstagebuch: Klicke für Live-Sync">
               <span id="sheetsFreshnessDot" class="w-2 h-2 rounded-full bg-emerald-400"></span>
               <span class="text-slate-500 font-bold text-[9px] uppercase">Sheet:</span>
-              <span id="sheetsFreshnessDate" class="font-bold text-emerald-300">02.10.2026</span>
+              <span id="sheetsFreshnessDate" class="font-bold text-emerald-300">08.10.2026</span>
             </div>
           </div>
 
@@ -178,9 +192,9 @@
             ⚙️ Config
           </button>
 
-          <button id="syncDataBtn" class="bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold px-3 py-1 rounded uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm active:scale-95">
-            <span id="syncSpinner" class="inline-block">🔄</span>
-            Sync
+          <button id="syncDataBtn" onclick="App.openRefreshModal()" class="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black text-[10px] px-3 py-1 rounded uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm active:scale-95" title="Scraper aktualisieren oder gesamte WebApp neu laden">
+            <span id="syncSpinner" class="inline-block text-xs">🔄</span>
+            Refresh / Sync
           </button>
         </div>
       </div>
@@ -1442,6 +1456,142 @@
       </div>
     </div>
 
+    <!-- ================= REFRESH & SCRAPER CONTROL HUB MODAL ================= -->
+    <div id="refreshHubModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto no-scrollbar shadow-2xl space-y-4 p-4 sm:p-6">
+        
+        <!-- Modal Header -->
+        <div class="flex items-start justify-between pb-3 border-b border-slate-800">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-800 flex items-center justify-center text-xl">
+              🔄
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2 py-0.5 rounded text-[10px] font-black font-mono bg-cyan-950 text-cyan-300 border border-cyan-800">
+                  v5.2 RELEASE HUB
+                </span>
+                <h2 class="text-base sm:text-lg font-black text-white font-mono">
+                  REFRESH & SCRAPER CONTROL CENTER
+                </h2>
+              </div>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">
+                Einzelne Daten-Scraper aktualisieren oder die gesamte App auf deinem Mac / iPhone hart neu laden
+              </p>
+            </div>
+          </div>
+          <button onclick="App.closeRefreshModal()" class="text-slate-400 hover:text-white p-1 text-lg">✕</button>
+        </div>
+
+        <!-- Live Status Bar & Global One-Click Sync -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+          <div class="flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="refreshHubStatusText" class="font-bold text-slate-200">Bereit für Synchronisation</span>
+            </div>
+            <span class="text-slate-500 text-[10px]">Stand: 09.10.2026</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+            <button onclick="App.refreshScraper('all')" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-slate-950 font-black text-xs py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-md font-mono active:scale-98 transition-all">
+              <span>⚡</span>
+              <span>Alle 3 Datenströme synchronisieren</span>
+            </button>
+            <button onclick="App.hardReloadApp()" class="w-full bg-rose-600/90 hover:bg-rose-500 text-white font-bold text-xs py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-md font-mono active:scale-98 transition-all border border-rose-500">
+              <span>🚀</span>
+              <span>App & Cache hart neu laden</span>
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-400 leading-relaxed font-sans">
+            💡 <strong>Tipp bei veralteter Ansicht auf Mac / iPhone:</strong> Klicke auf <em>"App & Cache hart neu laden"</em>. Dadurch werden veraltete Service-Worker-Caches im Browser geleert und die neuesten Skripte direkt frisch bezogen.
+          </p>
+        </div>
+
+        <!-- 3 Scraper Control Tiles -->
+        <div class="space-y-3">
+          
+          <!-- Scraper 1: World Athletics Ranking -->
+          <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3.5 space-y-2">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-base">🌍</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white font-mono uppercase">1. World Athletics Ranking Scraper</h4>
+                  <p class="text-[10px] text-slate-400 font-sans">Offizielles Dienstags-Ranking (Top 100 & Wertungs-Meetings)</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                🟢 Stand: 06.10.2026 (#70 • 1144 Pkt)
+              </span>
+            </div>
+            <div class="flex items-center justify-between flex-wrap gap-2 pt-1 border-t border-slate-900 text-xs font-mono">
+              <span class="text-[10px] text-slate-400">Vorwoche: 29.09.2026 (#69) • Nächstes WA Update: 13.10.2026</span>
+              <button onclick="App.refreshScraper('rankings')" class="px-3 py-1 bg-slate-800 hover:bg-cyan-600 hover:text-slate-950 text-cyan-300 font-bold rounded text-xs transition-all border border-slate-700">
+                🔄 Ranking neu laden
+              </button>
+            </div>
+          </div>
+
+          <!-- Scraper 2: Meeting Kalender & Diamond League -->
+          <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3.5 space-y-2">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-base">📅</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white font-mono uppercase">2. Meeting Kalender & Diamond League</h4>
+                  <p class="text-[10px] text-slate-400 font-sans">World Tour, Meisterschaften (WM Peking 2027) & DL Weitsprung</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
+                🟢 Stand: 09.10.2026 Live (48 Meets)
+              </span>
+            </div>
+            <div class="flex items-center justify-between flex-wrap gap-2 pt-1 border-t border-slate-900 text-xs font-mono">
+              <span class="text-[10px] text-slate-400">9 Diamond Leagues verifiziert • Pausen-Berechnung aktiv</span>
+              <button onclick="App.refreshScraper('meetings')" class="px-3 py-1 bg-slate-800 hover:bg-cyan-600 hover:text-slate-950 text-cyan-300 font-bold rounded text-xs transition-all border border-slate-700">
+                🔄 Kalender neu laden
+              </button>
+            </div>
+          </div>
+
+          <!-- Scraper 3: Google Sheets Trainingsdaten -->
+          <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3.5 space-y-2">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-base">📊</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white font-mono uppercase">3. Google Sheets Live-Sync</h4>
+                  <p class="text-[10px] text-slate-400 font-sans">Tagesaktuelle Trainingsprotokolle, Whoop & Bio-Metriken</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                🟢 Stand: 08.10.2026 (2.336 Logs)
+              </span>
+            </div>
+            <div class="flex items-center justify-between flex-wrap gap-2 pt-1 border-t border-slate-900 text-xs font-mono">
+              <button onclick="AnalyticsModule.openSheetsModal(); App.closeRefreshModal();" class="text-slate-400 hover:text-cyan-300 underline text-[10px]">
+                ⚙️ CSV-URL konfigurieren
+              </button>
+              <button onclick="App.refreshScraper('sheets')" class="px-3 py-1 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-emerald-300 font-bold rounded text-xs transition-all border border-slate-700">
+                🔄 Google Sheets jetzt abrufen
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
+          <span class="text-[10px] text-slate-500">Service Worker: Network-First v5.2</span>
+          <button onclick="App.closeRefreshModal()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-mono font-bold">
+            Schließen
+          </button>
+        </div>
+
+      </div>
+    </div>
+
   </main>
 
   <!-- ================= MOBILE BOTTOM DOCK (iPhone / iPad / Mobile) ================= -->
@@ -1468,12 +1618,12 @@
     </button>
   </nav>
 
-  <!-- Load Modular Application Logic -->
-  <script src="js/rankings.js"></script>
-  <script src="js/analytics.js"></script>
-  <script src="js/qualification.js"></script>
-  <script src="js/venues.js"></script>
-  <script src="js/training_plan.js"></script>
-  <script src="js/app.js"></script>
+  <!-- Load Modular Application Logic (with Cache-Buster v5.2) -->
+  <script src="js/rankings.js?v=5.2.0"></script>
+  <script src="js/analytics.js?v=5.2.0"></script>
+  <script src="js/qualification.js?v=5.2.0"></script>
+  <script src="js/venues.js?v=5.2.0"></script>
+  <script src="js/training_plan.js?v=5.2.0"></script>
+  <script src="js/app.js?v=5.2.0"></script>
 </body>
 </html>

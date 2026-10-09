@@ -277,7 +277,8 @@ const TrainingPlanModule = (() => {
       const dateIso = addDays(currentWeekStart, d.offset);
       const dayLogs = logsByDate[dateIso] || [];
       const hasSession = dayLogs.length > 0;
-      const isToday = dateIso === '2026-10-02';
+      const todayIso = new Date().toISOString().split('T')[0];
+      const isToday = dateIso === todayIso || dateIso === '2026-10-09' || dateIso === '2026-10-08';
 
       return `
         <div class="bg-slate-900 border ${isToday ? 'border-cyan-500/80 shadow-md shadow-cyan-500/10' : 'border-slate-800'} rounded-xl p-3 sm:p-4 space-y-3">
@@ -406,7 +407,8 @@ ${protocolText}
     for (let day = 1; day <= daysInMonth; day++) {
       const dateIso = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       const dayLogs = logsByDate[dateIso] || [];
-      const isToday = dateIso === '2026-10-02';
+      const todayIso = new Date().toISOString().split('T')[0];
+      const isToday = dateIso === todayIso || dateIso === '2026-10-09' || dateIso === '2026-10-08';
 
       cellsHtml += `
         <div onclick="TrainingPlanModule.openInReadinessTab('${dateIso}')" class="bg-slate-900 border ${isToday ? 'border-cyan-500 bg-cyan-950/20' : 'border-slate-800 hover:border-slate-700'} rounded-lg p-2 flex flex-col justify-between min-h-[95px] cursor-pointer transition-all hover:bg-slate-850">
@@ -610,7 +612,7 @@ ${protocolText}
                 const dayNames = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
                 const dayName = dayNames[dObj.getDay()];
                 const kwStr = getWeekNumber(dateIso);
-                const isToday = dateIso === '2026-10-05' || dateIso === '2026-10-02';
+                const isToday = dateIso === '2026-10-09' || dateIso === '2026-10-08' || dateIso === '2026-10-05';
 
                 dayCards.push({
                   dateIso,
@@ -778,8 +780,8 @@ ${protocolText}
       [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019].forEach(yr => {
         attachTrackDragListeners(yr);
       });
-      // Align 2026 to early October and 2025 to mid-October for immediate parallel comparison
-      jumpYearTrackToDate(2026, '2026-10-02');
+      // Align 2026 to latest October log and 2025 to mid-October for immediate parallel comparison
+      jumpYearTrackToDate(2026, '2026-10-08');
       jumpYearTrackToDate(2025, '2025-10-13');
     }, 100);
   }

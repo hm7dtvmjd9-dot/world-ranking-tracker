@@ -1,4 +1,4 @@
-const CACHE_NAME = 'athletics-intel-v4.1';
+const CACHE_NAME = 'athletics-intel-v5.2-20261009';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -24,15 +24,15 @@ const STATIC_ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[ServiceWorker] Caching core static assets');
+      console.log('[ServiceWorker v5.2] Pre-caching static assets');
       return cache.addAll(STATIC_ASSETS).catch(err => {
         console.warn('[ServiceWorker] Cache addAll warning:', err);
       });
     })
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
@@ -41,20 +41,57 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log('[ServiceWorker] Clearing legacy cache:', key);
+            console.log('[ServiceWorker] Purging legacy cache:', key);
             return caches.delete(key);
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data === 'SKIP_WAITING' || (event.data && event.data.action === 'SKIP_WAITING')) {
+    self.skipWaiting();
+  }
+  if (event.data === 'CLEAR_ALL_CACHES' || (event.data && event.data.action === 'CLEAR_ALL_CACHES')) {
+    caches.keys().then((keys) => {
+      return Promise.all(keys.map(k => caches.delete(k)));
+    }).then(() => {
+      if (event.ports && event.ports[0]) {
+        event.ports[0].postMessage({ success: true });
+      }
+    });
+  }
 });
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Network first for dynamic JSON data, falling back to cache
+  // If request contains cache-busting params, bypass service worker cache
+  if (url.searchParams.has('nocache') || url.searchParams.has('_t') || url.searchParams.has('t') || url.searchParams.has('v')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // 1. Navigation requests (HTML pages): NETWORK FIRST
+  // Always fetch fresh HTML from the server to guarantee instant app updates on Mac/iOS
+  if (event.request.mode === 'navigate' || url.pathname.endsWith('index.html') || url.pathname.endsWith('/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // 2. Dynamic JSON data (/data/): NETWORK FIRST with Cache Fallback
   if (url.pathname.includes('/data/')) {
     event.respondWith(
       fetch(event.request)
@@ -70,19 +107,19 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache first for local scripts, styles, and icons
+  // 3. Static scripts & assets (/js/, /icons/, etc.): NETWORK FIRST with Cache Fallback
+  // Ensures that code updates are immediately delivered on launch
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Fetch in background to revalidate cache
-        fetch(event.request).then((freshResponse) => {
-          if (freshResponse && freshResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, freshResponse));
-          }
-        }).catch(() => {});
-        return cachedResponse;
-      }
-      return fetch(event.request);
-    })
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const copy = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        return caches.match(event.request);
+      })
   );
 });

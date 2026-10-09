@@ -76,13 +76,16 @@ def scrape_rankings(date_str=None, fetch_all_competitions=False):
     print(f"Connecting to World Athletics: {url}")
     html = get_html(url)
 
+    match_date = re.search(r'Rank Date.*?(\d{4}-\d{2}-\d{2})', html, re.DOTALL) or re.search(r'data-rank-date="([^"]+)"', html)
+    detected_date = match_date.group(1) if match_date else (date_str or time.strftime("%Y-%m-%d"))
+
     rows = re.findall(r'<tr[^>]*data-id="(\d+)"[^>]*data-athlete-url="([^"]+)"[^>]*>(.*?)</tr>', html, re.DOTALL)
     if not rows:
         rows_alt = re.findall(r'<tr[^>]*data-athlete-url="([^"]+)"[^>]*>(.*?)</tr>', html, re.DOTALL)
         rows = [("", u, c) for u, c in rows_alt]
 
     total_rows = min(len(rows), 100)
-    print(f"Found {len(rows)} athletes. Extracting Top {total_rows} and fetching 5 counting competitions for all...")
+    print(f"Found {len(rows)} athletes. Extracting Top {total_rows} (Official Rank Date: {detected_date}) and fetching 5 counting competitions for all...")
 
     from concurrent.futures import ThreadPoolExecutor
 
@@ -116,7 +119,7 @@ def scrape_rankings(date_str=None, fetch_all_competitions=False):
     for ath, comps in zip(athletes, all_comps):
         ath["counted_competitions"] = comps
 
-    return athletes
+    return athletes, detected_date
 
 def main():
     parser = argparse.ArgumentParser(description="World Athletics Ranking Scraper")
@@ -137,7 +140,7 @@ def main():
     if args.date:
         rankings_dir = os.path.join(data_dir, "rankings")
         os.makedirs(rankings_dir, exist_ok=True)
-        athletes = scrape_rankings(date_str=args.date, fetch_all_competitions=args.all_comps)
+        athletes, detected_date = scrape_rankings(date_str=args.date, fetch_all_competitions=args.all_comps)
         out_path = os.path.join(rankings_dir, f"ranking_{args.date}.json")
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump({
@@ -160,16 +163,30 @@ def main():
         except Exception as e:
             print(f"Notice: could not backup previous: {e}")
 
-    athletes = scrape_rankings(fetch_all_competitions=args.all_comps)
+    athletes, detected_date = scrape_rankings(fetch_all_competitions=args.all_comps)
     with open(latest_path, "w", encoding="utf-8") as f:
         json.dump({
             "event": "Men's Long Jump",
-            "date": time.strftime("%Y-%m-%d"),
+            "date": detected_date,
             "athletes_count": len(athletes),
             "athletes": athletes
         }, f, ensure_ascii=False, indent=2)
 
-    print(f"\nSuccessfully updated {latest_path} with {len(athletes)} athletes!")
+    # Also archive the snapshot under data/rankings/
+    snap_path = os.path.join(data_dir, "rankings", f"ranking_{detected_date}.json")
+    try:
+        with open(snap_path, "w", encoding="utf-8") as f:
+            json.dump({
+                "event": "Men's Long Jump",
+                "date": detected_date,
+                "athletes_count": len(athletes),
+                "athletes": athletes
+            }, f, ensure_ascii=False, indent=2)
+        print(f"Archived snapshot to {snap_path}")
+    except Exception as e:
+        print(f"Notice: could not archive snapshot: {e}")
+
+    print(f"\nSuccessfully updated {latest_path} with {len(athletes)} athletes (Rank Date: {detected_date})!")
 
 if __name__ == "__main__":
     main()

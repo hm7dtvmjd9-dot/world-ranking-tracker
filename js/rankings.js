@@ -420,10 +420,11 @@ const RankingsModule = (() => {
       slider.max = archive.snapshots.length - 1;
 
       // Enforce default snapshot to the latest official snapshot (never future prognosis)
+      const todayStr = new Date().toISOString().split('T')[0];
       let defaultIdx = 0;
       for (let i = archive.snapshots.length - 1; i >= 0; i--) {
         const s = archive.snapshots[i];
-        if (!s.is_prognosis && !s.isPrognosis && (s.date || '') <= '2026-10-02') {
+        if (!s.is_prognosis && !s.isPrognosis && (s.date || '') <= todayStr) {
           defaultIdx = i;
           break;
         }
@@ -623,7 +624,7 @@ const RankingsModule = (() => {
       };
     });
 
-    const activeDate = snap ? snap.date : '2026-09-23';
+    const activeDate = snap ? snap.date : '2026-10-06';
 
     container.innerHTML = `
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 shadow-sm space-y-3">
@@ -690,8 +691,8 @@ const RankingsModule = (() => {
             <span>Wichtige Prognose-Meilensteine ansteuern:</span>
           </h4>
           <div class="flex items-center gap-2 flex-wrap text-xs font-mono">
-            <button onclick="RankingsModule.selectPrognosisDate('2026-09-23')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2026-09-23' ? 'bg-cyan-600 text-slate-950 font-bold border border-cyan-400' : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-700'}">
-              📍 23.09.2026 (Aktuell) • Luka #47 (1144 Pkt)
+            <button onclick="RankingsModule.selectPrognosisDate('2026-10-06')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2026-10-06' ? 'bg-cyan-600 text-slate-950 font-bold border border-cyan-400' : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-700'}">
+              📍 06.10.2026 (Aktuell) • Luka #70 (1144 Pkt)
             </button>
             <button onclick="RankingsModule.selectPrognosisDate('2027-01-31')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2027-01-31' ? 'bg-cyan-600 text-slate-950 font-bold border border-cyan-400' : 'bg-slate-950 hover:bg-slate-800 text-cyan-300 border border-slate-700'}">
               🔮 31.01.2027 (Vor Gorzów-Ablauf) • Luka #43 (1144 Pkt)

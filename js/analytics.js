@@ -1204,13 +1204,24 @@ ${protocolText}
     return rows;
   }
 
-  function normalizeDateStr(raw) {
+  function normalizeDateStr(raw, isoRaw) {
+    if (isoRaw && /^\d{4}-\d{2}-\d{2}/.test(String(isoRaw).trim())) {
+      return String(isoRaw).trim().slice(0, 10);
+    }
     if (!raw) return '';
     const s = String(raw).trim();
     if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    if (/^\d{4}-\d{2}-\d{2}T/.test(s)) return s.slice(0, 10);
     if (/^\d{1,2}\.\d{1,2}\.\d{4}$/.test(s)) {
       const parts = s.split('.');
       return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+    }
+    const slashMatch = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (slashMatch) {
+      const m = slashMatch[1].padStart(2, '0');
+      const d = slashMatch[2].padStart(2, '0');
+      const y = slashMatch[3];
+      return `${y}-${m}-${d}`;
     }
     return s;
   }
@@ -1245,8 +1256,9 @@ ${protocolText}
         row[h] = cols[idx] !== undefined ? String(cols[idx]).trim() : '';
       });
 
-      const rawDate = row.date || row.name || row.datum || row.tag || cols[1] || cols[0];
-      const d = normalizeDateStr(rawDate);
+      const rawDate = row.name || row.date || row.datum || row.tag || cols[0];
+      const isoDate = row.date || '';
+      const d = normalizeDateStr(rawDate, isoDate);
       if (!d) continue;
 
       const protocolText = row.protokoll || row.protocol || row.training_protocol || '';
