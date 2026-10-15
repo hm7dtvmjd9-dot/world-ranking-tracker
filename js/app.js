@@ -256,15 +256,16 @@ const App = (() => {
     // 1. World Ranking Freshness (Latest official Tuesday snapshot)
     const rankingDot = document.getElementById('rankingFreshnessDot');
     const rankingDate = document.getElementById('rankingFreshnessDate');
-    if (rankingDate && rankingDot) {
-      const latestDate = (state.rankingsArchive && state.rankingsArchive.snapshots && state.rankingsArchive.snapshots.length > 0)
-        ? state.rankingsArchive.snapshots.filter(s => !s.is_prognosis && !s.isPrognosis && s.date <= todayStr).slice(-1)[0]?.date || '2026-10-06'
-        : '2026-10-06';
-      
-      const parts = latestDate.split('-');
-      const formatted = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : latestDate;
-      rankingDate.textContent = formatted;
+    const latestDate = (state.rankingsArchive && state.rankingsArchive.snapshots && state.rankingsArchive.snapshots.length > 0)
+      ? state.rankingsArchive.snapshots.filter(s => !s.is_prognosis && !s.isPrognosis && s.date <= todayStr).slice(-1)[0]?.date || '2026-10-13'
+      : '2026-10-13';
+    
+    const parts = latestDate.split('-');
+    const formatted = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : latestDate;
+    const waShort = parts.length === 3 ? `${parts[2]}.${parts[1]}.` : '13.10.';
 
+    if (rankingDate && rankingDot) {
+      rankingDate.textContent = formatted;
       rankingDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
       rankingDate.className = 'font-bold text-emerald-300';
     }
@@ -274,23 +275,37 @@ const App = (() => {
     const meetingsText = document.getElementById('meetingsFreshnessText');
     if (meetingsText && meetingsDot) {
       meetingsDot.className = 'w-2 h-2 rounded-full bg-cyan-400';
-      meetingsText.textContent = '09.10 Live (DL & Peking)';
+      meetingsText.textContent = '15.10 Live (DL & Meisterschaften)';
       meetingsText.className = 'font-bold text-cyan-300';
     }
 
     // 3. Google Sheets Freshness
     const sheetsDot = document.getElementById('sheetsFreshnessDot');
     const sheetsDate = document.getElementById('sheetsFreshnessDate');
-    if (sheetsDate && sheetsDot) {
-      const logs = state.trainingLogs || [];
-      const latestLog = logs.length > 0 ? logs[logs.length - 1] : null;
-      const latestLogDate = latestLog ? latestLog.date : '2026-10-08';
-      const parts = latestLogDate.split('-');
-      const formatted = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : latestLogDate;
-      sheetsDate.textContent = formatted;
+    const logs = state.trainingLogs || [];
+    const latestLog = logs.length > 0 ? logs[logs.length - 1] : null;
+    const latestLogDate = latestLog ? latestLog.date : '2026-10-14';
+    const sParts = latestLogDate.split('-');
+    const sFormatted = sParts.length === 3 ? `${sParts[2]}.${sParts[1]}.${sParts[0]}` : latestLogDate;
+    const sheetShort = sParts.length === 3 ? `${sParts[2]}.${sParts[1]}.` : '14.10.';
 
+    if (sheetsDate && sheetsDot) {
+      sheetsDate.textContent = sFormatted;
       sheetsDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
       sheetsDate.className = 'font-bold text-emerald-300';
+    }
+
+    // 4. Minimalist Header Master Data Box
+    const masterBox = document.getElementById('masterDataFreshnessBox');
+    if (masterBox) {
+      masterBox.innerHTML = `
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-slate-300">WA: <strong class="text-emerald-300">${waShort}</strong></span>
+        <span class="text-slate-600">|</span>
+        <span class="text-slate-300">Tour: <strong class="text-cyan-300">15.10.</strong></span>
+        <span class="text-slate-600">|</span>
+        <span class="text-slate-300">Sheet: <strong class="text-amber-300">${sheetShort}</strong></span>
+      `;
     }
   }
 

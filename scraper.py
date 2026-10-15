@@ -186,7 +186,42 @@ def main():
     except Exception as e:
         print(f"Notice: could not archive snapshot: {e}")
 
+    # Auto-sync to rankings_archive.json
+    arch_path = os.path.join(data_dir, "rankings_archive.json")
+    if os.path.exists(arch_path):
+        try:
+            with open(arch_path, "r", encoding="utf-8") as f:
+                archive = json.load(f)
+            luka = next((a for a in athletes if "herden" in a.get("name", "").lower()), None)
+            new_snap = {
+                "date": detected_date,
+                "displayDate": detected_date,
+                "lukaRank": luka.get("rank") if luka else 70,
+                "lukaScore": luka.get("ranking_score") if luka else 1144,
+                "milestoneNote": f"Offizieller WA Snapshot • {detected_date}",
+                "athletes": athletes,
+                "isPrognosis": False
+            }
+            snaps = archive.get("snapshots", [])
+            idx = next((i for i, s in enumerate(snaps) if s.get("date") == detected_date), None)
+            if idx is not None:
+                snaps[idx] = new_snap
+            else:
+                ins = len(snaps)
+                for i, s in enumerate(snaps):
+                    if s.get("date") > detected_date:
+                        ins = i
+                        break
+                snaps.insert(ins, new_snap)
+                archive["total_snapshots"] = len(snaps)
+            with open(arch_path, "w", encoding="utf-8") as f:
+                json.dump(archive, f, ensure_ascii=False)
+            print(f"Synced {detected_date} to rankings_archive.json")
+        except Exception as e:
+            print(f"Notice: could not sync to archive: {e}")
+
     print(f"\nSuccessfully updated {latest_path} with {len(athletes)} athletes (Rank Date: {detected_date})!")
 
 if __name__ == "__main__":
     main()
+

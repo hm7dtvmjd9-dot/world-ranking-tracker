@@ -1285,16 +1285,35 @@ const RankingsModule = (() => {
     if (!modal) return;
     currentModalAthleteName = athleteName;
 
-    // Find in athletes database or state.athletes
+    // Find in athletes database first (contains full 27-38 career competitions) or state.athletes
     let target = null;
+    const cleanQuery = athleteName.toLowerCase().trim();
     const db = (window.App && window.App.state && window.App.state.athletesDatabase) || null;
     if (db && db.athletes) {
-      target = db.athletes.find(a => a.name.toLowerCase() === athleteName.toLowerCase());
+      target = db.athletes.find(a => {
+        const aName = a.name.toLowerCase();
+        return aName === cleanQuery || aName.includes(cleanQuery) || cleanQuery.includes(aName);
+      });
     }
 
-    if (!target) {
-      const stateAthletes = (window.App && window.App.state && window.App.state.athletes) || [];
-      target = stateAthletes.find(a => a.name.toLowerCase().includes(athleteName.toLowerCase()));
+    const stateAthletes = (window.App && window.App.state && window.App.state.athletes) || [];
+    const stateTarget = stateAthletes.find(a => {
+      const aName = a.name.toLowerCase();
+      return aName === cleanQuery || aName.includes(cleanQuery) || cleanQuery.includes(aName);
+    });
+
+    if (!target && stateTarget) {
+      target = stateTarget;
+    } else if (target && stateTarget) {
+      target = {
+        ...target,
+        rank: stateTarget.originalRank || target.rank,
+        ranking_score: stateTarget.totalScore || target.ranking_score,
+        sb: stateTarget.sb || target.sb,
+        counted_competitions: (target.counted_competitions && target.counted_competitions.length >= (stateTarget.countingMeetings || []).length)
+          ? target.counted_competitions
+          : (stateTarget.countingMeetings || target.counted_competitions || [])
+      };
     }
 
     if (!target) return;
@@ -1865,10 +1884,86 @@ const RankingsModule = (() => {
     }
   }
 
+  function openGermanAthletesModal() {
+    const modal = document.getElementById('germanAthletesModal');
+    const body = document.getElementById('germanAthletesModalBody');
+    if (!modal || !body) return;
+
+    const state = (window.App && window.App.state) || {};
+    const stateAthletes = state.athletes || [];
+    const dbAthletes = (state.athletesDatabase && state.athletesDatabase.athletes) || [];
+
+    // Filter German athletes from state.athletes or athletesDatabase
+    let gers = stateAthletes.filter(a => a.nation === 'GER' || a.country === 'GER');
+    if (gers.length === 0 && dbAthletes.length > 0) {
+      gers = dbAthletes.filter(a => a.country === 'GER' || a.nation === 'GER').map(a => ({
+        originalRank: a.rank,
+        name: a.name,
+        nation: 'GER',
+        totalScore: a.ranking_score || a.total_score,
+        sb: a.sb
+      }));
+    }
+
+    // Sort by rank ascending
+    gers.sort((a, b) => (a.originalRank || 999) - (b.originalRank || 999));
+
+    const me = gers.find(a => a.name.toLowerCase().includes('herden')) || { originalRank: 70, totalScore: 1144 };
+    const lukaScore = me.totalScore || 1144;
+    const lukaRank = me.originalRank || 70;
+
+    body.innerHTML = gers.map(ath => {
+      const isLuka = ath.name.toLowerCase().includes('herden');
+      const diffScore = (ath.totalScore || 0) - lukaScore;
+
+      let diffBadge = '';
+      if (isLuka) {
+        diffBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-cyan-950 text-cyan-300 border border-cyan-800">DU (LUKA)</span>';
+      } else if (diffScore > 0) {
+        diffBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-800">+${diffScore} Pkt vor dir</span>`;
+      } else {
+        diffBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-800">${diffScore} Pkt hinter dir</span>`;
+      }
+
+      return `
+        <div class="bg-slate-950 border ${isLuka ? 'border-cyan-500/80 shadow-md shadow-cyan-950' : 'border-slate-800 hover:border-slate-700'} rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition-all">
+          <div class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center font-mono font-black text-sm text-cyan-400">
+              #${ath.originalRank || '-'}
+            </span>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white text-sm font-sans">${ath.name}</span>
+                <span class="text-xs">🇩🇪</span>
+                ${isLuka ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-cyan-500 text-slate-950">DU</span>' : ''}
+              </div>
+              <div class="text-[11px] font-mono text-slate-400 mt-0.5 flex items-center gap-2">
+                <span>Score: <strong class="text-white">${ath.totalScore || '-'} Pkt</strong></span>
+                <span>•</span>
+                <span>SB: <strong class="text-cyan-300">${ath.sb ? ath.sb.toFixed(2) + 'm' : '-'}</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 self-end sm:self-auto">
+            ${diffBadge}
+            <button onclick="document.getElementById('germanAthletesModal').classList.add('hidden'); RankingsModule.openCompetitorModal('${ath.name.replace(/'/g, "\\'")}');" class="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500 text-cyan-300 hover:text-white text-xs font-mono font-bold transition-all shadow-sm flex items-center gap-1">
+              <span>Profil & WK</span>
+              <span>➔</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    modal.classList.remove('hidden');
+  }
+
   return {
     render,
     setHistoryInterval,
     openCompetitorModal,
+    openGermanAthletesModal,
     setModalAthleteSort,
     setAthleteRowSort,
     setAthleteDbSort,

@@ -411,7 +411,7 @@ ${protocolText}
       const isToday = dateIso === todayIso || dateIso === '2026-10-09' || dateIso === '2026-10-08';
 
       cellsHtml += `
-        <div onclick="TrainingPlanModule.openInReadinessTab('${dateIso}')" class="bg-slate-900 border ${isToday ? 'border-cyan-500 bg-cyan-950/20' : 'border-slate-800 hover:border-slate-700'} rounded-lg p-2 flex flex-col justify-between min-h-[95px] cursor-pointer transition-all hover:bg-slate-850">
+        <div onclick="TrainingPlanModule.openSessionPreviewModal('${dateIso}')" class="bg-slate-900 border ${isToday ? 'border-cyan-500 bg-cyan-950/20' : 'border-slate-800 hover:border-slate-700'} rounded-lg p-2 flex flex-col justify-between min-h-[95px] cursor-pointer transition-all hover:bg-slate-850">
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono font-bold ${isToday ? 'text-cyan-400 font-black' : 'text-slate-300'}">${day}</span>
             ${(() => {
@@ -869,6 +869,54 @@ ${protocolText}
       return matchText.includes(query);
     }) : logs.slice(-30);
 
+    let heatmapHtml = '';
+    if (query && matches.length > 0) {
+      const datesWithMatch = new Set(matches.map(m => m.date));
+      const yr = 2026;
+      const start = new Date(yr, 0, 1);
+      const end = new Date(yr, 11, 31);
+      let cur = new Date(start);
+      const dayOfWeek = (cur.getDay() + 6) % 7;
+      cur.setDate(cur.getDate() - dayOfWeek);
+
+      const weeks = [];
+      while (cur <= end || weeks.length < 52) {
+        const week = [];
+        for (let d = 0; d < 7; d++) {
+          const y = cur.getFullYear();
+          const m = String(cur.getMonth() + 1).padStart(2, '0');
+          const day = String(cur.getDate()).padStart(2, '0');
+          const iso = `${y}-${m}-${day}`;
+          week.push({ iso, has: datesWithMatch.has(iso), isInYear: y === yr });
+          cur.setDate(cur.getDate() + 1);
+        }
+        weeks.push(week);
+        if (cur > end && weeks.length >= 52) break;
+      }
+
+      heatmapHtml = `
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 font-mono">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-cyan-400 font-bold uppercase">📅 365-Tage Häufigkeits-Heatmap für "${planSearchQuery}" (${yr})</span>
+            <span class="text-slate-400 text-[10px]">${matches.length} Treffer</span>
+          </div>
+          <div class="overflow-x-auto">
+            <div class="inline-flex gap-1">
+              ${weeks.map(w => `
+                <div class="flex flex-col gap-1">
+                  ${w.map(d => {
+                    if (!d.isInYear) return '<div class="w-2.5 h-2.5 rounded-[2px] bg-slate-950 opacity-20"></div>';
+                    if (d.has) return `<div onclick="TrainingPlanModule.openSessionPreviewModal('${d.iso}')" title="${d.iso}: ${planSearchQuery} gefunden!" class="w-2.5 h-2.5 rounded-[2px] bg-cyan-400 border border-cyan-300 shadow-sm shadow-cyan-400/40 cursor-pointer hover:scale-125 transition-transform"></div>`;
+                    return `<div title="${d.iso}" class="w-2.5 h-2.5 rounded-[2px] bg-slate-900 border border-slate-850"></div>`;
+                  }).join('')}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     return `
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm space-y-3">
         <div class="flex items-center justify-between pb-2 border-b border-slate-800">
@@ -877,6 +925,8 @@ ${protocolText}
           </span>
           ${query ? `<button onclick="TrainingPlanModule.clearSearch()" class="text-xs font-mono text-cyan-400 hover:underline">Suche zurücksetzen ✕</button>` : ''}
         </div>
+
+        ${heatmapHtml}
 
         <div class="space-y-2.5">
           ${matches.length > 0 ? matches.map(l => `
@@ -1013,6 +1063,113 @@ ${l.protocol_text}
     }
   }
 
+  function openSessionPreviewModal(dateIso) {
+    const modal = document.getElementById('sessionPreviewModal');
+    const title = document.getElementById('sessionPreviewTitle');
+    const content = document.getElementById('sessionPreviewContent');
+    const goBtn = document.getElementById('sessionPreviewGoToTabBtn');
+    if (!modal || !content) return;
+
+    const state = (window.App && window.App.state) || {};
+    const logs = state.trainingLogs || [];
+    const daySessions = logs.filter(l => l.date === dateIso);
+
+    if (title) {
+      title.textContent = `EINHEITEN-VORSCHAU • ${formatDisplayDate(dateIso).toUpperCase()}`;
+    }
+
+    if (goBtn) {
+      goBtn.onclick = () => {
+        openInReadinessTab(dateIso);
+        modal.classList.add('hidden');
+      };
+    }
+
+    if (daySessions.length === 0 || (daySessions.length === 1 && daySessions[0].duration_min === 0 && !daySessions[0].protocol_text)) {
+      const rec = daySessions[0]?.whoop_recovery_pct;
+      content.innerHTML = `
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 text-center space-y-2">
+          <span class="text-3xl">🧘‍♂️</span>
+          <h4 class="font-bold text-white uppercase text-xs">Aktiver Ruhetag / ZNS-Erholung</h4>
+          <p class="text-xs text-slate-400">Keine Belastungseinheit für diesen Tag dokumentiert.</p>
+          ${rec != null ? `
+            <div class="pt-2">
+              <span class="px-2.5 py-1 rounded text-xs font-bold ${rec >= 67 ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-amber-950 text-amber-300 border border-amber-800'}">
+                Whoop Recovery: ${rec}%
+              </span>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    } else {
+      content.innerHTML = daySessions.map((log, sIdx) => {
+        const protocolText = log.protocol_text || log.protocol || '';
+        const trainerText = log.trainer ? '👨‍🏫 Trainer: Ja' : 'Trainer: Nein';
+
+        return `
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2.5 font-mono">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800 flex-wrap gap-2">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                ${daySessions.length > 1 ? `<span class="px-2 py-0.5 rounded text-[10px] font-black bg-slate-800 text-white">#${sIdx + 1}</span>` : ''}
+                ${getSessionBadge(log.session_type)}
+                ${log.time_of_day ? `<span class="px-2 py-0.5 rounded text-[10px] bg-slate-900 text-cyan-300 border border-slate-800">🕒 ${log.time_of_day}</span>` : ''}
+                <span class="px-2 py-0.5 rounded text-[10px] bg-slate-900 border border-slate-800 text-slate-300">${trainerText}</span>
+                <span class="font-bold text-white text-xs">⏱️ ${log.duration_min || 90} min</span>
+                ${log.venue ? `<span class="text-cyan-400 font-bold text-xs">📍 ${log.venue}</span>` : ''}
+              </div>
+              <div class="flex items-center gap-1.5 text-xs font-mono flex-wrap">
+                ${log.best_mark_m ? `<span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-black text-[10px]">WK: ${log.best_mark_m}m</span>` : ''}
+                ${log.eff_mark_m ? `<span class="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px]">Effektiv: ${log.eff_mark_m}m</span>` : ''}
+                ${log.approach_speed_11m_to_1m ? `<span class="text-cyan-300 text-[10px]">Vmax: <strong>${log.approach_speed_11m_to_1m} m/s</strong></span>` : ''}
+                ${log.trapbar_e1rm_kg ? `<span class="text-purple-300 text-[10px]">Trapbar: <strong>${log.trapbar_e1rm_kg} kg</strong></span>` : ''}
+                ${log.umsetzen_e1rm_kg ? `<span class="text-amber-300 text-[10px]">Umsetzen: <strong>${log.umsetzen_e1rm_kg} kg</strong></span>` : ''}
+              </div>
+            </div>
+
+            <!-- Scores -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px]">
+              <div class="bg-slate-900/80 p-1.5 rounded border border-slate-800">
+                <span class="text-slate-500 uppercase block font-bold">Leistung</span>
+                <span class="text-white font-bold">${log.performance_score != null ? log.performance_score + '/10' : '-'}</span>
+              </div>
+              <div class="bg-slate-900/80 p-1.5 rounded border border-slate-800">
+                <span class="text-slate-500 uppercase block font-bold">Fokus</span>
+                <span class="text-cyan-300 font-bold truncate block">${log.focus || '-'}</span>
+              </div>
+              <div class="bg-slate-900/80 p-1.5 rounded border border-slate-800">
+                <span class="text-slate-500 uppercase block font-bold">Schmerzen</span>
+                <span class="text-amber-300 font-bold">${log.pain_score || log.schmerzen || 'Keine'}</span>
+              </div>
+              <div class="bg-slate-900/80 p-1.5 rounded border border-slate-800">
+                <span class="text-slate-500 uppercase block font-bold">Erschöpfung</span>
+                <span class="text-rose-300 font-bold">${log.fatigue_score || log.erschöpfung || 'Normal'}</span>
+              </div>
+            </div>
+
+            <!-- Protocol text -->
+            ${protocolText ? `
+              <div class="bg-slate-900 border border-slate-800/80 rounded-lg p-2.5 space-y-1">
+                <div class="text-[10px] font-bold uppercase text-cyan-400">📋 Dokumentiertes Protokoll</div>
+                <div class="text-slate-200 text-xs whitespace-pre-line leading-relaxed pl-2 border-l-2 border-cyan-500/80">
+${protocolText}
+                </div>
+              </div>
+            ` : '<div class="text-slate-500 italic text-[11px]">Kein Protokolltext vorhanden</div>'}
+
+            ${(log.problems || log.learnings) ? `
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
+                ${log.problems ? `<div class="p-2 rounded bg-rose-950/20 border border-rose-800/40 text-rose-300"><strong>⚠️ Probleme:</strong> ${log.problems}</div>` : ''}
+                ${log.learnings ? `<div class="p-2 rounded bg-amber-950/20 border border-amber-800/40 text-amber-300"><strong>💡 Learnings:</strong> ${log.learnings}</div>` : ''}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    modal.classList.remove('hidden');
+  }
+
   return {
     render,
     switchView,
@@ -1026,6 +1183,7 @@ ${l.protocol_text}
     onSearchInput,
     clearSearch,
     openInReadinessTab,
+    openSessionPreviewModal,
     scrollYearTrack,
     jumpYearTrackToDate,
     jumpToWeek

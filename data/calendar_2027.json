@@ -1,94 +1,16 @@
 {
   "season": "2027 World Athletics Tour & Championships",
   "target_discipline": "Men's Long Jump (Weitsprung Männer)",
-  "scraped_at": "2026-09-24",
+  "scraped_at": "2026-10-15",
   "official_sources": [
     "World Athletics: World Indoor Tour 2027 Calendar & Organiser Details",
     "World Athletics: Continental Tour 2027 Calendar & Organiser Details",
     "European Athletics & DLV Official 2027 Championships Roadmap"
   ],
   "strict_discipline_filter": "Includes competitions offering Men's Long Jump and relevant championships for DLV cadre.",
-  "total_meetings": 48,
-  "promising_runways_count": 29,
+  "total_meetings": 43,
+  "promising_runways_count": 27,
   "meetings": [
-    {
-      "id": "wa-7247355",
-      "wa_id": 7247355,
-      "date": "2026-12-05",
-      "displayDate": "05. DEZ 2026",
-      "month": "Dezember 2026",
-      "year": 2026,
-      "name": "Visit Winston-Salem College Kickoff",
-      "tour": "World Athletics Indoor Tour 2027",
-      "tier": "Challenger",
-      "category": "D",
-      "subgroup": "Challenger",
-      "venue": "JDL Fast Track",
-      "city": "NC",
-      "country": "USA",
-      "indoor": true,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.37m, 6x über 8,00m)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.37,
-        8.21,
-        8.14,
-        8.1,
-        8.1
-      ],
-      "websiteUrl": "jdlfasttrack.com",
-      "resultsPageUrl": "https://live.jdlfasttrack.com/meets/73415",
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "Craig Longhurst",
-          "email": "craig@jdlcastlecorp.com",
-          "phone": "+13364481656",
-          "title": "General matters"
-        }
-      ],
-      "disciplinesMen": [
-        "3000m sh",
-        "Pole Vault",
-        "Long Jump",
-        "400m sh",
-        "Triple Jump",
-        "4x400m sh",
-        "Mile sh",
-        "200m sh",
-        "High Jump",
-        "Weight Throw",
-        "800m sh",
-        "300m sh",
-        "500m sh",
-        "60mH",
-        "Shot Put",
-        "60m"
-      ],
-      "disciplinesWomen": [
-        "3000m sh",
-        "Pole Vault",
-        "Long Jump",
-        "400m sh",
-        "Triple Jump",
-        "4x400m sh",
-        "Mile sh",
-        "200m sh",
-        "High Jump",
-        "Weight Throw",
-        "800m sh",
-        "300m sh",
-        "500m sh",
-        "60mH",
-        "Shot Put",
-        "60m"
-      ]
-    },
     {
       "id": "wa-7244492",
       "wa_id": 7244492,
@@ -130,20 +52,20 @@
         }
       ],
       "disciplinesMen": [
-        "3000m sh",
         "Long Jump",
-        "1500m sh",
-        "400m sh",
-        "800m sh",
-        "60mH"
-      ],
-      "disciplinesWomen": [
-        "Pole Vault",
-        "1500m sh",
-        "200m sh",
+        "3000m sh",
         "800m sh",
         "60mH",
-        "60m"
+        "400m sh",
+        "1500m sh"
+      ],
+      "disciplinesWomen": [
+        "200m sh",
+        "60m",
+        "Pole Vault",
+        "800m sh",
+        "60mH",
+        "1500m sh"
       ]
     },
     {
@@ -193,14 +115,14 @@
       ],
       "disciplinesMen": [
         "60mH",
-        "60m",
-        "Long Jump"
+        "Long Jump",
+        "60m"
       ],
       "disciplinesWomen": [
-        "Triple Jump",
         "60mH",
-        "60m",
-        "Long Jump"
+        "Triple Jump",
+        "Long Jump",
+        "60m"
       ]
     },
     {
@@ -244,17 +166,17 @@
         }
       ],
       "disciplinesMen": [
-        "Pole Vault",
         "Long Jump",
-        "1500m sh",
+        "Pole Vault",
+        "60m",
         "60mH",
-        "60m"
+        "1500m sh"
       ],
       "disciplinesWomen": [
-        "800m sh",
         "60mH",
-        "60m",
-        "400m sh"
+        "400m sh",
+        "800m sh",
+        "60m"
       ]
     },
     {
@@ -293,19 +215,19 @@
         }
       ],
       "disciplinesMen": [
-        "3000m sh",
-        "Pole Vault",
-        "Long Jump",
         "Triple Jump",
         "200m sh",
-        "60m"
+        "Long Jump",
+        "Pole Vault",
+        "60m",
+        "3000m sh"
       ],
       "disciplinesWomen": [
         "Triple Jump",
         "200m sh",
+        "60m",
         "800m sh",
-        "60mH",
-        "60m"
+        "60mH"
       ]
     },
     {
@@ -350,19 +272,19 @@
         }
       ],
       "disciplinesMen": [
-        "Long Jump",
         "High Jump",
-        "60mH",
         "300mH",
-        "60m"
+        "Long Jump",
+        "60m",
+        "60mH"
       ],
       "disciplinesWomen": [
+        "High Jump",
         "300mH",
         "Long Jump",
-        "High Jump",
-        "60mH",
+        "60m",
         "Shot Put",
-        "60m"
+        "60mH"
       ]
     },
     {
@@ -413,21 +335,21 @@
         }
       ],
       "disciplinesMen": [
-        "3000m sh",
         "Long Jump",
-        "400m sh",
-        "60mH",
+        "60m",
+        "3000m sh",
         "Shot Put",
-        "60m"
+        "60mH",
+        "400m sh"
       ],
       "disciplinesWomen": [
-        "Long Jump",
-        "1500m sh",
-        "Triple Jump",
-        "800m sh",
         "High Jump",
+        "Triple Jump",
+        "Long Jump",
+        "60m",
+        "800m sh",
         "60mH",
-        "60m"
+        "1500m sh"
       ]
     },
     {
@@ -437,7 +359,7 @@
       "displayDate": "28. JAN 2027",
       "month": "Januar 2027",
       "year": 2027,
-      "name": "Meeting Maratón Valencia",
+      "name": "Gran Premio Ciudad de Valencia",
       "tour": "World Athletics Indoor Tour 2027",
       "tier": "Silver",
       "category": "B",
@@ -465,7 +387,7 @@
       "liveStreamingUrl": "https://www.facv.es/nuevos-espacios/GRAN-PREMIO-INTERNACIONAL-DE-ATLETISMO-VALENCIA/es/22/1",
       "contactPersons": [
         {
-          "name": "VICENTE AÑO SANZ",
+          "name": "MANUEL RIPOLLES RUIZ",
           "email": "gpvalenciast@gmail.com",
           "phone": "+34963859508",
           "title": "General matters"
@@ -478,18 +400,18 @@
         }
       ],
       "disciplinesMen": [
-        "Long Jump",
         "Triple Jump",
-        "1500m sh",
+        "Long Jump",
         "800m sh",
-        "60mH"
+        "60mH",
+        "1500m sh"
       ],
       "disciplinesWomen": [
-        "3000m sh",
-        "Long Jump",
         "Triple Jump",
-        "800m sh",
-        "60m"
+        "Long Jump",
+        "60m",
+        "3000m sh",
+        "800m sh"
       ]
     },
     {
@@ -535,10 +457,10 @@
       ],
       "disciplinesMen": [
         "Long Jump",
-        "400m sh",
+        "Shot Put",
         "800m sh",
         "60mH",
-        "Shot Put"
+        "400m sh"
       ],
       "disciplinesWomen": [
         "60mH",
@@ -588,14 +510,14 @@
         }
       ],
       "disciplinesMen": [
-        "Triple Jump",
         "High Jump",
-        "Long Jump"
-      ],
-      "disciplinesWomen": [
-        "Pole Vault",
         "Long Jump",
         "Triple Jump"
+      ],
+      "disciplinesWomen": [
+        "Triple Jump",
+        "Long Jump",
+        "Pole Vault"
       ]
     },
     {
@@ -637,38 +559,38 @@
         }
       ],
       "disciplinesMen": [
-        "3000m sh",
-        "5000m sh",
-        "Pole Vault",
-        "Long Jump",
-        "400m sh",
-        "Triple Jump",
-        "4x400m sh",
         "Mile sh",
-        "200m sh",
-        "Weight Throw",
-        "800m sh",
         "High Jump",
-        "60mH",
+        "Triple Jump",
+        "Weight Throw",
+        "4x400m sh",
+        "200m sh",
+        "Long Jump",
+        "60m",
+        "Pole Vault",
+        "3000m sh",
+        "800m sh",
         "Shot Put",
-        "60m"
+        "5000m sh",
+        "60mH",
+        "400m sh"
       ],
       "disciplinesWomen": [
-        "3000m sh",
-        "5000m sh",
-        "Pole Vault",
-        "Long Jump",
-        "400m sh",
-        "Triple Jump",
-        "4x400m sh",
         "Mile sh",
-        "200m sh",
-        "Weight Throw",
-        "800m sh",
         "High Jump",
-        "60mH",
+        "Triple Jump",
+        "Weight Throw",
+        "4x400m sh",
+        "200m sh",
+        "Long Jump",
+        "60m",
+        "Pole Vault",
+        "3000m sh",
+        "800m sh",
         "Shot Put",
-        "60m"
+        "5000m sh",
+        "60mH",
+        "400m sh"
       ]
     },
     {
@@ -770,16 +692,16 @@
         }
       ],
       "disciplinesMen": [
-        "800m sh",
-        "1500m sh",
         "Long Jump",
-        "400m sh"
+        "400m sh",
+        "800m sh",
+        "1500m sh"
       ],
       "disciplinesWomen": [
-        "800m sh",
         "60mH",
+        "400m sh",
         "Long Jump",
-        "400m sh"
+        "800m sh"
       ]
     },
     {
@@ -824,38 +746,38 @@
         }
       ],
       "disciplinesMen": [
-        "3000m sh",
-        "5000m sh",
-        "Pole Vault",
-        "Long Jump",
-        "400m sh",
-        "1500m sh",
-        "Triple Jump",
         "Mile sh",
-        "200m sh",
-        "Weight Throw",
-        "800m sh",
         "High Jump",
-        "60mH",
+        "Triple Jump",
+        "Weight Throw",
+        "200m sh",
+        "Long Jump",
+        "60m",
+        "Pole Vault",
+        "3000m sh",
+        "800m sh",
         "Shot Put",
-        "60m"
+        "5000m sh",
+        "60mH",
+        "400m sh",
+        "1500m sh"
       ],
       "disciplinesWomen": [
-        "3000m sh",
-        "5000m sh",
-        "Pole Vault",
-        "Long Jump",
-        "400m sh",
-        "1500m sh",
-        "Triple Jump",
         "Mile sh",
-        "200m sh",
-        "Weight Throw",
-        "800m sh",
         "High Jump",
-        "60mH",
+        "Triple Jump",
+        "Weight Throw",
+        "200m sh",
+        "Long Jump",
+        "60m",
+        "Pole Vault",
+        "3000m sh",
+        "800m sh",
         "Shot Put",
-        "60m"
+        "5000m sh",
+        "60mH",
+        "400m sh",
+        "1500m sh"
       ]
     },
     {
@@ -925,155 +847,20 @@
         }
       ],
       "disciplinesMen": [
-        "Pole Vault",
-        "Long Jump",
-        "400m sh",
         "Mile sh",
-        "800m sh",
-        "60mH"
-      ],
-      "disciplinesWomen": [
-        "3000m sh",
+        "Long Jump",
         "Pole Vault",
-        "400m sh",
         "800m sh",
         "60mH",
-        "60m"
-      ]
-    },
-    {
-      "id": "wa-7240482",
-      "wa_id": 7240482,
-      "date": "2027-02-04",
-      "displayDate": "04. FEB 2027",
-      "month": "Februar 2027",
-      "year": 2027,
-      "name": "World Indoor Tour Gold Madrid",
-      "tour": "World Athletics Indoor Tour 2027",
-      "tier": "Gold",
-      "category": "A",
-      "subgroup": "Gold",
-      "venue": "Gallur",
-      "city": "Madrid",
-      "country": "ESP",
-      "indoor": true,
-      "mensLongJump": true,
-      "womensLongJump": false,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. A Gold)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.46m, 10x über 8,00m)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.46,
-        8.15,
-        8.15,
-        8.14,
-        8.14
-      ],
-      "websiteUrl": "https://www.rfea.es",
-      "resultsPageUrl": "https://www.rfea.es",
-      "liveStreamingUrl": "https://www.rfea.es",
-      "contactPersons": [
-        {
-          "name": "Luis Saladie",
-          "email": "lsaladie@rfea.es",
-          "phone": "+34669987731",
-          "title": "General matters"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump",
-        "1500m sh",
-        "400m sh",
-        "800m sh",
-        "60mH"
+        "400m sh"
       ],
       "disciplinesWomen": [
         "Pole Vault",
-        "1500m sh",
-        "400m sh",
-        "800m sh",
-        "Shot Put",
-        "60m"
-      ]
-    },
-    {
-      "id": "wa-7247354",
-      "wa_id": 7247354,
-      "date": "2027-02-05",
-      "displayDate": "05. FEB 2027",
-      "month": "Februar 2027",
-      "year": 2027,
-      "name": "Penn Classic",
-      "tour": "World Athletics Indoor Tour 2027",
-      "tier": "Challenger",
-      "category": "D",
-      "subgroup": "Challenger",
-      "venue": "Ott Center for Track & Field",
-      "city": "PA",
-      "country": "USA",
-      "indoor": true,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
-      "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
-      "lukaHistory": [],
-      "topHistoricalMarks": [],
-      "websiteUrl": "https://pennathletics.com/feature/ott-center",
-      "resultsPageUrl": "ottcenter.live",
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "Aaron Robison",
-          "email": "arobison@upenn.edu",
-          "phone": "+12158986154",
-          "title": "General matters"
-        }
-      ],
-      "disciplinesMen": [
-        "Pole Vault",
-        "Triple Jump",
-        "200m sh",
-        "Weight Throw",
-        "60mH",
-        "Shot Put",
-        "400m sh",
-        "1000m sh",
-        "High Jump",
-        "5000m sh",
-        "800m sh",
-        "500m sh",
-        "3000m sh",
-        "Long Jump",
-        "Mile sh",
         "60m",
-        "Distance Medley sh",
-        "4x800m sh",
-        "4x400m sh"
-      ],
-      "disciplinesWomen": [
-        "Pole Vault",
-        "Triple Jump",
-        "200m sh",
-        "Weight Throw",
-        "60mH",
-        "Shot Put",
-        "400m sh",
-        "1000m sh",
-        "High Jump",
-        "5000m sh",
-        "800m sh",
-        "500m sh",
         "3000m sh",
-        "Long Jump",
-        "Mile sh",
-        "60m",
-        "Distance Medley sh",
-        "4x800m sh",
-        "4x400m sh"
+        "800m sh",
+        "60mH",
+        "400m sh"
       ]
     },
     {
@@ -1123,110 +910,44 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "Long Jump",
-        "Triple Jump",
+        "400m",
+        "High Jump",
+        "Discus Throw",
         "4x400m",
+        "Triple Jump",
         "110mH",
-        "10,000m",
-        "5000m",
-        "Discus Throw",
+        "4x100m",
         "200m",
+        "Long Jump",
         "800m",
+        "10,000m",
         "Javelin Throw",
         "3000mSC",
-        "4x100m",
-        "400m",
-        "1500m",
         "Shot Put",
-        "High Jump"
-      ],
-      "disciplinesWomen": [
-        "Triple Jump",
-        "4x400m",
-        "Discus Throw",
-        "4x100m",
-        "Javelin Throw",
-        "Shot Put",
-        "100mH",
-        "800m",
-        "400m",
-        "1500m",
-        "High Jump",
-        "5000m",
         "100m",
-        "400mH",
-        "Long Jump",
-        "10,000m",
-        "200m",
-        "3000mSC",
-        "Hammer Throw"
-      ]
-    },
-    {
-      "id": "wa-7247353",
-      "wa_id": 7247353,
-      "date": "2027-02-13",
-      "displayDate": "13. FEB 2027",
-      "month": "Februar 2027",
-      "year": 2027,
-      "name": "Cochrane Elite Invitational",
-      "tour": "World Athletics Indoor Tour 2027",
-      "tier": "Challenger",
-      "category": "D",
-      "subgroup": "Challenger",
-      "venue": "JDL Fast Track",
-      "city": "NC",
-      "country": "USA",
-      "indoor": true,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": false,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. D Challenger)",
-      "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
-      "lukaHistory": [],
-      "topHistoricalMarks": [],
-      "websiteUrl": "jdlfasttrack.com",
-      "resultsPageUrl": "https://live.jdlfasttrack.com/meets/74373",
-      "liveStreamingUrl": "https://live.jdlfasttrack.com/meets/74373",
-      "contactPersons": [
-        {
-          "name": "Craig Longhurst",
-          "email": "craig@jdlcastlecorp.com",
-          "phone": "+13364481656",
-          "title": "General matters"
-        }
-      ],
-      "disciplinesMen": [
-        "3000m sh",
-        "Pole Vault",
-        "Long Jump",
-        "400m sh",
-        "Triple Jump",
-        "Mile sh",
-        "200m sh",
-        "Weight Throw",
-        "800m sh",
-        "High Jump",
-        "60mH",
-        "Shot Put",
-        "60m"
+        "5000m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "3000m sh",
-        "Pole Vault",
-        "Long Jump",
-        "400m sh",
         "Triple Jump",
-        "Mile sh",
-        "200m sh",
-        "Weight Throw",
-        "800m sh",
+        "100mH",
         "High Jump",
-        "60mH",
+        "4x400m",
+        "400mH",
+        "Hammer Throw",
         "Shot Put",
-        "60m"
+        "1500m",
+        "4x100m",
+        "200m",
+        "10,000m",
+        "Javelin Throw",
+        "3000mSC",
+        "5000m",
+        "400m",
+        "Discus Throw",
+        "Long Jump",
+        "800m",
+        "100m"
       ]
     },
     {
@@ -1278,14 +999,14 @@
         }
       ],
       "disciplinesMen": [
-        "800m sh",
         "Long Jump",
-        "400m sh"
+        "400m sh",
+        "800m sh"
       ],
       "disciplinesWomen": [
-        "800m sh",
         "60mH",
-        "Shot Put"
+        "Shot Put",
+        "800m sh"
       ]
     },
     {
@@ -1342,15 +1063,15 @@
         }
       ],
       "disciplinesMen": [
-        "Pole Vault",
         "60mH",
-        "60m",
-        "Long Jump"
+        "Long Jump",
+        "Pole Vault",
+        "60m"
       ],
       "disciplinesWomen": [
         "60mH",
-        "60m",
-        "Long Jump"
+        "Long Jump",
+        "60m"
       ]
     },
     {
@@ -1400,43 +1121,43 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "Pole Vault",
-        "400mH",
-        "Long Jump",
-        "Triple Jump",
-        "4x400m",
-        "110mH",
-        "10,000m",
-        "5000m",
-        "Discus Throw",
-        "200m",
-        "800m",
-        "Javelin Throw",
-        "4x100m",
         "400m",
-        "1500m",
+        "Discus Throw",
+        "High Jump",
+        "4x400m",
+        "Triple Jump",
+        "110mH",
+        "4x100m",
+        "200m",
+        "Long Jump",
+        "Pole Vault",
+        "800m",
+        "10,000m",
+        "400mH",
+        "Javelin Throw",
         "Shot Put",
-        "High Jump"
+        "100m",
+        "5000m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "400mH",
-        "Long Jump",
-        "Triple Jump",
-        "4x400m",
-        "10,000m",
-        "5000m",
-        "100mH",
-        "Discus Throw",
-        "200m",
-        "800m",
-        "Javelin Throw",
-        "4x100m",
         "400m",
-        "1500m",
+        "High Jump",
+        "Discus Throw",
+        "4x400m",
+        "Triple Jump",
+        "4x100m",
+        "100mH",
+        "200m",
+        "Long Jump",
+        "800m",
+        "10,000m",
+        "400mH",
+        "Javelin Throw",
         "Shot Put",
-        "High Jump"
+        "100m",
+        "5000m",
+        "1500m"
       ]
     },
     {
@@ -1557,28 +1278,28 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "Long Jump",
+        "High Jump",
         "Triple Jump",
         "110mH",
-        "200m",
         "4x100m",
-        "1500m",
+        "200m",
+        "Long Jump",
+        "Hammer Throw",
         "Shot Put",
-        "High Jump",
-        "Hammer Throw"
+        "100m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "Long Jump",
+        "High Jump",
         "Triple Jump",
+        "4x100m",
         "100mH",
         "200m",
-        "4x100m",
-        "1500m",
+        "Long Jump",
+        "Hammer Throw",
         "Shot Put",
-        "High Jump",
-        "Hammer Throw"
+        "100m",
+        "1500m"
       ]
     },
     {
@@ -1629,24 +1350,24 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "Long Jump",
+        "400m",
+        "High Jump",
         "Discus Throw",
         "200m",
-        "800m",
         "3000m",
-        "400m",
-        "1500m",
-        "High Jump"
+        "Long Jump",
+        "800m",
+        "100m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "Pole Vault",
-        "100mH",
+        "High Jump",
         "Discus Throw",
-        "200m",
+        "100mH",
         "3000m",
-        "1500m",
-        "High Jump"
+        "200m",
+        "Pole Vault",
+        "1500m"
       ]
     },
     {
@@ -1691,23 +1412,23 @@
         }
       ],
       "disciplinesMen": [
-        "3000m sh",
-        "Pole Vault",
         "Long Jump",
-        "1500m sh",
-        "400m sh",
-        "800m sh",
-        "60mH"
-      ],
-      "disciplinesWomen": [
-        "3000m sh",
         "Pole Vault",
-        "400m sh",
-        "1500m sh",
-        "200m sh",
+        "3000m sh",
         "800m sh",
         "60mH",
-        "60m"
+        "400m sh",
+        "1500m sh"
+      ],
+      "disciplinesWomen": [
+        "200m sh",
+        "60m",
+        "Pole Vault",
+        "3000m sh",
+        "800m sh",
+        "60mH",
+        "400m sh",
+        "1500m sh"
       ]
     },
     {
@@ -1816,26 +1537,26 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "400mH",
-        "Long Jump",
+        "400m",
+        "4x100m",
         "110mH",
         "200m",
-        "4x100m",
+        "Long Jump",
         "800m",
         "Javelin Throw",
-        "400m",
+        "400mH",
+        "100m",
         "1500m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "Long Jump",
-        "100mH",
+        "400m",
         "4x100m",
+        "100mH",
         "200m",
-        "800m",
+        "Long Jump",
         "Javelin Throw",
-        "400m"
+        "800m",
+        "100m"
       ]
     },
     {
@@ -1944,43 +1665,43 @@
       ],
       "disciplinesMen": [
         "Triple Jump",
-        "4x400m",
-        "Discus Throw",
-        "4x100m",
-        "Javelin Throw",
-        "Shot Put",
-        "800m",
-        "400m",
-        "1500m",
-        "High Jump",
-        "3000m",
-        "100m",
-        "400mH",
-        "Long Jump",
         "110mH",
-        "10,000m",
+        "High Jump",
+        "4x400m",
+        "3000m",
+        "400mH",
+        "Hammer Throw",
+        "Shot Put",
+        "1500m",
+        "4x100m",
         "200m",
+        "10,000m",
+        "Javelin Throw",
         "3000mSC",
-        "Hammer Throw"
+        "400m",
+        "Discus Throw",
+        "Long Jump",
+        "800m",
+        "100m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "Long Jump",
-        "Triple Jump",
-        "4x400m",
-        "10,000m",
-        "5000m",
-        "100mH",
+        "400m",
+        "High Jump",
         "Discus Throw",
+        "4x400m",
+        "Triple Jump",
+        "4x100m",
+        "100mH",
         "200m",
+        "Long Jump",
         "800m",
+        "10,000m",
         "Javelin Throw",
         "3000mSC",
-        "4x100m",
-        "400m",
-        "1500m",
         "Shot Put",
-        "High Jump"
+        "100m",
+        "5000m",
+        "1500m"
       ]
     },
     {
@@ -2030,26 +1751,26 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
+        "High Jump",
+        "200m",
         "Long Jump",
         "10,000m",
-        "200m",
         "Javelin Throw",
         "3000mSC",
-        "1500m",
         "Shot Put",
-        "High Jump"
+        "100m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "100m",
+        "High Jump",
+        "200m",
         "Long Jump",
         "10,000m",
-        "200m",
         "Javelin Throw",
         "3000mSC",
-        "1500m",
         "Shot Put",
-        "High Jump"
+        "100m",
+        "1500m"
       ]
     },
     {
@@ -2094,21 +1815,21 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "400mH",
-        "Long Jump",
-        "200m",
-        "800m",
         "400m",
-        "High Jump"
+        "High Jump",
+        "200m",
+        "Long Jump",
+        "800m",
+        "400mH",
+        "100m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "400mH",
+        "400m",
         "800m",
         "Javelin Throw",
-        "400m",
-        "Shot Put"
+        "400mH",
+        "Shot Put",
+        "100m"
       ]
     },
     {
@@ -2159,36 +1880,36 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "Long Jump",
-        "Triple Jump",
-        "4x400m",
-        "10,000m",
-        "5000m",
-        "Discus Throw",
-        "200m",
-        "800m",
-        "Javelin Throw",
-        "4x100m",
         "400m",
-        "1500m",
-        "Shot Put",
         "High Jump",
-        "Hammer Throw"
+        "Discus Throw",
+        "4x400m",
+        "Triple Jump",
+        "4x100m",
+        "200m",
+        "Long Jump",
+        "800m",
+        "10,000m",
+        "Javelin Throw",
+        "Hammer Throw",
+        "Shot Put",
+        "100m",
+        "5000m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "Long Jump",
-        "Triple Jump",
-        "4x400m",
+        "400m",
+        "High Jump",
         "Discus Throw",
+        "4x400m",
+        "Triple Jump",
+        "4x100m",
         "200m",
+        "Long Jump",
         "800m",
         "Javelin Throw",
-        "4x100m",
-        "400m",
         "Shot Put",
-        "High Jump"
+        "100m"
       ]
     },
     {
@@ -2252,54 +1973,54 @@
         }
       ],
       "disciplinesMen": [
-        "Pole Vault",
+        "Decathlon",
         "Triple Jump",
-        "4x400m",
-        "Discus Throw",
-        "4x100m",
-        "Javelin Throw",
-        "Shot Put",
-        "800m",
-        "400m",
-        "1500m",
+        "110mH",
         "High Jump",
         "5000m Walk",
-        "5000m",
-        "Decathlon",
-        "100m",
+        "4x400m",
         "400mH",
-        "Long Jump",
-        "110mH",
-        "10,000m",
-        "200m",
+        "Hammer Throw",
+        "Shot Put",
+        "1500m",
         "10,000m Walk",
+        "4x100m",
+        "200m",
+        "Pole Vault",
+        "10,000m",
+        "Javelin Throw",
         "3000mSC",
-        "Hammer Throw"
+        "5000m",
+        "400m",
+        "Discus Throw",
+        "Long Jump",
+        "800m",
+        "100m"
       ],
       "disciplinesWomen": [
-        "Pole Vault",
-        "Heptathlon",
         "Triple Jump",
-        "4x400m",
-        "Discus Throw",
-        "4x100m",
-        "Javelin Throw",
-        "Shot Put",
         "100mH",
-        "800m",
-        "400m",
-        "1500m",
+        "Heptathlon",
         "High Jump",
         "5000m Walk",
-        "5000m",
-        "100m",
+        "4x400m",
         "400mH",
-        "Long Jump",
-        "10,000m",
-        "200m",
+        "Hammer Throw",
+        "Shot Put",
+        "1500m",
         "10,000m Walk",
+        "4x100m",
+        "200m",
+        "Pole Vault",
+        "10,000m",
+        "Javelin Throw",
         "3000mSC",
-        "Hammer Throw"
+        "5000m",
+        "400m",
+        "Discus Throw",
+        "Long Jump",
+        "800m",
+        "100m"
       ]
     },
     {
@@ -2356,25 +2077,25 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "Long Jump",
         "110mH",
-        "200m",
-        "800m",
         "4x100m",
+        "200m",
         "3000m",
+        "Long Jump",
+        "800m",
         "300m",
-        "Shot Put"
+        "Shot Put",
+        "100m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "400mH",
-        "Long Jump",
-        "100mH",
         "4x100m",
+        "100mH",
+        "Long Jump",
         "800m",
+        "300m",
+        "400mH",
         "Javelin Throw",
-        "300m"
+        "100m"
       ]
     },
     {
@@ -2425,21 +2146,21 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "400mH",
-        "Long Jump",
-        "200m",
-        "800m",
         "400m",
-        "High Jump"
+        "High Jump",
+        "200m",
+        "Long Jump",
+        "800m",
+        "400mH",
+        "100m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "400mH",
+        "400m",
         "800m",
         "Javelin Throw",
-        "400m",
-        "Shot Put"
+        "400mH",
+        "Shot Put",
+        "100m"
       ]
     },
     {
@@ -2494,32 +2215,32 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "400mH",
-        "Long Jump",
+        "400m",
         "110mH",
-        "5000m",
         "200m",
+        "3000m",
+        "Long Jump",
         "800m",
         "Javelin Throw",
-        "3000m",
+        "400mH",
         "3000mSC",
-        "400m",
+        "100m",
+        "5000m",
         "1500m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "400mH",
-        "5000m",
+        "400m",
+        "High Jump",
         "100mH",
         "200m",
+        "3000m",
         "800m",
         "Javelin Throw",
-        "3000m",
+        "400mH",
         "3000mSC",
-        "400m",
-        "1500m",
-        "High Jump"
+        "100m",
+        "5000m",
+        "1500m"
       ]
     },
     {
@@ -2592,20 +2313,20 @@
         "Long Jump"
       ],
       "disciplinesWomen": [
-        "1000m",
-        "100m",
-        "Long Jump",
-        "Triple Jump",
-        "Hammer Throw",
-        "600m",
         "High Jump",
-        "100mH",
+        "2000m",
+        "Triple Jump",
         "4x100m",
+        "100mH",
+        "600m",
+        "Long Jump",
+        "60m",
         "Javelin Throw",
         "300m",
         "60mH",
-        "60m",
-        "2000m"
+        "Hammer Throw",
+        "1000m",
+        "100m"
       ]
     },
     {
@@ -2650,28 +2371,28 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "Long Jump",
+        "400m",
         "Triple Jump",
         "110mH",
-        "200m",
-        "800m",
         "4x100m",
+        "200m",
         "3000m",
-        "400m",
-        "1500m",
+        "Long Jump",
+        "800m",
+        "Hammer Throw",
         "Shot Put",
-        "Hammer Throw"
+        "100m",
+        "1500m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "400mH",
-        "Long Jump",
+        "400m",
         "Triple Jump",
         "200m",
+        "Long Jump",
         "800m",
-        "400m",
-        "Hammer Throw"
+        "400mH",
+        "Hammer Throw",
+        "100m"
       ]
     },
     {
@@ -2719,21 +2440,21 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "Pole Vault",
-        "Long Jump",
-        "110mH",
+        "400m",
         "Discus Throw",
+        "110mH",
+        "Long Jump",
+        "Pole Vault",
         "800m",
         "3000mSC",
-        "400m"
+        "100m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "100mH",
-        "Discus Throw",
-        "800m",
         "400m",
+        "Discus Throw",
+        "100mH",
+        "800m",
+        "100m",
         "1500m"
       ]
     },
@@ -2785,26 +2506,26 @@
         }
       ],
       "disciplinesMen": [
-        "Long Jump",
-        "110mH",
         "Discus Throw",
+        "110mH",
         "200m",
+        "Long Jump",
         "800m",
-        "1500m",
+        "Hammer Throw",
         "Shot Put",
-        "Hammer Throw"
+        "1500m"
       ],
       "disciplinesWomen": [
-        "100m",
-        "400mH",
+        "400m",
+        "High Jump",
         "Triple Jump",
         "100mH",
         "200m",
+        "3000m",
         "800m",
         "Javelin Throw",
-        "3000m",
-        "400m",
-        "High Jump"
+        "400mH",
+        "100m"
       ]
     },
     {
@@ -2917,20 +2638,20 @@
         }
       ],
       "disciplinesMen": [
-        "100m",
-        "Pole Vault",
-        "Long Jump",
-        "110mH",
         "Discus Throw",
+        "110mH",
+        "Long Jump",
+        "Pole Vault",
         "800m",
+        "100m",
         "1500m"
       ],
       "disciplinesWomen": [
-        "100m",
         "100mH",
         "800m",
-        "1500m",
-        "Shot Put"
+        "Shot Put",
+        "100m",
+        "1500m"
       ]
     },
     {
@@ -3068,69 +2789,6 @@
       "websiteUrl": "https://www.leichtathletik.de",
       "resultsPageUrl": "https://ergebnisse.leichtathletik.de",
       "liveStreamingUrl": null
-    },
-    {
-      "id": "wa-7247511",
-      "wa_id": 7247511,
-      "date": "2027-07-17",
-      "displayDate": "17. JUL 2027",
-      "month": "Juli 2027",
-      "year": 2027,
-      "name": "Saudi Athletics Grand Prix",
-      "tour": "World Athletics Continental Tour 2027",
-      "tier": "Silver",
-      "category": "B",
-      "subgroup": "Silver",
-      "venue": "King Fahd Sports City",
-      "city": "At Ta'if",
-      "country": "KSA",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": true,
-      "status": "Verifiziert: Weitsprung Männer ✅ (Kat. B Silver)",
-      "promisingRunway": false,
-      "runwayNote": "Solide Wettkampfanlage mit regulären Bedingungen",
-      "lukaHistory": [],
-      "topHistoricalMarks": [],
-      "websiteUrl": null,
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "Mohammed Shawkat Ahmed",
-          "email": "KSA@MF.WORLDATHLETICS.ORG",
-          "phone": "+966502786556",
-          "title": "General matters"
-        },
-        {
-          "name": "Ramzi NAIM",
-          "email": "ramzigos@gmail.com",
-          "phone": "+971502843893",
-          "title": "Meeting Director"
-        }
-      ],
-      "disciplinesMen": [
-        "100m",
-        "Pole Vault",
-        "Long Jump",
-        "Triple Jump",
-        "110mH",
-        "200m",
-        "800m",
-        "400m",
-        "Hammer Throw",
-        "Shot Put"
-      ],
-      "disciplinesWomen": [
-        "100m",
-        "Long Jump",
-        "Triple Jump",
-        "200m",
-        "800m",
-        "400m",
-        "Hammer Throw"
-      ]
     },
     {
       "id": "wa-7231707",

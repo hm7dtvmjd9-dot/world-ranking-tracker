@@ -28,7 +28,7 @@ jobs:
 
       - name: Ranking-Scraper mit Klick-Simulation ausführen
         run: |
-          python scraper.py
+          python scraper.py --all-comps
 
       - name: Neue Daten committen und pushen
         run: |
