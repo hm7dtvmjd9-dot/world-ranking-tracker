@@ -52,14 +52,27 @@ const App = (() => {
 
   function applyTheme(theme) {
     const btn = document.getElementById('themeToggleBtn');
+    const icon = document.getElementById('themeToggleIcon');
     if (theme === 'light') {
       document.documentElement.classList.add('light-theme');
       document.documentElement.classList.remove('dark');
-      if (btn) btn.innerHTML = '🌙 Dunkel';
+      if (icon) icon.textContent = '🌙';
+      else if (btn) btn.innerHTML = '<span id="themeToggleIcon">🌙</span>';
+      if (btn) btn.title = 'Zu Dark Mode wechseln';
+      if (window.Chart) {
+        Chart.defaults.color = '#334155';
+        Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.28)';
+      }
     } else {
       document.documentElement.classList.remove('light-theme');
       document.documentElement.classList.add('dark');
-      if (btn) btn.innerHTML = '☀️ Hell';
+      if (icon) icon.textContent = '☀️';
+      else if (btn) btn.innerHTML = '<span id="themeToggleIcon">☀️</span>';
+      if (btn) btn.title = 'Zu Light Mode wechseln';
+      if (window.Chart) {
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = 'rgba(51, 65, 85, 0.45)';
+      }
     }
     localStorage.setItem('theme_preference', theme);
   }
@@ -67,9 +80,7 @@ const App = (() => {
   function toggleTheme() {
     const isLight = document.documentElement.classList.contains('light-theme');
     applyTheme(isLight ? 'dark' : 'light');
-    if (state.activeTab === 'analytics' && window.AnalyticsModule) {
-      window.AnalyticsModule.render(state);
-    }
+    renderCurrentTab();
   }
 
   async function loadInitialData() {

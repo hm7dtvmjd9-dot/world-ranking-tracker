@@ -29,7 +29,187 @@ const QualificationModule = (() => {
     return isNaN(d.getTime()) ? null : d;
   }
 
+  const CHAMPIONSHIPS_2027 = [
+    {
+      id: 'DM_HALLE',
+      preset: 'DM',
+      code: 'DM Halle',
+      title: '74. Deutsche Hallenmeisterschaften',
+      date: '20.–21.02.2027',
+      city: 'Dortmund 🇩🇪',
+      cat: 'Kat. B',
+      norm: 'DLV Top 12 / 7.45m',
+      accent: 'border-cyan-500/60 bg-cyan-950/20 text-cyan-300'
+    },
+    {
+      id: 'VALENCIA_EM',
+      preset: 'VALENCIA',
+      code: 'Hallen-EM',
+      title: 'European Athletics Indoor Championships',
+      date: '04.–07.03.2027',
+      city: 'Valencia 🇪🇸',
+      cat: 'Kat. A (EM)',
+      norm: 'Norm 8.17m • 18 Pl. (Max 3/GER)',
+      accent: 'border-purple-500/60 bg-purple-950/25 text-purple-300'
+    },
+    {
+      id: 'CISM_WM',
+      preset: 'TEAM_EM',
+      code: 'CISM',
+      title: 'CISM Militär-Weltmeisterschaften',
+      date: '14.–18.06.2027',
+      city: 'CISM Host (TBA) 🌍',
+      cat: 'Kat. B / Bundeswehr',
+      norm: 'GER #1–#2 Sportsoldaten',
+      accent: 'border-emerald-500/50 bg-emerald-950/20 text-emerald-300'
+    },
+    {
+      id: 'TEAM_EM',
+      preset: 'TEAM_EM',
+      code: 'Team-EM',
+      title: 'Team-EM 1st Division',
+      date: '24.–27.06.2027',
+      city: 'Istanbul 🇹🇷',
+      cat: 'Kat. A',
+      norm: 'Nur 1 Starter / Nation (GER #1)',
+      accent: 'border-amber-500/60 bg-amber-950/20 text-amber-300'
+    },
+    {
+      id: 'DM_OUTDOOR',
+      preset: 'DM',
+      code: 'DM Freiluft',
+      title: '127. Deutsche Meisterschaften',
+      date: '02.–04.07.2027',
+      city: 'Deutschland 🇩🇪',
+      cat: 'Kat. B (+100 Pkt)',
+      norm: 'DLV Top 12 • WM-Quali Pflicht',
+      accent: 'border-cyan-500/60 bg-cyan-950/20 text-cyan-300'
+    },
+    {
+      id: 'FISU_WUG',
+      preset: 'TEAM_EM',
+      code: 'FISU WUG',
+      title: 'FISU World University Games',
+      date: '01.–12.08.2027',
+      city: 'Chungcheong 🇰🇷',
+      cat: 'Kat. B (adh)',
+      norm: 'Max 2 / Nation • DLV/adh Norm',
+      accent: 'border-indigo-500/50 bg-indigo-950/20 text-indigo-300'
+    },
+    {
+      id: 'BEIJING_WM',
+      preset: 'WM',
+      code: 'WM Peking',
+      title: 'World Athletics Championships Beijing',
+      date: '11.–19.09.2027',
+      city: 'Peking 🇨🇳',
+      cat: 'Kat. OW/GL',
+      norm: 'Norm 8.27m • 36 Pl. (Max 3/GER)',
+      accent: 'border-rose-500/60 bg-rose-950/25 text-rose-300'
+    }
+  ];
+
+  function renderChampionshipsStrip(state) {
+    const strip = document.getElementById('qualiChampionshipsStrip');
+    if (!strip) return;
+
+    strip.innerHTML = CHAMPIONSHIPS_2027.map(c => {
+      const isActive = state.activeChampionshipPreset === c.preset;
+      return `
+        <div onclick="QualificationModule.applyChampionshipPreset('${c.preset}')" class="cursor-pointer rounded-xl border p-2.5 transition-all ${
+          isActive
+            ? `${c.accent} ring-1 ring-white/30 shadow-md`
+            : 'bg-slate-950/80 border-slate-800 hover:border-slate-700 text-slate-300'
+        }">
+          <div class="flex items-center justify-between gap-1 font-mono text-[10px]">
+            <span class="px-1.5 py-0.5 rounded font-black bg-slate-900 border border-slate-700 text-white">${c.code}</span>
+            <span class="text-slate-400 font-bold">${c.date}</span>
+          </div>
+          <div class="text-xs font-bold text-white mt-1 truncate" title="${c.title}">${c.title}</div>
+          <div class="flex items-center justify-between gap-1 mt-1 text-[10px] font-mono text-slate-400">
+            <span>📍 ${c.city}</span>
+            <span class="text-amber-400 font-bold truncate">${c.norm}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function applyChampionshipPreset(presetKey) {
+    const state = window.App && window.App.state;
+    if (!state) return;
+
+    state.activeChampionshipPreset = presetKey;
+    const ruleBadge = document.getElementById('periodInfoRuleBadge');
+    const emBtn = document.getElementById('presetHallenEmBtn');
+    const wmBtn = document.getElementById('presetWm2027Btn');
+    const dmBtn = document.getElementById('presetDm2027Btn');
+    const teamBtn = document.getElementById('presetTeamEmBtn');
+
+    [emBtn, wmBtn, dmBtn, teamBtn].forEach(b => {
+      if (b) b.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all flex items-center gap-1 shadow-sm';
+    });
+
+    if (presetKey === 'VALENCIA') {
+      state.periodFieldSize = 18;
+      state.periodMaxPerNation = 3;
+      state.periodScope = 'europe';
+      state.periodMode = 'toplist';
+      state.periodStartDate = '2026-11-01';
+      state.periodStandardStartDate = '2026-02-22';
+      state.periodEntryStandard = 8.17;
+      state.isHallenEmPreset = true;
+      if (emBtn) emBtn.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-purple-600 text-white shadow-sm flex items-center gap-1';
+      if (ruleBadge) ruleBadge.textContent = 'EA Valencia 2027 Modus (04.–07.03.27 • Norm 8.17m • 18 Plätze Europa)';
+    } else if (presetKey === 'WM') {
+      state.periodFieldSize = 36;
+      state.periodMaxPerNation = 3;
+      state.periodScope = 'global';
+      state.periodMode = 'ranking';
+      state.periodStartDate = '2026-08-25';
+      state.periodStandardStartDate = '2026-08-01';
+      state.periodEntryStandard = 8.27;
+      state.isHallenEmPreset = false;
+      if (wmBtn) wmBtn.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-cyan-600 text-slate-950 font-black shadow-sm flex items-center gap-1';
+      if (ruleBadge) ruleBadge.textContent = 'WM Peking 2027 Modus (11.–19.09.27 • Norm 8.27m • 36 Plätze Weltweit)';
+    } else if (presetKey === 'DM') {
+      state.periodFieldSize = 12;
+      state.periodMaxPerNation = 12;
+      state.periodScope = 'germany';
+      state.periodMode = 'toplist';
+      state.periodStartDate = '2026-01-01';
+      state.periodStandardStartDate = '2026-01-01';
+      state.periodEntryStandard = 7.90;
+      state.isHallenEmPreset = false;
+      if (dmBtn) dmBtn.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-cyan-600 text-slate-950 font-black shadow-sm flex items-center gap-1';
+      if (ruleBadge) ruleBadge.textContent = 'DM Halle Dortmund (20.02.27) & DM Freiluft (02.07.27) • DLV Kader & Top-12';
+    } else if (presetKey === 'TEAM_EM') {
+      state.periodFieldSize = 2;
+      state.periodMaxPerNation = 2;
+      state.periodScope = 'germany';
+      state.periodMode = 'toplist';
+      state.periodStartDate = '2026-05-01';
+      state.periodStandardStartDate = '2026-05-01';
+      state.periodEntryStandard = 8.05;
+      state.isHallenEmPreset = false;
+      if (teamBtn) teamBtn.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-amber-500 text-slate-950 font-black shadow-sm flex items-center gap-1';
+      if (ruleBadge) ruleBadge.textContent = 'Team-EM Istanbul (GER #1), CISM Militär-WM & FISU WUG 2027 (GER #1–#2)';
+    }
+
+    const fsInput = document.getElementById('periodFieldSizeInput');
+    if (fsInput) fsInput.value = state.periodFieldSize;
+    const sdInput = document.getElementById('periodStartDateInput');
+    if (sdInput) sdInput.value = state.periodStartDate;
+
+    render(state);
+  }
+
   function render(state) {
+    if (!state.activeChampionshipPreset) {
+      state.activeChampionshipPreset = state.isHallenEmPreset ? 'VALENCIA' : 'WM';
+    }
+    renderChampionshipsStrip(state);
+
     const tbody = document.getElementById('periodTableBody');
     if (!tbody) return;
 
@@ -41,9 +221,11 @@ const QualificationModule = (() => {
     const toplistStartDate = new Date(state.periodStartDate);
     const standardStartDate = new Date(state.periodStandardStartDate);
 
-    // 1. Filter by Region (Europe vs Global)
+    // 1. Filter by Region (Germany vs Europe vs Global)
     let pool = state.athletes;
-    if (state.periodScope === 'europe') {
+    if (state.periodScope === 'germany') {
+      pool = pool.filter(a => a.nation === 'GER');
+    } else if (state.periodScope === 'europe') {
       pool = pool.filter(a => isEuropean(a.nation));
     }
 
@@ -66,9 +248,9 @@ const QualificationModule = (() => {
         const cat = (m.category || '').toUpperCase().trim();
         const markVal = parseFloat(m.mark) || 0;
 
-        // WA/EA Rule: Automatic Norm (Hallen-EM >= 8.17m) ONLY valid in Kat. C or higher!
+        // WA/EA Rule: Automatic Norm ONLY valid in Kat. C or higher!
         const isEligibleCategory = VALID_STANDARD_CATS.has(cat);
-        if (state.isHallenEmPreset && mDate && mDate >= standardStartDate && markVal >= state.periodEntryStandard && isEligibleCategory) {
+        if (mDate && mDate >= standardStartDate && markVal >= state.periodEntryStandard && isEligibleCategory) {
           hasDirectStandard = true;
           if (markVal > bestStandardMark) bestStandardMark = markVal;
         }
@@ -106,7 +288,7 @@ const QualificationModule = (() => {
       const marks = validPeriodMeetings.map(m => parseFloat(m.mark) || 0);
 
       const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
-      const maxMark = marks.length > 0 ? Math.max(...marks) : 0;
+      const maxMark = marks.length > 0 ? Math.max(...marks) : (ath.sb || 0);
       const maxScore = scores.length > 0 ? Math.max(...scores) : 0;
 
       const displayMark = Math.max(maxMark, bestStandardMark);
@@ -163,7 +345,7 @@ const QualificationModule = (() => {
         quotaStatus = 'quota_full';
       }
 
-            const isNew = ath.is_new_entrant || (ath.rankDelta != null && ath.rankDelta >= 15);
+      const isNew = ath.is_new_entrant || (ath.rankDelta != null && ath.rankDelta >= 15);
       return { ...ath, periodRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot, isNewEntrant: isNew };
     });
 
@@ -361,7 +543,7 @@ const QualificationModule = (() => {
     });
   }
 
-  return { render };
+  return { render, applyChampionshipPreset };
 })();
 
 window.QualificationModule = QualificationModule;

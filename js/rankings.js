@@ -17,8 +17,11 @@ const RankingsModule = (() => {
 
   let meetingSearchQuery = '';
   let meetingSelectedCategory = 'ALL';
-  let meetingSortBy = 'density';
+  let meetingSortBy = 'date_desc';
   let displayedMeetingsLimit = 40;
+  let competitionsViewMode = 'list'; // 'list' | 'calendar'
+  let competitionsYearFilter = 'ALL'; // 'ALL' | '2026' | '2025' | '2024' | '2023'
+  let compCalendarYearMonth = '2026-06';
 
   let expandedAthleteDbId = null;
   let expandedMeetingDbName = null;
@@ -149,7 +152,24 @@ const RankingsModule = (() => {
     return isNaN(n) ? 0 : n;
   }
 
+  function getMeetingIsoDate(meet) {
+    if (meet.iso_date && /^\d{4}-\d{2}-\d{2}$/.test(meet.iso_date)) {
+      return meet.iso_date;
+    }
+    const ts = getMeetingSortDate(meet, true);
+    if (!ts) return '';
+    const d = new Date(ts);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
   function getMeetingSortDate(meet, newest = true) {
+    if (meet.iso_date) {
+      const t = parseDateStr(meet.iso_date);
+      if (t > 0) return t;
+    }
     const dates = (meet.dates_seen || []).map(parseDateStr).filter(t => t > 0);
     if (dates.length === 0) return 0;
     return newest ? Math.max(...dates) : Math.min(...dates);
@@ -590,12 +610,12 @@ const RankingsModule = (() => {
     const snap = (state.rankingsArchive && state.rankingsArchive.snapshots && currentSnapshotIdx !== null)
       ? state.rankingsArchive.snapshots[currentSnapshotIdx]
       : null;
-    const snapDate = snap ? parseDateStr(snap.date) : new Date(2026, 8, 23).getTime();
+    const snapDate = snap ? parseDateStr(snap.date) : new Date(2026, 9, 13).getTime();
 
     const luka = state.athletes.find(a => a.name.toLowerCase().includes('herden'));
     const meets = (luka && luka.countingMeetings) ? luka.countingMeetings : [];
 
-    // Calculate meeting expiration details (365 days after date)
+    // Calculate meeting expiration details (365 days after date) and sort by expiration date ascending
     const meetsWithExpiry = meets.map(m => {
       const meetTime = parseDateStr(m.date);
       const expiryTime = meetTime > 0 ? meetTime + (365 * 24 * 60 * 60 * 1000) : 0;
@@ -608,8 +628,8 @@ const RankingsModule = (() => {
       let statusBadge = '';
       if (daysLeft <= 0) {
         statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-950 text-rose-300 border border-rose-800">⚠️ Verfallen (${expDateStr})</span>`;
-      } else if (daysLeft <= 60) {
-        statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-950 text-amber-300 border border-amber-800">⏳ Verfällt in ${daysLeft} Tagen (${expDateStr})</span>`;
+      } else if (daysLeft <= 120) {
+        statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-950 text-amber-300 border border-amber-800">⏳ Noch ${daysLeft} Tage (${expDateStr})</span>`;
       } else {
         statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">✅ Aktiv (${daysLeft} Tage bis ${expDateStr})</span>`;
       }
@@ -622,22 +642,20 @@ const RankingsModule = (() => {
         daysLeft,
         statusBadge
       };
-    });
-
-    const activeDate = snap ? snap.date : '2026-10-06';
+    }).sort((a, b) => a.expiryTime - b.expiryTime);
 
     container.innerHTML = `
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 shadow-sm space-y-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
           <div>
             <div class="flex items-center gap-2">
-              <span class="text-base">🔮</span>
+              <span class="text-base">⏱️</span>
               <h3 class="text-xs font-black text-white uppercase tracking-wider font-mono">
-                PUNKTE-VERFALL & RANKING-PROGNOSE COCKPIT (365-TAGE-REGEL)
+                ABLAUFDATEN (365-TAGE-REGEL) & PUNKTERECHNER
               </h3>
             </div>
             <p class="text-[10px] text-slate-400 font-mono mt-0.5">
-              Jeder gewertete Wettkampf verfällt nach exakt 365 Tagen. Simulation des Top-100 Feldes bis Sommer 2027.
+              Ablaufdaten deiner 5 Wertungs-Meetings & Simulation neuer Wettkampfergebnisse nach offizieller WA-Formel
             </p>
           </div>
           <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${meetsWithExpiry.length >= 5 ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-amber-950 text-amber-300 border border-amber-800'}">
@@ -645,29 +663,29 @@ const RankingsModule = (() => {
           </span>
         </div>
 
-        <!-- 1. Expiration Roadmap for Luka's Meetings -->
+        <!-- 1. Expiration Dates Table (Ablaufdaten) -->
         <div>
           <h4 class="text-[11px] font-bold text-slate-300 uppercase font-mono mb-2 flex items-center gap-1.5">
-            <span>⏱️</span>
-            <span>Ablauf-Fahrplan von Lukas aktuellen Meetings:</span>
+            <span>📅</span>
+            <span>Ablaufdaten von Lukas gewerteten Meetings (chronologisch nach Verfall):</span>
           </h4>
           <div class="overflow-x-auto border border-slate-800 rounded-lg">
             <table class="w-full text-left border-collapse text-[10px] font-mono">
               <thead>
                 <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[9px] uppercase">
-                  <th class="py-1.5 px-2">Wettkampf</th>
-                  <th class="py-1.5 px-2 text-center">Datum</th>
+                  <th class="py-1.5 px-2.5">Wettkampf</th>
+                  <th class="py-1.5 px-2 text-center">Wettkampf-Datum</th>
                   <th class="py-1.5 px-2 text-center">Kat.</th>
                   <th class="py-1.5 px-2 text-right">Weite</th>
                   <th class="py-1.5 px-2 text-right">Punkte</th>
                   <th class="py-1.5 px-2 text-center">Ablaufdatum (WA 365d)</th>
-                  <th class="py-1.5 px-2 text-center">Status</th>
+                  <th class="py-1.5 px-2 text-center">Restlaufzeit</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800/40">
                 ${meetsWithExpiry.length > 0 ? meetsWithExpiry.map(m => `
                   <tr class="hover:bg-slate-800/30 ${m.daysLeft <= 0 ? 'opacity-60 bg-rose-950/10' : ''}">
-                    <td class="py-1.5 px-2 text-white font-sans font-medium text-xs">
+                    <td class="py-1.5 px-2.5 text-white font-sans font-medium text-xs">
                       ${m.competition || '-'}
                       ${m.competition && m.competition.toLowerCase().includes('gorz') ? '<span class="ml-1 px-1 py-0.2 rounded bg-amber-500 text-slate-950 font-black text-[9px]">PEAK 1247</span>' : ''}
                     </td>
@@ -675,7 +693,7 @@ const RankingsModule = (() => {
                     <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${m.category || '-'}</span></td>
                     <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${m.mark}m</td>
                     <td class="py-1.5 px-2 text-right font-black text-amber-400">${m.performance_score || m.performanceScore || '-'} Pkt</td>
-                    <td class="py-1.5 px-2 text-center text-slate-300 whitespace-nowrap font-bold">${m.expDateStr}</td>
+                    <td class="py-1.5 px-2 text-center text-white whitespace-nowrap font-bold">${m.expDateStr}</td>
                     <td class="py-1.5 px-2 text-center whitespace-nowrap">${m.statusBadge}</td>
                   </tr>
                 `).join('') : '<tr><td colspan="7" class="py-3 text-center text-slate-500 italic">Keine Meetings für diesen Zeitpunkt hinterlegt.</td></tr>'}
@@ -684,205 +702,112 @@ const RankingsModule = (() => {
           </div>
         </div>
 
-        <!-- 2. Interactive Milestone Timeline Quick-Jumps -->
-        <div>
-          <h4 class="text-[11px] font-bold text-slate-300 uppercase font-mono mb-1.5 flex items-center gap-1.5">
-            <span>📅</span>
-            <span>Wichtige Prognose-Meilensteine ansteuern:</span>
-          </h4>
-          <div class="flex items-center gap-2 flex-wrap text-xs font-mono">
-            <button onclick="RankingsModule.selectPrognosisDate('2026-10-06')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2026-10-06' ? 'bg-cyan-600 text-slate-950 font-bold border border-cyan-400' : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-700'}">
-              📍 06.10.2026 (Aktuell) • Luka #70 (1144 Pkt)
-            </button>
-            <button onclick="RankingsModule.selectPrognosisDate('2027-01-31')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2027-01-31' ? 'bg-cyan-600 text-slate-950 font-bold border border-cyan-400' : 'bg-slate-950 hover:bg-slate-800 text-cyan-300 border border-slate-700'}">
-              🔮 31.01.2027 (Vor Gorzów-Ablauf) • Luka #43 (1144 Pkt)
-            </button>
-            <button onclick="RankingsModule.selectPrognosisDate('2027-02-01')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2027-02-01' ? 'bg-rose-600 text-white font-bold border border-rose-400' : 'bg-slate-950 hover:bg-slate-800 text-rose-300 border border-rose-800'}">
-              ⚠️ 01.02.2027 (Gorzów verfällt) • Luka #89 (895 Pkt, 4 Meets)
-            </button>
-            <button onclick="RankingsModule.selectPrognosisDate('2027-02-28')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2027-02-28' ? 'bg-amber-600 text-slate-950 font-bold border border-amber-400' : 'bg-slate-950 hover:bg-slate-800 text-amber-300 border border-slate-700'}">
-              ⚠️ 28.02.2027 (Dortmund verfällt) • Luka 781 Pkt (3 Meets)
-            </button>
-            <button onclick="RankingsModule.selectPrognosisDate('2027-06-30')" class="px-2.5 py-1 rounded transition-all ${activeDate === '2027-06-30' ? 'bg-purple-600 text-white font-bold border border-purple-400' : 'bg-slate-950 hover:bg-slate-800 text-purple-300 border border-slate-700'}">
-              🔮 30.06.2027 (Sommer bereinigt)
-            </button>
-          </div>
-        </div>
-
-        <!-- 3. Dedicated Prognosis Chart (Week-by-week drop into 2027) -->
-        <div>
-          <div class="flex items-center justify-between mb-1">
-            <h4 class="text-[11px] font-bold text-slate-300 uppercase font-mono flex items-center gap-1.5">
-              <span class="text-amber-400">📉</span>
-              <span>Prognostizierter Punkte- & Rangverlauf bis Sommer 2027:</span>
-            </h4>
-            <span class="text-[9px] font-mono text-slate-500">Ohne neue Wettkämpfe (Worst-Case Punkte-Verfall)</span>
-          </div>
-          <div class="h-44 sm:h-48 w-full bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-            <canvas id="prognosisChart"></canvas>
-          </div>
-        </div>
-
-        <!-- 4. What-If Replacement Simulator -->
-        <div class="mt-3 pt-3 border-t border-slate-800/80">
-          <div class="flex items-center justify-between gap-2 mb-2">
+        <!-- 2. Interactive WA Score Calculator (Punkterechner) -->
+        <div class="pt-3 border-t border-slate-800/80">
+          <div class="flex items-center justify-between gap-2 mb-2.5 flex-wrap">
             <div class="flex items-center gap-1.5">
               <span class="text-sm">🧮</span>
               <h4 class="text-xs font-bold text-white uppercase font-mono tracking-wider">
-                MEETING-ERSATZ SIMULATOR • NEUES ERGEBNIS DURCHRECHNEN
+                PUNKTERECHNER & MEETING-ERSATZ SIMULATOR
               </h4>
             </div>
-            <span class="text-[10px] text-slate-400 font-mono">World Athletics Wertungsformel (Men's LJ)</span>
+            <span class="text-[10px] text-slate-400 font-mono">Offizielle World Athletics Scoring Tables + Platzierungs-Bonus</span>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-mono">
             <div>
               <label class="text-[10px] text-slate-400 block mb-0.5">Ziel-Weite (m):</label>
-              <input id="simMarkInput" type="number" step="0.01" value="8.05" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none" />
+              <input id="simMarkInput" type="number" step="0.01" value="8.05" oninput="RankingsModule.simulateNewMeeting()" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none" />
             </div>
             <div>
-              <label class="text-[10px] text-slate-400 block mb-0.5">Kategorie:</label>
-              <select id="simCatSelect" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none">
-                <option value="A" selected>Kat. A (Gold / Indoor Gold) • +100 max</option>
-                <option value="GL">Kat. GL (Hallen-EM) • +140 max</option>
-                <option value="GW">Kat. GW (Hallen-WM) • +170 max</option>
-                <option value="B">Kat. B (Silver / DM) • +60 max</option>
-                <option value="C">Kat. C (Bronze) • +40 max</option>
-                <option value="D">Kat. D (Challenger) • +25 max</option>
+              <label class="text-[10px] text-slate-400 block mb-0.5">Wind (m/s):</label>
+              <input id="simWindInput" type="number" step="0.1" value="0.0" oninput="RankingsModule.simulateNewMeeting()" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">Meeting-Kategorie:</label>
+              <select id="simCatSelect" onchange="RankingsModule.simulateNewMeeting()" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none">
                 <option value="OW">Kat. OW (Olympia / WM) • +350 max</option>
+                <option value="DF">Kat. DF (DL Finale) • +240 max</option>
+                <option value="GW">Kat. GW (Diamond League / Hallen-WM) • +170 max</option>
+                <option value="GL">Kat. GL (Hallen-EM / EM) • +140 max</option>
+                <option value="A" selected>Kat. A (Gold Tour) • +100 max</option>
+                <option value="B">Kat. B (Silver Tour / DM) • +60 max</option>
+                <option value="C">Kat. C (Bronze Tour) • +40 max</option>
+                <option value="D">Kat. D (Challenger) • +25 max</option>
+                <option value="E">Kat. E (National) • +15 max</option>
+                <option value="F">Kat. F (Regional) • 0 Bonus</option>
               </select>
             </div>
             <div>
               <label class="text-[10px] text-slate-400 block mb-0.5">Platzierung:</label>
-              <select id="simPlaceSelect" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none">
+              <select id="simPlaceSelect" onchange="RankingsModule.simulateNewMeeting()" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none">
                 <option value="1">1. Platz</option>
                 <option value="2">2. Platz</option>
                 <option value="3">3. Platz</option>
                 <option value="4">4. Platz</option>
                 <option value="5">5. Platz</option>
                 <option value="6">6. Platz</option>
+                <option value="7">7. Platz</option>
+                <option value="8">8. Platz</option>
+                <option value="9">Kein Platz-Bonus (&gt;8.)</option>
               </select>
             </div>
-            <div class="flex items-end">
-              <button onclick="RankingsModule.simulateNewMeeting()" class="w-full py-1 px-2 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold font-mono text-xs rounded transition-all shadow-sm">
+            <div class="col-span-2 sm:col-span-1 flex items-end">
+              <button onclick="RankingsModule.simulateNewMeeting()" class="w-full py-1.5 px-2 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black font-mono text-xs rounded transition-all shadow-sm">
                 Berechnen ➔
               </button>
             </div>
           </div>
 
-          <div id="simResultBox" class="mt-2.5 hidden bg-slate-950 border border-cyan-500/40 rounded-lg p-2.5 text-xs font-mono text-slate-300">
-            <!-- Populated by simulateNewMeeting -->
+          <div id="simResultBox" class="mt-2.5 bg-slate-950 border border-cyan-500/40 rounded-lg p-2.5 text-xs font-mono text-slate-300">
+            <!-- Populated automatically by simulateNewMeeting -->
           </div>
         </div>
       </div>
     `;
 
-    // Render Dedicated Prognosis Line Chart
-    const progCanvas = document.getElementById('prognosisChart');
-    if (progCanvas) {
-      if (prognosisChartInstance) prognosisChartInstance.destroy();
-      const progData = [
-        { date: '23.09.26', rank: 47, score: 1144, label: 'Aktuell (23.09.2026)' },
-        { date: '31.10.26', rank: 46, score: 1144, label: 'Herbst (31.10.2026)' },
-        { date: '31.12.26', rank: 45, score: 1144, label: 'Jahresende (31.12.2026)' },
-        { date: '31.01.27', rank: 43, score: 1144, label: 'Vor Gorzów-Ablauf (31.01.2027)' },
-        { date: '01.02.27', rank: 89, score: 895, label: 'Gorzów verfällt (01.02.2027)' },
-        { date: '28.02.27', rank: 98, score: 781, label: 'Dortmund verfällt (28.02.2027)' },
-        { date: '31.03.27', rank: 104, score: 781, label: 'Frühjahr (31.03.2027)' },
-        { date: '30.06.27', rank: 110, score: 745, label: 'Sommer (30.06.2027)' }
-      ];
-
-      prognosisChartInstance = new Chart(progCanvas.getContext('2d'), {
-        type: 'line',
-        data: {
-          labels: progData.map(d => d.date),
-          datasets: [
-            {
-              label: 'Prognostizierter Ranking Score (Punkte)',
-              data: progData.map(d => d.score),
-              borderColor: '#f59e0b',
-              backgroundColor: 'rgba(245, 158, 11, 0.1)',
-              borderWidth: 2,
-              borderDash: [4, 4],
-              pointRadius: 4,
-              pointBackgroundColor: '#f59e0b',
-              yAxisID: 'yScore',
-              tension: 0.2
-            },
-            {
-              label: 'Prognostizierter World Rank (Invertiert)',
-              data: progData.map(d => d.rank),
-              borderColor: '#06b6d4',
-              borderWidth: 1.5,
-              pointRadius: 3,
-              pointBackgroundColor: '#06b6d4',
-              yAxisID: 'yRank',
-              tension: 0.2
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            yRank: {
-              position: 'left',
-              reverse: true,
-              min: 30,
-              max: 120,
-              grid: { color: '#1e293b' },
-              ticks: { color: '#06b6d4', callback: v => '#' + v }
-            },
-            yScore: {
-              position: 'right',
-              min: 600,
-              max: 1250,
-              grid: { drawOnChartArea: false },
-              ticks: { color: '#f59e0b', callback: v => v + ' Pkt' }
-            },
-            x: {
-              grid: { color: '#1e293b' },
-              ticks: { color: '#94a3b8', font: { size: 9 } }
-            }
-          },
-          plugins: {
-            legend: { labels: { color: '#cbd5e1', font: { size: 10 } } },
-            tooltip: {
-              callbacks: {
-                title: items => progData[items[0].dataIndex]?.label || '',
-                label: ctx => ctx.datasetIndex === 0 ? `Punkte: ${ctx.parsed.y} Pkt` : `Rang: #${ctx.parsed.y}`
-              }
-            }
-          }
-        }
-      });
-    }
+    // Immediately populate the score calculator preview
+    simulateNewMeeting();
   }
 
   function simulateNewMeeting() {
     const markInput = document.getElementById('simMarkInput');
+    const windInput = document.getElementById('simWindInput');
     const catSelect = document.getElementById('simCatSelect');
     const placeSelect = document.getElementById('simPlaceSelect');
     const resultBox = document.getElementById('simResultBox');
     if (!markInput || !catSelect || !placeSelect || !resultBox) return;
 
-    const mark = parseFloat(markInput.value) || 8.00;
+    const mark = parseFloat(markInput.value) || 8.05;
+    const wind = windInput ? (parseFloat(windInput.value) || 0.0) : 0.0;
     const cat = catSelect.value || 'A';
     const place = parseInt(placeSelect.value, 10) || 1;
 
     const bonuses = {
       'OW': [350, 300, 260, 230, 200, 175, 150, 130],
+      'DF': [240, 210, 185, 165, 145, 130, 115, 100],
       'GW': [170, 140, 120, 100, 85, 75, 65, 55],
       'GL': [140, 120, 100, 85, 75, 65, 55, 45],
       'A':  [100, 80, 70, 60, 50, 40, 35, 30],
       'B':  [60, 50, 45, 40, 35, 30, 25, 20],
       'C':  [40, 35, 30, 25, 20, 15, 12, 10],
-      'D':  [25, 20, 15, 10, 8, 5, 0, 0]
+      'D':  [25, 20, 15, 10, 8, 5, 0, 0],
+      'E':  [15, 10, 5, 0, 0, 0, 0, 0],
+      'F':  [0, 0, 0, 0, 0, 0, 0, 0]
     };
 
-    const placeIdx = Math.max(0, Math.min(place - 1, 7));
-    const bonus = (bonuses[cat] && bonuses[cat][placeIdx] !== undefined) ? bonuses[cat][placeIdx] : 0;
-    const resultPoints = Math.round(1138 + (mark - 8.00) * 215);
+    const placeIdx = place - 1;
+    const bonus = (placeIdx >= 0 && placeIdx < 8 && bonuses[cat] && bonuses[cat][placeIdx] !== undefined)
+      ? bonuses[cat][placeIdx]
+      : 0;
+
+    // Official WA Hungarian Scoring Table calibration for Men's Long Jump (7.80m=1076, 8.00m=1120, 8.18m=1160)
+    let resultPoints = Math.round(1076 + (mark - 7.80) * 220);
+    let windDeduction = 0;
+    if (wind > 2.0) {
+      windDeduction = Math.round((wind - 2.0) * 6);
+      resultPoints -= windDeduction;
+    }
     const totalNewScore = resultPoints + bonus;
 
     const state = (window.App && window.App.state) || null;
@@ -894,58 +819,59 @@ const RankingsModule = (() => {
 
     let updatedScores = [];
     let replaceNote = '';
-    const oldAvg = currentScores.length > 0 ? Math.round(currentScores.reduce((a,b) => a+b, 0) / currentScores.length) : 0;
+    const oldAvg = currentScores.length > 0 ? Math.round(currentScores.reduce((a, b) => a + b, 0) / currentScores.length) : 1144;
 
     if (currentScores.length < 5) {
       updatedScores = [...currentScores, totalNewScore];
       replaceNote = `Füllt den fehlenden 5. Wettkampf auf (aktuell nur ${currentScores.length}/5 Meets aktiv).`;
     } else {
-      currentScores.sort((a,b) => a - b);
+      currentScores.sort((a, b) => a - b);
       const lowest = currentScores[0];
       if (totalNewScore > lowest) {
         updatedScores = [...currentScores.slice(1), totalNewScore];
-        replaceNote = `Ersetzt das bisher schwächste Meeting (${lowest} Pkt) durch ${totalNewScore} Pkt (+${totalNewScore - lowest} Pkt Einzeldifferenz).`;
+        replaceNote = `Ersetzt dein schwächstes zählendes Meeting (${lowest} Pkt) durch ${totalNewScore} Pkt (+${totalNewScore - lowest} Pkt Einzeldifferenz).`;
       } else {
         updatedScores = [...currentScores];
-        replaceNote = `Das neue Meeting (${totalNewScore} Pkt) liegt unter deinem schwächsten zählenden Meeting (${lowest} Pkt) und würde als Backup dienen.`;
+        replaceNote = `Liegt unter deinem schwächsten zählenden Meeting (${lowest} Pkt) und dient als Backup, sobald ein älteres Meeting abläuft.`;
       }
     }
 
-    const newAvg = Math.round(updatedScores.reduce((a,b) => a+b, 0) / updatedScores.length);
+    const newAvg = updatedScores.length > 0
+      ? Math.round(updatedScores.reduce((a, b) => a + b, 0) / updatedScores.length)
+      : totalNewScore;
     const delta = newAvg - oldAvg;
 
-    // Projected World Rank
     const projectedRank = state.athletes.filter(a => !a.name.toLowerCase().includes('herden') && a.totalScore >= newAvg).length + 1;
-    const currentRank = luka ? luka.originalRank : 47;
+    const currentRank = luka ? luka.originalRank : 70;
     const rankDelta = currentRank - projectedRank;
 
     resultBox.classList.remove('hidden');
     resultBox.innerHTML = `
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-slate-800">
         <span class="font-bold text-white text-xs">
-          🎯 Simulations-Ergebnis: ${mark.toFixed(2)}m • Kat. ${cat} (${place}. Platz)
+          🎯 Berechnung: ${mark.toFixed(2)}m (${wind >= 0 ? '+' : ''}${wind.toFixed(1)} m/s) • Kat. ${cat} (${place <= 8 ? place + '. Platz' : '>8. Platz'})
         </span>
         <span class="px-2 py-0.5 rounded font-black text-amber-400 bg-amber-950/80 border border-amber-800">
-          Meeting-Score: ${totalNewScore} Pkt (${resultPoints} Weite + ${bonus} Platz)
+          Performance-Score: ${totalNewScore} Pkt (${resultPoints} Result${windDeduction > 0 ? ` [-${windDeduction} Wind]` : ''} + ${bonus} Platz)
         </span>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
         <div class="bg-slate-900 border border-slate-800 rounded p-2">
-          <span class="text-[10px] text-slate-400 uppercase block">Neuer Gesamt-Score:</span>
+          <span class="text-[10px] text-slate-400 uppercase block">Neuer 5er-Schnitt (Ranking Score):</span>
           <span class="text-base font-black text-white font-mono">${newAvg} Pkt</span>
           <span class="text-[10px] font-mono ${delta >= 0 ? 'text-emerald-400' : 'text-rose-400'} block">
-            ${delta >= 0 ? '+' : ''}${delta} Pkt im Schnitt
+            ${delta >= 0 ? '+' : ''}${delta} Pkt gegenüber ${oldAvg} Pkt
           </span>
         </div>
         <div class="bg-slate-900 border border-slate-800 rounded p-2">
-          <span class="text-[10px] text-slate-400 uppercase block">Prognostizierter Rang:</span>
+          <span class="text-[10px] text-slate-400 uppercase block">Simulierter Weltranglisten-Platz:</span>
           <span class="text-base font-black text-cyan-400 font-mono">#${projectedRank} weltweit</span>
           <span class="text-[10px] font-mono ${rankDelta > 0 ? 'text-emerald-400' : 'text-slate-400'} block">
-            ${rankDelta > 0 ? `▲ +${rankDelta} Plätze Aufstieg` : 'Rang gehalten'}
+            ${rankDelta > 0 ? `▲ +${rankDelta} Plätze Aufstieg (von #${currentRank})` : `Aktueller Rang #${currentRank} gehalten`}
           </span>
         </div>
         <div class="bg-slate-900 border border-slate-800 rounded p-2">
-          <span class="text-[10px] text-slate-400 uppercase block">Auswirkung auf Wertung:</span>
+          <span class="text-[10px] text-slate-400 uppercase block">Wertungseffekt:</span>
           <span class="text-[11px] text-slate-300 font-sans leading-tight block mt-0.5">${replaceNote}</span>
         </div>
       </div>
@@ -1654,6 +1580,289 @@ const RankingsModule = (() => {
     container.innerHTML = cardsHtml + paginationHtml;
   }
 
+  function setCompetitionsViewMode(mode) {
+    competitionsViewMode = mode === 'calendar' ? 'calendar' : 'list';
+    const listBtn = document.getElementById('compDbViewListBtn');
+    const calBtn = document.getElementById('compDbViewCalBtn');
+    if (listBtn && calBtn) {
+      if (competitionsViewMode === 'list') {
+        listBtn.className = 'px-2.5 py-1 rounded font-bold bg-amber-500 text-slate-950 transition-all';
+        calBtn.className = 'px-2.5 py-1 rounded font-bold text-slate-400 hover:text-white transition-all';
+      } else {
+        calBtn.className = 'px-2.5 py-1 rounded font-bold bg-amber-500 text-slate-950 transition-all';
+        listBtn.className = 'px-2.5 py-1 rounded font-bold text-slate-400 hover:text-white transition-all';
+      }
+    }
+    if (window.App && window.App.state) {
+      renderMeetingsDatabase(window.App.state);
+    }
+  }
+
+  function setCompetitionsYearFilter(year) {
+    competitionsYearFilter = year || 'ALL';
+    ['ALL', '2026', '2025', '2024', '2023'].forEach(y => {
+      const btn = document.getElementById(`compYearBtn${y}`);
+      if (!btn) return;
+      if (y === competitionsYearFilter) {
+        btn.className = 'comp-year-btn px-2 py-0.5 rounded font-bold bg-amber-500 text-slate-950';
+      } else {
+        btn.className = 'comp-year-btn px-2 py-0.5 rounded text-slate-400 hover:text-white border border-slate-800 bg-slate-950';
+      }
+    });
+    if (competitionsYearFilter !== 'ALL' && !compCalendarYearMonth.startsWith(competitionsYearFilter)) {
+      compCalendarYearMonth = `${competitionsYearFilter}-06`;
+    }
+    if (window.App && window.App.state) {
+      renderMeetingsDatabase(window.App.state);
+    }
+  }
+
+  function setCompetitionsCalMonth(ym) {
+    if (ym && /^\d{4}-\d{2}$/.test(ym)) {
+      compCalendarYearMonth = ym;
+      if (window.App && window.App.state) {
+        renderMeetingsDatabase(window.App.state);
+      }
+    }
+  }
+
+  function changeCompetitionsCalMonth(delta) {
+    const [yStr, mStr] = compCalendarYearMonth.split('-');
+    let y = parseInt(yStr, 10) || 2026;
+    let m = parseInt(mStr, 10) || 6;
+    m += delta;
+    if (m < 1) {
+      m = 12;
+      y -= 1;
+    } else if (m > 12) {
+      m = 1;
+      y += 1;
+    }
+    compCalendarYearMonth = `${y}-${String(m).padStart(2, '0')}`;
+    if (window.App && window.App.state) {
+      renderMeetingsDatabase(window.App.state);
+    }
+  }
+
+  function openCompetitionResultsModal(encodedName) {
+    const name = decodeURIComponent(encodedName);
+    const modal = document.getElementById('competitionResultsModal');
+    if (!modal) return;
+
+    const state = (window.App && window.App.state) || {};
+    const db = state.competitionsDatabase;
+    if (!db || !db.competitions) return;
+
+    const meet = db.competitions.find(c => c.name === name);
+    if (!meet) return;
+
+    const catBadge = document.getElementById('compResModalCatBadge');
+    const tourBadge = document.getElementById('compResModalTourBadge');
+    const titleEl = document.getElementById('compResModalTitle');
+    const subEl = document.getElementById('compResModalSub');
+    const bestMarkEl = document.getElementById('compResModalBestMark');
+    const countEl = document.getElementById('compResModalCount');
+    const topScoreEl = document.getElementById('compResModalTopScore');
+    const tbody = document.getElementById('compResModalTableBody');
+
+    if (catBadge) {
+      catBadge.textContent = `KAT. ${meet.category || '-'}`;
+    }
+    if (tourBadge) {
+      if (meet.tour_label) {
+        tourBadge.textContent = meet.tour_label;
+        tourBadge.classList.remove('hidden');
+      } else {
+        tourBadge.classList.add('hidden');
+      }
+    }
+    if (titleEl) titleEl.textContent = meet.name || '-';
+
+    const isoDate = getMeetingIsoDate(meet);
+    const dispDate = isoDate
+      ? isoDate.split('-').reverse().join('.')
+      : ((meet.dates_seen || []).join(', ') || '-');
+    if (subEl) {
+      subEl.textContent = `📅 ${dispDate} • 📍 ${meet.venue || '-'} • ${meet.indoor ? 'Indoor (Halle)' : 'Outdoor (Freiluft)'}`;
+    }
+
+    const results = [...(meet.results || [])];
+    results.sort((a, b) => {
+      const mA = cleanFloatMark(a.mark);
+      const mB = cleanFloatMark(b.mark);
+      if (mB !== mA) return mB - mA;
+      return (b.performance_score || 0) - (a.performance_score || 0);
+    });
+
+    const topMark = getMeetingTopMark(meet);
+    const topScore = results.reduce((max, r) => Math.max(max, parseInt(r.performance_score || 0, 10) || 0), 0);
+
+    if (bestMarkEl) bestMarkEl.textContent = topMark > 0 ? `${topMark.toFixed(2)}m` : '-';
+    if (countEl) countEl.textContent = `${results.length} Athleten`;
+    if (topScoreEl) topScoreEl.textContent = topScore > 0 ? `${topScore} Pkt` : '-';
+
+    if (tbody) {
+      if (results.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-slate-500">Keine Einzelergebnisse hinterlegt.</td></tr>';
+      } else {
+        tbody.innerHTML = results.map((r, idx) => {
+          const isMe = r.athlete && r.athlete.toLowerCase().includes('herden');
+          const isGer = r.country === 'GER';
+          const placeStr = r.place || `${idx + 1}.`;
+          const scoreStr = r.performance_score ? `${r.performance_score} Pkt` : '-';
+          return `
+            <tr class="hover:bg-slate-800/40 ${isMe ? 'bg-cyan-950/40 font-bold text-cyan-300' : ''}">
+              <td class="py-2 px-3 text-center font-bold text-slate-300">${placeStr}</td>
+              <td class="py-2 px-3 font-bold text-white">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <button onclick="document.getElementById('competitionResultsModal').classList.add('hidden'); RankingsModule.openCompetitorModal('${(r.athlete || '').replace(/'/g, "\\'")}');" class="hover:text-cyan-400 hover:underline text-left uppercase">
+                    ${r.athlete || '-'}
+                  </button>
+                  ${isMe ? '<span class="px-1.5 py-0.2 rounded bg-cyan-500 text-slate-950 font-black text-[9px] font-mono">YOU</span>' : ''}
+                  ${!isMe && isGer ? '<span class="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold text-[9px] font-mono">GER</span>' : ''}
+                  ${r.round === 'Qualifikation' ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-slate-800 text-slate-400 border border-slate-700">Quali</span>' : ''}
+                </div>
+              </td>
+              <td class="py-2 px-2 text-center">
+                <span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${r.country || '-'}</span>
+              </td>
+              <td class="py-2 px-3 text-right font-bold text-cyan-400">${r.mark}m</td>
+              <td class="py-2 px-2 text-center">${formatWindBadge(r.wind)}</td>
+              <td class="py-2 px-3 text-right font-black text-amber-400">${scoreStr}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    modal.classList.remove('hidden');
+  }
+
+  function renderMeetingsCalendarView(list, totalDbCount) {
+    const MONTH_NAMES = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+
+    // Collect available year-months across filtered list
+    const ymCounts = {};
+    list.forEach(m => {
+      const iso = getMeetingIsoDate(m);
+      if (iso && iso.length >= 7) {
+        const ym = iso.slice(0, 7);
+        ymCounts[ym] = (ymCounts[ym] || 0) + 1;
+      }
+    });
+
+    const availableYMs = Object.keys(ymCounts).sort().reverse();
+    if (availableYMs.length > 0 && !ymCounts[compCalendarYearMonth]) {
+      compCalendarYearMonth = availableYMs[0];
+    }
+
+    const [yStr, mStr] = compCalendarYearMonth.split('-');
+    const year = parseInt(yStr, 10) || 2026;
+    const month = parseInt(mStr, 10) || 6; // 1..12
+
+    const firstDay = new Date(year, month - 1, 1);
+    const daysInMonth = new Date(year, month, 0).getDate();
+    // Monday = 0 .. Sunday = 6
+    const startWeekday = (firstDay.getDay() + 6) % 7;
+
+    // Group meetings in this month by day
+    const dayMap = {};
+    const monthMeetings = [];
+    list.forEach(m => {
+      const iso = getMeetingIsoDate(m);
+      if (iso && iso.startsWith(compCalendarYearMonth)) {
+        const dNum = parseInt(iso.slice(8, 10), 10);
+        if (!dayMap[dNum]) dayMap[dNum] = [];
+        dayMap[dNum].push(m);
+        monthMeetings.push(m);
+      }
+    });
+
+    const quickMonthChips = availableYMs.slice(0, 14).map(ym => {
+      const [yy, mm] = ym.split('-');
+      const shortM = MONTH_NAMES[parseInt(mm, 10) - 1].slice(0, 3);
+      const isAct = ym === compCalendarYearMonth;
+      return `
+        <button onclick="RankingsModule.setCompetitionsCalMonth('${ym}')" class="px-2 py-1 rounded text-[10px] font-mono font-bold transition-all ${
+          isAct
+            ? 'bg-amber-500 text-slate-950 shadow-sm'
+            : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+        }">
+          ${shortM} ${yy.slice(2)} <span class="opacity-75">(${ymCounts[ym]})</span>
+        </button>
+      `;
+    }).join('');
+
+    let cellsHtml = '';
+    for (let i = 0; i < startWeekday; i++) {
+      cellsHtml += `<div class="min-h-[88px] bg-slate-950/30 border border-slate-800/40 rounded-lg p-1.5 opacity-40"></div>`;
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dayMeets = dayMap[day] || [];
+      const pillsHtml = dayMeets.map(m => {
+        const enc = encodeURIComponent(m.name);
+        const hasLuka = (m.results || []).some(r => r.athlete && r.athlete.toLowerCase().includes('herden'));
+        const topM = getMeetingTopMark(m);
+        let colorCls = 'bg-slate-900 border-slate-700 text-slate-200 hover:border-amber-400';
+        if (hasLuka) {
+          colorCls = 'bg-cyan-950/90 border-cyan-500 text-cyan-200 hover:bg-cyan-900';
+        } else if (['OW', 'GL', 'GW', 'A'].includes(m.category)) {
+          colorCls = 'bg-amber-950/80 border-amber-600/80 text-amber-200 hover:bg-amber-900';
+        } else if (m.category === 'B') {
+          colorCls = 'bg-emerald-950/70 border-emerald-700/70 text-emerald-200 hover:bg-emerald-900';
+        }
+        return `
+          <button onclick="RankingsModule.openCompetitionResultsModal('${enc}')" class="w-full text-left px-1.5 py-1 rounded border text-[9px] font-mono leading-tight transition-all truncate ${colorCls}" title="${m.name} (${m.venue || '-'}) • Top: ${topM ? topM.toFixed(2) + 'm' : '-'}">
+            <span class="font-black">[${m.category || '-'}]</span> ${m.name}
+          </button>
+        `;
+      }).join('');
+
+      cellsHtml += `
+        <div class="min-h-[92px] bg-slate-950/80 border ${dayMeets.length > 0 ? 'border-slate-700' : 'border-slate-800/60'} rounded-lg p-1.5 flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[10px] font-mono font-bold ${dayMeets.length > 0 ? 'text-white' : 'text-slate-600'}">${String(day).padStart(2, '0')}.</span>
+            ${dayMeets.length > 0 ? `<span class="text-[9px] font-mono text-amber-400 font-bold">${dayMeets.length} WK</span>` : ''}
+          </div>
+          <div class="space-y-1 max-h-36 overflow-y-auto no-scrollbar">
+            ${pillsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <button onclick="RankingsModule.changeCompetitionsCalMonth(-1)" class="px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono font-bold">◀</button>
+            <h3 class="text-sm sm:text-base font-black text-white font-mono min-w-[160px] text-center">
+              📅 ${MONTH_NAMES[month - 1]} ${year}
+            </h3>
+            <button onclick="RankingsModule.changeCompetitionsCalMonth(1)" class="px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono font-bold">▶</button>
+          </div>
+          <span class="text-xs font-mono text-amber-400 font-bold">
+            ${monthMeetings.length} Wettkämpfe im ${MONTH_NAMES[month - 1]} ${year} (Klick öffnet Ergebnisse)
+          </span>
+        </div>
+
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+          <span class="text-[10px] font-mono text-slate-500 uppercase font-bold mr-1 shrink-0">Monate mit WK:</span>
+          ${quickMonthChips}
+        </div>
+
+        <div class="grid grid-cols-7 gap-1.5 text-center font-mono text-[10px] font-bold text-slate-400 uppercase pt-1">
+          <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5">
+          ${cellsHtml}
+        </div>
+      </div>
+    `;
+  }
+
   function renderMeetingsDatabase(state) {
     const container = document.getElementById('meetingsDbContainer');
     const badge = document.getElementById('meetingsDbCountBadge');
@@ -1669,10 +1878,17 @@ const RankingsModule = (() => {
 
     if (meetingSelectedCategory !== 'ALL') {
       if (meetingSelectedCategory === 'GL') {
-        list = list.filter(c => ['OW', 'GL', 'GW'].includes(c.category));
+        list = list.filter(c => ['OW', 'GL', 'GW', 'DL'].includes(c.category));
       } else {
         list = list.filter(c => c.category === meetingSelectedCategory);
       }
+    }
+
+    if (competitionsYearFilter !== 'ALL') {
+      list = list.filter(c => {
+        const iso = getMeetingIsoDate(c);
+        return iso && iso.startsWith(competitionsYearFilter);
+      });
     }
 
     if (meetingSearchQuery) {
@@ -1680,12 +1896,13 @@ const RankingsModule = (() => {
       list = list.filter(c => {
         const nameMatch = c.name && c.name.toLowerCase().includes(q);
         const venueMatch = c.venue && c.venue.toLowerCase().includes(q);
+        const tourMatch = c.tour_label && c.tour_label.toLowerCase().includes(q);
         const athMatch = (c.results || []).some(r => r.athlete && r.athlete.toLowerCase().includes(q));
-        return nameMatch || venueMatch || athMatch;
+        return nameMatch || venueMatch || tourMatch || athMatch;
       });
     }
 
-    // Sort meetings
+    // Sort meetings (Chronological newest first by default)
     const CAT_WEIGHT = { 'OW': 10, 'GL': 9, 'GW': 8, 'DF': 7, 'A': 6, 'B': 5, 'C': 4, 'D': 3, 'E': 2, 'F': 1 };
     list.sort((a, b) => {
       if (meetingSortBy === 'density') {
@@ -1698,12 +1915,7 @@ const RankingsModule = (() => {
         const cA = CAT_WEIGHT[a.category] || 0;
         const cB = CAT_WEIGHT[b.category] || 0;
         if (cA !== cB) return cB - cA;
-        return (b.results || []).length - (a.results || []).length;
-      }
-      if (meetingSortBy === 'date_desc') {
-        const dA = getMeetingSortDate(a, true);
-        const dB = getMeetingSortDate(b, true);
-        return dB - dA;
+        return getMeetingSortDate(b, true) - getMeetingSortDate(a, true);
       }
       if (meetingSortBy === 'date_asc') {
         const dA = getMeetingSortDate(a, false);
@@ -1718,7 +1930,10 @@ const RankingsModule = (() => {
         const mB = getMeetingTopMark(b);
         return mB - mA;
       }
-      return 0;
+      // Default: date_desc (chronological newest first)
+      const dA = getMeetingSortDate(a, true);
+      const dB = getMeetingSortDate(b, true);
+      return dB - dA;
     });
 
     if (badge) {
@@ -1726,7 +1941,12 @@ const RankingsModule = (() => {
     }
 
     if (list.length === 0) {
-      container.innerHTML = '<div class="py-12 text-center text-slate-500 font-mono text-xs">Keine Wettkämpfe gefunden für diesen Suchbegriff.</div>';
+      container.innerHTML = '<div class="py-12 text-center text-slate-500 font-mono text-xs">Keine Wettkämpfe gefunden für diesen Filter.</div>';
+      return;
+    }
+
+    if (competitionsViewMode === 'calendar') {
+      container.innerHTML = renderMeetingsCalendarView(list, db.competitions.length);
       return;
     }
 
@@ -1736,60 +1956,64 @@ const RankingsModule = (() => {
     const cardsHtml = slicedMeetings.map(meet => {
       const isExpanded = expandedMeetingDbName === meet.name || list.length <= 3;
       const results = meet.results || [];
-      const hasLuka = results.some(r => r.athlete.toLowerCase().includes('herden'));
+      const hasLuka = results.some(r => r.athlete && r.athlete.toLowerCase().includes('herden'));
+      const isoDate = getMeetingIsoDate(meet);
+      const dispDate = isoDate
+        ? isoDate.split('-').reverse().join('.')
+        : ((meet.dates_seen || [])[0] || '-');
+      const topMark = getMeetingTopMark(meet);
+      const encodedName = encodeURIComponent(meet.name);
 
       let resultsHtml = '';
-      if (isExpanded) {
-        if (results.length > 0) {
-          resultsHtml = `
-            <div class="mt-3 pt-3 border-t border-slate-800">
-              <div class="overflow-x-auto border border-slate-800 rounded-lg">
-                <table class="w-full text-left border-collapse text-[11px] font-mono">
-                  <thead>
-                    <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
-                      <th class="py-1.5 px-2 text-center w-12">Platz</th>
-                      <th class="py-1.5 px-2.5">Athlet</th>
-                      <th class="py-1.5 px-2 text-center">Nation</th>
-                      <th class="py-1.5 px-2 text-right">Weite</th>
-                      <th class="py-1.5 px-2 text-center">Wind</th>
-                      <th class="py-1.5 px-2 text-right font-bold text-white">WA Score</th>
-                      <th class="py-1.5 px-2 text-center">Aktion</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-slate-800/40">
-                    ${results.map(r => {
-                      const isMe = r.athlete.toLowerCase().includes('herden');
-                      const isGer = r.country === 'GER';
-                      return `
-                        <tr class="hover:bg-slate-800/30 ${isMe ? 'bg-cyan-950/40 font-bold text-cyan-300' : ''}">
-                          <td class="py-1.5 px-2 text-center font-bold text-slate-300">${r.place || '-'}</td>
-                          <td class="py-1.5 px-2.5 font-bold uppercase tracking-tight text-white flex items-center gap-1.5 flex-wrap">
-                            <span>${r.athlete}</span>
-                            ${isMe ? '<span class="px-1 py-0.2 rounded bg-cyan-500 text-slate-950 font-black text-[9px] font-mono">YOU</span>' : ''}
-                            ${!isMe && isGer ? '<span class="px-1 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold text-[9px] font-mono">GER</span>' : ''}
-                            ${r.remark ? `<span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60">${r.remark}</span>` : ''}
-                            ${r.round === 'Qualifikation' && !r.remark ? `<span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700">Qualifikation</span>` : ''}
-                          </td>
-                          <td class="py-1.5 px-2 text-center">
-                            <span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${r.country}</span>
-                          </td>
-                          <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${r.mark}m</td>
-                          <td class="py-1.5 px-2 text-center">${formatWindBadge(r.wind)}</td>
-                          <td class="py-1.5 px-2 text-right font-black text-amber-400 text-xs">${r.performance_score} Pkt</td>
-                          <td class="py-1.5 px-2 text-center">
-                            <button onclick="RankingsModule.openCompetitorModal('${r.athlete}')" class="px-2 py-0.5 rounded bg-slate-950 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500 text-cyan-400 font-mono text-[10px] font-bold transition-all">
-                              Profil ↗
-                            </button>
-                          </td>
-                        </tr>
-                      `;
-                    }).join('')}
-                  </tbody>
-                </table>
-              </div>
+      if (isExpanded && results.length > 0) {
+        resultsHtml = `
+          <div class="mt-3 pt-3 border-t border-slate-800">
+            <div class="overflow-x-auto border border-slate-800 rounded-lg">
+              <table class="w-full text-left border-collapse text-[11px] font-mono">
+                <thead>
+                  <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
+                    <th class="py-1.5 px-2 text-center w-12">Platz</th>
+                    <th class="py-1.5 px-2.5">Athlet</th>
+                    <th class="py-1.5 px-2 text-center">Nation</th>
+                    <th class="py-1.5 px-2 text-right">Weite</th>
+                    <th class="py-1.5 px-2 text-center">Wind</th>
+                    <th class="py-1.5 px-2 text-right font-bold text-white">WA Score</th>
+                    <th class="py-1.5 px-2 text-center">Aktion</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/40">
+                  ${results.map((r, idx) => {
+                    const isMe = r.athlete && r.athlete.toLowerCase().includes('herden');
+                    const isGer = r.country === 'GER';
+                    return `
+                      <tr class="hover:bg-slate-800/30 ${isMe ? 'bg-cyan-950/40 font-bold text-cyan-300' : ''}">
+                        <td class="py-1.5 px-2 text-center font-bold text-slate-300">${r.place || (idx + 1) + '.'}</td>
+                        <td class="py-1.5 px-2.5 font-bold uppercase tracking-tight text-white flex items-center gap-1.5 flex-wrap">
+                          <span>${r.athlete}</span>
+                          ${isMe ? '<span class="px-1 py-0.2 rounded bg-cyan-500 text-slate-950 font-black text-[9px] font-mono">YOU</span>' : ''}
+                          ${!isMe && isGer ? '<span class="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold text-[9px] font-mono">GER</span>' : ''}
+                          ${r.remark ? `<span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60">${r.remark}</span>` : ''}
+                          ${r.round === 'Qualifikation' && !r.remark ? `<span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700">Qualifikation</span>` : ''}
+                        </td>
+                        <td class="py-1.5 px-2 text-center">
+                          <span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 font-bold text-slate-300 text-[10px]">${r.country || '-'}</span>
+                        </td>
+                        <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${r.mark}m</td>
+                        <td class="py-1.5 px-2 text-center">${formatWindBadge(r.wind)}</td>
+                        <td class="py-1.5 px-2 text-right font-black text-amber-400 text-xs">${r.performance_score ? r.performance_score + ' Pkt' : '-'}</td>
+                        <td class="py-1.5 px-2 text-center">
+                          <button onclick="RankingsModule.openCompetitorModal('${(r.athlete || '').replace(/'/g, "\\'")}')" class="px-2 py-0.5 rounded bg-slate-950 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500 text-cyan-400 font-mono text-[10px] font-bold transition-all">
+                            Profil ↗
+                          </button>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
             </div>
-          `;
-        }
+          </div>
+        `;
       }
 
       return `
@@ -1797,17 +2021,21 @@ const RankingsModule = (() => {
           hasLuka ? 'border-cyan-500/70 bg-cyan-950/20' : 'border-slate-800 hover:border-slate-700'
         }">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
+            <div class="cursor-pointer group" onclick="RankingsModule.openCompetitionResultsModal('${encodedName}')">
               <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2 py-0.5 rounded text-[10px] font-black font-mono bg-slate-950 text-amber-400 border border-slate-800">
+                  📅 ${dispDate}
+                </span>
                 <span class="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono bg-slate-800 text-cyan-300 border border-slate-700">
                   Kat. ${meet.category || '-'}
                 </span>
-                <h3 class="font-bold text-white text-sm font-sans tracking-tight">${meet.name}</h3>
+                ${meet.tour_label ? `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold font-mono bg-amber-950/80 text-amber-300 border border-amber-800/70">${meet.tour_label}</span>` : ''}
+                <h3 class="font-bold text-white group-hover:text-cyan-400 transition-colors text-sm font-sans tracking-tight">${meet.name}</h3>
                 ${meet.indoor ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-indigo-950 text-indigo-300 border border-indigo-800">Indoor</span>' : ''}
                 ${hasLuka ? '<span class="px-1.5 py-0.2 rounded bg-cyan-500 text-slate-950 font-black text-[9px] font-mono">MIT LUKA</span>' : ''}
               </div>
               <p class="text-[11px] text-slate-400 font-mono mt-1">
-                Ort: ${meet.venue || '-'} • Erfasst: ${(meet.dates_seen || []).join(', ') || '-'}
+                📍 ${meet.venue || '-'} ${topMark > 0 ? `• Sieger/Top: <strong class="text-emerald-400">${topMark.toFixed(2)}m</strong>` : ''}
               </p>
             </div>
 
@@ -1815,8 +2043,11 @@ const RankingsModule = (() => {
               <span class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] font-bold text-amber-400">
                 ${results.length} Springer
               </span>
-              <button onclick="RankingsModule.toggleMeetingDbRow('${encodeURIComponent(meet.name)}')" class="px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-bold transition-all">
-                ${isExpanded ? 'Ausblenden ▴' : 'Ergebnisse ▾'}
+              <button onclick="RankingsModule.openCompetitionResultsModal('${encodedName}')" class="px-2.5 py-1 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-800 text-cyan-300 text-xs font-bold transition-all">
+                Ergebnisse ↗
+              </button>
+              <button onclick="RankingsModule.toggleMeetingDbRow('${encodedName}')" class="px-2 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold transition-all" title="Inline ausklappen">
+                ${isExpanded ? '▴' : '▾'}
               </button>
             </div>
           </div>
@@ -1829,7 +2060,7 @@ const RankingsModule = (() => {
     const paginationHtml = totalMeetings > displayedMeetingsLimit ? `
       <div class="p-3.5 bg-slate-900 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left shadow-sm">
         <div class="text-xs font-mono text-slate-400">
-          Zeige <strong class="text-white">${slicedMeetings.length}</strong> von <strong class="text-amber-400">${totalMeetings}</strong> Meetings
+          Zeige <strong class="text-white">${slicedMeetings.length}</strong> von <strong class="text-amber-400">${totalMeetings}</strong> Meetings (Chronologisch)
         </div>
         <div class="flex items-center gap-2">
           <button onclick="RankingsModule.loadMoreMeetings(40)" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black font-mono text-xs shadow-md transition-all">
@@ -1910,7 +2141,6 @@ const RankingsModule = (() => {
 
     const me = gers.find(a => a.name.toLowerCase().includes('herden')) || { originalRank: 70, totalScore: 1144 };
     const lukaScore = me.totalScore || 1144;
-    const lukaRank = me.originalRank || 70;
 
     body.innerHTML = gers.map(ath => {
       const isLuka = ath.name.toLowerCase().includes('herden');
@@ -1977,7 +2207,12 @@ const RankingsModule = (() => {
     showAllMeetings,
     selectPrognosisDate,
     simulateNewMeeting,
-    renderPrognosisCard
+    renderPrognosisCard,
+    setCompetitionsViewMode,
+    setCompetitionsYearFilter,
+    setCompetitionsCalMonth,
+    changeCompetitionsCalMonth,
+    openCompetitionResultsModal
   };
 })();
 

@@ -122,15 +122,30 @@ def scrape_rankings(date_str=None, fetch_all_competitions=False):
     return athletes, detected_date
 
 def main():
-    parser = argparse.ArgumentParser(description="World Athletics Ranking Scraper")
+    parser = argparse.ArgumentParser(description="World Athletics Ranking & Tour Scraper")
     parser.add_argument("--date", help="Specific ranking date (YYYY-MM-DD)")
     parser.add_argument("--backfill", action="store_true", help="Scrape all weeks from 2023-06-20")
     parser.add_argument("--all-comps", action="store_true", help="Fetch counting competitions for all 100 athletes")
+    parser.add_argument("--tour-results", action="store_true", help="Scrape World Indoor Tour & Continental Tour Men's Long Jump results")
+    parser.add_argument("--calendar", action="store_true", help="Scrape 2027 Tour, Diamond League, DLV & Championships calendar")
+    parser.add_argument("--all", action="store_true", help="Run Ranking + Tour Results + 2027 Calendar scrapers")
     args = parser.parse_args()
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, "data")
     os.makedirs(data_dir, exist_ok=True)
+
+    if args.tour_results:
+        from python.scrape_tour_results import run_tour_results_scraper
+        run_tour_results_scraper()
+        if not args.all:
+            return
+
+    if args.calendar:
+        from python.scrape_calendar_2027 import main as run_calendar_scraper
+        run_calendar_scraper()
+        if not args.all:
+            return
 
     if args.backfill:
         from python.scrape_weekly_archive import run_archive_scraper
@@ -220,8 +235,15 @@ def main():
         except Exception as e:
             print(f"Notice: could not sync to archive: {e}")
 
+    if args.all:
+        from python.scrape_tour_results import run_tour_results_scraper
+        from python.scrape_calendar_2027 import main as run_calendar_scraper
+        run_tour_results_scraper()
+        run_calendar_scraper()
+
     print(f"\nSuccessfully updated {latest_path} with {len(athletes)} athletes (Rank Date: {detected_date})!")
 
 if __name__ == "__main__":
     main()
+
 

@@ -59,31 +59,44 @@
 
     /* ================= LIGHT THEME COMPATIBILITY ================= */
     .light-theme {
-      background-color: #f8fafc !important;
+      background-color: #f1f5f9 !important;
       color: #0f172a !important;
+      color-scheme: light;
     }
     .light-theme body {
-      background-color: #f8fafc !important;
+      background-color: #f1f5f9 !important;
       color: #0f172a !important;
     }
-    .light-theme header {
-      background-color: rgba(255, 255, 255, 0.95) !important;
-      border-color: #e2e8f0 !important;
+    .light-theme header,
+    .light-theme nav {
+      background-color: rgba(255, 255, 255, 0.96) !important;
+      border-color: #cbd5e1 !important;
     }
-    .light-theme .bg-slate-950 {
-      background-color: #f1f5f9 !important;
-      border-color: #e2e8f0 !important;
+    .light-theme .bg-slate-950,
+    .light-theme .bg-slate-950\/70,
+    .light-theme .bg-slate-950\/80,
+    .light-theme .bg-slate-950\/90 {
+      background-color: #f8fafc !important;
+      border-color: #cbd5e1 !important;
     }
-    .light-theme .bg-slate-900 {
+    .light-theme .bg-slate-900,
+    .light-theme .bg-slate-900\/80,
+    .light-theme .bg-slate-900\/90 {
       background-color: #ffffff !important;
-      border-color: #e2e8f0 !important;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      border-color: #cbd5e1 !important;
+      box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.06);
+    }
+    .light-theme .from-slate-900 {
+      background-image: linear-gradient(to right, #ffffff, #f8fafc, #ecfdf5) !important;
+      border-color: #94a3b8 !important;
     }
     .light-theme .bg-slate-800 {
       background-color: #e2e8f0 !important;
-      color: #1e293b !important;
+      color: #0f172a !important;
     }
     .light-theme .border-slate-800,
+    .light-theme .border-slate-800\/80,
+    .light-theme .border-slate-800\/90,
     .light-theme .border-slate-700 {
       border-color: #cbd5e1 !important;
     }
@@ -98,21 +111,76 @@
     }
     .light-theme .text-slate-400,
     .light-theme .text-slate-500 {
-      color: #64748b !important;
+      color: #475569 !important;
+    }
+    .light-theme .text-cyan-400,
+    .light-theme .text-cyan-300 {
+      color: #0369a1 !important;
+    }
+    .light-theme .text-emerald-400,
+    .light-theme .text-emerald-300 {
+      color: #047857 !important;
+    }
+    .light-theme .text-amber-400,
+    .light-theme .text-amber-300 {
+      color: #b45309 !important;
+    }
+    .light-theme .text-rose-400,
+    .light-theme .text-rose-300 {
+      color: #be123c !important;
+    }
+    .light-theme .text-purple-400,
+    .light-theme .text-purple-300 {
+      color: #6d28d9 !important;
+    }
+    .light-theme .bg-cyan-950,
+    .light-theme .bg-cyan-950\/70 {
+      background-color: #e0f2fe !important;
+      border-color: #7dd3fc !important;
+      color: #0369a1 !important;
+    }
+    .light-theme .bg-emerald-950,
+    .light-theme .bg-emerald-950\/70 {
+      background-color: #d1fae5 !important;
+      border-color: #6ee7b7 !important;
+      color: #047857 !important;
+    }
+    .light-theme .bg-amber-950,
+    .light-theme .bg-amber-950\/60,
+    .light-theme .bg-amber-950\/70 {
+      background-color: #fef3c7 !important;
+      border-color: #fcd34d !important;
+      color: #b45309 !important;
+    }
+    .light-theme .bg-rose-950,
+    .light-theme .bg-rose-950\/60 {
+      background-color: #ffe4e6 !important;
+      border-color: #fda4af !important;
+      color: #be123c !important;
+    }
+    .light-theme .bg-purple-950,
+    .light-theme .bg-purple-950\/60 {
+      background-color: #ede9fe !important;
+      border-color: #c4b5fd !important;
+      color: #6d28d9 !important;
+    }
+    .light-theme svg path.text-slate-800 {
+      color: #e2e8f0 !important;
     }
     .light-theme input,
     .light-theme select {
       background-color: #ffffff !important;
       color: #0f172a !important;
-      border-color: #cbd5e1 !important;
+      border-color: #94a3b8 !important;
     }
     .light-theme .tab-btn.active {
-      background-color: #ffffff !important;
-      color: #0284c7 !important;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+      background-color: #e0f2fe !important;
+      color: #0369a1 !important;
+      border-bottom-color: #0284c7 !important;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06) !important;
     }
     .light-theme tr:hover {
-      background-color: #f8fafc !important;
+      background-color: #f1f5f9 !important;
     }
   </style>
 </head>
@@ -122,7 +190,7 @@
   <div id="pwaUpdateBanner" class="hidden bg-cyan-950 border-b border-cyan-500 text-cyan-200 px-4 py-2 text-xs font-mono flex items-center justify-between sticky top-0 z-50 shadow-lg">
     <div class="flex items-center gap-2">
       <span class="text-base animate-pulse">✨</span>
-      <span><strong>Neues Update verfügbar (v5.2)!</strong> Ein neues Release mit aktuellen Scraper-Daten steht bereit.</span>
+      <span><strong>Neues Update verfügbar (v7.0)!</strong> Ein neues Release mit aktuellen Scraper-Daten steht bereit.</span>
     </div>
     <div class="flex items-center gap-2">
       <button onclick="App.hardReloadApp()" class="px-3 py-1 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black rounded text-[11px] shadow-sm">
@@ -144,7 +212,7 @@
             <div class="flex items-center gap-2">
               <h1 class="text-sm font-black tracking-tight text-white flex items-center">
                 <span class="text-white">Dashboard</span>
-                <span class="ml-2 text-[9px] font-bold text-cyan-300 font-mono bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-800">v6.0</span>
+                <span class="ml-2 text-[9px] font-bold text-cyan-300 font-mono bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-800">v7.0</span>
               </h1>
             </div>
             <p class="text-[11px] text-slate-400 font-medium">
@@ -159,11 +227,16 @@
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span class="text-slate-400">WA: <strong id="masterWaDate" class="text-emerald-300">13.10.</strong></span>
             <span class="text-slate-600">|</span>
-            <span class="text-slate-400">Tour: <strong id="masterTourDate" class="text-cyan-300">15.10.</strong></span>
+            <span class="text-slate-400">Tour: <strong id="masterTourDate" class="text-cyan-300">17.10.</strong></span>
             <span class="text-slate-600">|</span>
-            <span class="text-slate-400">Sheet: <strong id="masterSheetDate" class="text-emerald-300">14.10.</strong></span>
+            <span class="text-slate-400">Sheet: <strong id="masterSheetDate" class="text-emerald-300">15.10.</strong></span>
             <span class="text-slate-500 ml-1 text-xs">🔄</span>
           </div>
+
+          <!-- Light / Dark Theme Toggle Button -->
+          <button id="themeToggleBtn" onclick="App.toggleTheme()" class="w-8 h-8 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-800 flex items-center justify-center text-sm transition-all shadow-sm" title="Light / Dark Theme wechseln">
+            ☀️
+          </button>
         </div>
       </div>
 
@@ -206,23 +279,26 @@
     <div id="tabContentAnalytics" class="space-y-4">
       <!-- 1. Daily Readiness Cockpit -->
       <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-500/40 rounded-xl p-4 shadow-lg space-y-4">
-        <!-- Title & Date Switcher (Middle-Aligned Whoop Style) -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
-          <div>
+        <!-- Title & Date Switcher (Strictly Centered Whoop Style with Direct Native Picker) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 items-center gap-3 pb-3 border-b border-slate-800">
+          <div class="flex items-center justify-center sm:justify-start">
             <h2 class="text-sm font-black text-white uppercase tracking-wider font-mono flex items-center gap-2">
               <span class="text-emerald-400">⚡</span>
               <span>Daily Readiness</span>
             </h2>
           </div>
 
-          <!-- Whoop-Style Middle-Aligned Date Switcher -->
-          <div class="flex items-center justify-center gap-2 font-mono self-center sm:self-auto">
+          <!-- Whoop-Style Strictly Centered Date Switcher -->
+          <div class="flex items-center justify-center gap-2 font-mono justify-self-center relative">
             <button onclick="AnalyticsModule.prevDay()" class="w-8 h-8 rounded-full bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 flex items-center justify-center text-sm font-bold transition-all active:scale-95 shadow-sm" title="Vorheriger Tag">
               ◀
             </button>
-            <button onclick="AnalyticsModule.openDatePickerModal()" id="selectedTrainingDayDisplay" class="px-4 py-1.5 rounded-full bg-slate-950 hover:bg-slate-800 border border-slate-800 text-xs sm:text-sm font-bold text-white transition-all shadow-sm flex items-center gap-2" title="Klicke für Datumsauswahl">
-              📅 Mittwoch, 14. Oktober 2026
-            </button>
+            <div class="relative inline-flex items-center">
+              <button onclick="AnalyticsModule.triggerDirectDatePicker()" id="selectedTrainingDayDisplay" class="px-4 py-1.5 rounded-full bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500 text-xs sm:text-sm font-bold text-white transition-all shadow-sm flex items-center gap-2 whitespace-nowrap" title="Klicke für direkte Kalenderauswahl">
+                📅 Donnerstag, 15. Oktober 2026
+              </button>
+              <input type="date" id="trainingDatePicker" onchange="AnalyticsModule.onDatePicked(this.value)" class="sr-only" aria-label="Datum wählen" />
+            </div>
             <button onclick="AnalyticsModule.nextDay()" class="w-8 h-8 rounded-full bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 flex items-center justify-center text-sm font-bold transition-all active:scale-95 shadow-sm" title="Nächster Tag">
               ▶
             </button>
@@ -230,6 +306,9 @@
               Heute
             </button>
           </div>
+
+          <!-- Right Spacer to keep Date Switcher 100% Centered on Desktop -->
+          <div class="hidden sm:flex justify-end"></div>
         </div>
 
         <!-- Whoop 3-Score Cards: Sleep (Left), Recovery (Middle), Strain (Right) -->
@@ -340,17 +419,17 @@
             <div id="journalNutritionMacros" class="text-[10px] font-mono text-slate-400 truncate">450g C • 70g F • 180g P</div>
           </div>
 
-          <!-- 3. Training Scores Tile (Fokus, Leistung, Erschöpfung, Schmerzen - Clickable for graph) -->
-          <div onclick="AnalyticsModule.openScoresHistoryModal()" class="cursor-pointer group hover:border-cyan-400 hover:bg-slate-900/80 transition-all bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1" title="Klicke für Score-Entwicklung">
+          <!-- 3. Training Scores Tile (Fokus, Leistung, Erschöpfung, Schmerzen 1-4 Skala - Clickable for graph) -->
+          <div onclick="AnalyticsModule.openScoresHistoryModal()" class="cursor-pointer group hover:border-cyan-400 hover:bg-slate-900/80 transition-all bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1" title="Klicke für Score-Entwicklung (Skala 1-4)">
             <div class="flex items-center justify-between">
-              <span class="text-[10px] text-slate-400 font-mono uppercase font-bold">Training Scores</span>
+              <span class="text-[10px] text-slate-400 font-mono uppercase font-bold">Training Scores (1–4)</span>
               <span class="text-[9px] text-cyan-400 font-mono font-bold group-hover:underline">📈 Verlauf ↗</span>
             </div>
             <div id="journalScoresVal" class="text-xs font-bold font-mono text-amber-300">
-              Fokus: 8 • Leistung: 8 • Schmerzen: 1 • Erschöpfung: 3
+              Fokus: 3/4 • Leistung: 3/4 • Schmerzen: 1/4 • Erschöpfung: 3/4
             </div>
-            <div class="text-[10px] font-mono text-slate-400 truncate">
-              ZNS frisch • Beine schmerzfrei
+            <div id="journalScoresSub" class="text-[10px] font-mono text-slate-400 truncate">
+              Skala 1–4 (Schlecht ➔ Super)
             </div>
           </div>
 
@@ -395,16 +474,19 @@
         </div>
       </div>
 
-      <!-- 4. Correlation Explorer (Plot Everything against Everything) -->
+      <!-- 4. Correlation Explorer (Automatic Binary 0/1 Group Comparison vs. Scatter + Lag Statistics) -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
-          <div>
+          <div class="flex items-center gap-2 flex-wrap">
             <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-1.5 font-mono">
               <span class="text-cyan-400">🔬</span>
-              <span>Correlation</span>
+              <span>Correlation & Statistik-Engine</span>
             </h3>
+            <span id="corrChartTypeBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
+              Lineare Regression (Metrisch)
+            </span>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
             <span class="text-[10px] text-slate-400 font-mono uppercase font-bold">Korrelation:</span>
             <span id="corrPearsonVal" class="px-2.5 py-1 rounded text-xs font-black font-mono bg-emerald-950 text-emerald-300 border border-emerald-700">
               r = +0.78
@@ -439,11 +521,11 @@
                 <option value="body_weight_kg">Körpergewicht (kg)</option>
                 <option value="body_fat_pct">Körperfett (%)</option>
               </optgroup>
-              <optgroup label="📊 Scores & Beanspruchung">
-                <option value="performance_score">Leistungs-Score (1-10)</option>
-                <option value="focus_score">Fokus-Score (1-10)</option>
-                <option value="pain_score">Schmerz-Score (1-10)</option>
-                <option value="fatigue_score">Erschöpfungs-Score (1-10)</option>
+              <optgroup label="📊 Scores & Beanspruchung (Skala 1–4)">
+                <option value="performance_score">Leistungs-Score (1–4: Schlecht bis Super)</option>
+                <option value="focus_score">Fokus-Score (1–4: Unkonzentriert bis Flow)</option>
+                <option value="pain_score">Schmerz-Score (1–4: Keine bis Stark)</option>
+                <option value="fatigue_score">Erschöpfungs-Score (1–4: Hoch bis Regenerativ)</option>
                 <option value="duration_min">Trainingsdauer (Minuten)</option>
               </optgroup>
             </select>
@@ -476,7 +558,7 @@
                 <option value="aufsteiger_e1rm_kg">Aufsteiger e1RM (kg)</option>
                 <option value="rsi_score">DJ50 Reaktivitätsindex (RSI)</option>
               </optgroup>
-              <optgroup label="💊 Einzelsupplements (Binär)">
+              <optgroup label="💊 Einzelsupplements (Binär 0/1 • Punktbiseriale Auswertung)">
                 <option value="supp_kreatin">Supplement: Kreatin (Ja/Nein)</option>
                 <option value="supp_vit_d">Supplement: Vitamin D (Ja/Nein)</option>
                 <option value="supp_omega_3">Supplement: Omega-3 (Ja/Nein)</option>
@@ -488,7 +570,7 @@
                 <option value="supp_ashwaghanda">Supplement: Ashwaghanda (Ja/Nein)</option>
                 <option value="supp_elektrolyte">Supplement: Elektrolyte (Ja/Nein)</option>
               </optgroup>
-              <optgroup label="🧊 Regenerationsmaßnahmen (Binär)">
+              <optgroup label="🧊 Regenerationsmaßnahmen (Binär 0/1 • Punktbiseriale Auswertung)">
                 <option value="regen_lympho">Regeneration: Lymphomat (Ja/Nein)</option>
                 <option value="regen_physio">Regeneration: Physiotherapie (Ja/Nein)</option>
                 <option value="regen_kalte_dusche">Regeneration: Kalte Dusche / Eisbad (Ja/Nein)</option>
@@ -497,7 +579,7 @@
                 <option value="regen_outdoor">Regeneration: Outdoor / Spaziergang (Ja/Nein)</option>
                 <option value="regen_meditation">Regeneration: Meditation (Ja/Nein)</option>
               </optgroup>
-              <optgroup label="💤 Schlaf- & Rahmenfaktoren">
+              <optgroup label="💤 Schlaf- & Rahmenfaktoren (Binär 0/1)">
                 <option value="sleep_bett_geteilt">Schlaf: Bett geteilt (Ja/Nein)</option>
                 <option value="trainer_anwesend">Trainer: Anwesend (Ja/Nein)</option>
               </optgroup>
@@ -505,12 +587,17 @@
           </div>
         </div>
 
-        <!-- Scatter Plot Canvas -->
+        <!-- Dynamic Statistical KPI Strip (Auto-populated for Binary 0/1 or Continuous variables) -->
+        <div id="corrStatsSummaryRow" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center font-mono text-xs">
+          <!-- Populated dynamically by analytics.js -->
+        </div>
+
+        <!-- Chart Canvas (Auto-switches between Scatter+Trendline and Binary Group Mean Comparison) -->
         <div class="h-64 sm:h-72 w-full pt-1">
           <canvas id="corrScatterChart"></canvas>
         </div>
 
-        <!-- Legend Below Graph (as requested) -->
+        <!-- Legend Below Graph -->
         <div id="corrLegendContainer" class="flex flex-wrap items-center justify-center gap-4 text-xs font-mono pt-1 text-slate-400">
           <div class="flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-full bg-cyan-400"></span>
@@ -526,30 +613,31 @@
         <div id="corrInsightBox" class="bg-slate-950/80 border border-slate-800 rounded-lg p-3 text-xs text-slate-300 font-sans flex items-start gap-2.5">
           <span class="text-base">💡</span>
           <div>
-            <strong id="corrInsightTitle" class="text-cyan-300 font-mono block">Starke positive Korrelation:</strong>
+            <strong id="corrInsightTitle" class="text-cyan-300 font-mono block">Statistische Auswertung:</strong>
             <span id="corrInsightText" class="text-slate-400 text-[11px] leading-relaxed">
-              Langfristige Regenerationsgewohnheiten und maximale Kraftwerte zeigen signifikanten Einfluss auf Spitzenweiten im Wettkampf.
+              Automatische Erkennung von binären 0/1-Variablen (Punktbiseriale Korrelation r_pb, Gruppenmittelwerte Nein vs. Ja, Cohen's d & Folgetag-Effekt t+1).
             </span>
           </div>
         </div>
 
         <!-- Integrated Correlation Matrix Table -->
-        <div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden mt-3">
-          <div class="p-2.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden mt-3">
+          <div class="p-2.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between flex-wrap gap-2">
             <span class="font-bold text-white text-xs uppercase tracking-wider font-mono">
-              🔬 Korrelations-Matrix mit Weitsprung WK & Recovery (Pearson r)
+              🔬 Automatische Statistik-Matrix: Punktbiseriale (0/1) & Metrische Treiber
             </span>
-            <span class="text-[10px] text-slate-500 font-mono">Faktoren Ranking</span>
+            <span class="text-[10px] text-slate-500 font-mono">Inkl. Gruppen-Delta (Δ) & Folgetag-Recovery (t+1)</span>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs font-mono">
               <thead>
                 <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase font-bold text-[10px]">
-                  <th class="py-2 px-3">Variable</th>
-                  <th class="py-2 px-3 text-right">Korrelation (r)</th>
-                  <th class="py-2 px-3 w-32">Signal</th>
-                  <th class="py-2 px-3 text-center">Stärke</th>
-                  <th class="py-2 px-3">Bedeutung für Luka</th>
+                  <th class="py-2 px-3">Variable / Faktor</th>
+                  <th class="py-2 px-3 text-center">Typ</th>
+                  <th class="py-2 px-3 text-right">r / r_pb</th>
+                  <th class="py-2 px-3 text-right">Gruppen-Effekt (Δ)</th>
+                  <th class="py-2 px-3 w-28">Signal</th>
+                  <th class="py-2 px-3">Statistische Einordnung für Luka</th>
                 </tr>
               </thead>
               <tbody id="correlationTableBody" class="divide-y divide-slate-800/40"></tbody>
@@ -558,21 +646,21 @@
         </div>
       </div>
 
-      <!-- 5. Diagnostik & Kraft (Reduced Name, Time Switcher on Right, 4 Lifts Graph, Complete Diagnostic Tiles) -->
+      <!-- 5. Diagnostik & Kraft (Absolut kg | Relativ Kraft-Last x BW | % Entwicklung Δ% + Fokus-Radar) -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-sm">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-slate-800">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 pb-2 border-b border-slate-800">
           <div>
             <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 font-mono">
               <span class="text-amber-400">🏋️</span>
-              <span>Diagnostik & Kraft</span>
+              <span>Diagnostik & Kraft (OSP Kraft-Last-Verhältnis & % Entwicklung)</span>
             </h3>
             <p class="text-[11px] text-slate-400 font-mono mt-0.5">
-              Historische e1RM-Entwicklung (Umsetzen, Hip-Thrust, Trapbar, Aufsteiger) • Leistungsdiagnostik & Biomechanik
+              4 Hauptübungen & 16 Diagnostik-Parameter • Absolut (kg), Relativ zum Körpergewicht (x BW) & Prozentuale Entwicklung (Δ%)
             </p>
           </div>
 
           <!-- Time Switcher on Right -->
-          <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[10px] font-mono flex-wrap self-start sm:self-auto">
+          <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[10px] font-mono flex-wrap self-start lg:self-auto">
             <span class="text-slate-500 px-1 font-bold">Zeitraum:</span>
             <button onclick="AnalyticsModule.setStrengthInterval('1W')" id="strengthBtn1W" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">1W</button>
             <button onclick="AnalyticsModule.setStrengthInterval('1M')" id="strengthBtn1M" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all">1M</button>
@@ -585,14 +673,29 @@
           </div>
         </div>
 
-        <!-- Exercise Filter Chips -->
-        <div class="flex items-center gap-1.5 flex-wrap text-[10px] font-mono">
-          <span class="text-slate-500">Übungen:</span>
-          <button onclick="AnalyticsModule.toggleStrengthExercise('ALL')" id="filterExALL" class="px-2 py-0.5 rounded bg-slate-800 text-white font-bold border border-slate-700">Alle 4 Übungen</button>
-          <button onclick="AnalyticsModule.toggleStrengthExercise('umsetzen')" id="filterExUmsetzen" class="px-2 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-800/80">Umsetzen</button>
-          <button onclick="AnalyticsModule.toggleStrengthExercise('hipthrust')" id="filterExHipthrust" class="px-2 py-0.5 rounded bg-rose-950/60 text-rose-300 border border-rose-800/80">Hip-Thrust</button>
-          <button onclick="AnalyticsModule.toggleStrengthExercise('trapbar')" id="filterExTrapbar" class="px-2 py-0.5 rounded bg-purple-950/60 text-purple-300 border border-purple-800/80">Trapbar</button>
-          <button onclick="AnalyticsModule.toggleStrengthExercise('aufsteiger')" id="filterExAufsteiger" class="px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-800/80">Aufsteiger</button>
+        <!-- Exercise Filter Chips & Mode Switcher (Absolut | Relativ x BW | % Entwicklung) -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] font-mono">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-slate-500">Übungen:</span>
+            <button onclick="AnalyticsModule.toggleStrengthExercise('ALL')" id="filterExALL" class="px-2 py-0.5 rounded bg-slate-800 text-white font-bold border border-slate-700">Alle 4 Übungen</button>
+            <button onclick="AnalyticsModule.toggleStrengthExercise('umsetzen')" id="filterExUmsetzen" class="px-2 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-800/80">Umsetzen</button>
+            <button onclick="AnalyticsModule.toggleStrengthExercise('hipthrust')" id="filterExHipthrust" class="px-2 py-0.5 rounded bg-rose-950/60 text-rose-300 border border-rose-800/80">Hip-Thrust</button>
+            <button onclick="AnalyticsModule.toggleStrengthExercise('trapbar')" id="filterExTrapbar" class="px-2 py-0.5 rounded bg-purple-950/60 text-purple-300 border border-purple-800/80">Trapbar</button>
+            <button onclick="AnalyticsModule.toggleStrengthExercise('aufsteiger')" id="filterExAufsteiger" class="px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-800/80">Aufsteiger</button>
+          </div>
+
+          <!-- Darstellungs-Modus Switcher -->
+          <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 self-start sm:self-auto">
+            <span class="text-slate-500 px-1 font-bold">Einheit:</span>
+            <button onclick="AnalyticsModule.setStrengthDisplayMode('ABS')" id="strengthModeAbsBtn" class="px-2 py-0.5 rounded bg-cyan-600 text-slate-950 font-black transition-all">Absolut (kg)</button>
+            <button onclick="AnalyticsModule.setStrengthDisplayMode('REL')" id="strengthModeRelBtn" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all" title="Kraft-Last-Verhältnis relativ zum Körpergewicht (e1RM / Körpergewicht)">Relativ (x BW)</button>
+            <button onclick="AnalyticsModule.setStrengthDisplayMode('PCT')" id="strengthModePctBtn" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition-all" title="Prozentuale Entwicklung relativ zum ersten Wert im Zeitraum (% Δ)">% Entwicklung (Δ%)</button>
+          </div>
+        </div>
+
+        <!-- 4-Lift Progression & Focus Alert Cards (Shows Absolute, Relative xBW, % Delta & -5% Focus Warnings) -->
+        <div id="strengthFocusSummaryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <!-- Populated dynamically by analytics.js -->
         </div>
 
         <!-- 4-Lifts Chart Canvas -->
@@ -602,11 +705,11 @@
 
         <!-- Comprehensive Leistungsdiagnostik & Biomechanik KPI Tiles -->
         <div class="space-y-2 pt-2 border-t border-slate-800">
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between flex-wrap gap-1">
             <span class="text-xs font-bold text-white font-mono uppercase">
-              📊 Leistungsdiagnostik, Sprint & Weitsprung-Biomechanik Parameter
+              📊 Leistungsdiagnostik, Sprint & Weitsprung-Biomechanik (inkl. Δ% Entwicklung & Kraft-Last-Relation)
             </span>
-            <span class="text-[10px] font-mono text-slate-500">Alle Messgrößen aus Google Sheets</span>
+            <span class="text-[10px] font-mono text-slate-500">Automatische Fokus-Warnung bei Rückgang ≥ 5%</span>
           </div>
 
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
@@ -964,7 +1067,7 @@
         </div>
       </div>
 
-      <!-- VIEW 3: COMPETITIONS & MEETINGS DATABASE SEARCH (1,236 MEETINGS) -->
+      <!-- VIEW 3: COMPETITIONS & MEETINGS DATABASE SEARCH (1,728 MEETINGS) -->
       <div id="subViewMeetings" class="hidden space-y-4">
         <!-- Search & Control Header -->
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 space-y-3 shadow-sm">
@@ -972,41 +1075,62 @@
             <div>
               <h2 class="text-xs sm:text-sm font-black text-white uppercase tracking-wider font-mono flex items-center gap-1.5">
                 <span class="text-amber-400">🏟️</span>
-                <span>WELTWEITES WETTKAMPF-ARCHIV (1.236 MEETINGS 2023 - 2026)</span>
+                <span>CHRONOLOGISCHES WETTKAMPF-ARCHIV & TOUR-DATENBANK (2023 - 2026)</span>
               </h2>
               <p class="text-[11px] text-slate-400 font-mono mt-0.5">
-                Suche jedes Meeting (z.B. European Championships 2024, Rom, Gorzów, Kassel, Diamond League) & sieh alle gewerteten Springer
+                Chronologisch geordnet • World Indoor Tour, Continental Tour & Meisterschaften • Klicke auf ein Meeting für alle Weitsprung-Ergebnisse
               </p>
             </div>
-            <span id="meetingsDbCountBadge" class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950 border border-amber-800 px-2 py-0.5 rounded self-start sm:self-auto">
-              1.236 Meetings erfasst
-            </span>
+            <div class="flex items-center gap-2 self-start sm:self-auto">
+              <div class="flex items-center gap-1 bg-slate-950 p-0.5 rounded-lg border border-slate-800 font-mono text-[10px]">
+                <button id="compDbViewListBtn" onclick="RankingsModule.setCompetitionsViewMode('list')" class="px-2.5 py-1 rounded font-bold bg-amber-500 text-slate-950 transition-all">
+                  📋 Listen-Ansicht
+                </button>
+                <button id="compDbViewCalBtn" onclick="RankingsModule.setCompetitionsViewMode('calendar')" class="px-2.5 py-1 rounded font-bold text-slate-400 hover:text-white transition-all">
+                  📅 Kalender-Ansicht
+                </button>
+              </div>
+              <span id="meetingsDbCountBadge" class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950 border border-amber-800 px-2 py-1 rounded">
+                1.728 Meetings
+              </span>
+            </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center">
             <div class="md:col-span-7">
-              <input id="meetingsDbSearchInput" type="text" placeholder="Suche Wettkampf (z.B. European Championships 2024, Rom, Gorzów, Überflieger, Kassel, Diamond League)..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono" />
+              <input id="meetingsDbSearchInput" type="text" placeholder="Suche Wettkampf (z.B. Gorzów, Toruń, Rom, Kassel, Inneringen, Madrid, Diamond League)..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono" />
             </div>
             <div class="md:col-span-5 flex items-center gap-1.5 font-mono text-[10px]">
               <label for="meetingDbSortSelect" class="text-slate-400 font-bold uppercase whitespace-nowrap">Sortierung:</label>
               <select id="meetingDbSortSelect" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-amber-300 font-mono focus:outline-none focus:border-amber-500">
-                <option value="density" selected>Top-100-Dichte (Teilnehmerzahl)</option>
+                <option value="date_desc" selected>Chronologisch (Neueste zuerst)</option>
+                <option value="date_asc">Chronologisch (Älteste zuerst)</option>
+                <option value="density">Top-100-Dichte (Teilnehmerzahl)</option>
                 <option value="category">Kategorie (OW/GL → A → B → C → D)</option>
-                <option value="date_desc">Datum (Neueste zuerst)</option>
-                <option value="date_asc">Datum (Älteste zuerst)</option>
-                <option value="name_asc">Meeting-Name (A → Z)</option>
                 <option value="top_mark">Beste Weite (Top-Mark)</option>
+                <option value="name_asc">Meeting-Name (A → Z)</option>
               </select>
             </div>
           </div>
 
-          <div class="flex flex-wrap items-center gap-1 font-mono text-[10px] pt-1 border-t border-slate-800/60">
-            <span class="text-slate-400 font-bold uppercase mr-1">Kategorie Filter:</span>
-            <button data-catfilter="ALL" class="cat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white">ALL</button>
-            <button data-catfilter="GL" class="cat-filter-btn px-2 py-0.5 rounded text-amber-400 border border-amber-800 bg-slate-950 hover:bg-slate-800">OW / GL</button>
-            <button data-catfilter="A" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. A</button>
-            <button data-catfilter="B" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. B</button>
-            <button data-catfilter="C" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. C</button>
+          <div class="flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] pt-1 border-t border-slate-800/60">
+            <div class="flex flex-wrap items-center gap-1">
+              <span class="text-slate-400 font-bold uppercase mr-1">Kategorie Filter:</span>
+              <button data-catfilter="ALL" class="cat-filter-btn px-2.5 py-0.5 rounded font-bold bg-slate-700 text-white">ALL</button>
+              <button data-catfilter="GL" class="cat-filter-btn px-2 py-0.5 rounded text-amber-400 border border-amber-800 bg-slate-950 hover:bg-slate-800">OW / GL / DL</button>
+              <button data-catfilter="A" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. A (Gold/EM)</button>
+              <button data-catfilter="B" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. B (Silver/DM)</button>
+              <button data-catfilter="C" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. C (Bronze)</button>
+              <button data-catfilter="D" class="cat-filter-btn px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 border border-slate-800 bg-slate-950">Kat. D (Challenger)</button>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="text-slate-400 font-bold uppercase mr-1">Jahr:</span>
+              <button onclick="RankingsModule.setCompetitionsYearFilter('ALL')" id="compYearBtnALL" class="comp-year-btn px-2 py-0.5 rounded font-bold bg-amber-500 text-slate-950">Alle</button>
+              <button onclick="RankingsModule.setCompetitionsYearFilter('2026')" id="compYearBtn2026" class="comp-year-btn px-2 py-0.5 rounded text-slate-400 hover:text-white border border-slate-800 bg-slate-950">2026</button>
+              <button onclick="RankingsModule.setCompetitionsYearFilter('2025')" id="compYearBtn2025" class="comp-year-btn px-2 py-0.5 rounded text-slate-400 hover:text-white border border-slate-800 bg-slate-950">2025</button>
+              <button onclick="RankingsModule.setCompetitionsYearFilter('2024')" id="compYearBtn2024" class="comp-year-btn px-2 py-0.5 rounded text-slate-400 hover:text-white border border-slate-800 bg-slate-950">2024</button>
+              <button onclick="RankingsModule.setCompetitionsYearFilter('2023')" id="compYearBtn2023" class="comp-year-btn px-2 py-0.5 rounded text-slate-400 hover:text-white border border-slate-800 bg-slate-950">2023</button>
+            </div>
           </div>
         </div>
 
@@ -1069,19 +1193,30 @@
         </div>
       </div>
 
-      <!-- Preset Row (1-Click Switch) & Parameters -->
+      <!-- Preset Row (1-Click Switch) & Championship Selector -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-sm space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800">
-          <div class="flex items-center flex-wrap gap-2">
-            <span class="text-[10px] text-slate-400 font-bold uppercase font-mono">⚡ Schnellauswahl:</span>
-            <button id="presetHallenEmBtn" class="px-3 py-1.5 rounded-lg text-xs font-bold font-mono bg-purple-600 text-white shadow-sm flex items-center gap-1">
-              🇪🇺 Hallen-EM 2027 (Valencia • 18 Plätze / 3 Nat / Norm 8.17m + Toplist ab 01.11.26)
+          <div class="flex items-center flex-wrap gap-1.5">
+            <span class="text-[10px] text-slate-400 font-bold uppercase font-mono mr-1">🏆 Meisterschaften 2027:</span>
+            <button id="presetHallenEmBtn" class="px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-purple-600 text-white shadow-sm flex items-center gap-1">
+              🇪🇺 Hallen-EM Valencia (04.–07.03.27 • 18 Pl.)
             </button>
-            <button id="presetWm2027Btn" class="px-3 py-1.5 rounded-lg text-xs font-bold font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all flex items-center gap-1 shadow-sm">
-              🌍 WM 2027 (Peking • 36 Plätze / 3 Nat / 12M World Ranking)
+            <button id="presetWm2027Btn" class="px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all flex items-center gap-1 shadow-sm">
+              🌍 WM Peking (11.–19.09.27 • 36 Pl.)
+            </button>
+            <button id="presetDm2027Btn" onclick="QualificationModule.applyChampionshipPreset('DM')" class="px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all flex items-center gap-1 shadow-sm">
+              🇩🇪 DM Halle Dortmund / DM Freiluft (GER Top 12)
+            </button>
+            <button id="presetTeamEmBtn" onclick="QualificationModule.applyChampionshipPreset('TEAM_EM')" class="px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all flex items-center gap-1 shadow-sm">
+              🛡️ Team-EM / CISM / FISU 2027 (GER #1–#2)
             </button>
           </div>
           <span id="periodInfoRuleBadge" class="text-[10px] text-purple-400 font-mono font-bold">EA Valencia 2027 Modus aktiv (Norm 8.17m ab 22.02.26 + Toplist ab 01.11.26)</span>
+        </div>
+
+        <!-- Championship Calendar Quick-Overview Strip -->
+        <div id="qualiChampionshipsStrip" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-0.5">
+          <!-- Populated dynamically by qualification.js with 2027 Championships (DM, EM, WM, CISM, Team-EM, FISU) -->
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-5 gap-2.5 items-center font-mono text-[10px]">
@@ -1159,11 +1294,11 @@
           <div class="flex items-center gap-2">
             <span class="text-xl">📅</span>
             <h2 class="text-sm font-black text-white uppercase tracking-wider font-mono">
-              MEETINGS • VERIFIZIERTER WETTKAMPFKALENDER 2027
+              MEETINGS • WETTKAMPFKALENDER, MEISTERSCHAFTEN & DIAMOND LEAGUE 2027
             </h2>
           </div>
           <p class="text-xs text-slate-300 font-sans mt-1">
-            Grounded in offiziellen European Athletics & World Athletics Tour Dokumenten • Disziplin: Weitsprung Männer (LJ Men).
+            DLV Rahmenterminplan (Männer Aktive), Meisterschaften (DM, EM, WM, CISM, Team-EM, FISU), World Tour & Wanda Diamond League 2027.
           </p>
         </div>
         <div class="bg-slate-950/90 border border-amber-500/50 px-3 py-1.5 rounded-lg text-[11px] font-mono text-amber-300 self-start sm:self-auto flex items-center gap-1.5">
@@ -1177,13 +1312,13 @@
         <span class="text-base">🔔</span>
         <div class="flex-1 space-y-1">
           <div class="flex items-center justify-between flex-wrap gap-1">
-            <span class="font-bold text-cyan-300 uppercase">WÖCHENTLICHE MEETING-ÄNDERUNGEN & TOUR-UPDATES</span>
-            <span class="text-[10px] text-slate-400">Stand: 15.10.2026</span>
+            <span class="font-bold text-cyan-300 uppercase">AKTUALISIERTER TERMINPLAN 2027 (DLV, MEISTERSCHAFTEN & DIAMOND LEAGUE)</span>
+            <span class="text-[10px] text-slate-400">Stand: 17.10.2026</span>
           </div>
           <ul class="text-[11px] text-slate-300 space-y-0.5 list-disc list-inside">
-            <li><strong class="text-emerald-400">Neu bestätigt:</strong> CMCM Luxembourg (17. Jan 2027) & Gorzów Jump Festival (30. Jan 2027) – Men's Long Jump Kat. B/Silver.</li>
-            <li><strong class="text-cyan-400">Disziplin-Filter:</strong> Streng auf Weitsprung Männer gefiltert. ISTAF Indoor Berlin führt ausschließlich Frauen-Weitsprung und ist ausgeblendet.</li>
-            <li><strong class="text-amber-400">Terminverschiebung:</strong> Meeting Madrid Indoor (WIT Gold) terminiert auf 19. Feb 2027.</li>
+            <li><strong class="text-emerald-400">Meisterschaften 2027 bereinigt:</strong> Hallen-WM Toruń (war März 2026) entfernt. Hallen-Höhepunkt 2027 ist die <strong>Hallen-EM Valencia (04.–07.03.2027)</strong>, Sommer-Höhepunkt die <strong>WM Peking (11.–19.09.2027)</strong> sowie DM, CISM, Team-EM & FISU.</li>
+            <li><strong class="text-cyan-400">DLV Rahmenterminplan (Männer Elite):</strong> Alle relevanten deutschen Meetings (Dortmund, Düsseldorf, Karlsruhe, Essen, Dessau, Dresden, Weinheim, Inneringen, Garbsen, Pfungstadt) integriert – ohne Jugend/Masters.</li>
+            <li><strong class="text-amber-400">Wanda Diamond League 2027:</strong> Alle 15 offiziellen DL-Stationen (Doha bis Finale Zürich) sind mit Terminen hinterlegt und als <em>Disziplin-Zuteilung offen (TBA)</em> markiert, bis die Disziplinen offiziell verteilt sind.</li>
           </ul>
         </div>
       </div>
@@ -1200,20 +1335,18 @@
               📅 Monatskalender
             </button>
           </div>
-          <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
-            Weitsprung Männer (Exklusiv)
-          </span>
         </div>
 
         <!-- Tier Filter Buttons -->
         <div class="flex items-center gap-1 font-mono text-xs flex-wrap">
-          <span class="text-[10px] text-slate-400 font-bold uppercase mr-1">Tier:</span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase mr-1">Filter:</span>
           <button data-tier="ALL" class="cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold bg-cyan-600 text-white shadow-sm">ALLE</button>
+          <button data-tier="Meisterschaft" class="cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold text-emerald-300 border border-emerald-700 bg-slate-950 hover:bg-slate-800">🏆 MEISTERSCHAFTEN (DM/EM/WM/CISM)</button>
           <button data-tier="Diamond League" class="cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold text-cyan-300 border border-cyan-800 bg-slate-950 hover:bg-slate-800">💎 DIAMOND LEAGUE</button>
           <button data-tier="Gold" class="cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold text-amber-300 border border-amber-800 bg-slate-950 hover:bg-slate-800">GOLD</button>
           <button data-tier="Silver" class="cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold text-slate-300 border border-slate-700 bg-slate-950 hover:bg-slate-800">SILVER</button>
           <button data-tier="Bronze" class="cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold text-amber-600 border border-amber-900 bg-slate-950 hover:bg-slate-800">BRONZE</button>
-          <button data-tier="Challenger" class="cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold text-blue-400 border border-blue-900 bg-slate-950 hover:bg-slate-800">CHALLENGER</button>
+          <button data-tier="Challenger" class="cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold text-blue-400 border border-blue-900 bg-slate-950 hover:bg-slate-800">DLV / CHALLENGER</button>
         </div>
       </div>
 
@@ -1496,10 +1629,10 @@
         <div class="flex items-start justify-between pb-3 border-b border-slate-800">
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2 py-0.5 rounded text-xs font-black font-mono bg-amber-950 text-amber-300 border border-amber-800">SCORES</span>
+              <span class="px-2 py-0.5 rounded text-xs font-black font-mono bg-amber-950 text-amber-300 border border-amber-800">SCORES (1-4)</span>
               <h2 class="text-base sm:text-lg font-black text-white font-mono">TRAINING SCORES VERLAUF • LUKA HERDEN</h2>
             </div>
-            <p class="text-[11px] text-slate-400 font-mono mt-0.5">Historischer Verlauf: Fokus, Leistung, Erschöpfung, Schmerzen (1-10)</p>
+            <p class="text-[11px] text-slate-400 font-mono mt-0.5">Skala 1–4 (1 = Schlecht/Keine • 2 = Normal/Wenig • 3 = Gut/Mittel • 4 = Super/Stark)</p>
           </div>
           <button onclick="document.getElementById('trainingScoresModal').classList.add('hidden')" class="text-slate-400 hover:text-white p-1 text-lg">✕</button>
         </div>
@@ -1518,7 +1651,7 @@
             <button onclick="AnalyticsModule.setScoresInterval('ALL')" id="scoresBtnALL" class="px-2 py-0.5 rounded bg-cyan-600 text-slate-950 font-black transition-all">Max</button>
           </div>
           <span id="scoresDataCountBadge" class="text-[10px] font-mono text-cyan-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-            343 Einträge
+            346 Einträge
           </span>
         </div>
 
@@ -1529,6 +1662,61 @@
 
         <div class="pt-2 flex justify-end">
           <button onclick="document.getElementById('trainingScoresModal').classList.add('hidden')" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-mono font-bold">
+            Schließen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= COMPETITION RESULTS DETAIL MODAL (TAB 2 SUBTAB 3) ================= -->
+    <div id="competitionResultsModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl space-y-4 p-4 sm:p-5">
+        <div class="flex items-start justify-between pb-3 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span id="compResModalCatBadge" class="px-2 py-0.5 rounded text-xs font-black font-mono bg-amber-950 text-amber-300 border border-amber-800">KAT. B</span>
+              <span id="compResModalTourBadge" class="hidden px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-cyan-950 text-cyan-300 border border-cyan-800">WORLD TOUR</span>
+              <h2 id="compResModalTitle" class="text-base sm:text-lg font-black text-white font-mono">Meeting Name</h2>
+            </div>
+            <p id="compResModalSub" class="text-[11px] text-slate-400 font-mono mt-0.5">📅 Datum • Ort • Weitsprung Männer</p>
+          </div>
+          <button onclick="document.getElementById('competitionResultsModal').classList.add('hidden')" class="text-slate-400 hover:text-white p-1 text-lg">✕</button>
+        </div>
+
+        <div id="compResModalStatsRow" class="grid grid-cols-3 gap-2 text-center font-mono">
+          <div class="bg-slate-950 border border-slate-800 p-2 rounded-lg">
+            <span class="text-[9px] text-slate-500 uppercase block">Siegerweite</span>
+            <span id="compResModalBestMark" class="text-sm font-black text-emerald-400">-</span>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 p-2 rounded-lg">
+            <span class="text-[9px] text-slate-500 uppercase block">Erfasste Springer</span>
+            <span id="compResModalCount" class="text-sm font-black text-cyan-400">-</span>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 p-2 rounded-lg">
+            <span class="text-[9px] text-slate-500 uppercase block">Top WA-Score</span>
+            <span id="compResModalTopScore" class="text-sm font-black text-amber-400">-</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-800 rounded-xl">
+          <table class="w-full text-left border-collapse text-xs font-mono">
+            <thead>
+              <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
+                <th class="py-2 px-3 w-14 text-center">Platz</th>
+                <th class="py-2 px-3">Athlet</th>
+                <th class="py-2 px-2 text-center">Nation</th>
+                <th class="py-2 px-3 text-right">Weite</th>
+                <th class="py-2 px-2 text-center">Wind</th>
+                <th class="py-2 px-3 text-right">WA Punkte</th>
+              </tr>
+            </thead>
+            <tbody id="compResModalTableBody" class="divide-y divide-slate-800/40"></tbody>
+          </table>
+        </div>
+
+        <div class="pt-2 flex justify-between items-center text-xs font-mono">
+          <span id="compResModalSourceNote" class="text-[10px] text-slate-500">Quelle: World Athletics Tour & Ranking Datenbank</span>
+          <button onclick="document.getElementById('competitionResultsModal').classList.add('hidden')" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-mono font-bold">
             Schließen
           </button>
         </div>
@@ -1559,7 +1747,7 @@
       </div>
     </div>
 
-    <!-- ================= SESSION PREVIEW MODAL (FOR MONTH VIEW WITHOUT TAB SWITCH) ================= -->
+    <!-- ================= SESSION PREVIEW MODAL (FOR MONTH VIEW & BLOCK COMPARISON) ================= -->
     <div id="sessionPreviewModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl space-y-4 p-4 sm:p-5">
         <div class="flex items-start justify-between pb-3 border-b border-slate-800">
@@ -1653,7 +1841,7 @@
         </div>
 
         <div class="pt-2 flex justify-between items-center text-xs">
-          <span id="insightNote" class="text-[11px] text-slate-400 font-mono">Tipp: Regelmäßige Protokollierung optimiert die Pearson-Korrelation.</span>
+          <span id="insightNote" class="text-[11px] text-slate-400 font-mono">Tipp: Regelmäßige Protokollierung optimiert die Punktbiseriale Korrelation.</span>
           <button onclick="document.getElementById('insightCalendarModal').classList.add('hidden')" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-mono font-bold">
             Schließen
           </button>
@@ -1674,7 +1862,7 @@
             <div>
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="px-2 py-0.5 rounded text-[10px] font-black font-mono bg-cyan-950 text-cyan-300 border border-cyan-800">
-                  v6.0 RELEASE HUB
+                  v7.0 RELEASE HUB
                 </span>
                 <h2 class="text-base sm:text-lg font-black text-white font-mono">
                   REFRESH & SCRAPER CONTROL CENTER
@@ -1695,7 +1883,7 @@
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
               <span id="refreshHubStatusText" class="font-bold text-slate-200">Alle Datenströme online & aktuell</span>
             </div>
-            <span class="text-slate-500 text-[10px]">Stand: 15.10.2026</span>
+            <span class="text-slate-500 text-[10px]">Stand: 17.10.2026</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
@@ -1722,8 +1910,8 @@
               <div class="flex items-center gap-2">
                 <span class="text-base">🌍</span>
                 <div>
-                  <h4 class="text-xs font-bold text-white font-mono uppercase">1. World Athletics Ranking Scraper</h4>
-                  <p class="text-[10px] text-slate-400 font-sans">Offizielles Dienstags-Ranking (Top 100 & Wertungs-Meetings)</p>
+                  <h4 class="text-xs font-bold text-white font-mono uppercase">1. World Athletics Ranking & Tour Scraper</h4>
+                  <p class="text-[10px] text-slate-400 font-sans">Offizielles Dienstags-Ranking (Top 100) + World Indoor & Continental Tour Ergebnisse</p>
                 </div>
               </div>
               <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
@@ -1731,7 +1919,7 @@
               </span>
             </div>
             <div class="flex items-center justify-between flex-wrap gap-2 pt-1 border-t border-slate-900 text-xs font-mono">
-              <span class="text-[10px] text-slate-400">Vorwoche: 06.10.2026 (#70) • Nächstes WA Update: 20.10.2026</span>
+              <span class="text-[10px] text-slate-400">1.728 Meetings inkl. Tour-Ergebnisse • Nächstes WA Update: 20.10.2026</span>
               <button onclick="App.refreshScraper('rankings')" class="px-3 py-1 bg-slate-800 hover:bg-cyan-600 hover:text-slate-950 text-cyan-300 font-bold rounded text-xs transition-all border border-slate-700">
                 🔄 Ranking neu laden
               </button>
@@ -1744,16 +1932,16 @@
               <div class="flex items-center gap-2">
                 <span class="text-base">📅</span>
                 <div>
-                  <h4 class="text-xs font-bold text-white font-mono uppercase">2. Meeting Kalender & Diamond League</h4>
-                  <p class="text-[10px] text-slate-400 font-sans">World Tour, Meisterschaften (WM Peking 2027) & DL Weitsprung</p>
+                  <h4 class="text-xs font-bold text-white font-mono uppercase">2. DLV Rahmenterminplan, Meisterschaften & Diamond League</h4>
+                  <p class="text-[10px] text-slate-400 font-sans">DLV Männer Elite, Hallen-EM Valencia, WM Peking 2027 & 15 DL Stationen</p>
                 </div>
               </div>
               <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
-                🟢 Stand: 15.10.2026 Live (48 Meets)
+                🟢 Stand: 17.10.2026 Live (86 Meets)
               </span>
             </div>
             <div class="flex items-center justify-between flex-wrap gap-2 pt-1 border-t border-slate-900 text-xs font-mono">
-              <span class="text-[10px] text-slate-400">9 Diamond Leagues verifiziert • Pausen-Berechnung aktiv</span>
+              <span class="text-[10px] text-slate-400">7 Meisterschaften • 15 Diamond Leagues • 17 DLV Termine</span>
               <button onclick="App.refreshScraper('meetings')" class="px-3 py-1 bg-slate-800 hover:bg-cyan-600 hover:text-slate-950 text-cyan-300 font-bold rounded text-xs transition-all border border-slate-700">
                 🔄 Kalender neu laden
               </button>
@@ -1767,11 +1955,11 @@
                 <span class="text-base">📊</span>
                 <div>
                   <h4 class="text-xs font-bold text-white font-mono uppercase">3. Google Sheets Live-Sync</h4>
-                  <p class="text-[10px] text-slate-400 font-sans">Tagesaktuelle Trainingsprotokolle, Whoop & Bio-Metriken</p>
+                  <p class="text-[10px] text-slate-400 font-sans">Tagesaktuelle Trainingsprotokolle, Whoop, 1-4 Scores & Relativkraft</p>
                 </div>
               </div>
               <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
-                🟢 Stand: 14.10.2026 (2.352 Logs)
+                🟢 Stand: 15.10.2026 (2.355 Logs)
               </span>
             </div>
             <div class="flex items-center justify-between flex-wrap gap-2 pt-1 border-t border-slate-900 text-xs font-mono">
@@ -1788,7 +1976,7 @@
 
         <!-- Modal Footer -->
         <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
-          <span class="text-[10px] text-slate-500">Service Worker: Network-First v6.0</span>
+          <span class="text-[10px] text-slate-500">Service Worker: Network-First v7.0</span>
           <button onclick="App.closeRefreshModal()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-mono font-bold">
             Schließen
           </button>
@@ -1823,12 +2011,12 @@
     </button>
   </nav>
 
-  <!-- Load Modular Application Logic (with Cache-Buster v6.0) -->
-  <script src="js/rankings.js?v=6.0.0"></script>
-  <script src="js/analytics.js?v=6.0.0"></script>
-  <script src="js/qualification.js?v=6.0.0"></script>
-  <script src="js/venues.js?v=6.0.0"></script>
-  <script src="js/training_plan.js?v=6.0.0"></script>
-  <script src="js/app.js?v=6.0.0"></script>
+  <!-- Load Modular Application Logic (with Cache-Buster v7.0) -->
+  <script src="js/rankings.js?v=7.0.0"></script>
+  <script src="js/analytics.js?v=7.0.0"></script>
+  <script src="js/qualification.js?v=7.0.0"></script>
+  <script src="js/venues.js?v=7.0.0"></script>
+  <script src="js/training_plan.js?v=7.0.0"></script>
+  <script src="js/app.js?v=7.0.0"></script>
 </body>
 </html>

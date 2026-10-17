@@ -43,11 +43,26 @@ const VenuesModule = (() => {
         selectedTier = btn.getAttribute('data-tier') || 'ALL';
         if (window.App && window.App.state) {
           render(window.App.state);
+          if (currentViewMode === 'calendar') {
+            renderCalendarMonthGrid(window.App.state);
+          }
         }
       });
     });
 
     initializedListeners = true;
+  }
+
+  function matchesSelectedTier(m) {
+    if (selectedTier === 'ALL') return true;
+    if (selectedTier === 'Meisterschaft') {
+      return Boolean(
+        m.isChampionship ||
+        (m.tier && m.tier.toLowerCase() === 'meisterschaft') ||
+        (m.championshipType && m.championshipType.length > 0)
+      );
+    }
+    return (m.tier || '').toLowerCase() === selectedTier.toLowerCase();
   }
 
   function render(state) {
@@ -71,12 +86,10 @@ const VenuesModule = (() => {
     // Filter meetings
     const filtered = meetings.filter(m => {
       if (mensOnly && !m.mensLongJump) return false;
-      if (selectedTier !== 'ALL') {
-        if (m.tier.toLowerCase() !== selectedTier.toLowerCase()) return false;
-      }
+      if (!matchesSelectedTier(m)) return false;
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
-        const str = `${m.name} ${m.venue} ${m.city} ${m.country} ${m.tier}`.toLowerCase();
+        const str = `${m.name} ${m.venue} ${m.city} ${m.country} ${m.tier} ${m.championshipType || ''}`.toLowerCase();
         if (!str.includes(q)) return false;
       }
       return true;
@@ -116,7 +129,7 @@ const VenuesModule = (() => {
               <h3 class="text-xs font-black uppercase tracking-wider text-white font-mono">${month}</h3>
             </div>
             <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-950 text-cyan-400 border border-slate-800">
-              ${list.length} ${list.length === 1 ? 'Meeting' : 'Meetings'} mit Weitsprung Männer
+              ${list.length} ${list.length === 1 ? 'Termin' : 'Termine'}
             </span>
           </div>
 
@@ -149,10 +162,13 @@ const VenuesModule = (() => {
     const isGorzow = m.name.toLowerCase().includes('gorzów') || (m.city && m.city.toLowerCase().includes('gorzów'));
     const isPromising = m.promisingRunway;
     const isExpanded = expandedMeetingId === m.id;
+    const isChamp = Boolean(m.isChampionship || m.tier === 'Meisterschaft');
 
     // Tier badge colors
     let tierBadge = 'bg-slate-800 text-slate-300 border-slate-700';
-    if (m.tier === 'Diamond League') {
+    if (isChamp) {
+      tierBadge = 'bg-purple-950 text-purple-300 border-purple-500 shadow-sm';
+    } else if (m.tier === 'Diamond League') {
       tierBadge = 'bg-cyan-950 text-cyan-300 border-cyan-500 shadow-sm';
     } else if (m.tier === 'Gold' || m.tier === 'World Athletics Series') {
       tierBadge = 'bg-amber-950 text-amber-300 border-amber-700';
@@ -169,7 +185,7 @@ const VenuesModule = (() => {
 
     let mainRow = `
       <tr onclick="VenuesModule.toggleMeetingRow('${m.id}')" class="cursor-pointer hover:bg-slate-800/40 transition-colors ${
-        isExpanded ? 'bg-slate-800/70 border-b border-slate-800' : isGorzow ? 'bg-amber-950/15' : ''
+        isExpanded ? 'bg-slate-800/70 border-b border-slate-800' : isChamp ? 'bg-purple-950/15' : isGorzow ? 'bg-amber-950/15' : ''
       }">
         <!-- Datum -->
         <td class="py-2 px-2.5 whitespace-nowrap font-bold text-white">
@@ -185,6 +201,9 @@ const VenuesModule = (() => {
             <div class="flex items-center gap-1.5 flex-wrap">
               <span class="font-bold text-slate-100 font-sans text-xs">${m.name}</span>
               <span class="px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 text-[10px] text-slate-400 font-mono">${m.country}</span>
+              ${isChamp ? `<span class="px-1.5 py-0.2 rounded bg-purple-600 text-white font-black text-[9px] font-mono">🏆 ${m.championshipType || 'MEISTERSCHAFT'}</span>` : ''}
+              ${m.isDlvTerm && !isChamp ? '<span class="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold text-[9px] font-mono">🇩🇪 DLV Plan</span>' : ''}
+              ${m.dlDisciplineStatus === 'TBA' ? '<span class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-700 font-bold text-[9px] font-mono" title="Wanda Diamond League 2027 Termin steht fest; Disziplinverteilung Weitsprung Männer noch offen">⏳ Disziplinen offen (TBA)</span>' : ''}
               ${isGorzow ? '<span class="px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 font-black text-[9px] font-mono">LUKA 8.18m</span>' : ''}
             </div>
             <span class="text-[10px] text-slate-400 font-sans mt-0.5">
@@ -196,7 +215,7 @@ const VenuesModule = (() => {
         <!-- Kategorie & Tour -->
         <td class="py-2 px-2 text-center whitespace-nowrap">
           <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${tierBadge}">
-            ${m.tier.toUpperCase()} • Kat. ${m.category}
+            ${(m.tier || '').toUpperCase()} • Kat. ${m.category}
           </span>
         </td>
 
@@ -208,7 +227,7 @@ const VenuesModule = (() => {
             </span>
           ` : `
             <span class="px-1.5 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800 text-[10px]">
-              Punkte (Kat. D)
+              Punkte (Kat. ${m.category || 'D'})
             </span>
           `}
         </td>
@@ -619,12 +638,10 @@ const VenuesModule = (() => {
     // Filter according to active filters
     const filtered = rawMeetings.filter(m => {
       if (mensOnly && !m.mensLongJump) return false;
-      if (selectedTier !== 'ALL') {
-        if (m.tier.toLowerCase() !== selectedTier.toLowerCase()) return false;
-      }
+      if (!matchesSelectedTier(m)) return false;
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
-        const str = `${m.name} ${m.venue} ${m.city} ${m.country} ${m.tier}`.toLowerCase();
+        const str = `${m.name} ${m.venue} ${m.city} ${m.country} ${m.tier} ${m.championshipType || ''}`.toLowerCase();
         if (!str.includes(q)) return false;
       }
       return true;

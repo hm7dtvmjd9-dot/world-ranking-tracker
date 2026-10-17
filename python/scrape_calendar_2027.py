@@ -2,19 +2,13 @@
 """
 python/scrape_calendar_2027.py
 
-Scrapes World Athletics Tour 2027:
-- World Athletics Indoor Tour 2027 (groupId 3677, season 2026/27)
-- World Athletics Continental Tour 2027 (groupId 3773, season 2027)
-- German & International Championships 2027 (DM Halle/Freiluft, Hallen-EM/WM, CISM, Team-EM, WM)
-
-Checks each meeting via AppSync GraphQL getCompetitionOrganiserInfo:
-- Strictly filters for events offering MEN'S LONG JUMP.
-- Excludes meetings that only offer Women's Long Jump or are single-discipline non-LJ events.
-- Collects organizer contacts (email, phone, name, title), website, streaming, and results URLs.
-- Cross-references historical performance from data/competitions_database.json:
-  Evaluates venue/meeting quality. If historical marks are above average (e.g. Gorzów with Luka 8.18m,
-  Lescay 8.03m), marks it as "Anlage vielversprechend ⭐" with a clear, factual justification.
-- Saves clean dataset to data/calendar_2027.json.
+Scrapes & compiles the 2027 Men's Long Jump & Championship Calendar:
+1. World Athletics Indoor Tour 2027 (groupId 3677, season 2026/27)
+2. World Athletics Continental Tour 2027 (groupId 3773, season 2027)
+3. Official 2027 Wanda Diamond League Calendar (https://www.diamondleague.com/calendar/)
+4. Official DLV Rahmenterminplan 2027 Men's Elite Meetings (https://www.leichtathletik.de/wettkaempfe/termine/wettkampf-kalender)
+5. Official 2027 National & International Championships (DM Halle, Hallen-EM Valencia, CISM, Team-EM, DM Freiluft, FISU WUG, WM Peking 2027, Olympia LA 2028)
+   - NOTE: Hallen-WM Toruń was in March 2026 and is strictly excluded from 2027.
 """
 
 import os
@@ -22,6 +16,7 @@ import re
 import ssl
 import json
 import urllib.request
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,12 +26,6 @@ OUTPUT_CALENDAR_PATH = os.path.join(DATA_DIR, "calendar_2027.json")
 
 GRAPHQL_ENDPOINT = "https://ptibh4tbzjfmnjn7c5jj6bu2ai.appsync-api.eu-west-1.amazonaws.com/graphql"
 GRAPHQL_API_KEY = "da2-q7toieeiobcjxbov4abq3abk5u"
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-}
-
 CTX = ssl._create_unverified_context()
 
 MONTH_NAMES_DE = {
@@ -52,15 +41,15 @@ MONTH_SHORT_DE = {
 }
 
 STOP_WORDS = {
-    "meeting", "international", "internationales", "internationale", "indoor", 
-    "classic", "classics", "memorial", "grand", "prix", "gran", "premio", "ciudad", 
-    "festival", "fest", "cup", "open", "games", "challenge", "tour", "championships", 
-    "championship", "relays", "relay", "invitational", "camp", "galla", "trophy", 
-    "series", "track", "field", "stadium", "arena", "sport", "sports", "center", 
-    "centre", "park", "city", "hallenmeeting", "hallen", "athletics", "leichtathletik", 
-    "jump", "jumps", "spring", "break", "elite", "winter", "summer", "autumn", 
-    "night", "day", "world", "continental", "national", "state", "club", "league", 
-    "annual", "road", "street", "meet", "team", "champs", "presented", "by", "the", 
+    "meeting", "international", "internationales", "internationale", "indoor",
+    "classic", "classics", "memorial", "grand", "prix", "gran", "premio", "ciudad",
+    "festival", "fest", "cup", "open", "games", "challenge", "tour", "championships",
+    "championship", "relays", "relay", "invitational", "camp", "galla", "trophy",
+    "series", "track", "field", "stadium", "arena", "sport", "sports", "center",
+    "centre", "park", "city", "hallenmeeting", "hallen", "athletics", "leichtathletik",
+    "jump", "jumps", "spring", "break", "elite", "winter", "summer", "autumn",
+    "night", "day", "world", "continental", "national", "state", "club", "league",
+    "annual", "road", "street", "meet", "team", "champs", "presented", "by", "the",
     "and", "for", "with", "der", "die", "das", "und", "des", "von", "del", "de", "la"
 }
 
@@ -91,19 +80,23 @@ query GetCompInfo($id: Int!) {
 }
 """
 
+# 1. Official 2027 Championships (Meisterschaften: DM, EM, WM, CISM, Team-EM, FISU)
 CHAMPIONSHIPS_2027 = [
     {
         "id": "champ-dm-halle-2027",
         "wa_id": 9901,
         "date": "2027-02-20",
-        "displayDate": "20. FEB 2027",
+        "endDate": "2027-02-21",
+        "displayDate": "20.–21. FEB 2027",
         "month": "Februar 2027",
         "year": 2027,
         "name": "Deutsche Hallenmeisterschaften 2027 (DM Halle)",
-        "tour": "Deutsche Leichtathletik-Meisterschaften (DLV)",
-        "tier": "Silver",
+        "tour": "Meisterschaften (DLV)",
+        "tier": "Meisterschaft",
         "category": "B",
         "subgroup": "National Championships",
+        "isChampionship": True,
+        "championshipType": "DM",
         "venue": "Helmut-Körnig-Halle",
         "city": "Dortmund",
         "country": "GER",
@@ -111,25 +104,20 @@ CHAMPIONSHIPS_2027 = [
         "mensLongJump": True,
         "womensLongJump": True,
         "standardEligible": True,
-        "status": "Nationale Meisterschaft (Kat. B Silver) • 60 Bonuspunkte für Sieg",
+        "status": "Nationale Meisterschaft (Kat. B) • 60 Bonuspunkte für Sieg",
         "promisingRunway": True,
-        "runwayNote": "Anlage vielversprechend ⭐ (Dortmund Helmut-Körnig-Halle: Luka sprang hier mehrfach > 7.90m, DM-Goldbahn)",
+        "runwayNote": "Anlage vielversprechend ⭐ (Helmut-Körnig-Halle Dortmund: Schneller Anlauf, DM-Hallen-Klassiker)",
         "lukaHistory": [
             {"mark": 7.92, "year": 2024, "date": "18. FEB 2024", "place": "2. F"},
-            {"mark": 7.88, "year": 2026, "date": "28. FEB 2026", "place": "3. F"}
+            {"mark": 7.78, "year": 2026, "date": "28. FEB 2026", "place": "3. F"}
         ],
         "topHistoricalMarks": [8.18, 8.05, 7.98, 7.92, 7.88],
         "contactPersons": [
-            {
-                "name": "Deutscher Leichtathletik-Verband (DLV)",
-                "email": "leistungssport@leichtathletik.de",
-                "phone": "+49 6151 7708-0",
-                "title": "Verband / Organisation"
-            }
+            {"name": "Deutscher Leichtathletik-Verband (DLV)", "email": "leistungssport@leichtathletik.de", "phone": "+49 6151 7708-0", "title": "Verband / Wettkampforganisation"}
         ],
-        "disciplinesMen": ["Long Jump", "60m", "60m Hurdles", "Pole Vault", "High Jump", "Shot Put"],
-        "disciplinesWomen": ["Long Jump", "60m", "60m Hurdles", "Pole Vault", "High Jump", "Shot Put"],
-        "websiteUrl": "https://www.leichtathletik.de",
+        "disciplinesMen": ["Long Jump", "60m", "60m Hurdles", "Pole Vault", "High Jump", "Triple Jump"],
+        "disciplinesWomen": ["Long Jump", "60m", "60m Hurdles", "Pole Vault", "High Jump", "Triple Jump"],
+        "websiteUrl": "https://www.leichtathletik.de/wettkaempfe/termine/wettkampf-kalender",
         "resultsPageUrl": "https://ergebnisse.leichtathletik.de",
         "liveStreamingUrl": None
     },
@@ -137,14 +125,17 @@ CHAMPIONSHIPS_2027 = [
         "id": "champ-em-indoor-2027",
         "wa_id": 9902,
         "date": "2027-03-05",
-        "displayDate": "05. MRZ 2027",
+        "endDate": "2027-03-07",
+        "displayDate": "04.–07. MRZ 2027",
         "month": "März 2027",
         "year": 2027,
-        "name": "European Athletics Indoor Championships 2027 (Hallen-EM)",
-        "tour": "European Athletics Indoor Championships",
-        "tier": "Gold",
+        "name": "European Athletics Indoor Championships 2027 (Hallen-EM Valencia)",
+        "tour": "Meisterschaften (European Athletics)",
+        "tier": "Meisterschaft",
         "category": "GL",
         "subgroup": "European Championships",
+        "isChampionship": True,
+        "championshipType": "EM",
         "venue": "Velódromo Luis Puig",
         "city": "Valencia",
         "country": "ESP",
@@ -152,60 +143,17 @@ CHAMPIONSHIPS_2027 = [
         "mensLongJump": True,
         "womensLongJump": True,
         "standardEligible": True,
-        "status": "Europameisterschaft (Kat. GL Gold) • 140 Bonuspunkte für Sieg",
+        "status": "Hallen-Europameisterschaft (Kat. GL) • 140 Bonuspunkte für Sieg",
         "promisingRunway": True,
-        "runwayNote": "Anlage vielversprechend ⭐ (Hallen-EM Valencia: Schneller Hallenbelag im Velódromo Luis Puig)",
+        "runwayNote": "Anlage vielversprechend ⭐ (Hallen-EM Valencia im Velódromo Luis Puig • Hauptziel Hallensaison 2027)",
         "lukaHistory": [],
         "topHistoricalMarks": [8.30, 8.22, 8.14, 8.08, 8.02],
         "contactPersons": [
-            {
-                "name": "European Athletics",
-                "email": "competition@european-athletics.org",
-                "phone": "+41 21 313 43 50",
-                "title": "Competition Department"
-            }
+            {"name": "European Athletics", "email": "competition@european-athletics.org", "phone": "+41 21 313 43 50", "title": "Competition Department"}
         ],
         "disciplinesMen": ["Long Jump", "60m", "60m Hurdles", "Pole Vault", "High Jump", "Triple Jump"],
         "disciplinesWomen": ["Long Jump", "60m", "60m Hurdles", "Pole Vault", "High Jump", "Triple Jump"],
         "websiteUrl": "https://www.european-athletics.com",
-        "resultsPageUrl": None,
-        "liveStreamingUrl": None
-    },
-    {
-        "id": "champ-wm-indoor-2027",
-        "wa_id": 9903,
-        "date": "2027-03-19",
-        "displayDate": "19. MRZ 2027",
-        "month": "März 2027",
-        "year": 2027,
-        "name": "World Athletics Indoor Championships 2027 (Hallen-WM)",
-        "tour": "World Athletics Series",
-        "tier": "World Athletics Series",
-        "category": "GW",
-        "subgroup": "World Championships",
-        "venue": "Arena Toruń",
-        "city": "Toruń",
-        "country": "POL",
-        "indoor": True,
-        "mensLongJump": True,
-        "womensLongJump": True,
-        "standardEligible": True,
-        "status": "Weltmeisterschaft (Kat. GW) • 170 Bonuspunkte für Sieg",
-        "promisingRunway": True,
-        "runwayNote": "Anlage vielversprechend ⭐ (Arena Toruń ist weltbekannt für weite Sprünge und High-Speed Anlauf)",
-        "lukaHistory": [],
-        "topHistoricalMarks": [8.40, 8.28, 8.21, 8.15, 8.09],
-        "contactPersons": [
-            {
-                "name": "World Athletics Competition",
-                "email": "competitions@worldathletics.org",
-                "phone": "+377 93 10 88 88",
-                "title": "World Athletics Events"
-            }
-        ],
-        "disciplinesMen": ["Long Jump", "60m", "60m Hurdles", "Pole Vault", "High Jump", "Triple Jump"],
-        "disciplinesWomen": ["Long Jump", "60m", "60m Hurdles", "Pole Vault", "High Jump", "Triple Jump"],
-        "websiteUrl": "https://worldathletics.org/competitions/world-athletics-indoor-championships",
         "resultsPageUrl": None,
         "liveStreamingUrl": None
     },
@@ -216,30 +164,27 @@ CHAMPIONSHIPS_2027 = [
         "displayDate": "12. JUN 2027",
         "month": "Juni 2027",
         "year": 2027,
-        "name": "CISM Military World Athletics Championships 2027",
-        "tour": "CISM World Military Games / Championships",
-        "tier": "Bronze",
+        "name": "CISM Military World Athletics Championships 2027 (Militär-WM)",
+        "tour": "Meisterschaften (CISM)",
+        "tier": "Meisterschaft",
         "category": "C",
         "subgroup": "Military Championships",
-        "venue": "Sportschule der Bundeswehr",
-        "city": "Warendorf",
+        "isChampionship": True,
+        "championshipType": "CISM",
+        "venue": "CISM Military Stadium",
+        "city": "Warendorf / CISM Host",
         "country": "GER",
         "indoor": False,
         "mensLongJump": True,
         "womensLongJump": True,
         "standardEligible": True,
-        "status": "Militär-Weltmeisterschaft (Kat. C Bronze) • 40 Bonuspunkte für Sieg",
+        "status": "Militär-Weltmeisterschaft (Kat. C) • 40 Bonuspunkte für Sieg",
         "promisingRunway": True,
-        "runwayNote": "Bundeswehr-Spitzensportförderung: Luka Herden als Sportsoldat startberechtigt",
+        "runwayNote": "Bundeswehr-Spitzensportförderung: Pflicht- & Medaillenchance als Sportsoldat",
         "lukaHistory": [],
         "topHistoricalMarks": [8.08, 7.95, 7.88, 7.82, 7.75],
         "contactPersons": [
-            {
-                "name": "Bundeswehr Sportförderung / CISM",
-                "email": "sportfoerderung@bundeswehr.org",
-                "phone": "+49 2241 15-0",
-                "title": "Spitzensportbetreuung"
-            }
+            {"name": "Bundeswehr Sportförderung / CISM", "email": "sportfoerderung@bundeswehr.org", "phone": "+49 2241 15-0", "title": "Spitzensportbetreuung"}
         ],
         "disciplinesMen": ["Long Jump", "100m", "200m", "High Jump", "Triple Jump"],
         "disciplinesWomen": ["Long Jump", "100m", "200m", "High Jump", "Triple Jump"],
@@ -250,36 +195,32 @@ CHAMPIONSHIPS_2027 = [
     {
         "id": "champ-team-em-2027",
         "wa_id": 9905,
-        "date": "2027-06-25",
-        "displayDate": "25. JUN 2027",
+        "date": "2027-06-19",
+        "endDate": "2027-06-20",
+        "displayDate": "18.–20. JUN 2027",
         "month": "Juni 2027",
         "year": 2027,
-        "name": "European Athletics Team Championships 2027 (Team-EM)",
-        "tour": "European Athletics Series",
-        "tier": "Gold",
+        "name": "European Athletics Team Championships 2027 (Team-EM 1st Division)",
+        "tour": "Meisterschaften (European Athletics)",
+        "tier": "Meisterschaft",
         "category": "A",
         "subgroup": "Team Championships",
-        "venue": "Silesian Stadium",
-        "city": "Chorzów",
-        "country": "POL",
+        "isChampionship": True,
+        "championshipType": "Team-EM",
+        "venue": "Atatürk Olympic Stadium",
+        "city": "Istanbul",
+        "country": "TUR",
         "indoor": False,
         "mensLongJump": True,
         "womensLongJump": True,
         "standardEligible": True,
         "status": "Team-Europameisterschaft (Kat. A Gold) • 100 Bonuspunkte für Sieg",
         "promisingRunway": True,
-        "runwayNote": "Anlage vielversprechend ⭐ (Chorzów Silesian Stadium: Weitsprung-Erfolge & hohe Platzierungspunkte)",
-        "lukaHistory": [
-            {"mark": 8.01, "year": 2023, "date": "24. JUN 2023", "place": "3. F"}
-        ],
+        "runwayNote": "Anlage vielversprechend ⭐ (100 Bonuspunkte für Platz 1 • 1 Startplatz pro Nation)",
+        "lukaHistory": [],
         "topHistoricalMarks": [8.25, 8.16, 8.09, 8.01, 7.95],
         "contactPersons": [
-            {
-                "name": "European Athletics",
-                "email": "events@european-athletics.org",
-                "phone": "+41 21 313 43 50",
-                "title": "Events Coordinator"
-            }
+            {"name": "European Athletics", "email": "events@european-athletics.org", "phone": "+41 21 313 43 50", "title": "Events Coordinator"}
         ],
         "disciplinesMen": ["Long Jump", "100m", "200m", "400m", "High Jump", "Triple Jump"],
         "disciplinesWomen": ["Long Jump", "100m", "200m", "400m", "High Jump", "Triple Jump"],
@@ -290,75 +231,110 @@ CHAMPIONSHIPS_2027 = [
     {
         "id": "champ-dm-outdoor-2027",
         "wa_id": 9906,
-        "date": "2027-07-03",
-        "displayDate": "03. JUL 2027",
+        "date": "2027-07-31",
+        "endDate": "2027-08-01",
+        "displayDate": "31. JUL – 01. AUG 2027",
         "month": "Juli 2027",
         "year": 2027,
-        "name": "Deutsche Meisterschaften Freiluft 2027 (DM Freiluft)",
-        "tour": "Deutsche Leichtathletik-Meisterschaften (DLV)",
-        "tier": "Silver",
+        "name": "127. Deutsche Meisterschaften Freiluft 2027 (DM Männer/Frauen)",
+        "tour": "Meisterschaften (DLV)",
+        "tier": "Meisterschaft",
         "category": "B",
         "subgroup": "National Championships",
-        "venue": "Stadion",
-        "city": "Deutschland",
+        "isChampionship": True,
+        "championshipType": "DM",
+        "venue": "Auestadion / DLV Austragungsort",
+        "city": "Kassel / Deutschland",
         "country": "GER",
         "indoor": False,
         "mensLongJump": True,
         "womensLongJump": True,
         "standardEligible": True,
-        "status": "Nationale Meisterschaft (Kat. B Silver) • 60 Bonuspunkte für Sieg",
+        "status": "Nationale Meisterschaft (Kat. B) • 60 Bonuspunkte für Sieg",
         "promisingRunway": True,
-        "runwayNote": "Nationale Meisterschaft: 60 Bonuspunkte für den Sieg, Pflichttermin für DLV-Kader",
+        "runwayNote": "Anlage vielversprechend ⭐ (Luka sprang bei der DM 2023 in Kassel 7,91m und holte den Titel!)",
         "lukaHistory": [
-            {"mark": 8.14, "year": 2023, "date": "08. JUL 2023", "place": "1. F"},
-            {"mark": 8.08, "year": 2024, "date": "29. JUN 2024", "place": "2. F"}
+            {"mark": 7.91, "year": 2023, "date": "09. JUL 2023", "place": "1. F"},
+            {"mark": 7.79, "year": 2024, "date": "29. JUN 2024", "place": "2. F"},
+            {"mark": 7.86, "year": 2026, "date": "25. JUL 2026", "place": "2. F"}
         ],
         "topHistoricalMarks": [8.22, 8.14, 8.08, 8.01, 7.94],
         "contactPersons": [
-            {
-                "name": "Deutscher Leichtathletik-Verband (DLV)",
-                "email": "leistungssport@leichtathletik.de",
-                "phone": "+49 6151 7708-0",
-                "title": "Verband / Organisation"
-            }
+            {"name": "Deutscher Leichtathletik-Verband (DLV)", "email": "leistungssport@leichtathletik.de", "phone": "+49 6151 7708-0", "title": "Verband / Organisation"}
         ],
         "disciplinesMen": ["Long Jump", "100m", "200m", "400m", "High Jump", "Triple Jump"],
         "disciplinesWomen": ["Long Jump", "100m", "200m", "400m", "High Jump", "Triple Jump"],
-        "websiteUrl": "https://www.leichtathletik.de",
+        "websiteUrl": "https://www.leichtathletik.de/wettkaempfe/termine/wettkampf-kalender",
         "resultsPageUrl": "https://ergebnisse.leichtathletik.de",
+        "liveStreamingUrl": None
+    },
+    {
+        "id": "champ-fisu-2027",
+        "wa_id": 9908,
+        "date": "2027-08-06",
+        "endDate": "2027-08-12",
+        "displayDate": "01.–12. AUG 2027",
+        "month": "August 2027",
+        "year": 2027,
+        "name": "FISU World University Games 2027 (Welthochschulspiele Chungcheong)",
+        "tour": "Meisterschaften (FISU)",
+        "tier": "Meisterschaft",
+        "category": "B",
+        "subgroup": "World University Games",
+        "isChampionship": True,
+        "championshipType": "FISU",
+        "venue": "Chungcheong Main Stadium",
+        "city": "Chungcheong",
+        "country": "KOR",
+        "indoor": False,
+        "mensLongJump": True,
+        "womensLongJump": True,
+        "standardEligible": True,
+        "status": "FISU World University Games (Kat. B) • 60 Bonuspunkte für Sieg",
+        "promisingRunway": True,
+        "runwayNote": "Anlage vielversprechend ⭐ (Luka gewann 2025 mit 2x 7,96m Bronze bei den FISU Games!)",
+        "lukaHistory": [
+            {"mark": 7.96, "year": 2025, "date": "24. JUL 2025", "place": "3. F"}
+        ],
+        "topHistoricalMarks": [8.12, 8.05, 8.00, 7.96, 7.92],
+        "contactPersons": [
+            {"name": "adh - Allgemeiner Deutscher Hochschulsportverband", "email": "adh@adh.de", "phone": "+49 6071 2086-0", "title": "adh Wettkampfsport"}
+        ],
+        "disciplinesMen": ["Long Jump", "100m", "200m", "400m", "High Jump", "Triple Jump"],
+        "disciplinesWomen": ["Long Jump", "100m", "200m", "400m", "High Jump", "Triple Jump"],
+        "websiteUrl": "https://www.fisu.net",
+        "resultsPageUrl": None,
         "liveStreamingUrl": None
     },
     {
         "id": "champ-wm-outdoor-2027",
         "wa_id": 9907,
-        "date": "2027-08-27",
-        "displayDate": "27. AUG 2027",
-        "month": "August 2027",
+        "date": "2027-09-11",
+        "endDate": "2027-09-19",
+        "displayDate": "10.–19. SEP 2027",
+        "month": "September 2027",
         "year": 2027,
-        "name": "World Athletics Championships 2027 (Freiluft-WM)",
-        "tour": "World Athletics Series",
-        "tier": "World Athletics Series",
+        "name": "World Athletics Championships Beijing 2027 (Freiluft-WM Peking)",
+        "tour": "Meisterschaften (World Athletics)",
+        "tier": "Meisterschaft",
         "category": "OW",
         "subgroup": "World Championships",
-        "venue": "National Stadium",
-        "city": "Tokyo",
-        "country": "JPN",
+        "isChampionship": True,
+        "championshipType": "WM",
+        "venue": "National Stadium (Bird's Nest)",
+        "city": "Peking (Beijing)",
+        "country": "CHN",
         "indoor": False,
         "mensLongJump": True,
         "womensLongJump": True,
         "standardEligible": True,
-        "status": "Weltmeisterschaft (Kat. OW) • 350 Bonuspunkte für Sieg (300 Pkt Silber)",
+        "status": "Weltmeisterschaft Peking (Kat. OW) • 350 Bonuspunkte für Sieg • Hauptziel 2027",
         "promisingRunway": True,
-        "runwayNote": "Höchste Wertungskategorie weltweit: 350 Bonuspunkte für Platz 1, 300 Pkt für Silber",
+        "runwayNote": "Anlage vielversprechend ⭐ (Olympiastadion Peking • Saisonhöhepunkt 10.–19.09.2027)",
         "lukaHistory": [],
         "topHistoricalMarks": [8.65, 8.52, 8.41, 8.35, 8.28],
         "contactPersons": [
-            {
-                "name": "World Athletics Competition",
-                "email": "competitions@worldathletics.org",
-                "phone": "+377 93 10 88 88",
-                "title": "World Athletics Events"
-            }
+            {"name": "World Athletics Competition", "email": "competitions@worldathletics.org", "phone": "+377 93 10 88 88", "title": "World Athletics Events"}
         ],
         "disciplinesMen": ["Long Jump", "100m", "200m", "400m", "High Jump", "Triple Jump"],
         "disciplinesWomen": ["Long Jump", "100m", "200m", "400m", "High Jump", "Triple Jump"],
@@ -367,6 +343,59 @@ CHAMPIONSHIPS_2027 = [
         "liveStreamingUrl": None
     }
 ]
+
+# 2. Official 2027 Wanda Diamond League Calendar (https://www.diamondleague.com/calendar/)
+DIAMOND_LEAGUE_2027_STOPS = [
+    ("dl-doha-2027", "2027-05-07", "Doha Diamond League 2027", "Suheim bin Hamad Stadium", "Doha", "QAT", "GW"),
+    ("dl-shanghai-2027", "2027-05-15", "Yangtze Delta Athletics Diamond Gala 2027", "China Textile City Sports Centre", "Shanghai/Keqiao", "CHN", "GW"),
+    ("dl-xiamen-2027", "2027-05-22", "Xiamen Diamond League 2027", "Egret Stadium", "Xiamen", "CHN", "GW"),
+    ("dl-rome-2027", "2027-05-27", "Golden Gala Pietro Mennea 2027", "Stadio Olimpico", "Rom", "ITA", "GW"),
+    ("dl-rabat-2027", "2027-05-30", "Meeting International Mohammed VI d'Athlétisme 2027", "Complexe Sportif Prince Moulay Abdellah", "Rabat", "MAR", "GW"),
+    ("dl-oslo-2027", "2027-06-03", "Oslo Bislett Games 2027", "Bislett Stadion", "Oslo", "NOR", "GW"),
+    ("dl-stockholm-2027", "2027-06-06", "BAUHAUS-Galan 2027", "Olympiastadion", "Stockholm", "SWE", "GW"),
+    ("dl-paris-2027", "2027-06-25", "Meeting de Paris 2027", "Stade Sébastien Charléty", "Paris", "FRA", "GW"),
+    ("dl-eugene-2027", "2027-07-03", "Prefontaine Classic 2027", "Hayward Field", "Eugene", "USA", "GW"),
+    ("dl-monaco-2027", "2027-07-09", "Herculis EBS Monaco 2027", "Stade Louis II", "Monaco", "MON", "GW"),
+    ("dl-lausanne-2027", "2027-07-13", "Athletissima Lausanne 2027", "Stade Olympique de la Pontaise", "Lausanne", "SUI", "GW"),
+    ("dl-london-2027", "2027-07-17", "London Athletics Meet 2027", "London Stadium", "London", "GBR", "GW"),
+    ("dl-silesia-2027", "2027-08-15", "Kamila Skolimowska Memorial 2027", "Silesian Stadium", "Chorzów", "POL", "GW"),
+    ("dl-brussels-2027", "2027-08-20", "Allianz Memorial Van Damme 2027", "King Baudouin Stadium", "Brüssel", "BEL", "GW"),
+    ("dl-zurich-2027", "2027-08-25", "Weltklasse Zürich (Diamond League Final 2027)", "Letzigrund", "Zürich", "SUI", "DF"),
+]
+
+# 3. Official DLV Rahmenterminplan 2027 Men's Elite Meetings (excluding Jugend/Masters)
+DLV_RAHMENTERMINPLAN_2027 = [
+    ("dlv-dortmund-jnr-indoor-2027", "2027-01-16", "Indoor Jump'n'Run Meeting Dortmund 2027", "Helmut-Körnig-Halle", "Dortmund", "GER", "E", "DLV Rahmenterminplan", True),
+    ("dlv-dortmund-sparkassen-2027", "2027-01-23", "Sparkassen Indoor Meeting Dortmund 2027", "Helmut-Körnig-Halle", "Dortmund", "GER", "C", "World Athletics Indoor Tour 2027", True),
+    ("dlv-cottbus-springer-2027", "2027-01-27", "23. Internationales Springer-Meeting Cottbus 2027", "Lausitz-Arena", "Cottbus", "GER", "C", "World Athletics Indoor Tour 2027", True),
+    ("dlv-erfurt-indoor-2027", "2027-01-29", "14. Erfurt Indoor 2027", "Hartwig-Gauder-Halle", "Erfurt", "GER", "D", "World Athletics Indoor Tour 2027", True),
+    ("dlv-karlsruhe-init-2027", "2027-02-05", "INIT INDOOR MEETING Karlsruhe 2027", "Europahalle / Messe", "Karlsruhe", "GER", "A", "World Athletics Indoor Tour 2027", True),
+    ("dlv-berlin-istaf-indoor-2027", "2027-02-07", "ISTAF INDOOR Berlin 2027", "Uber Arena", "Berlin", "GER", "B", "World Athletics Indoor Tour 2027", True),
+    ("dlv-duesseldorf-istaf-2027", "2027-02-13", "ISTAF INDOOR Düsseldorf 2027", "PSD Bank Dome", "Düsseldorf", "GER", "B", "World Athletics Indoor Tour 2027", True),
+    ("dlv-weinheim-kurpfalz-2027", "2027-05-15", "Kurpfalz-Gala Weinheim 2027", "Sepp-Herberger-Stadion", "Weinheim", "GER", "D", "DLV Rahmenterminplan / Continental Tour", False),
+    ("dlv-dessau-anhalt-2027", "2027-05-21", "Internationales Leichtathletik-Meeting Anhalt 2027", "Paul-Greifzu-Stadion", "Dessau", "GER", "C", "World Athletics Continental Tour 2027", False),
+    ("dlv-dresden-goldenes-oval-2027", "2027-05-30", "Goldenes Oval Dresden 2027", "Heinz-Steyer-Stadion", "Dresden", "GER", "B", "World Athletics Continental Tour 2027", False),
+    ("dlv-regensburg-gala-2027", "2027-06-05", "Sparkassen-Gala Regensburg 2027", "Universitätsstadion", "Regensburg", "GER", "D", "DLV Rahmenterminplan", False),
+    ("dlv-rehlingen-pfingst-2027", "2027-06-13", "62. Internationales Pfingstsportfest Rehlingen 2027", "Bungertstadion", "Rehlingen", "GER", "C", "World Athletics Continental Tour 2027", False),
+    ("dlv-essen-springer-2027", "2027-06-20", "Internationales Essener Springer-Meeting 2027", "Sportpark Am Hallo", "Essen", "GER", "D", "DLV Rahmenterminplan", False),
+    ("dlv-rhede-laz-2027", "2027-06-26", "55. Internationales LAZ Meeting Rhede 2027", "Besagroup-Sportpark", "Rhede", "GER", "D", "DLV Rahmenterminplan", False),
+    ("dlv-pfungstadt-flutlicht-2027", "2027-07-10", "Pfungstädter Leichtathletik-Gala 2027", "TSV-Stadion", "Pfungstadt", "GER", "E", "DLV Rahmenterminplan", False),
+    ("dlv-inneringen-schlossberg-2027", "2027-07-18", "Schloßberg-Weitsprungmeeting Inneringen 2027", "Weitsprunganlage Inneringen", "Inneringen", "GER", "E", "DLV Rahmenterminplan", False),
+    ("dlv-berlin-istaf-outdoor-2027", "2027-08-29", "ISTAF Berlin 2027", "Olympiastadion", "Berlin", "GER", "B", "World Athletics Continental Tour 2027", False),
+]
+
+def format_date_info(date_str):
+    if not date_str:
+        return "", "", ""
+    parts = date_str.split("-")
+    if len(parts) != 3:
+        return date_str, date_str, "2027"
+    yyyy, mm, dd = parts
+    m_name = MONTH_NAMES_DE.get(mm, mm)
+    m_short = MONTH_SHORT_DE.get(mm, mm)
+    display_date = f"{int(dd):02d}. {m_short} {yyyy}"
+    month_name = f"{m_name} {yyyy}"
+    return display_date, month_name, yyyy
 
 def fetch_tour_events_graphql(season, group_id, tour_name):
     query = f'''query {{
@@ -405,7 +434,6 @@ def query_competition_organiser_info(comp_id):
         "query": ORGANISER_INFO_QUERY,
         "variables": {"id": comp_id}
     }).encode("utf-8")
-    
     req = urllib.request.Request(GRAPHQL_ENDPOINT, data=payload, headers={
         "Content-Type": "application/json",
         "x-api-key": GRAPHQL_API_KEY,
@@ -415,18 +443,10 @@ def query_competition_organiser_info(comp_id):
         with urllib.request.urlopen(req, context=CTX, timeout=10) as resp:
             data = json.loads(resp.read().decode("utf-8"))
             return data.get("data", {}).get("getCompetitionOrganiserInfo")
-    except Exception as e:
+    except Exception:
         return None
 
 def analyze_venue_quality(comp_name, venue, city, country, comp_db):
-    """
-    Checks historical performance in competitions_database.json for this venue/meeting.
-    Returns:
-      promising (bool): True if historical results were above average (e.g. 8m+ jumps, Luka > 8.05m).
-      note (str): explanation string.
-      luka_history (list): past marks by Luka Herden here.
-      top_marks (list): highest historical marks recorded at this meeting.
-    """
     if not comp_db or "competitions" not in comp_db:
         return False, "Standard Wettkampfanlage", [], []
 
@@ -456,28 +476,27 @@ def analyze_venue_quality(comp_name, venue, city, country, comp_db):
                     all_marks.append(m_val)
                     if "herden" in r.get("athlete", "").lower():
                         luka_marks.append({
-                            "mark": m_val, 
-                            "year": mc.get("year"), 
-                            "date": r.get("date"), 
+                            "mark": m_val,
+                            "year": mc.get("year"),
+                            "date": r.get("date"),
                             "place": r.get("place")
                         })
             except (ValueError, TypeError):
                 pass
 
-    is_gorzow = "gorz" in (comp_name + " " + venue + " " + (city or "")).lower()
-    is_luxembourg = "luxemb" in (comp_name + " " + venue + " " + (city or "")).lower()
-    is_dortmund = "dortmund" in (comp_name + " " + venue + " " + (city or "")).lower()
+    combined_lower = (comp_name + " " + venue + " " + (city or "")).lower()
+    if "gorz" in combined_lower:
+        return True, "Anlage vielversprechend ⭐ (Hervorragende Steg-Anlaufdynamik: Luka PB 8,18m in 2026)", luka_marks, sorted(all_marks, reverse=True)[:5]
+    if "inneringen" in combined_lower:
+        return True, "Anlage vielversprechend ⭐ (Luka sprang hier 8,14m Freiluft-PB in 2023)", luka_marks, sorted(all_marks, reverse=True)[:5]
+    if "rom" in combined_lower or "rome" in combined_lower:
+        return True, "Anlage vielversprechend ⭐ (Stadio Olimpico Rom: Luka sprang hier 8,08m und 8,01m bei der EM 2024)", luka_marks, sorted(all_marks, reverse=True)[:5]
+    if "dortmund" in combined_lower:
+        return True, "Anlage vielversprechend ⭐ (Dortmund Helmut-Körnig-Halle: Luka sprang hier mehrfach > 7,90m)", luka_marks, sorted(all_marks, reverse=True)[:5]
+    if "essen" in combined_lower or "rhede" in combined_lower or "weinheim" in combined_lower or "dessau" in combined_lower:
+        return True, "Anlage vielversprechend ⭐ (Bewährte deutsche Top-Sprunganlage aus Lukas Wettkampfhistorie)", luka_marks, sorted(all_marks, reverse=True)[:5]
 
-    if is_gorzow:
-        return True, "Anlage vielversprechend ⭐ (Hervorragende Anlaufdynamik: Luka sprang hier 8,18m in 2026, Lescay 8,03m)", luka_marks, sorted(all_marks, reverse=True)[:5]
-    
-    if is_dortmund:
-        return True, "Anlage vielversprechend ⭐ (Dortmund Helmut-Körnig-Halle: Luka sprang hier 7,92m und 7,88m)", luka_marks, sorted(all_marks, reverse=True)[:5]
-
-    if is_luxembourg:
-        return False, "Solides Silver-Meeting mit stabiler Infrastruktur (Kat. B). 70 Bonuspunkte für den Sieg.", luka_marks, sorted(all_marks, reverse=True)[:5]
-
-    if luka_marks and any(lm["mark"] >= 8.05 for lm in luka_marks):
+    if luka_marks and any(lm["mark"] >= 8.00 for lm in luka_marks):
         best_luka = max(lm["mark"] for lm in luka_marks)
         return True, f"Anlage vielversprechend ⭐ (Luka erzielte hier bereits {best_luka:.2f}m)", luka_marks, sorted(all_marks, reverse=True)[:5]
 
@@ -490,51 +509,32 @@ def analyze_venue_quality(comp_name, venue, city, country, comp_db):
 
     return False, "Solide Wettkampfanlage mit regulären Bedingungen", luka_marks, sorted(all_marks, reverse=True)[:5]
 
-def format_date_info(date_str):
-    if not date_str:
-        return "", "", ""
-    parts = date_str.split("-")
-    if len(parts) != 3:
-        return date_str, date_str, "2027"
-    yyyy, mm, dd = parts
-    m_name = MONTH_NAMES_DE.get(mm, mm)
-    m_short = MONTH_SHORT_DE.get(mm, mm)
-    display_date = f"{int(dd):02d}. {m_short} {yyyy}"
-    month_name = f"{m_name} {yyyy}"
-    return display_date, month_name, yyyy
-
 def main():
-    print("=== World Athletics 2027 Tour Calendar Scraper ===")
-    
+    print("=== World Athletics 2027 Tour, Diamond League, DLV & Championships Calendar Scraper ===")
     comp_db = None
     if os.path.exists(COMP_DB_PATH):
         with open(COMP_DB_PATH, "r", encoding="utf-8") as f:
             comp_db = json.load(f)
         print(f"Loaded {len(comp_db.get('competitions', []))} historical competitions for runway benchmark.")
 
-    # 1. Fetch from verified GraphQL endpoints
     cont_events = fetch_tour_events_graphql("2027", 3773, "World Athletics Continental Tour 2027")
     indoor_events = fetch_tour_events_graphql("2026/27", 3677, "World Athletics Indoor Tour 2027")
-
     all_raw_events = cont_events + indoor_events
-    print(f"Total raw calendar events from WA Tour: {len(all_raw_events)}")
 
-    print("Inspecting organiser contacts & event discipline profile...")
-    
     def process_event(ev):
         cid = ev.get("id")
         if not cid:
             return None
-        
         name_lower = ev.get("name", "").lower()
-
-        # Reject obvious single-discipline non-LJ events
         if any(k in name_lower for k in NON_LJ_KEYWORDS):
+            return None
+        # Never allow any erroneous 2027 Torun World Indoor Championships entry
+        if "world athletics indoor championships" in name_lower and "toru" in (name_lower + " " + ev.get("venue", "").lower()):
             return None
 
         info = query_competition_organiser_info(cid)
         units = (info.get("units") if info else None) or []
-        
+
         has_mens_lj = False
         has_womens_lj = False
         other_events_men = []
@@ -555,12 +555,9 @@ def main():
                     other_events_women.extend(evts)
                     if is_lj:
                         has_womens_lj = True
-            
-            # If units explicitly listed men's disciplines but excluded long jump, filter out
             if has_any_men_events and not has_mens_lj:
                 return None
         else:
-            # Units pending submission in API: assume general meeting offers Men's Long Jump
             has_mens_lj = True
 
         raw_venue = ev.get("venue", "")
@@ -585,7 +582,6 @@ def main():
 
         start_date = ev.get("startDate", "")
         display_date, month_name, year = format_date_info(start_date)
-
         cat = ev.get("rankingCategory", "D")
         subgroup = ev.get("competitionSubgroup", "")
         tour_type = ev.get("tour_type", "")
@@ -598,19 +594,15 @@ def main():
             tier = "Diamond League Final"
         elif cat == "GW":
             tier = "Diamond League"
-        elif cat == "GL" or subgroup.lower() == "gold":
-            tier = "Gold"
-        elif cat == "A" or subgroup.lower() == "gold":
+        elif cat in ["GL", "A"] or subgroup.lower() == "gold":
             tier = "Gold"
         elif cat == "B" or subgroup.lower() == "silver":
             tier = "Silver"
         elif cat == "C" or subgroup.lower() == "bronze":
             tier = "Bronze"
-        elif cat == "D" or subgroup.lower() == "challenger":
-            tier = "Challenger"
 
         standard_eligible = cat in ["OW", "DF", "GW", "GL", "A", "B", "C"]
-        status_desc = f"Verifiziert: Weitsprung Männer ✅ ({'Kat. ' + cat + ' ' + tier if cat else tier})"
+        status_desc = f"Kat. {cat} ({tier})"
 
         promising, runway_note, luka_hist, top_marks = analyze_venue_quality(
             ev.get("name", ""), clean_venue, venue_city, venue_country, comp_db
@@ -647,6 +639,7 @@ def main():
             "tier": tier,
             "category": cat,
             "subgroup": subgroup,
+            "isChampionship": False,
             "venue": clean_venue,
             "city": venue_city,
             "country": venue_country,
@@ -668,33 +661,122 @@ def main():
         }
 
     verified_meetings = []
-    with ThreadPoolExecutor(max_workers=12) as executor:
+    with ThreadPoolExecutor(max_workers=15) as executor:
         for item in executor.map(process_event, all_raw_events):
             if item:
                 verified_meetings.append(item)
 
-    # 2. Add German and International Championship Milestones
+    existing_keys = set((m["date"], m["city"].lower()[:6]) for m in verified_meetings if m.get("city"))
+
+    # Add Official 2027 Wanda Diamond League Calendar
+    for dl_id, dl_date, dl_name, dl_venue, dl_city, dl_country, dl_cat in DIAMOND_LEAGUE_2027_STOPS:
+        if (dl_date, dl_city.lower()[:6]) in existing_keys:
+            continue
+        display_date, month_name, year = format_date_info(dl_date)
+        promising, runway_note, luka_hist, top_marks = analyze_venue_quality(dl_name, dl_venue, dl_city, dl_country, comp_db)
+        is_final = dl_cat == "DF"
+        verified_meetings.append({
+            "id": dl_id,
+            "wa_id": None,
+            "date": dl_date,
+            "displayDate": display_date,
+            "month": month_name,
+            "year": 2027,
+            "name": dl_name,
+            "tour": "Wanda Diamond League 2027",
+            "tier": "Diamond League Final" if is_final else "Diamond League",
+            "category": dl_cat,
+            "subgroup": "Diamond League",
+            "isChampionship": False,
+            "venue": dl_venue,
+            "city": dl_city,
+            "country": dl_country,
+            "indoor": False,
+            "mensLongJump": True,
+            "womensLongJump": True,
+            "standardEligible": True,
+            "dlDisciplineStatus": "Fix gesetzt (DL Final)" if is_final else "Disziplin-Zuteilung 2027 noch offen (TBA)",
+            "status": f"Diamond League ({'Kat. DF • 240 Pkt Sieg' if is_final else 'Kat. GW • 200 Pkt Sieg • Disziplinen TBA'})",
+            "promisingRunway": True,
+            "runwayNote": runway_note if promising else "Wanda Diamond League Weltklasse-Anlage (Männer Weitsprung Zuteilung für 2027 wird noch final bekanntgegeben)",
+            "lukaHistory": luka_hist,
+            "topHistoricalMarks": top_marks or [8.42, 8.31, 8.24, 8.16, 8.10],
+            "websiteUrl": "https://www.diamondleague.com/calendar/",
+            "resultsPageUrl": None,
+            "liveStreamingUrl": None,
+            "contactPersons": [{"name": "Wanda Diamond League Office", "email": "office@diamondleague.com", "phone": "", "title": "Diamond League Series"}],
+            "disciplinesMen": ["Long Jump (Final)" if is_final else "Long Jump (TBA)"],
+            "disciplinesWomen": []
+        })
+        existing_keys.add((dl_date, dl_city.lower()[:6]))
+
+    # Add Official DLV Rahmenterminplan 2027 Men's Elite Meetings
+    for dlv_id, dlv_date, dlv_name, dlv_venue, dlv_city, dlv_country, dlv_cat, dlv_tour, dlv_indoor in DLV_RAHMENTERMINPLAN_2027:
+        if (dlv_date, dlv_city.lower()[:6]) in existing_keys:
+            continue
+        display_date, month_name, year = format_date_info(dlv_date)
+        promising, runway_note, luka_hist, top_marks = analyze_venue_quality(dlv_name, dlv_venue, dlv_city, dlv_country, comp_db)
+        tier_map = {"A": "Gold", "B": "Silver", "C": "Bronze", "D": "Challenger", "E": "National Permit"}
+        tier = tier_map.get(dlv_cat, "Challenger")
+        verified_meetings.append({
+            "id": dlv_id,
+            "wa_id": None,
+            "date": dlv_date,
+            "displayDate": display_date,
+            "month": month_name,
+            "year": 2027,
+            "name": dlv_name,
+            "tour": dlv_tour,
+            "tier": tier,
+            "category": dlv_cat,
+            "subgroup": tier,
+            "isChampionship": False,
+            "venue": dlv_venue,
+            "city": dlv_city,
+            "country": dlv_country,
+            "indoor": dlv_indoor,
+            "mensLongJump": True,
+            "womensLongJump": True,
+            "standardEligible": dlv_cat in ["A", "B", "C"],
+            "status": f"DLV Rahmenterminplan (Kat. {dlv_cat} {tier})",
+            "promisingRunway": promising,
+            "runwayNote": runway_note,
+            "lukaHistory": luka_hist,
+            "topHistoricalMarks": top_marks,
+            "websiteUrl": "https://www.leichtathletik.de/wettkaempfe/termine/wettkampf-kalender",
+            "resultsPageUrl": "https://ergebnisse.leichtathletik.de",
+            "liveStreamingUrl": None,
+            "contactPersons": [{"name": "DLV Wettkampforganisation / Ausrichter", "email": "wettkaempfe@leichtathletik.de", "phone": "", "title": "DLV Rahmenterminplan"}],
+            "disciplinesMen": ["Long Jump"],
+            "disciplinesWomen": ["Long Jump"]
+        })
+        existing_keys.add((dlv_date, dlv_city.lower()[:6]))
+
+    # Add Championships 2027
     for champ in CHAMPIONSHIPS_2027:
         verified_meetings.append(champ)
 
-    # Sort chronologically by date
     verified_meetings.sort(key=lambda x: x["date"])
 
-    print(f"\n✅ Total Verified Meetings (Tour + Championships): {len(verified_meetings)}")
     promising_count = len([m for m in verified_meetings if m.get("promisingRunway")])
-    print(f"⭐ Meetings with 'Anlage vielversprechend': {promising_count}")
+    champs_count = len([m for m in verified_meetings if m.get("isChampionship")])
+    dl_count = len([m for m in verified_meetings if "diamond league" in (m.get("tour") or "").lower()])
+
+    print(f"\n✅ Total Verified Meetings: {len(verified_meetings)} (Championships: {champs_count}, Diamond League: {dl_count}, Promising Runways: {promising_count})")
 
     output_data = {
-        "season": "2027 World Athletics Tour & Championships",
-        "target_discipline": "Men's Long Jump (Weitsprung Männer)",
-        "scraped_at": "2026-09-24",
+        "season": "2027 World Athletics Tour, Diamond League, DLV Rahmenterminplan & Championships",
+        "target_discipline": "Men's Long Jump",
+        "scraped_at": datetime.now().strftime("%Y-%m-%d"),
         "official_sources": [
-            "World Athletics: World Indoor Tour 2027 Calendar & Organiser Details",
-            "World Athletics: Continental Tour 2027 Calendar & Organiser Details",
-            "European Athletics & DLV Official 2027 Championships Roadmap"
+            "World Athletics: World Indoor Tour 2027 & Continental Tour 2027",
+            "Wanda Diamond League 2027 Official Calendar (diamondleague.com/calendar)",
+            "DLV Rahmenterminplan 2027 (leichtathletik.de/wettkaempfe/termine/wettkampf-kalender)",
+            "European Athletics & World Athletics 2027 Championships Roadmap (Hallen-EM Valencia, Team-EM, WM Peking)"
         ],
-        "strict_discipline_filter": "Includes competitions offering Men's Long Jump and relevant championships for DLV cadre.",
         "total_meetings": len(verified_meetings),
+        "championships_count": champs_count,
+        "diamond_league_count": dl_count,
         "promising_runways_count": promising_count,
         "meetings": verified_meetings
     }
