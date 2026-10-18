@@ -474,122 +474,190 @@
         </div>
       </div>
 
-      <!-- 4. Correlation Explorer (Automatic Binary 0/1 Group Comparison vs. Scatter + Lag Statistics) -->
+      <!-- 4. Correlation Explorer (Automatic Binary 0/1 Group Comparison vs. Scatter + Tag +1 / Schlaf Tag 0 Logic) -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
           <div class="flex items-center gap-2 flex-wrap">
             <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-1.5 font-mono">
               <span class="text-cyan-400">🔬</span>
-              <span>Correlation & Statistik-Engine</span>
+              <span>Correlation</span>
             </h3>
-            <span id="corrChartTypeBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
-              Lineare Regression (Metrisch)
+            <span id="corrChartModeBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
+              0/1 Gruppen-Vergleich (Tag +1)
             </span>
           </div>
           <div class="flex items-center gap-2 flex-wrap">
             <span class="text-[10px] text-slate-400 font-mono uppercase font-bold">Korrelation:</span>
             <span id="corrPearsonVal" class="px-2.5 py-1 rounded text-xs font-black font-mono bg-emerald-950 text-emerald-300 border border-emerald-700">
-              r = +0.78
+              r_pb = +0.14
             </span>
           </div>
         </div>
 
-        <!-- Selector Controls: All numerical + binary categorical options -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- Selector Controls: Y-Axis, X-Axis, and Time-Lag / Long-Term Mode -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1">
             <label class="text-[10px] font-bold font-mono uppercase text-cyan-400 block">
               Ziel-Parameter (Y-Achse):
             </label>
             <select id="corrVarA" onchange="AnalyticsModule.onCorrelationParamChanged()" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-cyan-500">
-              <optgroup label="🎯 Zielvariablen & Performance">
-                <option value="weitsprung_wk" selected>🎯 Weitsprung WK (m) [Absolute Zielvariable]</option>
-                <option value="whoop_recovery_pct">⚡ Whoop Recovery Score (%) [Tägliche ZNS-Readiness]</option>
-                <option value="sleep_performance_pct">Whoop Schlaf-Performance (%)</option>
-                <option value="whoop_strain">Whoop Day Strain (0-21)</option>
-                <option value="eff_mark_m">Effektive Weite (m) [ab Absprung]</option>
-                <option value="approach_speed_11m_to_1m">Anlauf-Geschwindigkeit Vmax (m/s)</option>
-                <option value="sprint_speed">Sprint-Geschwindigkeit Vmax (m/s)</option>
-                <option value="rsi_score">DJ50 Reaktivitätsindex (RSI)</option>
+              <optgroup label="⚡ Readiness & Wettkampf (Hauptziele)">
+                <option value="whoop_recovery_pct" selected>⚡ Whoop Recovery Score (%)</option>
+                <option value="sleep_performance_pct">💤 Whoop Sleep Score (%)</option>
+                <option value="weitsprung_wk">🎯 Weitsprung WK (m)</option>
+                <option value="whoop_strain">🔥 Whoop Strain (0–21)</option>
+                <option value="ref_body_weight_kg">⚖️ Körpergewicht inkl. Trend-Interpolation (kg)</option>
+                <option value="body_weight_kg">⚖️ Körpergewicht exakt gemessen (kg)</option>
+                <option value="body_fat_pct">📉 Körperfett (%)</option>
               </optgroup>
-              <optgroup label="🏋️ Kraft & Biomechanik">
-                <option value="umsetzen_e1rm_kg">Umsetzen e1RM (kg)</option>
-                <option value="hipthrust_e1rm_kg">Hip-Thrust e1RM (kg)</option>
-                <option value="trapbar_e1rm_kg">Trapbar Deadlift e1RM (kg)</option>
-                <option value="aufsteiger_e1rm_kg">Aufsteiger e1RM (kg)</option>
-                <option value="cmj_mit_armen">CMJ mit Armen (cm)</option>
-                <option value="cmj_ohne_arme">CMJ ohne Arme (cm)</option>
-                <option value="body_weight_kg">Körpergewicht (kg)</option>
-                <option value="body_fat_pct">Körperfett (%)</option>
-              </optgroup>
-              <optgroup label="📊 Scores & Beanspruchung (Skala 1–4)">
+              <optgroup label="📊 Subjektive Scores (Skala 1–4)">
                 <option value="performance_score">Leistungs-Score (1–4: Schlecht bis Super)</option>
-                <option value="focus_score">Fokus-Score (1–4: Unkonzentriert bis Flow)</option>
+                <option value="focus_score">Fokus-Score (1–4: Schlecht bis Super)</option>
                 <option value="pain_score">Schmerz-Score (1–4: Keine bis Stark)</option>
-                <option value="fatigue_score">Erschöpfungs-Score (1–4: Hoch bis Regenerativ)</option>
+                <option value="fatigue_score">Erschöpfungs-Score (1–4: Wenig bis Stark)</option>
                 <option value="duration_min">Trainingsdauer (Minuten)</option>
+              </optgroup>
+              <optgroup label="🏋️ Kraft (e1RM) & Sprint/Diagnostik">
+                <option value="trapbar_e1rm_kg">e1RM Trapbar (kg)</option>
+                <option value="hipthrust_e1rm_kg">e1RM Hip-Thrust (kg)</option>
+                <option value="umsetzen_e1rm_kg">e1RM Umsetzen (kg)</option>
+                <option value="aufsteiger_e1rm_kg">e1RM Aufsteiger (kg)</option>
+                <option value="sprint_60m_wk">60m WK (s)</option>
+                <option value="sprint_100m_wk">100m WK (s)</option>
+                <option value="eff_mark_m">Weite effektiv (m)</option>
+                <option value="approach_speed_11m_to_1m">Vmax_Weit (m/s)</option>
               </optgroup>
             </select>
           </div>
 
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1">
             <label class="text-[10px] font-bold font-mono uppercase text-amber-400 block">
-              Einflussfaktor (X-Achse):
+              Einflussfaktor (X-Achse aus Google Sheets):
             </label>
             <select id="corrVarB" onchange="AnalyticsModule.onCorrelationParamChanged()" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-amber-500">
-              <optgroup label="⚡ Whoop & Readiness">
-                <option value="whoop_recovery_pct" selected>Whoop Recovery Score (%)</option>
-                <option value="sleep_performance_pct">Whoop Schlaf-Performance (%)</option>
-                <option value="whoop_strain">Whoop Day Strain (0-21)</option>
-                <option value="body_weight_kg">Körpergewicht (kg)</option>
-                <option value="body_fat_pct">Körperfett (%)</option>
+              <optgroup label="💊 Supplements (Spalte Supplements • Standard: Tag +1)">
+                <option value="supp_Kreatin" selected>Supplement: Kreatin (n=556)</option>
+                <option value="supp_Magnesium">Supplement: Magnesium (n=555)</option>
+                <option value="supp_Multivitamin">Supplement: Multivitamin (n=578)</option>
+                <option value="supp_Omega-3">Supplement: Omega-3 (n=523)</option>
+                <option value="supp_Vit D">Supplement: Vit D (n=519)</option>
+                <option value="supp_Zink">Supplement: Zink (n=343)</option>
+                <option value="supp_Koffein">Supplement: Koffein (n=301)</option>
+                <option value="supp_B12">Supplement: B12 (n=174)</option>
+                <option value="supp_Ashwaghanda">Supplement: Ashwaghanda (n=173)</option>
+                <option value="supp_Elektrolyte">Supplement: Elektrolyte (n=123)</option>
+                <option value="supp_Probiotika">Supplement: Probiotika (n=22)</option>
+                <option value="supp_Ecdysteron">Supplement: Ecdysteron (n=9)</option>
               </optgroup>
-              <optgroup label="🥗 Ernährung & Makros">
-                <option value="calories_kcal">Kalorien (kcal)</option>
+              <optgroup label="🧊 Regeneration (Spalte Regeneration • Standard: Tag +1)">
+                <option value="regen_Blackroll">Regeneration: Blackroll (n=261)</option>
+                <option value="regen_Dehnen">Regeneration: Dehnen (n=405)</option>
+                <option value="regen_Lympho">Regeneration: Lympho (n=102)</option>
+                <option value="regen_Physio">Regeneration: Physio (n=164)</option>
+                <option value="regen_Kalte Dusche">Regeneration: Kalte Dusche (n=233)</option>
+                <option value="regen_Meditation">Regeneration: Meditation (n=93)</option>
+                <option value="regen_Outdoor-Time">Regeneration: Outdoor-Time (n=702)</option>
+                <option value="regen_Verdauungsspaziergang">Regeneration: Verdauungsspaziergang (n=117)</option>
+                <option value="regen_Spaziergang">Regeneration: Spaziergang (n=93)</option>
+                <option value="regen_Sauna">Regeneration: Sauna (n=23)</option>
+                <option value="regen_Eisbad">Regeneration: Eisbad (n=23)</option>
+                <option value="regen_Neuroathletik">Regeneration: Neuroathletik (n=13)</option>
+                <option value="regen_Flowlife">Regeneration: Flowlife (n=8)</option>
+                <option value="regen_Nap">Regeneration: Nap (n=14)</option>
+                <option value="regen_Libido">Regeneration: Libido (n=354)</option>
+                <option value="regen_Urlaub">Regeneration: Urlaub (n=57)</option>
+                <option value="regen_Zocken">Regeneration: Zocken (n=12)</option>
+              </optgroup>
+              <optgroup label="💤 Schlaf-Einträge (Spalte Schlaf • Standard: Gleicher Tag 0)">
+                <option value="sleep_Bett geteilt">Schlaf: Bett geteilt (n=611)</option>
+                <option value="sleep_Schlafmaske">Schlaf: Schlafmaske (n=366)</option>
+                <option value="sleep_Anderes Bett">Schlaf: Anderes Bett (n=277)</option>
+                <option value="sleep_Unterbrechung">Schlaf: Unterbrechung (n=237)</option>
+                <option value="sleep_Gelesen">Schlaf: Gelesen (n=235)</option>
+                <option value="sleep_Hot-Shower">Schlaf: Hot-Shower (n=223)</option>
+                <option value="sleep_Nasenpflaster">Schlaf: Nasenpflaster (n=205)</option>
+                <option value="sleep_Late Meal">Schlaf: Late Meal (n=188)</option>
+                <option value="sleep_Zahnspange">Schlaf: Zahnspange (n=119)</option>
+                <option value="sleep_Kopfhörer">Schlaf: Kopfhörer (n=72)</option>
+                <option value="sleep_Heiß">Schlaf: Heiß (n=39)</option>
+                <option value="sleep_Alkohol">Schlaf: Alkohol (n=7)</option>
+              </optgroup>
+              <optgroup label="🥗 Ernährung & Makros (Standard: Tag +1)">
+                <option value="nutr_⭐⭐⭐ Diszipliniert">Ernährung: ⭐⭐⭐ Diszipliniert (n=106)</option>
+                <option value="nutr_⭐⭐ Okay / Im Soll">Ernährung: ⭐⭐ Okay / Im Soll (n=181)</option>
+                <option value="nutr_⭐ Schlecht (Junk Food / Timing)">Ernährung: ⭐ Schlecht (Junk Food / Timing) (n=62)</option>
+                <option value="calories_kcal">Calories (kcal)</option>
                 <option value="protein_g">Protein (g)</option>
                 <option value="carbs_g">Carbs (g)</option>
                 <option value="fat_g">Fat (g)</option>
               </optgroup>
-              <optgroup label="🏋️ Kraft & Anlauf">
-                <option value="approach_speed_11m_to_1m">Anlauf-Geschwindigkeit (m/s)</option>
-                <option value="sprint_speed">Sprint-Geschwindigkeit (m/s)</option>
-                <option value="umsetzen_e1rm_kg">Umsetzen e1RM (kg)</option>
-                <option value="hipthrust_e1rm_kg">Hip-Thrust e1RM (kg)</option>
-                <option value="trapbar_e1rm_kg">Trapbar e1RM (kg)</option>
-                <option value="aufsteiger_e1rm_kg">Aufsteiger e1RM (kg)</option>
-                <option value="rsi_score">DJ50 Reaktivitätsindex (RSI)</option>
+              <optgroup label="👥 Sozial & Rahmenfaktoren (Standard: Tag +1)">
+                <option value="social_Freunde">Sozial: Freunde (n=366)</option>
+                <option value="social_Reisestress">Sozial: Reisestress (n=226)</option>
+                <option value="social_Me-Time">Sozial: Me-Time (n=180)</option>
+                <option value="social_Beziehungsstress">Sozial: Beziehungsstress (n=157)</option>
+                <option value="social_Arbeitsstress">Sozial: Arbeitsstress (n=14)</option>
+                <option value="trainer_anwesend">Trainer: Anwesend TRUE/FALSE</option>
               </optgroup>
-              <optgroup label="💊 Einzelsupplements (Binär 0/1 • Punktbiseriale Auswertung)">
-                <option value="supp_kreatin">Supplement: Kreatin (Ja/Nein)</option>
-                <option value="supp_vit_d">Supplement: Vitamin D (Ja/Nein)</option>
-                <option value="supp_omega_3">Supplement: Omega-3 (Ja/Nein)</option>
-                <option value="supp_magnesium">Supplement: Magnesium (Ja/Nein)</option>
-                <option value="supp_multivitamin">Supplement: Multivitamin (Ja/Nein)</option>
-                <option value="supp_zink">Supplement: Zink (Ja/Nein)</option>
-                <option value="supp_koffein">Supplement: Koffein (Ja/Nein)</option>
-                <option value="supp_b12">Supplement: Vitamin B12 (Ja/Nein)</option>
-                <option value="supp_ashwaghanda">Supplement: Ashwaghanda (Ja/Nein)</option>
-                <option value="supp_elektrolyte">Supplement: Elektrolyte (Ja/Nein)</option>
+              <optgroup label="🏃 Trainingseinheit & Schwerpunkt (Standard: Tag +1)">
+                <option value="te_Kraft">Trainingseinheit: Kraft</option>
+                <option value="te_Sprint">Trainingseinheit: Sprint</option>
+                <option value="te_Sprung">Trainingseinheit: Sprung</option>
+                <option value="te_Tempos">Trainingseinheit: Tempos</option>
+                <option value="te_Regeneration">Trainingseinheit: Regeneration</option>
+                <option value="te_Ausdauer">Trainingseinheit: Ausdauer</option>
+                <option value="te_Stabi">Trainingseinheit: Stabi</option>
+                <option value="te_Wettkampf">Trainingseinheit: Wettkampf</option>
+                <option value="te_Frei">Trainingseinheit: Frei</option>
+                <option value="prot_fct">Protokoll: French Contrast Training (FCT)</option>
+                <option value="prot_1080">Protokoll: 1080 Sprint</option>
               </optgroup>
-              <optgroup label="🧊 Regenerationsmaßnahmen (Binär 0/1 • Punktbiseriale Auswertung)">
-                <option value="regen_lympho">Regeneration: Lymphomat (Ja/Nein)</option>
-                <option value="regen_physio">Regeneration: Physiotherapie (Ja/Nein)</option>
-                <option value="regen_kalte_dusche">Regeneration: Kalte Dusche / Eisbad (Ja/Nein)</option>
-                <option value="regen_sauna">Regeneration: Sauna (Ja/Nein)</option>
-                <option value="regen_dehnen">Regeneration: Dehnen / Blackroll (Ja/Nein)</option>
-                <option value="regen_outdoor">Regeneration: Outdoor / Spaziergang (Ja/Nein)</option>
-                <option value="regen_meditation">Regeneration: Meditation (Ja/Nein)</option>
+              <optgroup label="⚡ Metrische Werte (Whoop, Gewicht, Kraft)">
+                <option value="ref_body_weight_kg">Körpergewicht inkl. Trend-Interpolation (kg)</option>
+                <option value="body_weight_kg">Körpergewicht exakt gemessen (kg)</option>
+                <option value="body_fat_pct">Körperfett (%)</option>
+                <option value="whoop_strain">Whoop Strain (0–21)</option>
+                <option value="whoop_recovery_pct">Whoop Recovery (%)</option>
+                <option value="sleep_performance_pct">Whoop Sleep (%)</option>
+                <option value="trapbar_e1rm_kg">e1RM Trapbar (kg)</option>
+                <option value="hipthrust_e1rm_kg">e1RM Hip-Thrust (kg)</option>
+                <option value="umsetzen_e1rm_kg">e1RM Umsetzen (kg)</option>
+                <option value="aufsteiger_e1rm_kg">e1RM Aufsteiger (kg)</option>
               </optgroup>
-              <optgroup label="💤 Schlaf- & Rahmenfaktoren (Binär 0/1)">
-                <option value="sleep_bett_geteilt">Schlaf: Bett geteilt (Ja/Nein)</option>
-                <option value="trainer_anwesend">Trainer: Anwesend (Ja/Nein)</option>
-              </optgroup>
+            </select>
+          </div>
+
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1">
+            <label class="text-[10px] font-bold font-mono uppercase text-emerald-400 block">
+              Zeit-Zuordnung (Tag +1 vs. Tag 0 vs. Langfrist-Trend):
+            </label>
+            <select id="corrLagModeSelect" onchange="AnalyticsModule.onCorrelationParamChanged()" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
+              <option value="smart" selected>⚡ Standard: Tag +1 (Schlaf = Tag 0)</option>
+              <option value="lag1">📅 Immer Folgetag (Tag +1)</option>
+              <option value="lag0">☀️ Immer Gleicher Tag (Tag 0)</option>
+              <option value="rolling14">📈 Saison-Muster (14-Tage Rollierend)</option>
             </select>
           </div>
         </div>
 
-        <!-- Dynamic Statistical KPI Strip (Auto-populated for Binary 0/1 or Continuous variables) -->
+        <!-- Dynamic Statistical KPI Strip -->
         <div id="corrStatsSummaryRow" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center font-mono text-xs">
-          <!-- Populated dynamically by analytics.js -->
+          <div class="bg-slate-950/90 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase font-bold">Korrelation (r / r_pb)</div>
+            <div id="corrStatR" class="text-xs font-black text-cyan-300 mt-0.5">-</div>
+          </div>
+          <div class="bg-slate-950/90 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase font-bold">Gruppen-Delta (Ja vs. Nein)</div>
+            <div id="corrStatDelta" class="text-xs font-black text-emerald-400 mt-0.5">-</div>
+          </div>
+          <div class="bg-slate-950/90 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase font-bold">Effektstärke & Welch-t</div>
+            <div id="corrStatEffect" class="text-xs font-black text-amber-300 mt-0.5">-</div>
+          </div>
+          <div class="bg-slate-950/90 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase font-bold">Zeit-Modus & Vergleich</div>
+            <div id="corrStatLag" class="text-xs font-black text-purple-300 mt-0.5">-</div>
+          </div>
         </div>
 
         <!-- Chart Canvas (Auto-switches between Scatter+Trendline and Binary Group Mean Comparison) -->

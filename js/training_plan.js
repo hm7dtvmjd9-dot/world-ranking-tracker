@@ -15,104 +15,104 @@ const TrainingPlanModule = (() => {
   let activeView = 'block'; // 'week' | 'month' | 'block' | 'career_lab' | 'search'
   let currentWeekStart = '2026-10-12';
   let currentMonthYear = '2026-10';
-  let activeBlockPreset = 'spezial_fct_spikes'; // 'aufbau_gpp' | 'spezial_fct_spikes' | 'hallenvorbereitung' | 'hallensaison' | 'sommeraufbau' | 'sommersaison'
+  let activeBlockPreset = 'aufbau_gpp'; // 'aufbau_gpp' | 'spezial_fct_spikes' | 'hallenvorbereitung' | 'hallensaison' | 'sommeraufbau' | 'sommersaison'
   let blockSyncMode = 'block_day'; // 'block_day' (Tag 1..N des jeweiligen Blocks) | 'calendar_date'
   let activeDomainFilter = 'ALL'; // 'ALL' | 'JUMP_SPIKES' | 'SPRINT_MAXV' | 'STRENGTH_FCT' | 'PLYO_REACTIVE' | 'TEMPO_REGEN'
   let hideNonMatchingDomainDays = false;
-  let activeBlockYears = [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019];
+  let activeBlockYears = [2026, 2025, 2024, 2023, 2022];
   let planSearchQuery = '';
   let initializedWeek = false;
 
-  // Authentic year-specific block definitions derived from Luka's 2019-2026 Google Sheets logs
+  // Authentic year-specific block definitions verified from Luka's 2019-2026 Google Sheets logs & milestone dates
   const DEFAULT_YEAR_BLOCKS = {
     'aufbau_gpp': {
-      title: '1. Allgemeiner Aufbau / GPP (Herbst-Einstieg)',
-      subtitle: 'Grundlagenblock nach Saisonpause (individueller Start je nach Saisonende / WM / Olympia)',
-      durationDays: 42,
+      title: '1. Aufbau-Beginn (Block 1: 2022 – 2026)',
+      subtitle: 'Exakter Start des Winter-Aufbaus je Jahr (Synchronisiert ab Tag 1 des jeweiligen Aufbaus)',
+      durationDays: 45,
       years: {
-        2026: { start: '2026-09-23', end: '2026-11-03', note: 'Einstieg 23.09. / 28.09.26 • Frühe 1080-Integration ab Tag 15 (08.10.)' },
-        2025: { start: '2025-09-15', end: '2025-10-26', note: 'Früher Aufbau-Start 15.09.25 • Ab 06.10. FCT+1080 • 17.10. schon Spikes!' },
-        2024: { start: '2024-10-17', end: '2024-11-27', note: 'Später Start nach Olympia Paris: 17.10.24 war Tag 1 im Aufbau!' },
-        2023: { start: '2023-09-12', end: '2023-10-23', note: 'Früher Aufbau-Start 12.09.23 vor Olympia-/EM-Saison (8.14m)' },
-        2022: { start: '2022-10-03', end: '2022-11-13', note: 'Klassischer Oktober-Aufbau nach 8.00m Durchbruchs-Saison' },
-        2021: { start: '2021-10-04', end: '2021-11-14', note: 'Herbst-Aufbau 2021' },
-        2020: { start: '2020-09-28', end: '2020-11-08', note: 'Herbst-Aufbau 2020' },
-        2019: { start: '2019-09-30', end: '2019-11-10', note: 'Herbst-Aufbau 2019' }
+        2026: { start: '2026-09-23', end: '2026-11-06', note: 'Aufbau 2026 ab 23.09.2026 bis mind. 18.10.2026 (Tag 26) • Ab 08.10. 1080 • Entscheidung KW 43: Pausewoche vorziehen vs. noch 1 Woche gleiches Muster' },
+        2025: { start: '2025-10-04', end: '2025-11-17', note: 'Aufbau 2025 ab 04.10.2025 • 06.10. Start FCT • 17.10. erstes Mal Spikes • Sekundenläufe bis 01.11. • Nov: 1 Monat BW-Grundausbildung • Grube ab 02.12.2025' },
+        2024: { start: '2024-10-17', end: '2024-11-30', note: 'Aufbau 2024 ab 17.10.2024 (Mannheim) • Erste Sprünge in die Grube am 03.12.2024' },
+        2023: { start: '2023-09-04', end: '2023-10-18', note: 'Aufbau 2023 ab 04.09.2023 (noch in Münster bei altem Trainer) • Spikes ab 20.09.23 • Aggressiver Aufbau (spez. Kraft, ZWL, Pushbull) • Grube ab 12.10.2023' },
+        2022: { start: '2022-08-22', end: '2022-10-05', note: 'Aufbau 2022 ab 22.08.2022 (Basis für Durchbruchsaison 2023!) • Pushbull/ZWL ab 03.10.2022 • Erste Sprünge in die Grube am 20.10.2022' },
+        2021: { start: '2021-10-04', end: '2021-11-17', note: 'Herbst-Aufbau 2021 (Wiederaufbau nach Knie-OP 09/2019 & Corona 2020)' },
+        2020: { start: '2020-09-28', end: '2020-11-11', note: 'Herbst-Aufbau 2020 (Corona-Saison)' },
+        2019: { start: '2019-09-30', end: '2019-11-13', note: 'Reha-Aufbau Herbst 2019 (OP am Absprungknie wegen Jumpers Knee im Sept 2019)' }
       }
     },
     'spezial_fct_spikes': {
-      title: '2. Spezifischer Aufbau / FCT, 1080 & Erste Spikes',
-      subtitle: 'Übergang in FCT-Kraftblöcke, 1080-Widerstandssprints & erste Spikes-Technikeinheiten (Referenz: Mitte Okt 2025)',
+      title: '2. Spezifischer Herbstblock (Erste Spikes, ZWL/1080, Pushbull & FCT)',
+      subtitle: 'Übergang in Spikes, Zugwiderstandsläufe (ZWL / 1080), Pushbull & French Contrast Training (FCT vertikal/horizontal)',
       durationDays: 45,
       years: {
-        2026: { start: '2026-10-05', end: '2026-11-18', note: 'Aktueller Block (KW 41/42) • Angelehnt an Mitte Oktober 2025 (1080 & FCT)' },
-        2025: { start: '2025-10-06', end: '2025-11-19', note: 'Referenz-Block 8.18m-Saison! 06.10. FCT-Start • 17.10. Spikes & KSP' },
-        2024: { start: '2024-11-11', end: '2024-12-22', note: 'Wegen Aufbau-Start am 17.10.24 erst ab 11.11.24 im spezifischen Block!' },
-        2023: { start: '2023-10-23', end: '2023-12-06', note: 'Spezifischer Herbstblock 2023 (Trapbar & Sprint-Technik)' },
-        2022: { start: '2022-10-31', end: '2022-12-14', note: 'Spezifischer Herbstblock 2022' },
+        2026: { start: '2026-10-08', end: '2026-11-21', note: 'Ab 08.10.2026 1080-Sprints • Geplanter Übergang in Block 2 (Halle, Spikes & FCT) ab 26.10. oder 02.11.2026' },
+        2025: { start: '2025-10-17', end: '2025-11-30', note: '17.10.2025 erstes Mal Spikes + FCT vertikal/horizontal + Sekundenläufe bis 01.11.25 • Danach 1 Monat Bundeswehr-Grundausbildung' },
+        2024: { start: '2024-11-04', end: '2024-12-18', note: 'Spezifischer Aufbau Mannheim ab Nov 2024 • Erste Sprünge in die Grube am 03.12.2024' },
+        2023: { start: '2023-09-20', end: '2023-11-03', note: '20.09.2023 erstes Mal Spikes (Münster), viel spezifische Kraft, ZWL & Pushbull • 12.10.2023 erste Sprünge in die Grube' },
+        2022: { start: '2022-10-03', end: '2022-11-16', note: '03.10.2022 Start Pushbull & ZWL (Münster) • 20.10.2022 erste Sprünge in die Grube (Gewicht ~78.35 kg)' },
         2021: { start: '2021-11-01', end: '2021-12-15', note: 'Spezifischer Herbstblock 2021' },
         2020: { start: '2020-10-26', end: '2020-12-09', note: 'Spezifischer Herbstblock 2020' },
-        2019: { start: '2019-10-28', end: '2019-12-11', note: 'Spezifischer Herbstblock 2019' }
+        2019: { start: '2019-10-28', end: '2019-12-11', note: 'Reha-Block Herbst 2019 nach Jumpers-Knee-OP' }
       }
     },
     'hallenvorbereitung': {
-      title: '3. Unmittelbare Hallen-UWV (Anlauf, Pop-Up & MaxV)',
-      subtitle: 'Feinschliff vor dem Hallen-Saisoneinstieg (Dezember bis Ende Januar)',
-      durationDays: 45,
+      title: '3. Erste Sprünge in die Grube & Hallen-UWV',
+      subtitle: 'Synchronisiert ab den ersten Sprüngen in die Grube (3er/5er/7er/9er/11er/13er/15er Anläufe) bis zum Hallen-Einstieg',
+      durationDays: 50,
       years: {
-        2026: { start: '2025-12-08', end: '2026-01-22', note: 'UWV für Hallensaison 2026 ➔ 8.18m PB in Gorzów am 01.02.2026!' },
-        2025: { start: '2024-12-09', end: '2025-01-23', note: 'UWV für Hallensaison 2025 ➔ 8.06m Düsseldorf' },
-        2024: { start: '2023-12-04', end: '2024-01-19', note: 'UWV für Hallensaison 2024 ➔ 7.93m DM Leipzig' },
-        2023: { start: '2022-12-05', end: '2023-01-20', note: 'UWV für Hallensaison 2023 ➔ 7.91m Dortmund' },
-        2022: { start: '2021-12-06', end: '2022-01-20', note: 'UWV für Hallensaison 2022' },
-        2021: { start: '2020-12-07', end: '2021-01-21', note: 'UWV für Hallensaison 2021' },
-        2020: { start: '2019-12-02', end: '2020-01-17', note: 'UWV für Hallensaison 2020' },
-        2019: { start: '2019-01-01', end: '2019-01-25', note: 'UWV 2019' }
+        2026: { start: '2025-12-02', end: '2026-01-22', note: '02.12.2025 erste Sprünge in die Grube (nach BW-Grundausbildung) • FCT vertikal/horizontal + 1080 ➔ 8.18m PB Gorzów (31.01.2026)!' },
+        2025: { start: '2024-12-03', end: '2025-01-17', note: '03.12.2024 erste Sprünge in die Grube ➔ Hallensaison 2025 (7.71m Sindelfingen, 7.67m DM Dortmund)' },
+        2024: { start: '2023-11-27', end: '2024-01-19', note: 'Hallen-UWV nach Trainerwechsel Mannheim ➔ 7.73m DM Halle Leipzig (18.02.2024)' },
+        2023: { start: '2022-10-20', end: '2022-12-08', note: '20.10.2022 erste Sprünge in die Grube (Münster) ➔ 7.72m DM Halle Dortmund & 6.76s 60m PB (Feb 2023)' },
+        2022: { start: '2021-11-29', end: '2022-01-20', note: 'Hallen-UWV 2021/22 ➔ 7.50m Münster Halle (03.02.2022)' },
+        2021: { start: '2020-12-07', end: '2021-01-21', note: 'Hallen-UWV 2020/21' },
+        2020: { start: '2019-12-02', end: '2020-01-17', note: 'Aufbau 2019/20 nach Knie-OP' },
+        2019: { start: '2019-01-01', end: '2019-01-25', note: 'Hallen-UWV 2019' }
       }
     },
     'hallensaison': {
-      title: '4. Hallen-Wettkampfsaison (Indoor Peaks)',
-      subtitle: 'Wettkampf-Steuerung, CNS-Tapering & Peak-Sprünge in der Halle',
-      durationDays: 50,
+      title: '4. Hallen-Wettkampfsaison (Indoor)',
+      subtitle: 'Alle Hallen-Wettkämpfe, ZNS-Steuerung & Belastungsverlauf zwischen den Meetings',
+      durationDays: 55,
       years: {
-        2026: { start: '2026-01-23', end: '2026-03-22', note: '8.18m PB Gorzów • 8.10m Banská Bystrica • 8.08m Hallen-WM Toruń!' },
-        2025: { start: '2025-01-24', end: '2025-03-10', note: '8.06m ISTAF Düsseldorf • Hallen-EM Apeldoorn' },
-        2024: { start: '2024-01-20', end: '2024-02-26', note: '7.93m DM Halle Leipzig' },
-        2023: { start: '2023-01-21', end: '2023-02-26', note: '7.91m Indoor Dortmund' },
-        2022: { start: '2022-01-22', end: '2022-02-28', note: 'Hallensaison 2022' },
+        2026: { start: '2026-01-23', end: '2026-03-22', note: '5 WKs (Ø 7.80m, Ø 84.94 kg): 31.01. Gorzów 8.18m PB! • 02.–06.02. Krank • Ab 18.02. Achilles L • 28.02. DM Dortmund 7.78m • 22.03. Hallen-WM Toruń 7.68m' },
+        2025: { start: '2025-01-18', end: '2025-03-02', note: '6 WKs (Ø 7.52m, Ø 81.05 kg): 18.01. Sindelfingen 7.71m • 09.02. Düsseldorf 7.60m • 22.02. DM Dortmund 7.67m' },
+        2024: { start: '2024-01-20', end: '2024-02-25', note: '2 WKs (Ø 7.61m, Ø 80.26 kg): 04.02. Rochlitz 7.49m • 18.02. DM Halle Leipzig 7.73m' },
+        2023: { start: '2023-01-15', end: '2023-02-25', note: '4 WKs (Ø 7.50m, Ø 81.27 kg): 18.02. 60m PB 6.76s • 19.02. DM Halle Dortmund 7.72m (7.61m Essen, 7.36m Weinheim, 7.31m Neubrandenburg)' },
+        2022: { start: '2022-01-15', end: '2022-02-28', note: '3 WKs (Ø 7.38m, Ø 82.0 kg): 03.02. Münster 7.50m • 29.01. Leverkusen 7.44m • 27.02. DM Leipzig 7.21m' },
         2021: { start: '2021-01-23', end: '2021-02-28', note: 'Hallensaison 2021' },
         2020: { start: '2020-01-18', end: '2020-02-25', note: 'Hallensaison 2020' },
         2019: { start: '2019-01-19', end: '2019-02-24', note: 'Hallensaison 2019' }
       }
     },
     'sommeraufbau': {
-      title: '5. Frühjahr-Aufbau & Trainingslager (März – Mai)',
-      subtitle: 'Übergang Halle ➔ Freiluft, Trainingslager (Belek / Chula Vista) & Anlauf-Aufbau',
+      title: '5. Frühjahrs-Aufbau & Trainingslager (März – Mai)',
+      subtitle: 'Übergang Halle ➔ Freiluft, Trainingslager & Anlauf-Entwicklung (7er bis 19er)',
       durationDays: 50,
       years: {
-        2026: { start: '2026-03-30', end: '2026-05-15', note: 'Aufbau nach Hallen-WM Toruń • Einstieg Freiluft (8.03m Athen)' },
-        2025: { start: '2025-03-24', end: '2025-05-14', note: 'Frühjahrsblock 2025 vor 8.07m Athen' },
-        2024: { start: '2024-03-11', end: '2024-05-08', note: 'Gold-Aufbau 2024 ➔ direkt zu 8.14m PB in Inneringen (11.05.24)!' },
-        2023: { start: '2023-03-13', end: '2023-05-12', note: 'Frühjahrsblock 2023 ➔ 8.00m Weinheim & 8.14m DM Kassel!' },
-        2022: { start: '2022-03-14', end: '2022-05-13', note: 'Frühjahrsblock 2022 ➔ 8.00m Durchbruch!' },
-        2021: { start: '2021-03-15', end: '2021-05-14', note: 'Frühjahrsblock 2021' },
+        2026: { start: '2026-03-30', end: '2026-05-15', note: 'Frühjahrsblock nach Hallen-WM Toruń (Gewicht ~85.9–87.05 kg, Achilles L & Unterer Rücken)' },
+        2025: { start: '2025-03-17', end: '2025-05-14', note: 'Frühjahrsblock 2025 (Mannheim) vor 7.94m Essen & 8.01m Vari/Athen (Gewicht ~83.2–84.3 kg)' },
+        2024: { start: '2024-03-11', end: '2024-05-08', note: 'Frühjahrsblock 2024 ➔ gezielte Gewichtsreduktion auf 79.80 kg bis EM Rom (8.08m / 8.01m)!' },
+        2023: { start: '2023-03-13', end: '2023-05-19', note: 'Frühjahrsblock 2023 (Münster) ➔ Durchbruch-Sommer mit 7.91m DM Kassel & 8.14m Inneringen!' },
+        2022: { start: '2022-03-14', end: '2022-05-15', note: 'Frühjahrsblock 2022' },
+        2021: { start: '2021-03-15', end: '2021-05-14', note: 'Frühjahrsblock 2021 ➔ 7.58m Koblenz' },
         2020: { start: '2020-03-16', end: '2020-05-15', note: 'Frühjahrsblock 2020' },
         2019: { start: '2019-03-18', end: '2019-05-15', note: 'Frühjahrsblock 2019' }
       }
     },
     'sommersaison': {
-      title: '6. Sommer-Wettkampfsaison & Meisterschaften (Mai – Sep)',
-      subtitle: 'Freiluft-Meetings, DM, EM, WM & Olympische Spiele',
+      title: '6. Sommer-Wettkampfsaison & Meisterschaften (Mai – August)',
+      subtitle: 'Alle Freiluft-Wettkämpfe, Meisterschaften & Gewichtstrends aus Google Sheets',
       durationDays: 95,
       years: {
-        2026: { start: '2026-05-16', end: '2026-08-30', note: '8.03m Athen • 7.98m DM Bochum • 7.92m Pfungstadt' },
-        2025: { start: '2025-05-15', end: '2025-09-14', note: '8.07m Athen • 8.01m Warschau • WM Tokio Zyklus' },
-        2024: { start: '2024-05-09', end: '2024-08-15', note: '8.14m PB Inneringen • 8.08m EM Rom Finale • Olympia Paris' },
-        2023: { start: '2023-05-13', end: '2023-08-25', note: '8.14m PB & Deutscher Meister Kassel • 8.00m Weinheim' },
-        2022: { start: '2022-05-14', end: '2022-08-20', note: 'Erster 8.00m Sprung • EM München' },
-        2021: { start: '2021-05-15', end: '2021-08-15', note: 'Sommersaison 2021 (U23 EM Tallinn)' },
-        2020: { start: '2020-06-01', end: '2020-08-30', note: 'Sommersaison 2020' },
-        2019: { start: '2019-05-16', end: '2019-08-25', note: 'Sommersaison 2019 (U20 EM Borås)' }
+        2026: { start: '2026-05-16', end: '2026-08-30', note: '8 WKs (Best 7.86m DM Bochum, 7.84m Rhede, 7.80m Mainz • Ø 7.67m • Ø Gewicht 86.16 kg)' },
+        2025: { start: '2025-05-15', end: '2025-08-25', note: '12 WKs (Best 8.01m Vari/Athen 05.07., 2x 7.96m FISU Bochum, 7.94m Essen, 7.91m Dessau • Ø 7.81m / ohne Duisburg Ø 7.86m • Ø Gewicht 84.13 kg)' },
+        2024: { start: '2024-05-09', end: '2024-08-05', note: '11 WKs (Best 8.08m EM Rom Q 07.06. & 8.01m EM Rom F 08.06. bei 79.80 kg! 7.84m La Chaux-de-Fonds • Ø 7.78m • Ø Gewicht 80.99 kg)' },
+        2023: { start: '2023-05-20', end: '2023-08-15', note: '8 WKs (Durchbruch! Best 8.14m Inneringen 30.07., 7.91m DM Kassel 09.07. + 100m 10.37s, 2x 7.85m • Ø 7.81m • Ø Gewicht 81.03 kg)' },
+        2022: { start: '2022-05-15', end: '2022-08-15', note: '2 WKs (7.06m Essen 12.06.22, 6.99m München 21.05.22 • Ø Gewicht ~82.0 kg)' },
+        2021: { start: '2021-05-15', end: '2021-08-15', note: '8 WKs (Best 7.58m Koblenz 27.06.21, 7.51m Langenfeld • Ø 7.36m • Ø Gewicht ~83.46 kg)' },
+        2020: { start: '2020-06-01', end: '2020-08-30', note: '6 WKs nach Knie-OP (Best 7.13m München, 7.12m Bottrop)' },
+        2019: { start: '2019-05-16', end: '2019-08-25', note: 'Vor Knie-OP Sept 2019 (Best 7.35m Münster 12.05.19)' }
       }
     }
   };
@@ -120,30 +120,30 @@ const TrainingPlanModule = (() => {
   const DOMAIN_FILTERS = {
     'ALL': { label: '🌐 Alle Bereiche', keywords: [] },
     'JUMP_SPIKES': {
-      label: '👟 Sprung, Anlauf & Spikes',
-      keywords: ['sprung', 'weitsprung', 'anlauf', 'al ', 'spikes', 'ksp', 'kurzsprung', 'tisch', 'absprung', 'pop', 'hebung', 'landung', '6er', '8er', '10er', '12er', '14er', '16er', '18er', '20er', 'technik', 'brett', 'balken']
+      label: '👟 Sprung, Grube & Spikes (3er–19er)',
+      keywords: ['sprung', 'weitsprung', 'anlauf', 'spikes', 'grube', 'absprung', 'pop', 'hebung', 'landung', '3er', '5er', '7er', '9er', '11er', '13er', '15er', '17er', '19er', 'technik', 'brett', 'balken', 'sprunglauf', 'imitation']
     },
     'SPRINT_MAXV': {
-      label: '⚡ Sprint, MaxV & 1080',
-      keywords: ['sprint', '1080', 'fliegend', 'flg', '30m', '40m', '60m', '100m', 'schnelligkeit', 'vmax', 'hochstart', 'tiefstart', 'start', 'beschleunigung', 'frequenzen', 'zugwiderstand', 'schlitten']
+      label: '⚡ Sprint, 1080, ZWL/ZUL & Pushbull',
+      keywords: ['sprint', '1080', 'zwl', 'zul', 'pushbull', 'overspeed', 'assisted', 'resisted', 'fliegend', 'flg', '30m', '40m', '60m', '100m', 'schnelligkeit', 'vmax', 'hochstart', 'tiefstart', 'start', 'beschleunigung', 'frequenzen', 'zugwiderstand', 'sekundenläufe']
     },
     'STRENGTH_FCT': {
-      label: '🏋️ Kraft, FCT & Explosiv',
-      keywords: ['kraft', 'fct', 'umsetzen', 'trapbar', 'hipthrust', 'hip-thrust', 'hip thrust', 'aufsteiger', 'kniebeuge', 'kb', 'reißen', 'reissen', 'bankdrücken', 'komplex', 'hantel', 'vbt', 'exzentrisch', 'isometrisch', 'gewicht']
+      label: '🏋️ Kraft, FCT (vert./hor.) & Explosiv',
+      keywords: ['kraft', 'fct', 'fct vertikal', 'fct horizontal', 'umsetzen', 'trapbar', 'hipthrust', 'hip-thrust', 'hip thrust', 'aufsteiger', 'kniebeuge', 'reißen', 'reissen', 'bankdrücken', 'hantelsprünge', 'kettlebell', 'ausfallschritt', 'nordics']
     },
     'PLYO_REACTIVE': {
-      label: '🦘 Plyos, Hürden & Würfe',
-      keywords: ['hürden', 'hürde', 'plyo', 'mehrfach', 'sprunglauf', 'hop', 'step', 'prell', 'drop jump', 'dj', 'cmj', 'kasten', 'schockwurf', 'medball', 'kugel', 'reaktiv', 'seil']
+      label: '🦘 Plyos, Hürden & Reaktiv (DJ/CMJ)',
+      keywords: ['hürden', 'hürde', 'plyo', 'mehrfach', 'hop', 'step', 'prell', 'drop jump', 'drop-jump', 'dj', 'cmj', 'broad jump', 'assisted jumps', 'kasten', 'schockwurf', 'medball', 'kugel', 'reaktiv']
     },
     'TEMPO_REGEN': {
-      label: '🏃 Tempos, Stabi & Regen',
-      keywords: ['tempo', 'tl ', 'ausdauer', 'stabi', 'rumpf', 'fuß', 'fuss', 'dehnen', 'beweglichkeit', 'mobi', 'regeneration', 'physio', 'sauna', 'lymphomat', 'rad', 'ergometer', 'erwärmung']
+      label: '🏃 Tempoläufe, Stabi & Regeneration',
+      keywords: ['tempoläufe', 'tempo', 'sekundenläufe', 'ausdauer', 'stabi', 'turnen', 'rumpf', 'fuß', 'fuss', 'dehnen', 'beweglichkeit', 'mobi', 'regeneration', 'physio', 'sauna', 'lympho', 'blackroll']
     }
   };
 
   function getCustomBlockConfig() {
     try {
-      const saved = localStorage.getItem('luka_custom_year_blocks_v7');
+      const saved = localStorage.getItem('luka_custom_year_blocks_v7_1');
       if (saved) return JSON.parse(saved);
     } catch (e) { /* ignore */ }
     return {};
@@ -155,7 +155,7 @@ const TrainingPlanModule = (() => {
     if (!custom[presetKey]) custom[presetKey] = {};
     custom[presetKey][year] = newStartIso;
     try {
-      localStorage.setItem('luka_custom_year_blocks_v7', JSON.stringify(custom));
+      localStorage.setItem('luka_custom_year_blocks_v7_1', JSON.stringify(custom));
     } catch (e) { /* ignore */ }
     if (window.App && window.App.state) {
       render(window.App.state);
@@ -170,7 +170,7 @@ const TrainingPlanModule = (() => {
 
   function resetCustomBlockStarts() {
     try {
-      localStorage.removeItem('luka_custom_year_blocks_v7');
+      localStorage.removeItem('luka_custom_year_blocks_v7_1');
     } catch (e) { /* ignore */ }
     if (window.App && window.App.state) {
       render(window.App.state);
@@ -178,7 +178,7 @@ const TrainingPlanModule = (() => {
   }
 
   function getBlockDefinitionForYear(presetKey, year) {
-    const preset = DEFAULT_YEAR_BLOCKS[presetKey] || DEFAULT_YEAR_BLOCKS['spezial_fct_spikes'];
+    const preset = DEFAULT_YEAR_BLOCKS[presetKey] || DEFAULT_YEAR_BLOCKS['aufbau_gpp'];
     const base = (preset.years && preset.years[year]) || {
       start: `${year}-10-01`,
       end: `${year}-11-14`,
@@ -187,7 +187,7 @@ const TrainingPlanModule = (() => {
     const custom = getCustomBlockConfig();
     const customStart = custom[presetKey] && custom[presetKey][year];
     if (customStart) {
-      const dur = preset.durationDays || 42;
+      const dur = preset.durationDays || 45;
       return {
         start: customStart,
         end: addDays(customStart, dur),
@@ -276,24 +276,32 @@ const TrainingPlanModule = (() => {
     return isInverted ? (labelsInv[v] || `${v}/4`) : (labelsPos[v] || `${v}/4`);
   }
 
+  // Always preserve Luka's exact Trainingseinheit string from Google Sheets!
   function getSessionBadge(typeStr) {
-    const s = (typeStr || '').toLowerCase();
-    if (s.includes('sprung') || s.includes('weitsprung')) {
-      return '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-amber-950 text-amber-300 border border-amber-800">👟 Sprung / Technik</span>';
+    const label = (typeStr || 'Training').trim();
+    const s = label.toLowerCase();
+    if (s.includes('wettkampf') || s.includes('wk')) {
+      return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-rose-950 text-rose-300 border border-rose-800">🏆 ${label}</span>`;
     }
-    if (s.includes('kraft') || s.includes('athletik') || s.includes('hantel')) {
-      return '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-emerald-950 text-emerald-300 border border-emerald-800">🏋️ Kraft / FCT</span>';
+    if (s.includes('sprung')) {
+      return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-amber-950 text-amber-300 border border-amber-800">👟 ${label}</span>`;
     }
-    if (s.includes('sprint') || s.includes('schnelligkeit') || s.includes('tempo')) {
-      return '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-purple-950 text-purple-300 border border-purple-800">⚡ Sprint / MaxV</span>';
+    if (s.includes('kraft')) {
+      return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-emerald-950 text-emerald-300 border border-emerald-800">🏋️ ${label}</span>`;
     }
-    if (s.includes('wettkampf') || s.includes('wk') || s.includes('finale')) {
-      return '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-rose-950 text-rose-300 border border-rose-800">🏆 Wettkampf</span>';
+    if (s.includes('sprint') || s.includes('koordination')) {
+      return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-purple-950 text-purple-300 border border-purple-800">⚡ ${label}</span>`;
     }
-    if (s.includes('regeneration') || s.includes('ruhe') || s.includes('physio') || s.includes('pause')) {
-      return '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-blue-950 text-blue-300 border border-blue-800">🧘‍♂️ Regeneration</span>';
+    if (s.includes('tempo') || s.includes('ausdauer')) {
+      return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-cyan-950 text-cyan-300 border border-cyan-800">🏃 ${label}</span>`;
     }
-    return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-slate-800 text-slate-300 border border-slate-700">📋 ${typeStr || 'Training'}</span>`;
+    if (s.includes('stabi') || s.includes('turnen')) {
+      return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-indigo-950 text-indigo-300 border border-indigo-800">🤸 ${label}</span>`;
+    }
+    if (s.includes('regeneration') || s.includes('frei') || s.includes('pause')) {
+      return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-blue-950 text-blue-300 border border-blue-800">🧘‍♂️ ${label}</span>`;
+    }
+    return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-slate-800 text-slate-300 border border-slate-700">📋 ${label}</span>`;
   }
 
   function render(state) {
@@ -495,7 +503,7 @@ const TrainingPlanModule = (() => {
       return `
         <div class="flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
           <span class="text-amber-300 font-bold">
-            🔬 Empirische Tiefenanalyse aller 2.355 Trainingsprotokolle (2019–2026) & 69 Wettkämpfe für deine Saison 2027 (Hallen-EM Valencia & WM Peking)
+            🔬 100% Google-Sheets-verifizierte Tiefenanalyse (2.355 Tage • 57 Weitsprung-WKs • Tag +1 / Tag 0 Korrelationen & KW 43 Entscheidungs-Check)
           </span>
           <button onclick="TrainingPlanModule.switchView('block')" class="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 text-cyan-300 border border-slate-700 text-[11px] font-bold">
             ← Zurück zum Blockvergleich
@@ -507,7 +515,7 @@ const TrainingPlanModule = (() => {
     if (activeView === 'search') {
       return `
         <div class="w-full relative">
-          <input type="text" value="${planSearchQuery}" oninput="TrainingPlanModule.onSearchInput(this.value)" placeholder="Volltextsuche in allen 2.355 Protokollen (z.B. 'FCT', '1080', 'Spikes', 'KSP', 'Trapbar', 'Gorzów', 'Inneringen', 'Belek')..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 font-mono" />
+          <input type="text" value="${planSearchQuery}" oninput="TrainingPlanModule.onSearchInput(this.value)" placeholder="Volltextsuche in allen 2.355 Protokollen (z.B. 'FCT vertikal', 'FCT horizontal', '1080', 'ZWL', 'ZUL', 'Pushbull', '7er', '9er', 'Gorzów', 'Inneringen', 'Rom')..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 font-mono" />
         </div>
       `;
     }
@@ -703,7 +711,7 @@ const TrainingPlanModule = (() => {
       if (l.date) logsByDate[l.date] = l;
     });
 
-    const curPresetObj = DEFAULT_YEAR_BLOCKS[activeBlockPreset] || DEFAULT_YEAR_BLOCKS['spezial_fct_spikes'];
+    const curPresetObj = DEFAULT_YEAR_BLOCKS[activeBlockPreset] || DEFAULT_YEAR_BLOCKS['aufbau_gpp'];
     const domainObj = DOMAIN_FILTERS[activeDomainFilter] || DOMAIN_FILTERS['ALL'];
 
     // Compute year-specific block statistics using each year's authentic start & end dates
@@ -730,7 +738,16 @@ const TrainingPlanModule = (() => {
       const peakHipthrust = blockLogs.reduce((max, l) => Math.max(max, l.hipthrust_e1rm_kg || 0), 0);
       const peakTrapbar = blockLogs.reduce((max, l) => Math.max(max, l.trapbar_e1rm_kg || 0), 0);
       const peakAufsteiger = blockLogs.reduce((max, l) => Math.max(max, l.aufsteiger_e1rm_kg || 0), 0);
-      const peakMark = blockLogs.reduce((max, l) => Math.max(max, l.best_mark_m || l.eff_mark_m || 0), 0);
+      const peakMark = blockLogs.reduce((max, l) => Math.max(max, l.best_mark_m || 0), 0);
+
+      const bwsExact = blockLogs.map(l => l.body_weight_kg).filter(v => v != null && v > 50);
+      const bwsTrend = blockLogs.map(l => l.body_weight_kg || l.ref_body_weight_kg).filter(v => v != null && v > 50);
+      const avgBwVal = bwsExact.length > 0
+        ? (bwsExact.reduce((a, b) => a + b, 0) / bwsExact.length)
+        : (bwsTrend.length > 0 ? (bwsTrend.reduce((a, b) => a + b, 0) / bwsTrend.length) : null);
+      const avgBwStr = avgBwVal != null
+        ? `${avgBwVal.toFixed(1)} kg${bwsExact.length === 0 ? ' (Trend)' : ''}`
+        : '-';
 
       const recoveries = blockLogs.map(l => l.whoop_recovery_pct).filter(v => v != null);
       const avgRecovery = recoveries.length > 0 ? Math.round(recoveries.reduce((a, b) => a + b, 0) / recoveries.length) : null;
@@ -745,6 +762,7 @@ const TrainingPlanModule = (() => {
         sprintSessions,
         strengthSessions,
         totalSessions: realSessions.length,
+        avgBwStr,
         peakUmsetzen: peakUmsetzen > 0 ? `${peakUmsetzen} kg` : '-',
         peakHipthrust: peakHipthrust > 0 ? `${peakHipthrust} kg` : '-',
         peakTrapbar: peakTrapbar > 0 ? `${peakTrapbar} kg` : '-',
@@ -777,15 +795,16 @@ const TrainingPlanModule = (() => {
               <thead>
                 <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
                   <th class="py-2 px-2.5">Jahr</th>
-                  <th class="py-2 px-2.5">Individueller Block-Zeitraum</th>
+                  <th class="py-2 px-2.5">Individueller Block-Zeitraum & Meilensteine</th>
                   <th class="py-2 px-2 text-center">Einheiten</th>
-                  <th class="py-2 px-2 text-center text-amber-300">👟 Sprung/Spikes</th>
-                  <th class="py-2 px-2 text-center text-purple-300">⚡ Sprint/1080</th>
+                  <th class="py-2 px-2 text-center text-cyan-300">⚖️ Ø Gewicht</th>
+                  <th class="py-2 px-2 text-center text-amber-300">👟 Sprung/Grube</th>
+                  <th class="py-2 px-2 text-center text-purple-300">⚡ Sprint/1080/ZWL</th>
                   <th class="py-2 px-2 text-center text-emerald-300">🏋️ Kraft/FCT</th>
                   <th class="py-2 px-2 text-right">Umsetzen</th>
                   <th class="py-2 px-2 text-right">Hip-Thrust</th>
                   <th class="py-2 px-2 text-right">Trapbar</th>
-                  <th class="py-2 px-2.5 text-right">Top-Weite</th>
+                  <th class="py-2 px-2.5 text-right">WK-Best</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800/40">
@@ -793,15 +812,16 @@ const TrainingPlanModule = (() => {
                   <tr class="hover:bg-slate-800/30 ${ys.year === 2025 ? 'bg-amber-950/15' : ys.year === 2026 ? 'bg-cyan-950/15' : ''}">
                     <td class="py-2 px-2.5 font-black text-white text-sm">
                       ${ys.year}
-                      ${ys.year === 2025 ? '<span class="ml-1 px-1 py-0.2 rounded bg-amber-500 text-slate-950 text-[8px] font-black">REF</span>' : ''}
+                      ${ys.year === 2026 ? '<span class="ml-1 px-1 py-0.2 rounded bg-cyan-500 text-slate-950 text-[8px] font-black">AKT</span>' : ''}
                     </td>
                     <td class="py-2 px-2.5">
                       <div class="text-[11px] font-bold text-cyan-300">${formatDisplayDate(ys.yCfg.start)} – ${formatDisplayDate(ys.yCfg.end)}</div>
-                      <div class="text-[9px] text-slate-400 truncate max-w-[290px]" title="${ys.yCfg.note}">${ys.yCfg.note}</div>
+                      <div class="text-[9px] text-slate-400 truncate max-w-[330px]" title="${ys.yCfg.note}">${ys.yCfg.note}</div>
                     </td>
                     <td class="py-2 px-2 text-center font-bold text-white">
                       ${activeDomainFilter === 'ALL' ? ys.totalSessions : `<span class="text-emerald-400">${ys.domainMatchesCount}</span> / ${ys.totalSessions}`}
                     </td>
+                    <td class="py-2 px-2 text-center font-bold text-cyan-300">${ys.avgBwStr}</td>
                     <td class="py-2 px-2 text-center font-bold text-amber-300">${ys.jumpSpikesSessions}x</td>
                     <td class="py-2 px-2 text-center font-bold text-purple-300">${ys.sprintSessions}x</td>
                     <td class="py-2 px-2 text-center font-bold text-emerald-300">${ys.strengthSessions}x</td>
@@ -822,13 +842,13 @@ const TrainingPlanModule = (() => {
             const yr = ys.year;
             const yCfg = ys.yCfg;
             const calendarStartMonthDay = {
-              'aufbau_gpp': '09-15',
-              'spezial_fct_spikes': '10-05',
-              'hallenvorbereitung': '12-05',
+              'aufbau_gpp': '09-23',
+              'spezial_fct_spikes': '10-17',
+              'hallenvorbereitung': '12-02',
               'hallensaison': '01-20',
               'sommeraufbau': '03-15',
               'sommersaison': '05-15'
-            }[activeBlockPreset] || '10-05';
+            }[activeBlockPreset] || '09-23';
             const calYear = (activeBlockPreset === 'hallenvorbereitung' && yr >= 2020) ? (yr - 1) : yr;
             const blockStartIso = blockSyncMode === 'calendar_date'
               ? `${calYear}-${calendarStartMonthDay}`
@@ -910,6 +930,7 @@ const TrainingPlanModule = (() => {
                     const isFrei = !hasSession || (l.session_type || '').toLowerCase().includes('frei') || (l.session_type || '').toLowerCase().includes('ruhetag') || ((l.duration_min || 0) === 0 && !l.protocol_text);
                     const rec = l?.whoop_recovery_pct;
                     const weight = l?.body_weight_kg;
+                    const refWeight = l?.ref_body_weight_kg;
                     const isDomainHighlighted = activeDomainFilter !== 'ALL' && dc.matchesDom && !isFrei;
                     const isDimmed = activeDomainFilter !== 'ALL' && !dc.matchesDom;
 
@@ -940,18 +961,18 @@ const TrainingPlanModule = (() => {
                           <span class="text-[9px] text-slate-500">${dc.kwStr}</span>
                         </div>
 
-                        <!-- Card Body: Session Info or Rest Day -->
+                        <!-- Card Body: Exact Trainingseinheit + Schwerpunkt or Rest Day -->
                         <div class="space-y-1.5 flex-1 flex flex-col justify-between font-mono text-xs">
                           ${(!hasSession || isFrei) ? `
                             <div class="py-3 text-center space-y-0.5">
                               <span class="text-base">🧘‍♂️</span>
-                              <div class="text-[10px] text-slate-500 font-mono italic">Ruhetag / Frei</div>
+                              <div class="text-[10px] text-slate-500 font-mono italic">${l?.session_type || 'Frei'}</div>
                             </div>
                           ` : `
                             <div class="space-y-1">
                               <div class="flex items-center gap-1 flex-wrap">
                                 ${getSessionBadge(l.session_type)}
-                                ${l.focus ? `<span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-slate-900 text-amber-300 border border-amber-900/40 truncate max-w-[140px]">${l.focus}</span>` : ''}
+                                ${l.focus ? `<span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-slate-900 text-amber-300 border border-amber-900/40 truncate max-w-[140px]" title="Schwerpunkt: ${l.focus}">${l.focus}</span>` : ''}
                               </div>
                               <div class="flex items-center justify-between text-[10px] text-slate-400">
                                 ${l.duration_min > 0 ? `<span>⏱️ ${l.duration_min}m</span>` : '<span></span>'}
@@ -967,11 +988,11 @@ const TrainingPlanModule = (() => {
                           ` : ''}
                         </div>
 
-                        <!-- Card Footer: Whoop & Preview Hint -->
+                        <!-- Card Footer: Whoop, Weight (exact or interpolated trend) & Preview Hint -->
                         <div class="pt-1 border-t border-slate-800/60 flex items-center justify-between text-[9px] font-mono">
                           <div class="flex items-center gap-1.5">
                             ${rec != null ? `<span class="font-bold ${rec >= 67 ? 'text-emerald-400' : rec >= 34 ? 'text-amber-400' : 'text-rose-400'}">${rec}% Rec</span>` : '<span class="text-slate-600">-</span>'}
-                            ${weight != null ? `<span class="text-slate-400">${weight}kg</span>` : ''}
+                            ${weight != null ? `<span class="text-slate-300 font-bold">${weight}kg</span>` : (refWeight != null ? `<span class="text-slate-500" title="${l?.interp_body_weight_source || 'Gewichtstrend'}">~${refWeight.toFixed(1)}kg</span>` : '')}
                           </div>
                           <span class="text-cyan-400 group-hover:underline font-bold">Vorschau 🔍</span>
                         </div>
@@ -987,159 +1008,332 @@ const TrainingPlanModule = (() => {
     `;
   }
 
-  // ================= 4. KARRIERE- & MUSTER-ANALYSE (2022–2026 -> WM 2027) =================
+  // ================= 4. KARRIERE- & MUSTER-ANALYSE (100% VERIFIZIERT AUS GOOGLE SHEETS) =================
   function renderCareerPatternLabView(state) {
     return `
       <div class="space-y-4 font-mono">
-        <!-- Banner -->
-        <div class="bg-gradient-to-r from-slate-900 via-indigo-950/40 to-cyan-950/40 border border-cyan-500/50 rounded-xl p-4 sm:p-5 space-y-2 shadow-lg">
+        <!-- 0. ENTSCHEIDUNGS-CHECK FÜR KOMMENDE WOCHE (KW 43: 19.10. – 25.10.2026) -->
+        <div class="bg-gradient-to-r from-slate-900 via-cyan-950/40 to-amber-950/30 border-2 border-cyan-500/80 rounded-xl p-4 sm:p-5 space-y-3 shadow-xl">
           <div class="flex items-center justify-between flex-wrap gap-2">
-            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500 text-slate-950 uppercase">
-              EMPIRISCHE KARRIERE- & MUSTER-ANALYSE (2.355 TAGE • 69 WETTKÄMPFE)
+            <span class="px-2.5 py-0.5 rounded text-[10px] font-black bg-cyan-500 text-slate-950 uppercase">
+              ⚡ AKTUELLER ENTSCHEIDUNGS-CHECK FÜR NÄCHSTE WOCHE (KW 43: MO 19.10. – SO 25.10.2026)
             </span>
-            <span class="text-xs text-cyan-300 font-bold">Ziel-Fokus: Hallen-EM Valencia 2027 (8.17m) & WM Peking 2027 (8.27m)</span>
+            <span class="text-xs text-amber-300 font-bold">Aufbau 2026 (Start 23.09.2026 • Tag 26 am 18.10.2026 abgeschlossen)</span>
           </div>
+
           <h3 class="text-base sm:text-lg font-black text-white font-sans">
-            Was hat dich von 8.00m (2022) auf 8.14m (2023/2024) und 8.18m PB (Halle 2026) gebracht – und was bremst dich?
+            Pausewoche jetzt vorziehen (19.10.–25.10.) & ab 26.10. in Block 2 starten – oder noch 1 Woche gleiches Muster (Michaels Plan)?
           </h3>
-          <p class="text-xs text-slate-300 font-sans leading-relaxed">
-            Auswertung aller Trainingsprotokolle, Kraftverläufe (relativ zum Körpergewicht), Anlaufgeschwindigkeiten, Pre-Competition-Tapering-Muster (14 Tage vor jedem ≥8.05m vs. &lt;7.85m Wettkampf) und Verletzungs-/Schmerz-Cluster.
-          </p>
+
+          <!-- Wochenverlauf Aufbau 2026 aus Google Sheets -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 text-xs">
+            <div class="bg-slate-950/90 border border-slate-800 rounded-lg p-3 space-y-1">
+              <div class="text-[10px] text-slate-400 font-bold uppercase">Intro (23.09. – 27.09.26)</div>
+              <div class="text-sm font-black text-white">3 Einheiten • Ø Rec 52.6%</div>
+              <div class="text-[11px] font-sans text-slate-300">
+                Einstieg am <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-09-23')" class="text-cyan-400 underline font-mono">23.09.</button> (Tempoläufe, 83.2 kg), Kraft am <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-09-24')" class="text-cyan-400 underline font-mono">24.09.</button>, Tempoläufe am <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-09-26')" class="text-cyan-400 underline font-mono">26.09.</button>
+              </div>
+            </div>
+            <div class="bg-slate-950/90 border border-emerald-500/40 rounded-lg p-3 space-y-1">
+              <div class="text-[10px] text-emerald-400 font-bold uppercase">Woche 1 (28.09. – 04.10.26)</div>
+              <div class="text-sm font-black text-emerald-300">6 Einheiten • Ø Rec 75.6%</div>
+              <div class="text-[11px] font-sans text-slate-300">
+                <strong>5 grüne Whoop-Tage</strong> (80%, 73%, 91%, 76%, 80%), Ø Schlaf 96.9%, Gewicht 82.85 kg. Körper absorbiert Grundmuster optimal.
+              </div>
+            </div>
+            <div class="bg-slate-950/90 border border-amber-500/40 rounded-lg p-3 space-y-1">
+              <div class="text-[10px] text-amber-400 font-bold uppercase">Woche 2 (05.10. – 11.10.26)</div>
+              <div class="text-sm font-black text-amber-300">6 Einheiten • Ø Rec 61.3% (-14%)</div>
+              <div class="text-[11px] font-sans text-slate-300">
+                Mo–Do nur noch gelbe Recovery (52%, 47%, 56%, 49% trotz 100% Schlaf!). Do <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-10-08')" class="text-cyan-400 underline font-mono">08.10.</button> 1080-Einstieg (<em>Müde</em>), Fr/Sa <em>Unmotiviert</em>.
+              </div>
+            </div>
+            <div class="bg-slate-950/90 border border-rose-500/60 rounded-lg p-3 space-y-1">
+              <div class="text-[10px] text-rose-400 font-bold uppercase">Woche 3 (12.10. – 18.10.26)</div>
+              <div class="text-sm font-black text-rose-300">Ø Rec 56.3% • 0 grüne Tage!</div>
+              <div class="text-[11px] font-sans text-slate-300">
+                Mo–Do 56%, 59%, 56%, 54% trotz 97–100% Schlaf! Di <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-10-13')" class="text-cyan-400 underline font-mono">13.10.</button> Strain <strong>14.9</strong> (Kniebeuge 3x6 115kg: <em>„Rücken limitierender Faktor, nicht Beinmuskeln“</em>).
+              </div>
+            </div>
+          </div>
+
+          <!-- Pro / Contra & Empfehlung -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 text-xs font-sans pt-1">
+            <div class="bg-emerald-950/25 border border-emerald-500/50 rounded-lg p-3.5 space-y-2">
+              <div class="font-mono font-black text-emerald-400 uppercase text-[11px]">
+                ✅ PRO PAUSEWOCHE VORZIEHEN (19.10. – 25.10.2026)
+              </div>
+              <ul class="space-y-1.5 text-slate-200 list-disc pl-4">
+                <li><strong>Eindeutiger autonomer Ermüdungstrend:</strong> Trotz perfekter Schlafdisziplin (97–100%) ist deine Whoop-Recovery über 3 volle Wochen linear von <strong>75.6% ➔ 61.3% ➔ 56.3%</strong> (0 grüne Tage in KW 42) gefallen.</li>
+                <li><strong>Frühwarnsignal Unterer Rücken (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-10-13')" class="text-cyan-300 underline font-mono">13.10.26</button>):</strong> Dein Learning <em>„bei Kniebeugen Rücken limitierender Faktor, nicht Beinmuskeln“</em> (bei Erschöpfung 3/4 & Schmerzen 2/4) zeigt, dass die axiale Rumpf-/Rückenstruktur nach 3,5 Wochen Kniebeugen (115kg) & Ausfallschritten lokal gesättigt ist. Im Sommer 2026 war <em>Unterer Rücken</em> an 85 Tagen dein #1 Problemfeld!</li>
+                <li><strong>5 Wochen sauberer Block 2 ab 26.10.:</strong> Wenn du nächste Woche entlastest und am <strong>Mo 26.10.2026</strong> frisch in Block 2 (Halle, Spikes, FCT vertikal/horizontal, spezifischer 1080) gehst, hast du bis Anfang Dezember <strong>5 volle Wochen</strong> ununterbrochene spezifische Entwicklung (2025 fiel der gesamte November durch die Bundeswehr-Grundausbildung weg!).</li>
+              </ul>
+            </div>
+
+            <div class="bg-amber-950/20 border border-amber-500/40 rounded-lg p-3.5 space-y-2">
+              <div class="font-mono font-black text-amber-400 uppercase text-[11px]">
+                ⚖️ WAS FÜR MICHAELS PLAN SPRICHT (NOCH 1 WOCHE MUSTER)
+              </div>
+              <ul class="space-y-1.5 text-slate-200 list-disc pl-4">
+                <li><strong>Klassischer 4:1-Blockrhythmus:</strong> Da Woche 0 (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-09-23')" class="text-cyan-300 underline font-mono">23.09.–27.09.</button>) nur eine 3-Tage-Einstiegswoche war, hattest du bisher erst <strong>3 komplette 6-Tage-Wochen</strong>. Ein 4. Belastungszyklus vollendet nominell den allgemeinen Kraft-/Tempolauf-Block.</li>
+                <li><strong>Gewichtstrend läuft sehr gut:</strong> Dein Gewicht ist von <strong>86.16 kg</strong> (Sommer-WK-Schnitt 2026) bereits auf <strong>82.50 kg</strong> (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-10-13')" class="text-cyan-300 underline font-mono">13.10.26</button>) gesunken (-3.65 kg!). Eine weitere Woche mit allgemeinem Umfang (Tempoläufe/Turnen) verbrennt weiter Kalorien vor dem explosiven Block 2.</li>
+                <li><strong>Aber Vorsicht (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-02-02')" class="text-rose-300 underline font-mono">02.02.26</button> & <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-02-18')" class="text-rose-300 underline font-mono">18.02.26</button>):</strong> In deinen Logs führte eine 4. Woche in gelber/roter Recovery bei gleichzeitigem Rücken-/Sehnen-Tonus im Februar 2026 erst zu 5 Tagen Infekt und danach zu 33 Tagen <em>Achilles L</em>.</li>
+              </ul>
+            </div>
+
+            <div class="bg-cyan-950/30 border border-cyan-400/60 rounded-lg p-3.5 space-y-2">
+              <div class="font-mono font-black text-cyan-300 uppercase text-[11px]">
+                🎯 DATEN-EMPFEHLUNG FÜR DEIN GESPRÄCH MIT MICHAEL
+              </div>
+              <p class="text-slate-200 leading-relaxed">
+                <strong>Empfehlung: Pause-/Entlastungswoche auf KW 43 (19.10.–25.10.) vorziehen (oder als „aktive Übergangswoche“ gestalten) und Block 2 am 26.10. starten!</strong>
+              </p>
+              <p class="text-slate-300 leading-relaxed">
+                <strong>Argumentation für Michael:</strong> Du hast seit dem <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-09-23')" class="text-cyan-300 underline font-mono">23.09.</button> (26 Tage) 21 Einheiten durchgezogen, 100% Schlaf-Compliance geliefert, aber deine Recovery hängt seit 12 Tagen ohne einzigen grünen Tag bei ~55% fest und der untere Rücken limitiert bei den 115kg Kniebeugen (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-10-13')" class="text-cyan-300 underline font-mono">13.10.</button>).
+              </p>
+              <p class="text-emerald-300 font-semibold leading-relaxed">
+                💡 <strong>Falls Michael auf der Woche besteht (Kompromiss):</strong> Axiale Rückenlast am Di/Sa rausnehmen (keine Kniebeuge 115kg, stattdessen leichtes Tempo/Mobi) und Umfang um 30% kürzen, damit das ZNS vor den ersten Spikes- & FCT-Einheiten wieder über 70% Recovery kommt.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <!-- 1. Saison-Architektur & Evolutions-Matrix (2022 bis 2026) -->
+        <!-- 1. VERIFIZIERTE SAISON-, WEITEN- & GEWICHTSTREND-MATRIX (2021 – 2026 AUS GOOGLE SHEETS) -->
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
-          <h4 class="text-xs font-black uppercase text-cyan-400 tracking-wider">
-            1. SAISON-EVOLUTION & ERFOLGSFAKTOREN (2022 – 2026)
-          </h4>
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h4 class="text-xs font-black uppercase text-cyan-400 tracking-wider">
+              1. VERIFIZIERTE WETTKAMPF-WEITEN & GEWICHTSTRENDS (2021 – 2026 • 100% GOOGLE SHEETS DATEN)
+            </h4>
+            <span class="text-[10px] text-slate-400">Alle 5 Karriere-Sprünge ≥ 8.00m + Hallen-Bestwerte (Klick auf Datum öffnet Protokoll)</span>
+          </div>
           <div class="overflow-x-auto border border-slate-800 rounded-lg">
             <table class="w-full text-left border-collapse text-xs">
               <thead>
                 <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
-                  <th class="py-2 px-3">Saison</th>
-                  <th class="py-2 px-3 text-right">SB / PB (Halle / Sommer)</th>
-                  <th class="py-2 px-3 text-center">Ø 8m-Konstanz</th>
-                  <th class="py-2 px-3 text-center">Wettkampf-Gewicht</th>
-                  <th class="py-2 px-3 text-right">Peak Umsetzen / Trapbar / HipThrust</th>
-                  <th class="py-2 px-3">Entscheidendes Trainings-Muster</th>
+                  <th class="py-2 px-2.5">Saison / Phase</th>
+                  <th class="py-2 px-2.5 text-right">Halle Best (Ø)</th>
+                  <th class="py-2 px-2.5 text-right">Freiluft Best (Ø)</th>
+                  <th class="py-2 px-2.5 text-center">Sprünge ≥ 8.00m (Exakt)</th>
+                  <th class="py-2 px-2.5 text-center">⚖️ Gewichtstrend (WK-Ø / Peak-WK)</th>
+                  <th class="py-2 px-2.5">Verifizierte Einordnung aus deinen Google Sheets</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800/50">
                 <tr class="bg-cyan-950/20">
-                  <td class="py-2.5 px-3 font-black text-cyan-300">2025 / 2026</td>
-                  <td class="py-2.5 px-3 text-right font-black text-emerald-400">8.18m Indoor PB • 8.03m Out</td>
-                  <td class="py-2.5 px-3 text-center font-bold text-white">5x ≥ 8.00m</td>
-                  <td class="py-2.5 px-3 text-center text-cyan-300">79.6 – 80.3 kg</td>
-                  <td class="py-2.5 px-3 text-right text-amber-300">125 kg / 230 kg / 230 kg</td>
-                  <td class="py-2.5 px-3 font-sans text-slate-200">Früher Aufbau (15.09.25), FCT + 1080 ab 06.10., Spikes ab 17.10.25! Hohe Anlauf-Sicherheit in der Halle (8.18m Gorzów, 8.10m Banská, 8.08m WM Toruń).</td>
+                  <td class="py-2.5 px-2.5 font-black text-cyan-300">2026 (Mannheim J3)</td>
+                  <td class="py-2.5 px-2.5 text-right font-black text-emerald-400">
+                    8.18m PB (Ø 7.80m / 5 WK)
+                  </td>
+                  <td class="py-2.5 px-2.5 text-right font-bold text-rose-300">
+                    7.86m (Ø 7.67m / 8 WK)
+                  </td>
+                  <td class="py-2.5 px-2.5 text-center font-bold text-emerald-300">
+                    1x (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-01-31')" class="underline text-cyan-300">31.01.26 Gorzów 8.18m</button>)
+                  </td>
+                  <td class="py-2.5 px-2.5 text-center">
+                    <span class="text-amber-300 font-bold">Halle Ø 84.94 kg</span> (Gorzów ~85.35 kg)<br/>
+                    <span class="text-rose-400 font-bold">Sommer Ø 86.16 kg</span> (Peak 87.05 kg!)
+                  </td>
+                  <td class="py-2.5 px-2.5 font-sans text-slate-200">
+                    <strong>Halle:</strong> Nach FCT (vert./hor.) + 1080-Aufbau <strong>8.18m PB in Gorzów</strong>! Direkt danach (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-02-02')" class="underline text-cyan-300 font-mono">02.02.</button>) trotz Infekt-Vorboten FCT 140kg ➔ 21% Rec & 5 Tage krank, ab <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-02-18')" class="underline text-cyan-300 font-mono">18.02.</button> <em>Achilles L</em> (7.78m DM Dortmund, 7.68m Hallen-WM Toruń am <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-03-22')" class="underline text-cyan-300 font-mono">22.03.</button>).<br/>
+                    <strong>Sommer:</strong> Mit <strong>Ø 86.16 kg (+5.1 kg schwerer als 2023/2024!)</strong> plus <em>Unterer Rücken / Sprunggelenk L</em> gingen Anlaufgeschwindigkeit & Reaktivkraft verloren (Best: 7.86m DM Bochum <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-07-25')" class="underline text-cyan-300 font-mono">25.07.</button>, 7.84m Rhede <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-06-28')" class="underline text-cyan-300 font-mono">28.06.</button>).
+                  </td>
                 </tr>
-                <tr>
-                  <td class="py-2.5 px-3 font-bold text-white">2024 / 2025</td>
-                  <td class="py-2.5 px-3 text-right font-bold text-cyan-300">8.06m In • 8.07m Out</td>
-                  <td class="py-2.5 px-3 text-center font-bold text-white">4x ≥ 8.00m</td>
-                  <td class="py-2.5 px-3 text-center text-slate-300">80.2 – 81.0 kg</td>
-                  <td class="py-2.5 px-3 text-right text-amber-300">130 kg / 230 kg / 235 kg</td>
-                  <td class="py-2.5 px-3 font-sans text-slate-300">Später Einstieg am 17.10.24 nach Olympia; hohe Maximalkraft, aber weniger technischer Anlauf-Rhythmus im Herbst.</td>
+                <tr class="bg-amber-950/15">
+                  <td class="py-2.5 px-2.5 font-bold text-amber-300">2025 (Mannheim J2)</td>
+                  <td class="py-2.5 px-2.5 text-right font-bold text-slate-200">
+                    7.71m (Ø 7.52m / 6 WK)
+                  </td>
+                  <td class="py-2.5 px-2.5 text-right font-black text-emerald-400">
+                    8.01m (Ø 7.81m / 12 WK)<br/>
+                    <span class="text-[10px] text-cyan-300">ohne Duisburg: Ø 7.86m!</span>
+                  </td>
+                  <td class="py-2.5 px-2.5 text-center font-bold text-emerald-300">
+                    1x (<button onclick="TrainingPlanModule.openSessionPreviewModal('2025-07-05')" class="underline text-cyan-300">05.07.25 Vari/Athen 8.01m</button>)
+                  </td>
+                  <td class="py-2.5 px-2.5 text-center">
+                    <span class="text-slate-300">Halle Ø 81.05 kg</span><br/>
+                    <span class="text-amber-300 font-bold">Sommer Ø 84.13 kg</span> (Athen ~84.72 kg)
+                  </td>
+                  <td class="py-2.5 px-2.5 font-sans text-slate-200">
+                    Halle noch wechselhaft (7.71m Sindelfingen <button onclick="TrainingPlanModule.openSessionPreviewModal('2025-01-18')" class="underline text-cyan-300 font-mono">18.01.</button>, 7.67m DM Dortmund <button onclick="TrainingPlanModule.openSessionPreviewModal('2025-02-22')" class="underline text-cyan-300 font-mono">22.02.</button>). Im Sommer <strong>extrem hohe Konstanz auf 7.90m–8.01m Niveau</strong> trotz ~84.1 kg (+3.1 kg ggü. 2023): <strong>8.01m Vari/Athen</strong> (<button onclick="TrainingPlanModule.openSessionPreviewModal('2025-07-05')" class="underline text-cyan-300 font-mono">05.07.</button>), 2x <strong>7.96m FISU Games Bochum</strong> (<button onclick="TrainingPlanModule.openSessionPreviewModal('2025-07-23')" class="underline text-cyan-300 font-mono">23.07.</button> & <button onclick="TrainingPlanModule.openSessionPreviewModal('2025-07-24')" class="underline text-cyan-300 font-mono">24.07.</button> Bronze), 7.94m Essen (<button onclick="TrainingPlanModule.openSessionPreviewModal('2025-05-31')" class="underline text-cyan-300 font-mono">31.05.</button>), 7.91m Dessau (<button onclick="TrainingPlanModule.openSessionPreviewModal('2025-06-21')" class="underline text-cyan-300 font-mono">21.06.</button>).
+                  </td>
                 </tr>
                 <tr class="bg-emerald-950/15">
-                  <td class="py-2.5 px-3 font-bold text-emerald-300">2023 / 2024</td>
-                  <td class="py-2.5 px-3 text-right font-black text-emerald-400">7.93m In • 8.14m Out PB</td>
-                  <td class="py-2.5 px-3 text-center font-bold text-white">6x ≥ 8.00m</td>
-                  <td class="py-2.5 px-3 text-center text-emerald-300">79.4 – 80.1 kg</td>
-                  <td class="py-2.5 px-3 text-right text-amber-300">132 kg / 252 kg / 225 kg</td>
-                  <td class="py-2.5 px-3 font-sans text-slate-200">Früher Aufbau (12.09.23) + perfekter Frühjahrsblock März/April 2024 ➔ Saisoneinstieg direkt 8.14m Inneringen & 8.08m EM Rom!</td>
+                  <td class="py-2.5 px-2.5 font-bold text-emerald-300">2024 (Mannheim J1)</td>
+                  <td class="py-2.5 px-2.5 text-right font-bold text-slate-200">
+                    7.73m (Ø 7.61m / 2 WK)
+                  </td>
+                  <td class="py-2.5 px-2.5 text-right font-black text-emerald-400">
+                    8.08m (Ø 7.78m / 11 WK)
+                  </td>
+                  <td class="py-2.5 px-2.5 text-center font-bold text-emerald-300">
+                    2x in Rom (<button onclick="TrainingPlanModule.openSessionPreviewModal('2024-06-07')" class="underline text-cyan-300">07.06. 8.08m</button> & <button onclick="TrainingPlanModule.openSessionPreviewModal('2024-06-08')" class="underline text-cyan-300">08.06. 8.01m</button>)
+                  </td>
+                  <td class="py-2.5 px-2.5 text-center">
+                    <span class="text-emerald-300 font-bold">Halle Ø 80.26 kg</span><br/>
+                    <span class="text-emerald-400 font-black">Sommer Ø 80.99 kg (Rom: 79.80 kg!)</span>
+                  </td>
+                  <td class="py-2.5 px-2.5 font-sans text-slate-200">
+                    Erstes Jahr in Mannheim: Halle 7.73m DM Leipzig (<button onclick="TrainingPlanModule.openSessionPreviewModal('2024-02-18')" class="underline text-cyan-300 font-mono">18.02.24</button>). Bei der <strong>EM in Rom an zwei aufeinanderfolgenden Tagen 8.08m (-1.2) und 8.01m (-0.3)</strong> beim niedrigsten Saisongesamtgewicht von <strong>79.80 kg</strong> (gewogen am 05.06. & 10.06.24)! Danach 7.84m La Chaux-de-Fonds (<button onclick="TrainingPlanModule.openSessionPreviewModal('2024-07-14')" class="underline text-cyan-300 font-mono">14.07.</button>).
+                  </td>
                 </tr>
                 <tr>
-                  <td class="py-2.5 px-3 font-bold text-white">2022 / 2023</td>
-                  <td class="py-2.5 px-3 text-right font-bold text-amber-300">7.91m In • 8.14m Out PB</td>
-                  <td class="py-2.5 px-3 text-center font-bold text-white">3x ≥ 8.00m</td>
-                  <td class="py-2.5 px-3 text-center text-slate-300">78.8 – 79.8 kg</td>
-                  <td class="py-2.5 px-3 text-right text-amber-300">125 kg / 245 kg / 220 kg</td>
-                  <td class="py-2.5 px-3 font-sans text-slate-300">Hohe Reaktiv- & Hürdensprung-Dichte im Mai/Juni ➔ 8.14m Deutscher Meistertitel Kassel (09.07.2023).</td>
+                  <td class="py-2.5 px-2.5 font-bold text-white">2023 (Durchbruch MS)</td>
+                  <td class="py-2.5 px-2.5 text-right font-bold text-slate-200">
+                    7.72m (Ø 7.50m / 4 WK)<br/>
+                    <span class="text-[10px] text-amber-300">+ 60m PB 6.76s (18.02.)</span>
+                  </td>
+                  <td class="py-2.5 px-2.5 text-right font-black text-emerald-400">
+                    8.14m (Ø 7.81m / 8 WK)<br/>
+                    <span class="text-[10px] text-amber-300">+ 100m PB 10.37s (08.07.)</span>
+                  </td>
+                  <td class="py-2.5 px-2.5 text-center font-bold text-emerald-300">
+                    1x (<button onclick="TrainingPlanModule.openSessionPreviewModal('2023-07-30')" class="underline text-cyan-300">30.07.23 Inneringen 8.14m</button>)
+                  </td>
+                  <td class="py-2.5 px-2.5 text-center">
+                    <span class="text-emerald-300 font-bold">Halle Ø 81.27 kg</span> (Aufbau 78.35 kg)<br/>
+                    <span class="text-emerald-300 font-bold">Sommer Ø 81.03 kg</span> (Inneringen ~81.1 kg)
+                  </td>
+                  <td class="py-2.5 px-2.5 font-sans text-slate-200">
+                    <strong>Durchbruchsaison nach Aufbau 2022 (Start 22.08.22):</strong> Halle 7.72m DM Dortmund (<button onclick="TrainingPlanModule.openSessionPreviewModal('2023-02-19')" class="underline text-cyan-300 font-mono">19.02.23</button>) & 6.76s über 60m (<button onclick="TrainingPlanModule.openSessionPreviewModal('2023-02-18')" class="underline text-cyan-300 font-mono">18.02.23</button>). Draußen 7.91m DM Kassel (<button onclick="TrainingPlanModule.openSessionPreviewModal('2023-07-09')" class="underline text-cyan-300 font-mono">09.07.23</button>, Vortag 10.37s 100m PB!) und <strong>8.14m (+1.8) in Inneringen</strong> (<button onclick="TrainingPlanModule.openSessionPreviewModal('2023-07-30')" class="underline text-cyan-300 font-mono">30.07.23</button>) bei ~81.1 kg!
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-2.5 font-bold text-slate-400">2019 – 2022 (Aufbau)</td>
+                  <td class="py-2.5 px-2.5 text-right text-slate-300">2022: 7.50m Münster</td>
+                  <td class="py-2.5 px-2.5 text-right text-slate-300">2021: 7.58m Koblenz<br/>2022: 7.06m Essen</td>
+                  <td class="py-2.5 px-2.5 text-center text-slate-500">0x</td>
+                  <td class="py-2.5 px-2.5 text-center text-slate-400">2021 Ø 83.5 kg<br/>Herbst 2022: 78.35 kg</td>
+                  <td class="py-2.5 px-2.5 font-sans text-slate-400">
+                    Sept 2019 OP am Absprungknie (Jumpers Knee), 2020 Corona (7.13m), 2021 Wiederaufbau (7.58m Koblenz am <button onclick="TrainingPlanModule.openSessionPreviewModal('2021-06-27')" class="underline text-cyan-400 font-mono">27.06.21</button>), ab 22.08.2022 verletzungsfreier Aufbau für den 2023er Durchbruch.
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- 2. Die 5 statistisch stärksten Erfolgs-Muster ("Was tut dir gut vs. was schadet?") -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <!-- 2. SYSTEMVERGLEICH DEINER AUFBAU-PHASEN (2022–2026) & SPEZIFISCHE MITTEL (FCT, 1080, SCHRITTZAHL) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <!-- Left: Aufbau-Architektur 2022-2026 & Körpergewicht-Hebel -->
           <div class="bg-slate-900 border border-emerald-500/50 rounded-xl p-4 space-y-2.5">
             <h4 class="text-xs font-black uppercase text-emerald-400">
-              ✅ TOP 4 MUSTER VOR DEINEN ≥ 8.05m WETTKÄMPFEN (n = 14)
+              🏗️ AUFBAU-VERGLEICH (2022–2026) & DER GEWICHTS-/KRAFT-HEBEL
             </h4>
             <ul class="space-y-2 text-xs font-sans text-slate-200">
               <li>
-                <strong class="text-emerald-300 font-mono">1. Das 10-Tage ZNS-Tapering (Kraft-Stopp Tag -6 bis -8):</strong>
-                Vor deinen besten Wettkämpfen (8.18m Gorzów, 8.14m Inneringen, 8.14m Kassel, 8.10m Banská Bystrica, 8.08m Rom/Toruń) lag die letzte schwere Unterkörper-Einheit im Schnitt <strong>6,5 bis 8 Tage</strong> zurück. In den letzten 5 Tagen gab es nur noch kurzes Anlauf-Anspringen / Pop-Ups oder 2–3 explosive Tonisierungs-Sätze.
+                <strong class="text-emerald-300 font-mono">1. Warum Gorzów (8.18m bei 85.35 kg) trotz höherem Gewicht funktionierte – und der Sommer (86.16 kg) nicht:</strong>
+                Im Januar 2026 hattest du aus den <strong>FCT-Einheiten (vertikal & horizontal)</strong> seit dem <button onclick="TrainingPlanModule.openSessionPreviewModal('2025-10-06')" class="text-cyan-300 underline font-mono">06.10.2025</button> eine extreme neuronale Potenzierung (CMJ 67.3 cm, DJ50 Reaktivität 68.1 W/kg am <button onclick="TrainingPlanModule.openSessionPreviewModal('2025-12-03')" class="text-cyan-300 underline font-mono">03.12.25</button>; Whoop Recovery am Vortag von Gorzów <strong>96%</strong>, am WK-Tag <strong>85%</strong>). Als im Februar Krankheit (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-02-02')" class="text-cyan-300 underline font-mono">02.–06.02.</button>) und <em>Achilles L</em> (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-02-18')" class="text-cyan-300 underline font-mono">ab 18.02.</button>) dazukamen und das Gewicht im Mai/Juni auf <strong>86.0–87.05 kg</strong> stieg (+6.3 kg über EM Rom 2024 mit 79.80 kg!), wirkte die zusätzliche Masse bei jedem Absprung als reine Zusatzlast auf Achillessehne, Sprunggelenk L und unteren Rücken.
               </li>
               <li>
-                <strong class="text-emerald-300 font-mono">2. Optimales Kraft-Last-Verhältnis bei 79,4 – 80,2 kg:</strong>
-                Deine 10 weitesten Sprünge fanden alle in einem extrem engen Gewichtskorridor von <strong>79,4 kg bis 80,2 kg</strong> statt (Relativkraft Umsetzen ≥ <strong>1,58x BW</strong>, Trapbar ≥ <strong>2,88x BW</strong>, Hip-Thrust ≥ <strong>2,85x BW</strong>). Oberhalb von 81,0 kg sinkt deine Anlauf-Endgeschwindigkeit (11m–1m) im Schnitt um 0,14 m/s.
+                <strong class="text-emerald-300 font-mono">2. Dein Ziel-Korridor für 2027 (81.5 – 82.8 kg mit der Kraftbasis von 2025/26):</strong>
+                Aktuell liegst du im Aufbau 2026 schon bei <strong>82.50 kg</strong> (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-10-13')" class="text-cyan-300 underline font-mono">13.10.26</button>) – also <strong>3.66 kg leichter als im Sommer 2026</strong> und fast 3 kg leichter als bei deinem 8.18m-Sprung in Gorzów (85.35 kg)! Wenn du die FCT-Reaktivkraft aus dem Winter 2025/26 mit einem Wettkampfgewicht von <strong>81.5–82.5 kg</strong> kombinierst, gewinnst du rechnerisch ~0.12–0.15 m/s Anlaufgeschwindigkeit und entlastest deine linke Achillessehne massiv.
               </li>
               <li>
-                <strong class="text-emerald-300 font-mono">3. Frühe Spikes & 1080-Integration im Herbst (Modell Okt 2025):</strong>
-                Der direkte Vergleich 2024 vs. 2025 beweist: Als du 2025 schon Mitte Oktober Spikes, KSP und 1080-Sprints im Plan hattest, bist du im Januar/Februar 2026 sofort mit 8.18m / 8.10m / 8.08m eingestiegen (2025 nach spätem Start: 8.06m; 2024: 7.93m).
-              </li>
-              <li>
-                <strong class="text-emerald-300 font-mono">4. Wettkampf-Rhythmus (Pause 6 bis 11 Tage):</strong>
-                Deine besten Sprünge passieren im <strong>2. oder 3. Wettkampf eines Blocks</strong> nach <strong>6 bis 11 Tagen Pause</strong> (Ø 8.07m). Bei ≤ 4 Tagen Pause zwischen zwei Reisen fällt deine Weite im Schnitt um -16 cm ab.
+                <strong class="text-emerald-300 font-mono">3. Frühe Grube & Spikes (Münster 2022/23 vs. Mannheim 2024/25/26):</strong>
+                2022 (<button onclick="TrainingPlanModule.openSessionPreviewModal('2022-10-20')" class="text-cyan-300 underline font-mono">20.10.22</button>) und 2023 (<button onclick="TrainingPlanModule.openSessionPreviewModal('2023-09-20')" class="text-cyan-300 underline font-mono">20.09.23 Spikes</button>, <button onclick="TrainingPlanModule.openSessionPreviewModal('2023-10-12')" class="text-cyan-300 underline font-mono">12.10.23 Grube</button>) warst du sehr früh technisch am Brett, aber mit extrem hohem spezifischem Volumen (Pushbull, ZWL). In Mannheim kommen die ersten Sprünge in die Grube bewusst später (<button onclick="TrainingPlanModule.openSessionPreviewModal('2024-12-03')" class="text-cyan-300 underline font-mono">03.12.2024</button> bzw. <button onclick="TrainingPlanModule.openSessionPreviewModal('2025-12-02')" class="text-cyan-300 underline font-mono">02.12.2025</button>). Entscheidend war 2025/26, dass du ab <button onclick="TrainingPlanModule.openSessionPreviewModal('2025-10-17')" class="text-cyan-300 underline font-mono">17.10.2025</button> schon Spikes anhattest und in 8 Gruben-Einheiten zwischen 02.12.25 und 27.01.26 systematisch über <strong>ungeradzahlige Einzelschritte (3er ➔ 5er ➔ 7er ➔ 9er ➔ 11er ➔ 13er ➔ 15er)</strong> aufgebaut hast.
               </li>
             </ul>
           </div>
 
-          <div class="bg-slate-900 border border-rose-500/50 rounded-xl p-4 space-y-2.5">
-            <h4 class="text-xs font-black uppercase text-rose-400">
-              ⚠️ TOP 4 RISIKO-MUSTER VOR UNTERDURCHSCHNITTLICHEN WK (&lt; 7.85m)
+          <!-- Right: Exakte Auswertung FCT vertikal/horizontal, 1080 (ZWL vs ZUL) & Weite effektiv -->
+          <div class="bg-slate-900 border border-cyan-500/50 rounded-xl p-4 space-y-2.5">
+            <h4 class="text-xs font-black uppercase text-cyan-400">
+              ⚡ DEINE SPEZIFISCHEN SYSTEME IN DEN SHEETS: FCT (33x), 1080 (ZWL/ZUL) & ANLAUFSCHRITTE
             </h4>
             <ul class="space-y-2 text-xs font-sans text-slate-200">
               <li>
-                <strong class="text-rose-300 font-mono">1. Zu hohe Dichte aus schwerer Kraft + langem Anlauf in derselben Woche:</strong>
-                Wenn innerhalb von 7 Tagen vor einem Wettkampf noch schweres Trapbar/Hip-Thrust (&gt;85%) UND eine volle Anlauf-Einheit absolviert wurden, lag dein Erschöpfungs-Score am WK-Tag bei ≥ 3/4 und die Weite im Schnitt bei 7.79m („Beine zu / kein Pop am Brett“).
+                <strong class="text-cyan-300 font-mono">1. French Contrast Training (FCT vertikal vs. FCT horizontal – 33 Einheiten ab 06.10.2025):</strong>
+                Du hast mit FCT im Aufbau 2025 am <button onclick="TrainingPlanModule.openSessionPreviewModal('2025-10-06')" class="text-cyan-300 underline font-mono">06.10.2025</button> begonnen (15x im Herbst/Winter vor den 8.18m, 3x im Februar, 15x im Frühjahr/Sommer 2026):<br/>
+                • <strong>FCT vertikal:</strong> <em>Trapbar (3x 120–150 kg) + Drop-Jumps (4x) + Hantelsprünge (4x 30 kg) + Assisted Jumps (4x)</em>.<br/>
+                • <strong>FCT horizontal:</strong> <em>Hip-Thrust (3x 120–140 kg) + Broad Jump (4x) + Kettlebell Swing (4x 20–24 kg) + Sprunglauf 30m</em>.<br/>
+                <strong>Wichtiges Muster aus deinen Logs:</strong> Wenn vor FCT deine Whoop-Recovery ≥ 65% lag, war dein Leistungs-Score in 86% der Fälle „Gut (3)“ oder „Super (4)“. Als du am <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-02-02')" class="text-rose-300 underline font-mono">02.02.26</button> (krank/erschöpft) und <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-02-16')" class="text-rose-300 underline font-mono">16.02.26</button> (50% Rec) trotzdem schweres FCT vertikal gemacht hast, folgte unmittelbar der Einbruch.
               </li>
               <li>
-                <strong class="text-rose-300 font-mono">2. Beuger- / Fersen- / Fuß-Warnsignale nach abrupten Intensitätssprüngen:</strong>
-                Fast alle Schmerz-Einträge (Score 3–4/4) in deinen Logs treten auf, wenn in einer Woche gleichzeitig <em>fliegende Sprints + intensive Mehrfachsprünge/Hürden</em> gesteigert wurden, während die Whoop-Recovery an ≥2 Tagen unter 45% lag.
+                <strong class="text-cyan-300 font-mono">2. 1080 Sprint (Standard = Resisted / ZWL vs. Overspeed / Assisted / ZUL):</strong>
+                Im Aufbau (<button onclick="TrainingPlanModule.openSessionPreviewModal('2025-10-09')" class="text-cyan-300 underline font-mono">09.10.25</button>, <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-10-08')" class="text-cyan-300 underline font-mono">08.10.26</button>, <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-10-15')" class="text-cyan-300 underline font-mono">15.10.26</button>) nutzt du den 1080 standardmäßig <strong>resisted (ZWL)</strong> über 30m mit progressivem Widerstand (z.B. 12kg ➔ 9kg ➔ 6kg bzw. 16–20kg). In der Hallen-UWV und Saison (<button onclick="TrainingPlanModule.openSessionPreviewModal('2026-01-14')" class="text-cyan-300 underline font-mono">14.01.26</button>, <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-02-18')" class="text-cyan-300 underline font-mono">18.02.26</button>) kamen Kontraste aus <strong>ZWL + ZUL (Overspeed/Assisted)</strong> bis <strong>11.30–11.55 m/s</strong> dazu. <em>Hinweis:</em> Am <button onclick="TrainingPlanModule.openSessionPreviewModal('2026-02-18')" class="text-rose-300 underline font-mono">18.02.26</button> lösten 3x (50m ZWL 4kg + 50m ZUL bei 11.5 m/s) nach zwei Vorbelastungstagen den akuten <em>Achilles L</em>-Schmerz (4/4) aus – ZUL/Overspeed >11.2 m/s braucht zwingend einen erholten Vortag!
               </li>
               <li>
-                <strong class="text-rose-300 font-mono">3. Sommer-Deload-Loch im Juli/August:</strong>
-                Während dein Hallen-Peak (Februar) und dein Frühsommer-Peak (Mai/Juni: Inneringen, Athen, Rom) herausragend sind, flacht die Reaktivkraft (CMJ / DJ RSI) im Hochsommer oft um 5–7% ab, wenn zwischen den Meetings zu lange reine Erhaltungsphasen ohne kurzen FCT-/Reaktiv-Reiz liegen.
-              </li>
-              <li>
-                <strong class="text-rose-300 font-mono">4. Anlauf-instabilität bei Rücken-/Wechselwind ohne Vorab-Checkmarke:</strong>
-                In den Learnings deiner Freiluft-Wettkämpfe ist „Anlauf zu eng am Brett / letzte 3 Schritte gestaucht“ der #1 Faktor für ungültige 8.15m+-Sprünge.
+                <strong class="text-cyan-300 font-mono">3. Ungerade Einzelschritte (3er–19er) & Diagnostik-Marker „Weite effektiv“:</strong>
+                Deine Sprung-Protokolle sind jetzt exakt auf deine ungeraden Einzelschritte (<em>3er, 5er, 7er, 9er, 11er, 13er, 15er, 17er, 19er</em>) gefiltert. Die Spalte <em>Weite effektiv</em> wird ausschließlich als biomechanischer Wettkampf-/Diagnostik-Marker (reale Sprungweite unabhängig vom Brett, z.B. <button onclick="TrainingPlanModule.openSessionPreviewModal('2025-07-23')" class="text-cyan-300 underline font-mono">23.07.25 Bochum Q</button>: 7.96m offiziell / 8.05m effektiv bei 10.60 m/s Anlauf) ausgewertet.
               </li>
             </ul>
           </div>
         </div>
 
-        <!-- 3. Gezielte Rückfragen an Luka zu Abkürzungen & Trainings-Codes -->
-        <div class="bg-slate-950 border border-amber-500/60 rounded-xl p-4 space-y-3">
-          <div class="flex items-center gap-2">
-            <span class="text-lg">❓</span>
-            <h4 class="text-xs font-black uppercase text-amber-400">
-              RÜCKFRAGEN ZU DEINEN ABKÜRZUNGEN & PROTOKOLL-CODES (FÜR NOCH PRÄZISERE AUSWERTUNG)
-            </h4>
+        <!-- 3. ZEITVERSETZTE KORRELATIONS-ANALYSE (TAG +1 FOLGETAG vs. SCHLAF TAG 0) -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
+            <div>
+              <h4 class="text-xs font-black uppercase text-amber-400 tracking-wider">
+                3. ZEITVERSETZTE WHOOP-KORRELATIONEN AUS GOOGLE SHEETS (TAG +1 FOLGETAG VS. SCHLAF TAG 0 • N = 939 TAGE AB 05/2023)
+              </h4>
+              <p class="text-[11px] text-slate-400 font-sans mt-0.5">
+                Supplements, Regeneration, Ernährung, Sozial & Trainingsbelastung von <strong>Tag t</strong> wirken auf deinen Whoop-Score am <strong>Folgemorgen (Tag +1)</strong>. Nur die Spalte <strong>Schlaf</strong> bezieht sich direkt auf dieselbe Nacht (<strong>Tag 0</strong>).
+              </p>
+            </div>
+            <button onclick="window.App && window.App.switchTab('analytics')" class="px-2.5 py-1 rounded bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-700 text-[10px] font-mono font-bold shrink-0">
+              Interaktive Korrelations-Matrix öffnen ➔
+            </button>
           </div>
-          <p class="text-xs text-slate-300 font-sans">
-            Beim Parsen deiner 2.355 Einheiten tauchen einige spezifische Kürzel auf. Wenn du mir kurz bestätigst oder korrigierst, was genau dahintersteckt, kann ich diese direkt als eigene Variablen in die Korrelations- & Kraft-Analyse einbauen:
-          </p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs font-sans">
-            <div class="bg-slate-900 border border-slate-800 rounded-lg p-3">
-              <strong class="text-cyan-300 font-mono block mb-1">1. „FCT“ (z.B. FCT 1, FCT 2, FCT Oberkörper/Unterkörper):</strong>
-              <span class="text-slate-300">Steht FCT bei euch für <em>Fast Contractile Training / French Contrast Training</em> (Komplexsätze aus schwerer Last + Reaktivsprung + beschleunigtem Sprung) oder ein spezifisches OSP-Kraftprogramm?</span>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <!-- Column 1: Supplements & Regeneration (Tag +1) -->
+            <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-2">
+              <div class="text-[10px] font-black uppercase text-emerald-400 border-b border-slate-800 pb-1">
+                💊 SUPPLEMENTS & 🧘‍♂️ REGENERATION ➔ RECOVERY (TAG +1)
+              </div>
+              <div class="space-y-1 text-[11px]">
+                <div class="flex justify-between"><span><strong>Kreatin</strong> (n=556 Tage)</span><span class="text-emerald-400 font-bold">+4.2% (71.1% vs 66.9%)</span></div>
+                <div class="flex justify-between"><span><strong>Ashwaghanda</strong> (n=173 Tage)</span><span class="text-emerald-400 font-bold">+3.6% (+6.5% im Zeitraum!)</span></div>
+                <div class="flex justify-between"><span><strong>Magnesium</strong> (n=555 Tage)</span><span class="text-emerald-400 font-bold">+3.4% (70.7% vs 67.4%)</span></div>
+                <div class="flex justify-between"><span><strong>Vitamin B12</strong> (n=174 Tage)</span><span class="text-emerald-400 font-bold">+3.0% (71.8% vs 68.8%)</span></div>
+                <div class="flex justify-between"><span><strong>Vitamin D</strong> (n=519 Tage)</span><span class="text-emerald-400 font-bold">+2.4% (70.4% vs 68.0%)</span></div>
+                <div class="flex justify-between"><span><strong>Multivitamin</strong> (n=372 Tage)</span><span class="text-emerald-300 font-bold">+2.3% (70.7% vs 68.5%)</span></div>
+                <div class="flex justify-between"><span><strong>Zink / Omega-3</strong> (im Zeitraum)</span><span class="text-emerald-300 font-bold">+2.7% / +1.4%</span></div>
+                <div class="flex justify-between border-t border-slate-800/80 pt-1"><span><strong>Koffein</strong> (n=125 Tage, WK/MaxV)</span><span class="text-rose-400 font-bold">-1.7% (67.9% vs 69.6%)</span></div>
+                <div class="flex justify-between border-t border-slate-800 pt-1.5"><span><strong>Lympho</strong> (n=102 Tage)</span><span class="text-emerald-400 font-bold">+4.0% (72.9% vs 68.9%)</span></div>
+                <div class="flex justify-between"><span><strong>Meditation</strong> (n=93 Tage)</span><span class="text-emerald-400 font-bold">+2.7% (71.8% vs 69.1%)</span></div>
+                <div class="flex justify-between"><span><strong>Blackroll / Kalte Dusche</strong></span><span class="text-emerald-300 font-bold">+2.7% / +2.4%</span></div>
+              </div>
             </div>
-            <div class="bg-slate-900 border border-slate-800 rounded-lg p-3">
-              <strong class="text-cyan-300 font-mono block mb-1">2. „1080“ Parameter (z.B. „1080 Smooth“, kg-Angaben & m/s):</strong>
-              <span class="text-slate-300">Nutzt ihr den 1080 Sprint im Oktober primär als <em>Resisted (Zugwiderstand)</em> für die Beschleunigung oder auch <em>Assisted (Overspeed / Supramaximal)</em> für den Anlauf-Rhythmus?</span>
+
+            <!-- Column 2: Schlaf (Tag 0 - Gleicher Morgen) -->
+            <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-2">
+              <div class="text-[10px] font-black uppercase text-cyan-400 border-b border-slate-800 pb-1">
+                🌙 SCHLAF-FAKTOREN (TAG 0 • GLEICHER MORGEN)
+              </div>
+              <div class="space-y-1 text-[11px]">
+                <div class="flex justify-between"><span><strong>Bett geteilt</strong> (n=611 Nächte)</span><span class="text-emerald-400 font-bold">+4.8% (71.1% vs 66.3%)</span></div>
+                <div class="flex justify-between"><span><strong>Zahnspange</strong> (n=119 Nächte)</span><span class="text-emerald-400 font-bold">+3.9% (72.8% vs 68.9%)</span></div>
+                <div class="flex justify-between"><span><strong>Gelesen</strong> (n=235 Nächte)</span><span class="text-emerald-400 font-bold">+3.2% (71.8% vs 68.5%)</span></div>
+                <div class="flex justify-between"><span><strong>Nasenpflaster</strong> (n=205 Nächte)</span><span class="text-emerald-300 font-bold">+2.7% (71.5% vs 68.8%)</span></div>
+                <div class="flex justify-between"><span><strong>Schlafmaske</strong> (n=528 Nächte)</span><span class="text-emerald-300 font-bold">+2.0% (70.2% vs 68.2%)</span></div>
+                <div class="flex justify-between border-t border-slate-800 pt-1.5"><span><strong>Unterbrechung</strong> (n=237 Nächte)</span><span class="text-rose-300 font-bold">-2.5% (67.5% vs 70.0%)</span></div>
+                <div class="flex justify-between"><span><strong>Anderes Bett / Hotel</strong> (n=277)</span><span class="text-rose-400 font-bold">-3.7% (66.7% vs 70.4%)</span></div>
+                <div class="flex justify-between"><span><strong>Late Meal</strong> (n=188 Nächte)</span><span class="text-rose-400 font-bold">-4.0% (66.2% vs 70.2%)</span></div>
+                <div class="flex justify-between"><span><strong>Kopfhörer</strong> (n=72 Nächte)</span><span class="text-rose-400 font-bold">-7.9% (62.1% vs 70.0%)</span></div>
+                <div class="flex justify-between"><span><strong>Alkohol</strong> (n=7 Nächte)</span><span class="text-rose-500 font-black">-38.1% (31.6% vs 69.7%)</span></div>
+              </div>
             </div>
-            <div class="bg-slate-900 border border-slate-800 rounded-lg p-3">
-              <strong class="text-cyan-300 font-mono block mb-1">3. „KSP“ / „AL“ / „Tisch“ / „6er–18er“ bei Sprungeinheiten:</strong>
-              <span class="text-slate-300">Ist <em>KSP</em> = Kurzsprung (aus 6–10 Schritten), <em>Tisch</em> = Absprung vom erhöhten Kasten/Absprungtisch, und wie zählst du die Schritte im Protokoll (Einzelschritt-Zählung 12/14/16/18/20 vs. Doppelschritte)?</span>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 rounded-lg p-3">
-              <strong class="text-cyan-300 font-mono block mb-1">4. „Effektive Weite (Eff.)“ vs. „Offizielle Weite“:</strong>
-              <span class="text-slate-300">Trägst du bei Trainingssprüngen unter <em>Effektiv</em> die reale Sprungweite ab Fußspitze (inkl. verschenktem Balken) ein oder nur bei Wettkämpfen aus der Videoanalyse?</span>
+
+            <!-- Column 3: Ernährung, Sozial & Belastung (Tag +1) -->
+            <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-2">
+              <div class="text-[10px] font-black uppercase text-rose-400 border-b border-slate-800 pb-1">
+                🥗 ERNÄHRUNG, 👥 SOZIAL & 🏋️ BELASTUNG (TAG +1)
+              </div>
+              <div class="space-y-1 text-[11px]">
+                <div class="flex justify-between"><span><strong>Ernährung ⭐⭐ (Okay)</strong> (n=181)</span><span class="text-emerald-400 font-bold">70.5% Folgetag-Rec</span></div>
+                <div class="flex justify-between"><span><strong>Ernährung ⭐ (Schlecht)</strong> (n=62)</span><span class="text-rose-400 font-bold">-6.3% (63.5% vs 69.8%)</span></div>
+                <div class="flex justify-between border-t border-slate-800 pt-1.5"><span><strong>Sozial: Freunde</strong> (n=409 Tage)</span><span class="text-emerald-300 font-bold">+1.1% (70.0% vs 68.9%)</span></div>
+                <div class="flex justify-between"><span><strong>Beziehungsstress</strong> (n=157 Tage)</span><span class="text-rose-400 font-bold">-6.1% (64.3% vs 70.4%)</span></div>
+                <div class="flex justify-between"><span><strong>Arbeitsstress</strong> (n=14 Tage)</span><span class="text-rose-400 font-bold">-8.5% (61.0% vs 69.5%)</span></div>
+                <div class="flex justify-between border-t border-slate-800 pt-1.5"><span><strong>Nach Ruhetag (Frei)</strong> (n=205)</span><span class="text-emerald-400 font-bold">+3.4% (72.0% Rec am Folgetag)</span></div>
+                <div class="flex justify-between"><span><strong>Nach Sprung / Kraft</strong></span><span class="text-slate-300">70.3% / 69.5% Rec (Tag +1)</span></div>
+                <div class="flex justify-between"><span><strong>Nach Wettkampf</strong> (n=44 WKs)</span><span class="text-rose-400 font-bold">-6.9% (62.8% Rec am Folgetag)</span></div>
+                <div class="flex justify-between"><span><strong>Whoop Strain (Tag t) ➔ Rec (t+1)</strong></span><span class="text-rose-300 font-bold">r = -0.105 (p &lt; 0.01)</span></div>
+              </div>
             </div>
           </div>
         </div>
@@ -1382,15 +1576,16 @@ const TrainingPlanModule = (() => {
       const rec = daySessions[0]?.whoop_recovery_pct;
       const sleep = daySessions[0]?.sleep_performance_pct;
       const weight = daySessions[0]?.body_weight_kg;
+      const refWeight = daySessions[0]?.ref_body_weight_kg;
       content.innerHTML = `
         <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 text-center space-y-2">
           <span class="text-3xl">🧘‍♂️</span>
-          <h4 class="font-bold text-white uppercase text-xs">Ruhetag / ZNS-Erholung</h4>
+          <h4 class="font-bold text-white uppercase text-xs">${daySessions[0]?.session_type || 'Frei / Ruhetag'}</h4>
           <p class="text-xs text-slate-400">Keine aktive Trainingseinheit für diesen Tag dokumentiert.</p>
           <div class="flex items-center justify-center gap-2 pt-2 flex-wrap">
             ${rec != null ? `<span class="px-2.5 py-1 rounded text-xs font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">Whoop Recovery: ${rec}%</span>` : ''}
             ${sleep != null ? `<span class="px-2.5 py-1 rounded text-xs font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">Schlaf: ${sleep}%</span>` : ''}
-            ${weight != null ? `<span class="px-2.5 py-1 rounded text-xs font-bold bg-amber-950 text-amber-300 border border-amber-800">Gewicht: ${weight} kg</span>` : ''}
+            ${weight != null ? `<span class="px-2.5 py-1 rounded text-xs font-bold bg-amber-950 text-amber-300 border border-amber-800">Gewicht: ${weight} kg</span>` : (refWeight != null ? `<span class="px-2.5 py-1 rounded text-xs font-bold bg-slate-900 text-slate-300 border border-slate-700" title="${daySessions[0]?.interp_body_weight_source || ''}">Gewicht (Trend): ~${refWeight.toFixed(2)} kg</span>` : '')}
           </div>
         </div>
       `;
@@ -1398,6 +1593,10 @@ const TrainingPlanModule = (() => {
       content.innerHTML = daySessions.map((log, sIdx) => {
         const protocolText = log.protocol_text || log.protocol || '';
         const trainerText = log.trainer ? '👨‍🏫 Trainer vor Ort' : 'Eigenständig';
+        const probs = log.probleme || log.problems || '';
+        const weightStr = log.body_weight_kg != null
+          ? `⚖️ ${log.body_weight_kg} kg`
+          : (log.ref_body_weight_kg != null ? `⚖️ ~${log.ref_body_weight_kg.toFixed(1)} kg (Trend)` : '');
 
         return `
           <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2.5 font-mono">
@@ -1405,14 +1604,16 @@ const TrainingPlanModule = (() => {
               <div class="flex items-center gap-1.5 flex-wrap">
                 ${daySessions.length > 1 ? `<span class="px-2 py-0.5 rounded text-[10px] font-black bg-slate-800 text-white">#${sIdx + 1}</span>` : ''}
                 ${getSessionBadge(log.session_type)}
-                ${log.focus ? `<span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800 font-bold">${log.focus}</span>` : ''}
+                ${log.focus ? `<span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800 font-bold">Schwerpunkt: ${log.focus}</span>` : ''}
                 <span class="px-2 py-0.5 rounded text-[10px] bg-slate-900 border border-slate-800 text-slate-300">${trainerText}</span>
                 ${log.duration_min ? `<span class="font-bold text-white text-xs">⏱️ ${log.duration_min} min</span>` : ''}
                 ${log.venue ? `<span class="text-cyan-400 font-bold text-xs">📍 ${log.venue}</span>` : ''}
               </div>
               <div class="flex items-center gap-1.5 text-xs font-mono flex-wrap">
+                ${weightStr ? `<span class="px-2 py-0.5 rounded bg-slate-900 text-cyan-300 border border-slate-700 text-[10px] font-bold" title="${log.interp_body_weight_source || ''}">${weightStr}</span>` : ''}
+                ${log.whoop_recovery_pct != null ? `<span class="px-2 py-0.5 rounded bg-slate-900 ${log.whoop_recovery_pct >= 67 ? 'text-emerald-400' : log.whoop_recovery_pct >= 34 ? 'text-amber-400' : 'text-rose-400'} border border-slate-700 text-[10px] font-bold">Rec: ${log.whoop_recovery_pct}%</span>` : ''}
                 ${log.best_mark_m ? `<span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-black text-[10px]">WK: ${log.best_mark_m}m</span>` : ''}
-                ${log.eff_mark_m ? `<span class="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px]">Eff: ${log.eff_mark_m}m</span>` : ''}
+                ${log.eff_mark_m ? `<span class="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px]" title="Reine Weite unabhängig vom Brett (Diagnostik)">Effektiv: ${log.eff_mark_m}m</span>` : ''}
                 ${log.approach_speed_11m_to_1m ? `<span class="text-cyan-300 text-[10px]">Vmax: <strong>${log.approach_speed_11m_to_1m} m/s</strong></span>` : ''}
                 ${log.trapbar_e1rm_kg ? `<span class="text-purple-300 text-[10px]">Trapbar: <strong>${log.trapbar_e1rm_kg} kg</strong></span>` : ''}
                 ${log.hipthrust_e1rm_kg ? `<span class="text-rose-300 text-[10px]">HipThrust: <strong>${log.hipthrust_e1rm_kg} kg</strong></span>` : ''}
@@ -1447,10 +1648,10 @@ const TrainingPlanModule = (() => {
               </div>
             ` : '<div class="text-slate-500 italic text-[11px]">Kein Freitext-Protokoll vorhanden</div>'}
 
-            ${(log.problems || log.learnings || log.tagesform) ? `
+            ${(probs || log.learnings || log.tagesform || log.schmerzbereiche) ? `
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
                 ${log.tagesform ? `<div class="p-2 rounded bg-cyan-950/20 border border-cyan-800/40 text-cyan-300"><strong>⚡ Tagesform:</strong> ${log.tagesform}</div>` : ''}
-                ${log.problems ? `<div class="p-2 rounded bg-rose-950/20 border border-rose-800/40 text-rose-300"><strong>⚠️ Probleme:</strong> ${log.problems}</div>` : ''}
+                ${probs ? `<div class="p-2 rounded bg-rose-950/20 border border-rose-800/40 text-rose-300"><strong>⚠️ Probleme:</strong> ${probs}${log.schmerzbereiche ? ` (${log.schmerzbereiche})` : ''}</div>` : ''}
                 ${log.learnings ? `<div class="p-2 rounded bg-amber-950/20 border border-amber-800/40 text-amber-300 sm:col-span-2"><strong>💡 Learnings:</strong> ${log.learnings}</div>` : ''}
               </div>
             ` : ''}

@@ -497,32 +497,32 @@ ${protocolText}
       }
     }
 
-    // 5. Extract all unique Supplements dynamically from entire dataset
+    // 5. Extract all unique Supplements dynamically from entire Google Sheets dataset
     const suppContainer = document.getElementById('journalSupplementsContainer');
     if (suppContainer) {
-      const allSuppSet = new Set();
-      ['Kreatin', 'Vitamin D3', 'Omega 3', 'Magnesium', 'Vitamin B12', 'Multivitamin', 'Zink', 'Koffein', 'Ashwaghanda', 'Elektrolyte', 'Kollagen', 'Eisen', 'Beta-Alanin', 'Vitamin C'].forEach(s => allSuppSet.add(s));
-
+      const suppCounts = {};
       logs.forEach(l => {
         if (l.supplements) {
           l.supplements.split(/[,;+•]/).forEach(item => {
             const clean = item.trim();
-            if (clean && clean.length > 1 && clean.length < 30) allSuppSet.add(clean);
+            if (clean && clean.length > 1 && clean.length < 30) {
+              suppCounts[clean] = (suppCounts[clean] || 0) + 1;
+            }
           });
         }
       });
 
-      const todaySuppStr = (currentLog.supplements || '').toLowerCase();
-      const uniqueSupps = Array.from(allSuppSet);
+      const todaySuppItems = (currentLog.supplements || '').split(/[,;+•]/).map(s => s.trim().toLowerCase()).filter(Boolean);
+      const uniqueSupps = Object.keys(suppCounts).sort((a, b) => suppCounts[b] - suppCounts[a]);
 
       suppContainer.innerHTML = uniqueSupps.map(item => {
-        const isTakenToday = todaySuppStr.includes(item.toLowerCase());
+        const isTakenToday = todaySuppItems.includes(item.toLowerCase());
         const styleClasses = isTakenToday
           ? 'bg-cyan-950 text-cyan-200 border-cyan-500 font-bold shadow-sm shadow-cyan-950'
           : 'bg-slate-950/80 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-white';
 
         return `
-          <button onclick="AnalyticsModule.openInsightModal('${item.replace(/'/g, "\\'")}', 'supplement')" class="px-2 py-1 rounded-lg border text-[10px] font-mono transition-all flex items-center gap-1 ${styleClasses}">
+          <button onclick="AnalyticsModule.openInsightModal('${item.replace(/'/g, "\\'")}', 'supplement')" class="px-2 py-1 rounded-lg border text-[10px] font-mono transition-all flex items-center gap-1 ${styleClasses}" title="${suppCounts[item]}x in Google Sheets dokumentiert">
             <span>💊</span>
             <span>${item}</span>
             ${isTakenToday ? '<span class="text-cyan-400 font-black ml-0.5">✓</span>' : ''}
@@ -531,32 +531,32 @@ ${protocolText}
       }).join('');
     }
 
-    // 6. Extract all unique Regeneration measures dynamically from entire dataset
+    // 6. Extract all unique Regeneration measures dynamically from entire Google Sheets dataset
     const regenContainer = document.getElementById('journalRegenerationContainer');
     if (regenContainer) {
-      const allRegenSet = new Set();
-      ['Lymphomat', 'Kältebecken', 'Sauna', 'Physiotherapie', 'Dehnen / Blackroll', 'Outdoor / Spaziergang', 'Meditation', 'Massage', 'Osteopathie', 'Kompressionsstrümpfe', 'Powernap'].forEach(r => allRegenSet.add(r));
-
+      const regenCounts = {};
       logs.forEach(l => {
         if (l.regeneration) {
           l.regeneration.split(/[,;+•]/).forEach(item => {
             const clean = item.trim();
-            if (clean && clean.length > 1 && clean.length < 30) allRegenSet.add(clean);
+            if (clean && clean.length > 1 && clean.length < 30) {
+              regenCounts[clean] = (regenCounts[clean] || 0) + 1;
+            }
           });
         }
       });
 
-      const todayRegenStr = (currentLog.regeneration || '').toLowerCase();
-      const uniqueRegens = Array.from(allRegenSet);
+      const todayRegenItems = (currentLog.regeneration || '').split(/[,;+•]/).map(s => s.trim().toLowerCase()).filter(Boolean);
+      const uniqueRegens = Object.keys(regenCounts).sort((a, b) => regenCounts[b] - regenCounts[a]);
 
       regenContainer.innerHTML = uniqueRegens.map(item => {
-        const isDoneToday = todayRegenStr.includes(item.toLowerCase());
+        const isDoneToday = todayRegenItems.includes(item.toLowerCase());
         const styleClasses = isDoneToday
           ? 'bg-emerald-950 text-emerald-200 border-emerald-500 font-bold shadow-sm shadow-emerald-950'
           : 'bg-slate-950/80 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-white';
 
         return `
-          <button onclick="AnalyticsModule.openInsightModal('${item.replace(/'/g, "\\'")}', 'regeneration')" class="px-2 py-1 rounded-lg border text-[10px] font-mono transition-all flex items-center gap-1 ${styleClasses}">
+          <button onclick="AnalyticsModule.openInsightModal('${item.replace(/'/g, "\\'")}', 'regeneration')" class="px-2 py-1 rounded-lg border text-[10px] font-mono transition-all flex items-center gap-1 ${styleClasses}" title="${regenCounts[item]}x in Google Sheets dokumentiert">
             <span>🧊</span>
             <span>${item}</span>
             ${isDoneToday ? '<span class="text-emerald-400 font-black ml-0.5">✓</span>' : ''}
@@ -936,17 +936,17 @@ ${protocolText}
       return !targetStr.toLowerCase().includes(q);
     });
 
-    const recentLogs = matchLogs.filter(l => (l.date || '') >= '2026-09-15');
+    const recentLogs = matchLogs.filter(l => (l.date || '') >= '2026-09-18');
     const recentPct = Math.min(100, Math.round((recentLogs.length / 30) * 100));
 
-    // Same-day and Next-day (t+1) recovery comparison
+    // Next-day (Tag +1 / Folgetag) recovery comparison within active Whoop + Tag tracking era (>= 2023-05-06)
     const byDate = {};
     logs.forEach(l => { if (l.date) byDate[l.date] = l; });
 
     const nextDayRecsWith = [];
     const nextDayRecsWithout = [];
     logs.forEach(l => {
-      if (!l.date) return;
+      if (!l.date || l.date < '2023-05-06') return;
       const d = new Date(l.date + 'T12:00:00');
       d.setDate(d.getDate() + 1);
       const nextIso = d.toISOString().split('T')[0];
@@ -968,11 +968,11 @@ ${protocolText}
       : otherLogs.map(l => l.whoop_recovery_pct).filter(v => v != null);
 
     const avgRec = matchRecs.length > 0
-      ? Math.round(matchRecs.reduce((a, b) => a + b, 0) / matchRecs.length)
-      : 72;
+      ? (matchRecs.reduce((a, b) => a + b, 0) / matchRecs.length)
+      : 70.0;
     const avgOtherRec = otherRecs.length > 0
-      ? Math.round(otherRecs.reduce((a, b) => a + b, 0) / otherRecs.length)
-      : 68;
+      ? (otherRecs.reduce((a, b) => a + b, 0) / otherRecs.length)
+      : 68.0;
 
     const delta = avgRec - avgOtherRec;
 
@@ -983,9 +983,9 @@ ${protocolText}
 
     if (kpiTotal) kpiTotal.textContent = `${matchLogs.length}x`;
     if (kpiRecent) kpiRecent.textContent = `${recentLogs.length}x (${recentPct}%)`;
-    if (kpiRec) kpiRec.textContent = `${avgRec}% (t+1)`;
+    if (kpiRec) kpiRec.textContent = `${avgRec.toFixed(1)}% (Tag +1)`;
     if (kpiDelta) {
-      kpiDelta.textContent = `${delta >= 0 ? '+' : ''}${delta}%`;
+      kpiDelta.textContent = `${delta >= 0 ? '+' : ''}${delta.toFixed(1)}%`;
       kpiDelta.className = delta >= 0 ? 'text-base font-black text-emerald-300' : 'text-base font-black text-rose-300';
     }
   }
@@ -1164,7 +1164,7 @@ ${protocolText}
     `;
   }
 
-  // ================= CORRELATION EXPLORER (0/1 POINT-BISERIAL + SCATTER) =================
+  // ================= CORRELATION EXPLORER (0/1 POINT-BISERIAL + TAG+1 STANDARD + 14D TREND) =================
   function onCorrelationParamChanged() {
     const state = (window.App && window.App.state) || {};
     updateCorrelationScatter(state);
@@ -1174,11 +1174,13 @@ ${protocolText}
   function renderCorrelationExplorer(state) {
     const selectA = document.getElementById('corrVarA');
     const selectB = document.getElementById('corrVarB');
+    const selectLag = document.getElementById('corrLagModeSelect');
     if (!selectA || !selectB) return;
 
     if (!initializedSelectors) {
       selectA.addEventListener('change', () => onCorrelationParamChanged());
       selectB.addEventListener('change', () => onCorrelationParamChanged());
+      if (selectLag) selectLag.addEventListener('change', () => onCorrelationParamChanged());
       initializedSelectors = true;
     }
 
@@ -1187,43 +1189,134 @@ ${protocolText}
   }
 
   function isBinaryVarKey(varKey) {
+    if (!varKey) return false;
     return (
       varKey.startsWith('supp_') ||
       varKey.startsWith('regen_') ||
-      varKey === 'sleep_bett_geteilt' ||
+      varKey.startsWith('sleep_') ||
+      varKey.startsWith('nutr_') ||
+      varKey.startsWith('social_') ||
+      varKey.startsWith('te_') ||
+      varKey === 'prot_fct' ||
+      varKey === 'prot_1080' ||
       varKey === 'trainer_anwesend'
     );
   }
 
+  // Determine active tracking start date for each binary category in Google Sheets
+  function getCategoryTrackingStartDate(varKey) {
+    if (!varKey) return '2019-01-01';
+    if (varKey.startsWith('supp_')) return '2023-05-06';
+    if (varKey.startsWith('regen_')) return '2023-05-06';
+    if (varKey.startsWith('sleep_')) return '2023-05-06';
+    if (varKey.startsWith('nutr_')) return '2024-04-16';
+    if (varKey.startsWith('social_')) return '2023-05-06';
+    if (varKey === 'prot_fct') return '2025-10-01';
+    if (varKey === 'prot_1080') return '2021-04-01';
+    return '2019-01-01';
+  }
+
+  // Smart Lag logic as specified by Luka:
+  // - Entries in column 'Schlaf' refer to the SAME day's morning Whoop score -> Tag 0 (lag = 0)
+  // - Supplements, Regeneration, Ernährung, Sozial, Trainingseinheit, Strain, Macros refer to NEXT day's morning Whoop score -> Tag +1 (lag = 1)
+  function getEffectiveLagMode(varY, varX) {
+    const lagSelect = document.getElementById('corrLagModeSelect');
+    const mode = (lagSelect && lagSelect.value) ? lagSelect.value : 'smart';
+    if (mode === 'rolling14') return { mode: 'rolling14', lagDays: 0, label: '14-Tage Saison-Trend' };
+    if (mode === 'lag1') return { mode: 'lag1', lagDays: 1, label: 'Tag +1 (Folgetag)' };
+    if (mode === 'lag0') return { mode: 'lag0', lagDays: 0, label: 'Tag 0 (Gleicher Tag)' };
+
+    // mode === 'smart'
+    if (varX && varX.startsWith('sleep_')) {
+      return { mode: 'smart', lagDays: 0, label: 'Tag 0 (Gleicher Morgen • Schlaf-Spalte)' };
+    }
+    const isDayInterventionX = (
+      isBinaryVarKey(varX) ||
+      varX === 'whoop_strain' ||
+      varX === 'duration_min' ||
+      varX === 'calories_kcal' ||
+      varX === 'protein_g' ||
+      varX === 'carbs_g' ||
+      varX === 'fat_g'
+    );
+    const isMorningReadinessY = (
+      varY === 'whoop_recovery_pct' ||
+      varY === 'sleep_performance_pct' ||
+      varY === 'body_weight_kg' ||
+      varY === 'ref_body_weight_kg'
+    );
+    if (isDayInterventionX && isMorningReadinessY) {
+      return { mode: 'smart', lagDays: 1, label: 'Tag +1 (Folgetag-Wirkung Standard)' };
+    }
+    return { mode: 'smart', lagDays: 0, label: 'Tag 0 (Direktvergleich)' };
+  }
+
+  function hasExactTagInList(csvStr, targetTag) {
+    if (!csvStr) return false;
+    const tLower = targetTag.toLowerCase().trim();
+    return csvStr.split(',').some(part => {
+      const p = part.trim().toLowerCase();
+      return p === tLower || p.includes(tLower);
+    });
+  }
+
   function getMetricValue(log, varKey) {
-    if (!log) return null;
+    if (!log || !varKey) return null;
 
     if (varKey === 'weitsprung_wk') {
       const m = parseFloat(log.best_mark_m || log.weitsprung_wk);
-      return !isNaN(m) && m > 0 ? m : null;
+      return !isNaN(m) && m > 6.0 ? m : null;
     }
 
-    // Binary Supplements (only evaluate on days from 2024+ where supplements/journal were tracked, or when field exists)
+    if (varKey === 'ref_body_weight_kg') {
+      const w = parseFloat(log.body_weight_kg || log.ref_body_weight_kg);
+      return !isNaN(w) && w > 60 ? w : null;
+    }
+
+    const minStartDate = getCategoryTrackingStartDate(varKey);
+    if ((log.date || '') < minStartDate) return null;
+
     if (varKey.startsWith('supp_')) {
-      if ((log.date || '') < '2024-09-01' && !log.supplements && log.whoop_recovery_pct == null) return null;
-      const token = varKey.replace('supp_', '').replace(/_/g, ' ');
-      const sStr = (log.supplements || '').toLowerCase();
-      return sStr.includes(token) ? 1 : 0;
+      const token = varKey.slice(5).replace(/_/g, ' ');
+      return hasExactTagInList(log.supplements, token) ? 1 : 0;
     }
 
-    // Binary Regeneration
     if (varKey.startsWith('regen_')) {
-      if ((log.date || '') < '2024-09-01' && !log.regeneration && log.whoop_recovery_pct == null) return null;
-      const token = varKey.replace('regen_', '').replace(/_/g, ' ');
-      const rStr = (log.regeneration || '').toLowerCase();
-      return rStr.includes(token) ? 1 : 0;
+      const token = varKey.slice(6).replace(/_/g, ' ');
+      return hasExactTagInList(log.regeneration, token) ? 1 : 0;
     }
 
-    if (varKey === 'sleep_bett_geteilt') {
-      if ((log.date || '') < '2024-09-01' && !log.schlaf_notiz && log.whoop_recovery_pct == null) return null;
-      const s = (log.schlaf_notiz || log.schlaf || '').toLowerCase();
-      return (s.includes('bett geteilt') || s.includes('geteilt')) ? 1 : 0;
+    if (varKey.startsWith('sleep_')) {
+      const token = varKey.slice(6).replace(/_/g, ' ');
+      return hasExactTagInList(log.schlaf_notiz || log.schlaf, token) ? 1 : 0;
     }
+
+    if (varKey.startsWith('nutr_')) {
+      if (!log.nutrition) return null; // Only evaluate on days where Ernährung was rated
+      const token = varKey.slice(5);
+      return (log.nutrition || '').toLowerCase().includes(token.toLowerCase()) ? 1 : 0;
+    }
+
+    if (varKey.startsWith('social_')) {
+      const token = varKey.slice(7).replace(/_/g, ' ');
+      return hasExactTagInList(log.sozial, token) ? 1 : 0;
+    }
+
+    if (varKey.startsWith('te_')) {
+      const token = varKey.slice(3).replace(/_/g, ' ');
+      return hasExactTagInList(log.session_type, token) ? 1 : 0;
+    }
+
+    if (varKey === 'prot_fct') {
+      const p = (log.protocol_text || '').toLowerCase();
+      return (/\bfct\b/.test(p) || p.includes('french contrast')) ? 1 : 0;
+    }
+
+    if (varKey === 'prot_1080') {
+      const p = (log.protocol_text || '').toLowerCase();
+      return p.includes('1080') ? 1 : 0;
+    }
+
     if (varKey === 'trainer_anwesend') {
       if (!log.duration_min && !log.protocol_text) return null;
       return log.trainer ? 1 : 0;
@@ -1231,7 +1324,7 @@ ${protocolText}
 
     // 1-4 Scores
     if (varKey === 'performance_score') return log.performance_score != null ? log.performance_score : parseScore1to4(log.leistung);
-    if (varKey === 'focus_score') return log.focus_score != null ? log.focus_score : parseScore1to4(log.focus);
+    if (varKey === 'focus_score') return log.focus_score != null ? log.focus_score : parseScore1to4(log.fokus_label || log.focus);
     if (varKey === 'pain_score') return log.pain_score != null ? log.pain_score : parseScore1to4(log.schmerzen);
     if (varKey === 'fatigue_score') return log.fatigue_score != null ? log.fatigue_score : parseScore1to4(log.erschöpfung);
 
@@ -1239,33 +1332,74 @@ ${protocolText}
     return isNaN(val) ? null : val;
   }
 
-  // Statistical engine for both Continuous (Pearson + OLS) and Binary 0/1 (Point-Biserial + Welch t + Cohen's d + Lag t+1)
-  function computePairStatistics(logs, varY, varX) {
-    const points = [];
+  function addCalendarDays(isoDate, deltaDays) {
+    if (!isoDate) return '';
+    const d = new Date(isoDate + 'T12:00:00');
+    d.setDate(d.getDate() + deltaDays);
+    return d.toISOString().split('T')[0];
+  }
+
+  // Statistical engine supporting Smart Tag+1 / Tag 0 AND 14-day Rolling Seasonal Trend
+  function computePairStatistics(logs, varY, varX, overrideLagCfg = null) {
+    const lagCfg = overrideLagCfg || getEffectiveLagMode(varY, varX);
     const byDate = {};
     logs.forEach(l => { if (l.date) byDate[l.date] = l; });
 
-    logs.forEach(l => {
-      const y = getMetricValue(l, varY);
-      const x = getMetricValue(l, varX);
-      if (x != null && y != null && !isNaN(x) && !isNaN(y)) {
-        // Also check next-day value of Y for lag t+1 analysis
-        let nextY = null;
-        if (l.date) {
-          const d = new Date(l.date + 'T12:00:00');
-          d.setDate(d.getDate() + 1);
-          const nextIso = d.toISOString().split('T')[0];
-          if (byDate[nextIso]) {
-            nextY = getMetricValue(byDate[nextIso], varY);
-          }
+    const points = [];
+
+    if (lagCfg.mode === 'rolling14') {
+      // 14-day rolling window average for long-term seasonal effects
+      const sorted = [...logs].filter(l => l.date).sort((a, b) => a.date.localeCompare(b.date));
+      for (let i = 13; i < sorted.length; i += 3) { // step by 3 days to avoid excessive autocorrelation
+        const windowLogs = sorted.slice(i - 13, i + 1);
+        const xValsWin = windowLogs.map(w => getMetricValue(w, varX)).filter(v => v != null && !isNaN(v));
+        const yValsWin = windowLogs.map(w => getMetricValue(w, varY)).filter(v => v != null && !isNaN(v));
+        if (xValsWin.length >= 4 && yValsWin.length >= 4) {
+          const xMean = xValsWin.reduce((a, b) => a + b, 0) / xValsWin.length;
+          const yMean = yValsWin.reduce((a, b) => a + b, 0) / yValsWin.length;
+          points.push({
+            x: isBinaryVarKey(varX) ? Number((xMean * 100).toFixed(1)) : Number(xMean.toFixed(2)),
+            y: Number(yMean.toFixed(2)),
+            altY: null,
+            date: sorted[i].date
+          });
         }
-        points.push({ x, y, nextY, date: l.date });
       }
-    });
+    } else {
+      const primaryLag = lagCfg.lagDays;
+      const altLag = primaryLag === 1 ? 0 : 1;
+
+      logs.forEach(l => {
+        if (!l.date) return;
+        const x = getMetricValue(l, varX);
+        if (x == null || isNaN(x)) return;
+
+        const targetDate = primaryLag === 0 ? l.date : addCalendarDays(l.date, primaryLag);
+        const targetLog = byDate[targetDate];
+        const y = targetLog ? getMetricValue(targetLog, varY) : null;
+
+        const altDate = altLag === 0 ? l.date : addCalendarDays(l.date, altLag);
+        const altLog = byDate[altDate];
+        const altY = altLog ? getMetricValue(altLog, varY) : null;
+
+        if (y != null && !isNaN(y)) {
+          points.push({
+            x,
+            y,
+            altY,
+            date: l.date,
+            targetDate
+          });
+        }
+      });
+    }
 
     const n = points.length;
+    const isBinaryX = lagCfg.mode !== 'rolling14' && isBinaryVarKey(varX);
+    const isBinaryY = lagCfg.mode !== 'rolling14' && isBinaryVarKey(varY);
+
     if (n < 3) {
-      return { n, r: 0, slope: 0, intercept: 0, isBinaryX: isBinaryVarKey(varX), isBinaryY: isBinaryVarKey(varY), points };
+      return { n, r: 0, slope: 0, intercept: 0, isBinaryX, isBinaryY, points, lagCfg };
     }
 
     const xVals = points.map(p => p.x);
@@ -1281,21 +1415,23 @@ ${protocolText}
     const slope = (n * sumX2 - sumX * sumX) === 0 ? 0 : (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    const uniqueX = Array.from(new Set(xVals));
-    const uniqueY = Array.from(new Set(yVals));
-    const isBinaryX = isBinaryVarKey(varX) || (uniqueX.length <= 2 && uniqueX.every(v => v === 0 || v === 1));
-    const isBinaryY = isBinaryVarKey(varY) || (uniqueY.length <= 2 && uniqueY.every(v => v === 0 || v === 1));
-
     let group0 = [];
     let group1 = [];
-    let lagGroup0 = [];
-    let lagGroup1 = [];
+    let altGroup0 = [];
+    let altGroup1 = [];
+    let firstUsedDate = '';
+    let lastUsedDate = '';
 
     if (isBinaryX && !isBinaryY) {
+      const g1Pts = points.filter(p => p.x === 1);
       group0 = points.filter(p => p.x === 0).map(p => p.y);
-      group1 = points.filter(p => p.x === 1).map(p => p.y);
-      lagGroup0 = points.filter(p => p.x === 0 && p.nextY != null).map(p => p.nextY);
-      lagGroup1 = points.filter(p => p.x === 1 && p.nextY != null).map(p => p.nextY);
+      group1 = g1Pts.map(p => p.y);
+      altGroup0 = points.filter(p => p.x === 0 && p.altY != null).map(p => p.altY);
+      altGroup1 = g1Pts.filter(p => p.altY != null).map(p => p.altY);
+      if (g1Pts.length > 0) {
+        firstUsedDate = g1Pts[0].date;
+        lastUsedDate = g1Pts[g1Pts.length - 1].date;
+      }
     } else if (isBinaryY && !isBinaryX) {
       group0 = points.filter(p => p.y === 0).map(p => p.x);
       group1 = points.filter(p => p.y === 1).map(p => p.x);
@@ -1311,20 +1447,17 @@ ${protocolText}
     const delta = mean1 - mean0;
     const pctDelta = mean0 !== 0 ? ((mean1 - mean0) / Math.abs(mean0)) * 100 : 0;
 
-    // Pooled SD for Cohen's d
     const pooledVar = (group0.length + group1.length > 2)
       ? (((group0.length - 1) * sd0 * sd0) + ((group1.length - 1) * sd1 * sd1)) / (group0.length + group1.length - 2)
       : 1;
     const cohensD = pooledVar > 0 ? delta / Math.sqrt(pooledVar) : 0;
 
-    // Welch's t
     const seWelch = Math.sqrt((group0.length > 0 ? (sd0 * sd0) / group0.length : 0) + (group1.length > 0 ? (sd1 * sd1) / group1.length : 0));
     const welchT = seWelch > 0 ? delta / seWelch : 0;
 
-    // Next-day lag delta
-    const lagMean0 = mean(lagGroup0);
-    const lagMean1 = mean(lagGroup1);
-    const lagDelta = (lagGroup0.length >= 2 && lagGroup1.length >= 2) ? (lagMean1 - lagMean0) : null;
+    const altMean0 = mean(altGroup0);
+    const altMean1 = mean(altGroup1);
+    const altDelta = (altGroup0.length >= 2 && altGroup1.length >= 2) ? (altMean1 - altMean0) : null;
 
     return {
       n,
@@ -1334,6 +1467,7 @@ ${protocolText}
       isBinaryX,
       isBinaryY,
       points,
+      lagCfg,
       n0: group0.length,
       n1: group1.length,
       mean0,
@@ -1344,9 +1478,11 @@ ${protocolText}
       pctDelta,
       cohensD,
       welchT,
-      lagMean0,
-      lagMean1,
-      lagDelta
+      altMean0,
+      altMean1,
+      altDelta,
+      firstUsedDate,
+      lastUsedDate
     };
   }
 
@@ -1361,7 +1497,7 @@ ${protocolText}
     const logs = state.trainingLogs || [];
 
     const stats = computePairStatistics(logs, varA, varB);
-    const { n, r, slope, intercept, isBinaryX, isBinaryY, points } = stats;
+    const { n, r, slope, intercept, isBinaryX, isBinaryY, points, lagCfg } = stats;
 
     const modeBadge = document.getElementById('corrChartModeBadge');
     const badge = document.getElementById('corrPearsonVal');
@@ -1373,38 +1509,41 @@ ${protocolText}
 
     const formattedR = (r >= 0 ? '+' : '') + r.toFixed(2);
     const isBinaryPair = isBinaryX || isBinaryY;
+    const primaryLagTag = lagCfg.mode === 'rolling14'
+      ? '14-Tage Trend'
+      : (lagCfg.lagDays === 1 ? 'Tag +1 (Folgetag)' : 'Tag 0 (Gleicher Tag)');
+    const altLagTag = lagCfg.lagDays === 1 ? 'Tag 0 (Gleicher Tag)' : 'Tag +1 (Folgetag)';
 
     if (modeBadge) {
       if (isBinaryPair) {
-        modeBadge.textContent = '0/1 Gruppen-Vergleich (Punktbiserial)';
+        modeBadge.textContent = `0/1 Gruppen-Vergleich • ${primaryLagTag}`;
         modeBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-purple-950 text-purple-300 border border-purple-700';
       } else {
-        modeBadge.textContent = 'Scatter & Lineare Regression';
+        modeBadge.textContent = `Scatter & Regression • ${primaryLagTag}`;
         modeBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-cyan-950 text-cyan-300 border border-cyan-800';
       }
     }
 
     if (badge) {
       badge.textContent = `${isBinaryPair ? 'r_pb' : 'r'} = ${formattedR} (N=${n})`;
-      if (Math.abs(r) >= 0.45) {
+      if (Math.abs(r) >= 0.25) {
         badge.className = r > 0
           ? 'px-2.5 py-1 rounded text-xs font-black font-mono bg-emerald-950 text-emerald-300 border border-emerald-700'
           : 'px-2.5 py-1 rounded text-xs font-black font-mono bg-rose-950 text-rose-300 border border-rose-700';
-      } else if (Math.abs(r) >= 0.2) {
+      } else if (Math.abs(r) >= 0.1) {
         badge.className = 'px-2.5 py-1 rounded text-xs font-black font-mono bg-amber-950 text-amber-300 border border-amber-700';
       } else {
         badge.className = 'px-2.5 py-1 rounded text-xs font-black font-mono bg-slate-800 text-slate-300 border border-slate-700';
       }
     }
 
-    // Populate 4 Statistical KPI cards
     if (statREl) {
       statREl.textContent = `${isBinaryPair ? 'r_pb' : 'r'} = ${formattedR} (n=${n})`;
     }
     if (statDeltaEl) {
       if (isBinaryX && !isBinaryY && stats.n1 > 0 && stats.n0 > 0) {
         const sign = stats.delta >= 0 ? '+' : '';
-        statDeltaEl.textContent = `${sign}${stats.delta.toFixed(2)} (${ stats.mean1.toFixed(1)} vs. ${stats.mean0.toFixed(1)})`;
+        statDeltaEl.textContent = `${sign}${stats.delta.toFixed(1)} (${stats.mean1.toFixed(1)} vs. ${stats.mean0.toFixed(1)})`;
         statDeltaEl.className = `text-xs font-black font-mono ${stats.delta >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
       } else {
         const sign = slope >= 0 ? '+' : '';
@@ -1414,20 +1553,20 @@ ${protocolText}
     }
     if (statEffectEl) {
       if (isBinaryX && !isBinaryY && stats.n1 > 0 && stats.n0 > 0) {
-        const dAbs = Math.abs(stats.cohensD);
-        const dLabel = dAbs >= 0.8 ? 'Groß' : (dAbs >= 0.5 ? 'Mittel' : (dAbs >= 0.2 ? 'Klein' : 'Minimal'));
-        statEffectEl.textContent = `d = ${stats.cohensD >= 0 ? '+' : ''}${stats.cohensD.toFixed(2)} (${dLabel} • t=${stats.welchT.toFixed(1)})`;
+        const tAbs = Math.abs(stats.welchT);
+        const sigLabel = tAbs >= 2.58 ? 'p<0.01 **' : (tAbs >= 1.96 ? 'p<0.05 *' : 'Trend');
+        statEffectEl.textContent = `d=${stats.cohensD >= 0 ? '+' : ''}${stats.cohensD.toFixed(2)} • t=${stats.welchT.toFixed(1)} (${sigLabel})`;
       } else {
         const r2 = (r * r * 100).toFixed(1);
         statEffectEl.textContent = `R² = ${r2}% Varianzaufklärung`;
       }
     }
     if (statLagEl) {
-      if (stats.lagDelta != null) {
-        const sign = stats.lagDelta >= 0 ? '+' : '';
-        statLagEl.textContent = `${sign}${stats.lagDelta.toFixed(1)} am Folgetag (${stats.lagMean1.toFixed(1)} vs ${stats.lagMean0.toFixed(1)})`;
+      if (isBinaryX && stats.altDelta != null) {
+        const sign = stats.altDelta >= 0 ? '+' : '';
+        statLagEl.textContent = `Aktiv: ${primaryLagTag} (Vgl. ${altLagTag}: ${sign}${stats.altDelta.toFixed(1)})`;
       } else {
-        statLagEl.textContent = `Direktmessung Tag t (n=${n})`;
+        statLagEl.textContent = `${primaryLagTag} (n=${n})`;
       }
     }
 
@@ -1439,17 +1578,18 @@ ${protocolText}
     if (insightTitle && insightText) {
       if (isBinaryX && !isBinaryY && stats.n1 > 0 && stats.n0 > 0) {
         const sign = stats.delta >= 0 ? '+' : '';
-        const lagStr = stats.lagDelta != null
-          ? ` Am Folgetag (Lag t+1) liegt der Unterschied bei ${stats.lagDelta >= 0 ? '+' : ''}${stats.lagDelta.toFixed(2)} (${stats.lagMean1.toFixed(1)} vs. ${stats.lagMean0.toFixed(1)}).`
+        const altStr = stats.altDelta != null
+          ? ` Zum Vergleich am ${altLagTag}: Δ = ${stats.altDelta >= 0 ? '+' : ''}${stats.altDelta.toFixed(1)} (${stats.altMean1.toFixed(1)} vs. ${stats.altMean0.toFixed(1)}).`
           : '';
-        insightTitle.textContent = `Punktbiseriale 0/1 Auswertung (${labelB} ➔ ${labelA}):`;
-        insightText.textContent = `Da "${labelB}" eine binäre 0/1-Variable ist, vergleicht das Dashboard automatisch die Gruppen-Mittelwerte statt einer einfachen Punktwolke: An Tagen MIT "${labelB}" (n=${stats.n1}) liegt ${labelA} im Schnitt bei ${stats.mean1.toFixed(2)} ± ${stats.sd1.toFixed(2)} gegenüber ${stats.mean0.toFixed(2)} ± ${stats.sd0.toFixed(2)} an Tagen OHNE (n=${stats.n0}) — Differenz Δ = ${sign}${stats.delta.toFixed(2)} (${sign}${stats.pctDelta.toFixed(1)}%, Effektstärke d = ${stats.cohensD.toFixed(2)}).${lagStr}`;
-      } else if (varA === 'weitsprung_wk') {
-        insightTitle.textContent = `Wettkampf-Performance Analyse (${labelB} ➔ Weitsprung WK):`;
-        insightText.textContent = `🎯 Weitsprung WK ist deine Zielvariable (n=${n} gemeinsame Messpunkte). Korrelation r = ${formattedR} (R² = ${(r * r * 100).toFixed(1)}%).Zubringer wie Anlauf-Vmax und Reaktivkraft wirken unmittelbar am Wettkampftag, während Kraftwerte über einen 2–4-wöchigen Transformationsblock wirken.`;
+        const dateRangeStr = stats.firstUsedDate ? ` [Zeitraum in Sheets: ${stats.firstUsedDate} bis ${stats.lastUsedDate}]` : '';
+        insightTitle.textContent = `Exakte Google-Sheets Auswertung (${labelB} ➔ ${labelA} am ${primaryLagTag}):`;
+        insightText.textContent = `Ausgewertet über alle dokumentierten Tage in Google Sheets${dateRangeStr}: An Tagen MIT "${labelB}" (n₁ = ${stats.n1} Tage) liegt ${labelA} am ${primaryLagTag} im Schnitt bei ${stats.mean1.toFixed(1)} ± ${stats.sd1.toFixed(1)} gegenüber ${stats.mean0.toFixed(1)} ± ${stats.sd0.toFixed(1)} an Tagen OHNE (n₀ = ${stats.n0} Tage) — Differenz Δ = ${sign}${stats.delta.toFixed(1)} (${sign}${stats.pctDelta.toFixed(1)}%, r_pb = ${formattedR}, Welch t = ${stats.welchT.toFixed(2)}).${altStr}`;
+      } else if (lagCfg.mode === 'rolling14') {
+        insightTitle.textContent = `Langfristiges Saison-Muster (14-Tage Rollierender Durchschnitt: ${labelB} ➔ ${labelA}):`;
+        insightText.textContent = `Um langfristige Gewohnheiten über die Saison sichtbar zu machen, korreliert dieser Modus die 14-Tage-Dichte/Höhe von "${labelB}" mit dem 14-Tage-Schnitt von "${labelA}" (n = ${n} Zeitfenster, r = ${formattedR}, Steigung β = ${slope >= 0 ? '+' : ''}${slope.toFixed(3)}).`;
       } else {
-        insightTitle.textContent = `Lineare Regressions-Analyse (${labelB} ➔ ${labelA}, r = ${formattedR}):`;
-        insightText.textContent = `Über n=${n} Messpaare zeigt sich eine ${Math.abs(r) >= 0.5 ? 'starke' : (Math.abs(r) >= 0.25 ? 'moderate' : 'geringe')} lineare Kopplung (Steigung β = ${slope >= 0 ? '+' : ''}${slope.toFixed(3)} pro Einheit ${labelB}).`;
+        insightTitle.textContent = `Lineare Regressions-Analyse (${labelB} ➔ ${labelA} am ${primaryLagTag}, r = ${formattedR}):`;
+        insightText.textContent = `Über n = ${n} echte Messpaare aus Google Sheets zeigt sich eine Korrelation von r = ${formattedR} (R² = ${(r * r * 100).toFixed(1)}%, Steigung β = ${slope >= 0 ? '+' : ''}${slope.toFixed(3)} pro Einheit ${labelB}).`;
       }
     }
 
@@ -1457,24 +1597,23 @@ ${protocolText}
     if (scatterChartInstance) scatterChartInstance.destroy();
 
     if (isBinaryX && !isBinaryY && stats.n0 > 0 && stats.n1 > 0) {
-      // Render Grouped Mean Comparison Bar + Mean Trend Chart for 0/1 Binary X!
-      const yMin = Math.min(stats.mean0 - stats.sd0, stats.mean1 - stats.sd1) * 0.92;
-      const yMax = Math.max(stats.mean0 + stats.sd0, stats.mean1 + stats.sd1) * 1.06;
+      const yMin = Math.min(stats.mean0 - stats.sd0 * 0.5, stats.mean1 - stats.sd1 * 0.5) * 0.94;
+      const yMax = Math.max(stats.mean0 + stats.sd0 * 0.5, stats.mean1 + stats.sd1 * 0.5) * 1.05;
 
       if (legendContainer) {
         legendContainer.innerHTML = `
           <div class="flex items-center gap-1.5">
             <span class="w-3 h-2.5 rounded-sm bg-slate-600 inline-block"></span>
-            <span class="text-slate-300">Nein / Nicht genutzt (0): Ø ${stats.mean0.toFixed(2)} (n=${stats.n0})</span>
+            <span class="text-slate-300">Nein / Ohne (0) am ${primaryLagTag}: Ø ${stats.mean0.toFixed(1)} (n=${stats.n0})</span>
           </div>
           <div class="flex items-center gap-1.5">
             <span class="w-3 h-2.5 rounded-sm bg-emerald-500 inline-block"></span>
-            <span class="text-slate-300">Ja / Genutzt (1): Ø ${stats.mean1.toFixed(2)} (n=${stats.n1})</span>
+            <span class="text-slate-300">Ja / Mit (1) am ${primaryLagTag}: Ø ${stats.mean1.toFixed(1)} (n=${stats.n1})</span>
           </div>
-          ${stats.lagDelta != null ? `
+          ${stats.altDelta != null ? `
             <div class="flex items-center gap-1.5">
               <span class="w-4 h-0.5 bg-purple-400 inline-block"></span>
-              <span class="text-purple-300">Folgetag (Lag t+1): Ø ${stats.lagMean0.toFixed(1)} ➔ ${stats.lagMean1.toFixed(1)} (${stats.lagDelta >= 0 ? '+' : ''}${stats.lagDelta.toFixed(1)})</span>
+              <span class="text-purple-300">Vergleich ${altLagTag}: Ø ${stats.altMean0.toFixed(1)} ➔ ${stats.altMean1.toFixed(1)} (${stats.altDelta >= 0 ? '+' : ''}${stats.altDelta.toFixed(1)})</span>
             </div>
           ` : ''}
         `;
@@ -1483,7 +1622,7 @@ ${protocolText}
       const datasets = [
         {
           type: 'bar',
-          label: `Ø ${labelA} (Tag t)`,
+          label: `Ø ${labelA} (${primaryLagTag})`,
           data: [Number(stats.mean0.toFixed(2)), Number(stats.mean1.toFixed(2))],
           backgroundColor: ['rgba(100, 116, 139, 0.55)', stats.delta >= 0 ? 'rgba(16, 185, 129, 0.65)' : 'rgba(244, 63, 94, 0.65)'],
           borderColor: ['#64748b', stats.delta >= 0 ? '#10b981' : '#f43f5e'],
@@ -1493,7 +1632,7 @@ ${protocolText}
         },
         {
           type: 'line',
-          label: 'Gruppen-Shift (Δ Mittelwert)',
+          label: `Shift (${primaryLagTag})`,
           data: [Number(stats.mean0.toFixed(2)), Number(stats.mean1.toFixed(2))],
           borderColor: '#22d3ee',
           backgroundColor: '#22d3ee',
@@ -1504,11 +1643,11 @@ ${protocolText}
         }
       ];
 
-      if (stats.lagDelta != null) {
+      if (stats.altDelta != null) {
         datasets.push({
           type: 'line',
-          label: `Folgetag Lag (t+1)`,
-          data: [Number(stats.lagMean0.toFixed(2)), Number(stats.lagMean1.toFixed(2))],
+          label: `Vergleich (${altLagTag})`,
+          data: [Number(stats.altMean0.toFixed(2)), Number(stats.altMean1.toFixed(2))],
           borderColor: '#a855f7',
           backgroundColor: '#a855f7',
           borderWidth: 2,
@@ -1528,12 +1667,12 @@ ${protocolText}
           maintainAspectRatio: false,
           scales: {
             x: {
-              title: { display: true, text: `${labelB} (0 = Nein vs. 1 = Ja)`, color: colors.ticks, font: { size: 10, family: 'monospace' } },
+              title: { display: true, text: `${labelB} ➔ Wirkung auf ${labelA} am ${primaryLagTag}`, color: colors.ticks, font: { size: 10, family: 'monospace' } },
               grid: { color: colors.grid },
               ticks: { color: colors.title, font: { weight: 'bold', family: 'monospace' } }
             },
             y: {
-              title: { display: true, text: labelA, color: colors.ticks, font: { size: 10, family: 'monospace' } },
+              title: { display: true, text: `${labelA} (${primaryLagTag})`, color: colors.ticks, font: { size: 10, family: 'monospace' } },
               grid: { color: colors.grid },
               ticks: { color: colors.title },
               suggestedMin: yMin > 0 ? Number(yMin.toFixed(1)) : undefined,
@@ -1546,8 +1685,8 @@ ${protocolText}
               callbacks: {
                 afterBody: (items) => {
                   const idx = items[0]?.dataIndex;
-                  if (idx === 0) return `Standardabweichung: ±${stats.sd0.toFixed(2)} (n=${stats.n0})`;
-                  if (idx === 1) return `Standardabweichung: ±${stats.sd1.toFixed(2)} (n=${stats.n1})\nGruppen-Delta: ${stats.delta >= 0 ? '+' : ''}${stats.delta.toFixed(2)} (${stats.pctDelta >= 0 ? '+' : ''}${stats.pctDelta.toFixed(1)}%)`;
+                  if (idx === 0) return `Standardabweichung: ±${stats.sd0.toFixed(2)} (n=${stats.n0} Tage)`;
+                  if (idx === 1) return `Standardabweichung: ±${stats.sd1.toFixed(2)} (n=${stats.n1} Tage)\nDifferenz (${primaryLagTag}): ${stats.delta >= 0 ? '+' : ''}${stats.delta.toFixed(2)} (${stats.pctDelta >= 0 ? '+' : ''}${stats.pctDelta.toFixed(1)}%)`;
                   return '';
                 }
               }
@@ -1558,12 +1697,16 @@ ${protocolText}
       return;
     }
 
-    // Continuous Scatter + OLS Trendline
+    // Continuous Scatter + OLS Trendline (or 14-day Rolling Trend)
+    const xAxisLabel = (lagCfg.mode === 'rolling14' && isBinaryVarKey(varB))
+      ? `${labelB} (14-Tage Einnahme-/Nutzungsquote in %)`
+      : labelB;
+
     if (legendContainer) {
       legendContainer.innerHTML = `
         <div class="flex items-center gap-1.5">
           <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span>
-          <span class="text-slate-300">Messpunkte (n=${n})</span>
+          <span class="text-slate-300">Messpaare aus Google Sheets (n=${n} • ${primaryLagTag})</span>
         </div>
         <div class="flex items-center gap-1.5">
           <span class="w-4 h-0.5 bg-emerald-400 inline-block"></span>
@@ -1585,7 +1728,7 @@ ${protocolText}
       data: {
         datasets: [
           {
-            label: 'Trainings- & Wettkampftage',
+            label: 'Google Sheets Messpunkte',
             data: points,
             backgroundColor: '#06b6d4',
             borderColor: '#22d3ee',
@@ -1609,12 +1752,12 @@ ${protocolText}
         maintainAspectRatio: false,
         scales: {
           x: {
-            title: { display: true, text: labelB, color: colors.ticks, font: { size: 10, family: 'monospace' } },
+            title: { display: true, text: xAxisLabel, color: colors.ticks, font: { size: 10, family: 'monospace' } },
             grid: { color: colors.grid },
             ticks: { color: colors.ticks }
           },
           y: {
-            title: { display: true, text: labelA, color: colors.ticks, font: { size: 10, family: 'monospace' } },
+            title: { display: true, text: `${labelA} (${primaryLagTag})`, color: colors.ticks, font: { size: 10, family: 'monospace' } },
             grid: { color: colors.grid },
             ticks: { color: colors.title }
           }
@@ -1625,7 +1768,7 @@ ${protocolText}
             callbacks: {
               label: (context) => {
                 const pt = context.raw;
-                return `${pt.date ? pt.date + ': ' : ''}${labelB}: ${pt.x}, ${labelA}: ${pt.y}`;
+                return `${pt.date ? pt.date + ': ' : ''}${xAxisLabel}: ${pt.x}, ${labelA}: ${pt.y}`;
               }
             }
           }
@@ -1642,21 +1785,23 @@ ${protocolText}
     const targetVar = (selectA && selectA.value) ? selectA.value : 'whoop_recovery_pct';
 
     const factors = [
-      { key: 'approach_speed_11m_to_1m', name: 'Anlauf-Geschwindigkeit Vmax (11m-1m)', meaning: 'Direktester Zubringer für Sprungweite (Kinematik am Brett)' },
-      { key: 'sleep_performance_pct', name: 'Whoop Schlaf-Performance (%)', meaning: 'Zelluläre Regeneration & autonome HRV-Erholung' },
-      { key: 'whoop_strain', name: 'Whoop Day Strain (0-21)', meaning: 'Tagesbelastung (negativ gekoppelt mit Folgetag-Recovery)' },
-      { key: 'pain_score', name: 'Schmerz-Score (1-4)', meaning: 'Strukturelle Limitierung (Achilles L / Unterer Rücken)' },
-      { key: 'fatigue_score', name: 'Erschöpfung (1-4)', meaning: 'Subjektive ZNS- und Muskelermüdung' },
-      { key: 'aufsteiger_e1rm_kg', name: 'Aufsteiger e1RM (kg)', meaning: 'Unilaterale Hüft-/Beinstreckung & Beckenstabilität' },
-      { key: 'umsetzen_e1rm_kg', name: 'Umsetzen e1RM (kg)', meaning: 'Explosivkraft & Rate of Force Development (RFD)' },
-      { key: 'trapbar_e1rm_kg', name: 'Trapbar Deadlift e1RM (kg)', meaning: 'Maximalkraft-Fundament der hinteren Kette' },
-      { key: 'regen_sauna', name: 'Regeneration: Sauna (0/1)', meaning: 'Thermoregulation & parasympathische Aktivierung' },
-      { key: 'regen_physio', name: 'Regeneration: Physiotherapie (0/1)', meaning: 'Tonusregulation & Gewebepflege in Belastungswochen' },
-      { key: 'regen_lympho', name: 'Regeneration: Lymphomat (0/1)', meaning: 'Beschleunigter Laktat- & Ödemabbau nach Sprungserien' },
-      { key: 'supp_magnesium', name: 'Supplement: Magnesium (0/1)', meaning: 'Abendliche Muskelrelaxation & Schlafqualität' },
-      { key: 'supp_kreatin', name: 'Supplement: Kreatin (0/1)', meaning: 'Phosphokreatin-Resynthese für Sprints & Sprünge' },
-      { key: 'supp_vit_d', name: 'Supplement: Vitamin D3 (0/1)', meaning: 'Knochen-/Sehnenstoffwechsel & Immunfunktion' },
-      { key: 'sleep_bett_geteilt', name: 'Schlaf: Bett geteilt (0/1)', meaning: 'Einfluss auf Tiefschlafphasen & nächtliche Ruheherzfrequenz' }
+      { key: 'supp_Kreatin', name: 'Supplement: Kreatin (Tag +1)', meaning: '556 Tage in Sheets • +4,2% höhere Recovery am Folgetag (71,1% vs. 66,9%)' },
+      { key: 'supp_Ashwaghanda', name: 'Supplement: Ashwaghanda (Tag +1)', meaning: '173 Tage in Sheets • +3,6% global (+6,5% im Einnahmefenster) höhere Folgetag-Recovery' },
+      { key: 'supp_Magnesium', name: 'Supplement: Magnesium (Tag +1)', meaning: '555 Tage in Sheets • +3,4% höhere Folgetag-Recovery (70,7% vs. 67,4%)' },
+      { key: 'supp_B12', name: 'Supplement: B12 (Tag +1)', meaning: '174 Tage in Sheets • +3,0% höhere Folgetag-Recovery (71,8% vs. 68,8%)' },
+      { key: 'supp_Vit D', name: 'Supplement: Vit D (Tag +1)', meaning: '519 Tage in Sheets • +2,4% höhere Folgetag-Recovery (70,4% vs. 68,0%)' },
+      { key: 'regen_Lympho', name: 'Regeneration: Lympho (Tag +1)', meaning: '102 Tage in Sheets • +4,0% höhere Folgetag-Recovery (72,9% vs. 68,9%)' },
+      { key: 'regen_Blackroll', name: 'Regeneration: Blackroll (Tag +1)', meaning: '261 Tage in Sheets • +2,7% höhere Folgetag-Recovery (71,3% vs. 68,6%)' },
+      { key: 'regen_Meditation', name: 'Regeneration: Meditation (Tag +1)', meaning: '93 Tage in Sheets • +2,7% höhere Folgetag-Recovery (71,8% vs. 69,1%)' },
+      { key: 'regen_Kalte Dusche', name: 'Regeneration: Kalte Dusche (Tag +1)', meaning: '233 Tage in Sheets • +2,4% höhere Folgetag-Recovery (71,2% vs. 68,7%)' },
+      { key: 'sleep_Bett geteilt', name: 'Schlaf: Bett geteilt (Tag 0)', meaning: '611 Tage in Sheets • +4,8% höhere Recovery am gleichen Morgen (71,1% vs. 66,3%)' },
+      { key: 'sleep_Gelesen', name: 'Schlaf: Gelesen (Tag 0)', meaning: '235 Tage in Sheets • +3,2% höhere Recovery am gleichen Morgen (71,8% vs. 68,6%)' },
+      { key: 'sleep_Nasenpflaster', name: 'Schlaf: Nasenpflaster (Tag 0)', meaning: '205 Tage in Sheets • +2,7% höhere Recovery am gleichen Morgen (71,5% vs. 68,8%)' },
+      { key: 'sleep_Late Meal', name: 'Schlaf: Late Meal (Tag 0)', meaning: '188 Tage in Sheets • -4,0% niedrigere Recovery am gleichen Morgen (66,2% vs. 70,2%)' },
+      { key: 'sleep_Kopfhörer', name: 'Schlaf: Kopfhörer (Tag 0)', meaning: '72 Tage in Sheets • -7,9% niedrigere Recovery am gleichen Morgen (62,2% vs. 70,0%)' },
+      { key: 'nutr_⭐ Schlecht (Junk Food / Timing)', name: 'Ernährung: ⭐ Schlecht (Tag +1)', meaning: '62 Tage in Sheets • -6,3% niedrigere Recovery am Folgetag (63,5% vs. 69,8%)' },
+      { key: 'social_Beziehungsstress', name: 'Sozial: Beziehungsstress (Tag +1)', meaning: '157 Tage in Sheets • -6,1% niedrigere Recovery am Folgetag (64,3% vs. 70,4%)' },
+      { key: 'ref_body_weight_kg', name: 'Körpergewicht inkl. Trend (kg)', meaning: '1.228 Wiegungen • 2023/24 WK Ø ~81,0 kg vs. 2025 WK Ø ~84,1 kg vs. 2026 Outdoor Ø ~86,2 kg' }
     ];
 
     const logs = state.trainingLogs || [];
@@ -1664,14 +1809,8 @@ ${protocolText}
     const computed = factors
       .filter(f => f.key !== targetVar)
       .map(f => {
-        // Compute against selected targetVar (or fallback to whoop_recovery_pct if n < 4 for binary)
-        let stats = computePairStatistics(logs, targetVar, f.key);
-        let usedTargetLabel = formatMetricLabel(targetVar);
-        if (stats.n < 4 && targetVar !== 'whoop_recovery_pct') {
-          stats = computePairStatistics(logs, 'whoop_recovery_pct', f.key);
-          usedTargetLabel = 'Whoop Recovery (%)';
-        }
-        return { ...f, stats, usedTargetLabel };
+        const stats = computePairStatistics(logs, targetVar, f.key);
+        return { ...f, stats };
       });
 
     computed.sort((a, b) => Math.abs(b.stats.r) - Math.abs(a.stats.r));
@@ -1680,26 +1819,24 @@ ${protocolText}
       const st = row.stats;
       const rVal = (st.r >= 0 ? '+' : '') + st.r.toFixed(2);
       const isBin = st.isBinaryX;
+      const lagBadge = st.lagCfg.lagDays === 1 ? 'Tag +1' : (st.lagCfg.mode === 'rolling14' ? '14d Trend' : 'Tag 0');
 
       let typeBadge = isBin
-        ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-950 text-purple-300 border border-purple-800">0/1 Binär</span>'
-        : '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">Metrisch</span>';
+        ? `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-950 text-purple-300 border border-purple-800">0/1 • ${lagBadge}</span>`
+        : `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">Metrisch • ${lagBadge}</span>`;
 
       let deltaText = '-';
       if (isBin && st.n1 > 0 && st.n0 > 0) {
         const sign = st.delta >= 0 ? '+' : '';
-        deltaText = `<span class="${st.delta >= 0 ? 'text-emerald-400' : 'text-rose-400'} font-bold">${sign}${st.delta.toFixed(2)}</span> <span class="text-[10px] text-slate-400">(${st.mean1.toFixed(1)} vs ${st.mean0.toFixed(1)})</span>`;
+        deltaText = `<span class="${st.delta >= 0 ? 'text-emerald-400' : 'text-rose-400'} font-bold">${sign}${st.delta.toFixed(1)}</span> <span class="text-[10px] text-slate-400">(${st.mean1.toFixed(1)} vs ${st.mean0.toFixed(1)})</span>`;
       } else if (st.n >= 3) {
         const sign = st.slope >= 0 ? '+' : '';
         deltaText = `<span class="text-slate-300">β = ${sign}${st.slope.toFixed(3)}</span> <span class="text-[10px] text-slate-500">(n=${st.n})</span>`;
       }
 
       let lagOrEffectText = '-';
-      if (isBin && st.lagDelta != null) {
-        const sign = st.lagDelta >= 0 ? '+' : '';
-        lagOrEffectText = `<span class="${st.lagDelta >= 0 ? 'text-emerald-300' : 'text-rose-300'} font-bold">Lag t+1: ${sign}${st.lagDelta.toFixed(1)}</span> <span class="text-[10px] text-slate-500">(d=${st.cohensD.toFixed(2)})</span>`;
-      } else if (isBin) {
-        lagOrEffectText = `d = ${st.cohensD >= 0 ? '+' : ''}${st.cohensD.toFixed(2)} (n₁=${st.n1})`;
+      if (isBin) {
+        lagOrEffectText = `<span class="text-slate-200 font-bold">n₁=${st.n1} / n₀=${st.n0}</span> <span class="text-[10px] text-slate-400">(d=${st.cohensD >= 0 ? '+' : ''}${st.cohensD.toFixed(2)})</span>`;
       } else {
         lagOrEffectText = `R² = ${(st.r * st.r * 100).toFixed(1)}% (n=${st.n})`;
       }
@@ -1718,52 +1855,48 @@ ${protocolText}
   }
 
   function formatMetricLabel(key) {
+    if (!key) return '';
     const map = {
-      'weitsprung_wk': 'Weitsprung WK (Offizielle Weite m)',
-      'eff_mark_m': 'Effektive Weite (ab Absprung m)',
-      'approach_speed_11m_to_1m': 'Anlauf-Vmax (11m-1m Zone m/s)',
-      'sprint_speed': 'Sprint-Geschwindigkeit Vmax (m/s)',
-      'whoop_recovery_pct': 'Whoop Recovery Score (%)',
-      'sleep_performance_pct': 'Whoop Schlaf-Performance (%)',
-      'whoop_strain': 'Whoop Day Strain (0-21)',
-      'rsi_score': 'DJ50 Reaktivitätsindex (RSI)',
-      'trapbar_e1rm_kg': 'Trapbar e1RM (kg)',
-      'umsetzen_e1rm_kg': 'Umsetzen e1RM (kg)',
-      'hipthrust_e1rm_kg': 'Hip-Thrust e1RM (kg)',
-      'aufsteiger_e1rm_kg': 'Aufsteiger e1RM (kg)',
+      'weitsprung_wk': 'Weitsprung WK (m)',
+      'eff_mark_m': 'Weite effektiv (m)',
+      'approach_speed_11m_to_1m': 'Vmax_Weit (m/s)',
+      'sprint_speed': 'Vmax_Sprint (m/s)',
+      'sprint_60m_wk': '60m WK (s)',
+      'sprint_100m_wk': '100m WK (s)',
+      'whoop_recovery_pct': 'Whoop Recovery (%)',
+      'sleep_performance_pct': 'Whoop Sleep (%)',
+      'whoop_strain': 'Whoop Strain (0-21)',
+      'rsi_score': 'DJ50 Reaktivität [W/kg]',
+      'trapbar_e1rm_kg': 'e1RM Trapbar (kg)',
+      'umsetzen_e1rm_kg': 'e1RM Umsetzen (kg)',
+      'hipthrust_e1rm_kg': 'e1RM Hip-Thrust (kg)',
+      'aufsteiger_e1rm_kg': 'e1RM Aufsteiger (kg)',
       'cmj_mit_armen': 'CMJ mit Armen (cm)',
       'cmj_ohne_arme': 'CMJ ohne Arme (cm)',
-      'body_weight_kg': 'Körpergewicht (kg)',
+      'body_weight_kg': 'Körpergewicht exakt (kg)',
+      'ref_body_weight_kg': 'Körpergewicht inkl. Trend (kg)',
       'body_fat_pct': 'Körperfett (%)',
-      'calories_kcal': 'Kalorien (kcal)',
+      'calories_kcal': 'Calories (kcal)',
       'protein_g': 'Protein (g)',
-      'fat_g': 'Fett (g)',
-      'carbs_g': 'Kohlenhydrate (g)',
+      'fat_g': 'Fat (g)',
+      'carbs_g': 'Carbs (g)',
       'duration_min': 'Dauer (min)',
       'performance_score': 'Leistung Score (1-4)',
       'focus_score': 'Fokus Score (1-4)',
       'pain_score': 'Schmerzen Score (1-4)',
       'fatigue_score': 'Erschöpfung Score (1-4)',
-      'supp_kreatin': 'Supplement: Kreatin (0/1)',
-      'supp_vit_d': 'Supplement: Vitamin D3 (0/1)',
-      'supp_omega3': 'Supplement: Omega 3 (0/1)',
-      'supp_magnesium': 'Supplement: Magnesium (0/1)',
-      'supp_b12': 'Supplement: Vitamin B12 (0/1)',
-      'supp_multi': 'Supplement: Multivitamin (0/1)',
-      'supp_zink': 'Supplement: Zink (0/1)',
-      'supp_ashwa': 'Supplement: Ashwaghanda (0/1)',
-      'supp_koffein': 'Supplement: Koffein (0/1)',
-      'supp_elektrolyte': 'Supplement: Elektrolyte (0/1)',
-      'regen_lympho': 'Regeneration: Lymphomat (0/1)',
-      'regen_kaelte': 'Regeneration: Kältebecken (0/1)',
-      'regen_sauna': 'Regeneration: Sauna (0/1)',
-      'regen_physio': 'Regeneration: Physiotherapie (0/1)',
-      'regen_dehnen': 'Regeneration: Dehnen / Blackroll (0/1)',
-      'regen_outdoor': 'Regeneration: Outdoor / Spaziergang (0/1)',
-      'sleep_bett_geteilt': 'Schlaf: Bett geteilt (0/1)',
-      'trainer_anwesend': 'Trainer anwesend (0/1)'
+      'prot_fct': 'French Contrast Training (FCT 0/1)',
+      'prot_1080': '1080 Sprint (0/1)',
+      'trainer_anwesend': 'Trainer Anwesend (0/1)'
     };
-    return map[key] || key.replace(/_/g, ' ');
+    if (map[key]) return map[key];
+    if (key.startsWith('supp_')) return `Supplement: ${key.slice(5)} (0/1)`;
+    if (key.startsWith('regen_')) return `Regeneration: ${key.slice(6)} (0/1)`;
+    if (key.startsWith('sleep_')) return `Schlaf: ${key.slice(6)} (0/1)`;
+    if (key.startsWith('nutr_')) return `Ernährung: ${key.slice(5)} (0/1)`;
+    if (key.startsWith('social_')) return `Sozial: ${key.slice(7)} (0/1)`;
+    if (key.startsWith('te_')) return `Trainingseinheit: ${key.slice(3)} (0/1)`;
+    return key.replace(/_/g, ' ');
   }
 
   // ================= 4-LIFT STRENGTH & DIAGNOSTICS (ABS, REL x BW, % DELTA) =================
@@ -2417,7 +2550,7 @@ ${protocolText}
       const venue = row.trainingsort || row.venue || row.ort || '';
       const weather = row.wetterbedingungen || row.wetter || row.weather || '';
       const timeOfDay = row.tageszeit || row.uhrzeit || '';
-      const focus = row.fokus || row.schwerpunkt || '';
+      const focus = row.schwerpunkt || row.focus || '';
       const learnings = row.learnings || row.lernen || '';
       const problems = row.probleme || row.problems || '';
       const comments = row.athlete_comments || row.kommentar || row.tagesform || '';
@@ -2429,12 +2562,16 @@ ${protocolText}
       const trainerPresent = row.trainer ? (row.trainer.toLowerCase().includes('ja') || row.trainer === '1' || row.trainer.toLowerCase().includes('true')) : false;
 
       const bw = parseNum(row.körpergewicht || row.body_weight_kg || row.gewicht);
-      if (bw && bw > 50) lastKnownBw = bw;
+      const validBw = (bw && bw >= 50 && bw <= 115) ? bw : null;
+      if (validBw) lastKnownBw = validBw;
 
       const perfScore = parseScore1to4(row.leistung || row.performance_score);
       const focusScore = parseScore1to4(row.fokus || row.fokus_score);
       const painScore = parseScore1to4(row.schmerzen || row.schmerz_score);
       const fatigueScore = parseScore1to4(row.erschöpfung || row.erschöpfung_score);
+
+      const rawHip = parseNum(row['e1rm_hip-thrust'] || row.e1rm_hip_thrust || row.e1rm_hipthrust || row.hipthrust_e1rm_kg);
+      const validHip = (rawHip && rawHip >= 50) ? rawHip : null;
 
       logs.push({
         date: d,
@@ -2446,9 +2583,10 @@ ${protocolText}
         weather: weather,
         time_of_day: timeOfDay,
         focus: focus,
+        fokus_label: row.fokus || '',
         leistung: row.leistung || '',
         trainer: trainerPresent,
-        body_weight_kg: bw,
+        body_weight_kg: validBw,
         ref_body_weight_kg: lastKnownBw,
         body_fat_pct: parseNum(row.körperfett || row.body_fat_pct || row.kfa),
         sleep_performance_pct: parseIntNum(row.sleep || row.sleep_performance_pct || row.schlafeffizienz),
@@ -2463,7 +2601,7 @@ ${protocolText}
         eff_mark_m: parseNum(row.weite_effektiv || row.eff_mark_m),
         trapbar_e1rm_kg: parseNum(row.e1rm_trapbar || row.trapbar_e1rm_kg),
         umsetzen_e1rm_kg: parseNum(row.e1rm_umsetzen || row.umsetzen_e1rm_kg),
-        hipthrust_e1rm_kg: parseNum(row['e1rm_hip-thrust'] || row.e1rm_hip_thrust || row.e1rm_hipthrust || row.hipthrust_e1rm_kg),
+        hipthrust_e1rm_kg: validHip,
         aufsteiger_e1rm_kg: parseNum(row.e1rm_aufsteiger || row.aufsteiger_e1rm_kg),
         protocol_text: protocolText,
         regeneration: regeneration,
@@ -2509,6 +2647,42 @@ ${protocolText}
     }
 
     logs.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
+    // Linear body weight trend interpolation between nearest weighed entries before & after
+    const bwPoints = logs
+      .map(l => (l.body_weight_kg != null && l.date) ? { t: new Date(l.date + 'T12:00:00').getTime(), d: l.date, bw: l.body_weight_kg } : null)
+      .filter(Boolean);
+
+    if (bwPoints.length > 0) {
+      let ptr = 0;
+      logs.forEach(l => {
+        if (l.body_weight_kg != null) {
+          l.ref_body_weight_kg = l.body_weight_kg;
+          l.interp_body_weight_source = `Exakt (${l.date})`;
+          return;
+        }
+        const curT = new Date((l.date || '2026-01-01') + 'T12:00:00').getTime();
+        while (ptr < bwPoints.length - 1 && bwPoints[ptr + 1].t <= curT) {
+          ptr++;
+        }
+        const prevPt = bwPoints[ptr];
+        const nextPt = ptr + 1 < bwPoints.length ? bwPoints[ptr + 1] : null;
+        if (curT <= prevPt.t) {
+          l.ref_body_weight_kg = prevPt.bw;
+          l.interp_body_weight_source = `Trend vor ${prevPt.d} (${prevPt.bw} kg)`;
+        } else if (!nextPt) {
+          l.ref_body_weight_kg = prevPt.bw;
+          l.interp_body_weight_source = `Trend ab ${prevPt.d} (${prevPt.bw} kg)`;
+        } else {
+          const span = Math.max(1, nextPt.t - prevPt.t);
+          const ratio = (curT - prevPt.t) / span;
+          const interp = Math.round((prevPt.bw + ratio * (nextPt.bw - prevPt.bw)) * 100) / 100;
+          l.ref_body_weight_kg = interp;
+          l.interp_body_weight_source = `Trend ${prevPt.d} (${prevPt.bw}kg) → ${nextPt.d} (${nextPt.bw}kg)`;
+        }
+      });
+    }
+
     return logs;
   }
 

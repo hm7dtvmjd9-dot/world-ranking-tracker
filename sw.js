@@ -1,4 +1,4 @@
-const CACHE_NAME = 'athletics-intel-v7.0-20261017';
+const CACHE_NAME = 'athletics-intel-v7.1-20261018';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -27,7 +27,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[ServiceWorker v7.0] Pre-caching static assets');
+      console.log('[ServiceWorker v7.1] Pre-caching static assets');
       return cache.addAll(STATIC_ASSETS).catch(err => {
         console.warn('[ServiceWorker] Cache addAll warning:', err);
       });
