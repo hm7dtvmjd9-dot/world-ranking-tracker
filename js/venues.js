@@ -168,7 +168,7 @@ const VenuesModule = (() => {
     let tierBadge = 'bg-slate-800 text-slate-300 border-slate-700';
     if (isChamp) {
       tierBadge = 'bg-purple-950 text-purple-300 border-purple-500 shadow-sm';
-    } else if (m.tier === 'Diamond League') {
+    } else if (m.tier && m.tier.includes('Diamond League')) {
       tierBadge = 'bg-cyan-950 text-cyan-300 border-cyan-500 shadow-sm';
     } else if (m.tier === 'Gold' || m.tier === 'World Athletics Series') {
       tierBadge = 'bg-amber-950 text-amber-300 border-amber-700';
@@ -600,25 +600,40 @@ const VenuesModule = (() => {
     renderCalendarMonthGrid(state);
   }
 
+  const CALENDAR_MONTHS = [
+    'Dezember 2026',
+    'Januar 2027', 'Februar 2027', 'März 2027', 'April 2027',
+    'Mai 2027', 'Juni 2027', 'Juli 2027', 'August 2027', 'September 2027',
+    'Oktober 2027', 'November 2027', 'Dezember 2027'
+  ];
+
+  const CALENDAR_MONTH_CONFIG = {
+    'Dezember 2026': { year: 2026, month: 12, days: 31 },
+    'Januar 2027': { year: 2027, month: 1, days: 31 },
+    'Februar 2027': { year: 2027, month: 2, days: 28 },
+    'März 2027': { year: 2027, month: 3, days: 31 },
+    'April 2027': { year: 2027, month: 4, days: 30 },
+    'Mai 2027': { year: 2027, month: 5, days: 31 },
+    'Juni 2027': { year: 2027, month: 6, days: 30 },
+    'Juli 2027': { year: 2027, month: 7, days: 31 },
+    'August 2027': { year: 2027, month: 8, days: 31 },
+    'September 2027': { year: 2027, month: 9, days: 30 },
+    'Oktober 2027': { year: 2027, month: 10, days: 31 },
+    'November 2027': { year: 2027, month: 11, days: 30 },
+    'Dezember 2027': { year: 2027, month: 12, days: 31 }
+  };
+
   function nextCalendarMonth() {
-    const months = [
-      'Januar 2027', 'Februar 2027', 'März 2027', 'April 2027',
-      'Mai 2027', 'Juni 2027', 'Juli 2027', 'August 2027', 'September 2027'
-    ];
-    const idx = months.indexOf(activeCalendarMonth);
-    if (idx !== -1 && idx < months.length - 1) {
-      setCalendarMonth(months[idx + 1]);
+    const idx = CALENDAR_MONTHS.indexOf(activeCalendarMonth);
+    if (idx !== -1 && idx < CALENDAR_MONTHS.length - 1) {
+      setCalendarMonth(CALENDAR_MONTHS[idx + 1]);
     }
   }
 
   function prevCalendarMonth() {
-    const months = [
-      'Januar 2027', 'Februar 2027', 'März 2027', 'April 2027',
-      'Mai 2027', 'Juni 2027', 'Juli 2027', 'August 2027', 'September 2027'
-    ];
-    const idx = months.indexOf(activeCalendarMonth);
+    const idx = CALENDAR_MONTHS.indexOf(activeCalendarMonth);
     if (idx > 0) {
-      setCalendarMonth(months[idx - 1]);
+      setCalendarMonth(CALENDAR_MONTHS[idx - 1]);
     }
   }
 
@@ -670,22 +685,8 @@ const VenuesModule = (() => {
       }
     });
 
-    const months = [
-      'Januar 2027', 'Februar 2027', 'März 2027', 'April 2027',
-      'Mai 2027', 'Juni 2027', 'Juli 2027', 'August 2027', 'September 2027'
-    ];
-
-    const monthConfig = {
-      'Januar 2027': { year: 2027, month: 1, days: 31 },
-      'Februar 2027': { year: 2027, month: 2, days: 28 },
-      'März 2027': { year: 2027, month: 3, days: 31 },
-      'April 2027': { year: 2027, month: 4, days: 30 },
-      'Mai 2027': { year: 2027, month: 5, days: 31 },
-      'Juni 2027': { year: 2027, month: 6, days: 30 },
-      'Juli 2027': { year: 2027, month: 7, days: 31 },
-      'August 2027': { year: 2027, month: 8, days: 31 },
-      'September 2027': { year: 2027, month: 9, days: 30 }
-    };
+    const months = CALENDAR_MONTHS;
+    const monthConfig = CALENDAR_MONTH_CONFIG;
 
     const meetingsByDate = {};
     sorted.forEach(m => {
@@ -720,7 +721,7 @@ const VenuesModule = (() => {
             <button onclick="VenuesModule.toggleShowAllMonths()" class="px-3 py-1 rounded text-xs font-mono font-bold transition-all ${
               showAllMonthsInGrid ? 'bg-cyan-600 text-slate-950 font-black' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
             }">
-              ${showAllMonthsInGrid ? '✓ Alle 9 Monate aktiv' : 'Alle 9 Monate anzeigen'}
+              ${showAllMonthsInGrid ? '✓ Alle Monate aktiv' : 'Alle Monate anzeigen'}
             </button>
             <button onclick="VenuesModule.nextCalendarMonth()" class="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-mono font-bold transition-all">
               Nächster ▶
@@ -737,7 +738,7 @@ const VenuesModule = (() => {
               <button onclick="VenuesModule.setCalendarMonth('${mName}')" class="px-3 py-1 rounded-lg shrink-0 font-bold transition-all flex items-center gap-1.5 ${
                 isActive ? 'bg-cyan-500 text-slate-950 font-black shadow-md' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
               }">
-                <span>${mName.replace(' 2027', '')}</span>
+                <span>${mName.replace(' 2027', '').replace(' 2026', ' \'26')}</span>
                 <span class="text-[9px] px-1 py-0.2 rounded ${isActive ? 'bg-slate-950 text-cyan-300' : 'bg-slate-900 text-slate-500'}">
                   ${mCount}
                 </span>
@@ -807,8 +808,8 @@ const VenuesModule = (() => {
             <!-- Meetings Content or Rest Day Indicator -->
             <div class="space-y-1.5 my-1 flex-1 flex flex-col justify-center">
               ${hasMeeting ? dayMeetings.map(m => {
-                const isDiamond = m.tier === 'Diamond League';
-                const isChampionship = (m.tier === 'Major' || m.tier === 'World Athletics Series' || m.category === 'OW' || m.category === 'GL' || m.category === 'GW' || m.name.includes('DM') || m.name.includes('EM') || m.name.includes('WM') || m.name.includes('CISM'));
+                const isDiamond = Boolean(m.tier && m.tier.includes('Diamond League'));
+                const isChampionship = Boolean(m.tier === 'Major' || m.tier === 'World Athletics Series' || m.category === 'OW' || m.category === 'GL' || m.name.includes('DM') || m.name.includes('EM') || m.name.includes('WM') || m.name.includes('CISM'));
                 const isGold = m.tier === 'Gold';
                 const isSilver = m.tier === 'Silver';
                 const isBronze = m.tier === 'Bronze';
@@ -914,7 +915,7 @@ const VenuesModule = (() => {
               <div class="bg-slate-950 px-2.5 py-1 rounded border border-slate-800 flex items-center gap-1.5">
                 <span class="text-slate-400">DL & Majors:</span>
                 <span class="font-bold text-purple-300">
-                  ${monthMeetings.filter(m => m.tier === 'Diamond League' || m.tier === 'Major' || m.tier === 'World Athletics Series' || m.category === 'OW' || m.category === 'GL').length}
+                  ${monthMeetings.filter(m => (m.tier && m.tier.includes('Diamond League')) || m.tier === 'Major' || m.tier === 'World Athletics Series' || m.category === 'OW' || m.category === 'GL').length}
                 </span>
               </div>
             </div>
