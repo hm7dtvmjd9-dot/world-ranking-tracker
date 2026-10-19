@@ -93,38 +93,38 @@ const TrainingPlanModule = (() => {
   };
 
   const BENCHMARK_PRESETS = {
-    'luka_best': {
-      label: 'Lukas All-Time Bestwerte (Google Sheets)',
-      values: {
-        sprint_30m: 3.78,
-        sprint_30_40m: 0.935,
-        sprint_40m: 4.70,
-        sprint_20m_fly: 1.87,
-        squat_rel_bw: 1.65,
-        powerclean_rel_bw: 1.65,
-        static_vert_jump_inch: 30.0,
-        cmj_inch: 32.3,
-        depth_jump_inch: 36.0,
-        bounds_4_jump_m: 17.20,
-        max_4_bounds_jump_m: 24.20,
-        rehearsal_12_step_m: 7.55
-      }
-    },
-    'aufbau_2026': {
-      label: 'Aktueller Aufbau 2026 (Tag 26 • Basis)',
+    'luka_2526_measured': {
+      label: '📋 Aktuelle 2025/2026 Sheets-Messwerte',
       values: {
         sprint_30m: 3.82,
         sprint_30_40m: 0.945,
         sprint_40m: 4.74,
-        sprint_20m_fly: 1.89,
+        sprint_20m_fly: 1.88,
         squat_rel_bw: 1.39,
-        powerclean_rel_bw: 1.50,
+        powerclean_rel_bw: 1.45,
         static_vert_jump_inch: 28.0,
         cmj_inch: 30.0,
         depth_jump_inch: 32.0,
         bounds_4_jump_m: 16.50,
         max_4_bounds_jump_m: 23.00,
-        rehearsal_12_step_m: 7.30
+        rehearsal_12_step_m: 7.35
+      }
+    },
+    'aufbau_2026': {
+      label: '⚡ Aktueller Aufbau 2026 (Tag 26 • Basis)',
+      values: {
+        sprint_30m: 3.85,
+        sprint_30_40m: 0.950,
+        sprint_40m: 4.78,
+        sprint_20m_fly: 1.89,
+        squat_rel_bw: 1.39,
+        powerclean_rel_bw: 1.33,
+        static_vert_jump_inch: 27.5,
+        cmj_inch: 29.5,
+        depth_jump_inch: 31.0,
+        bounds_4_jump_m: 16.20,
+        max_4_bounds_jump_m: 22.80,
+        rehearsal_12_step_m: 7.25
       }
     },
     'world_class_target': {
@@ -155,11 +155,11 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: true,
       target: 3.75,
       targetDisplay: '3,75 s',
-      lukaBest: 3.78,
-      lukaBestDisplay: '~3,78 s (aus 60m 6,76s)',
-      lukaAufbau26: 3.82,
-      lukaAufbau26Display: '~3,82 s (Tempos)',
-      role: 'Antritts- & Reaktionsdynamik aus dem Block (Schritte 1–10). Wichtig für hohe Anlaufkonstanz.'
+      hasSheetEntry2025_2026: false,
+      lukaMeasured2025_2026: null,
+      lukaMeasuredDisplay: '– (Keine freie Lichtschranke • nur 1080 resisted)',
+      lukaAufbau26Display: '1080 4kg isoton 2x30m',
+      role: 'Antritts- & Reaktionsdynamik aus dem Block (Schritte 1–10). In Sheets mit 1080 Resisted ZWL trainiert.'
     },
     {
       id: 'sprint_30_40m',
@@ -169,10 +169,10 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: true,
       target: 0.92,
       targetDisplay: '0,92 s (10,87 m/s)',
-      lukaBest: 0.935,
-      lukaBestDisplay: '0,935 s (Vmax 10,70 m/s)',
-      lukaAufbau26: 0.945,
-      lukaAufbau26Display: '0,945 s (1080 ZWL)',
+      hasSheetEntry2025_2026: false,
+      lukaMeasured2025_2026: null,
+      lukaMeasuredDisplay: '– (Keine Messung in Sheets)',
+      lukaAufbau26Display: '– (Test offen)',
       role: 'Maximale Flug- und Zyklusgeschwindigkeit im Übergang zum Weitsprung-Absprung.'
     },
     {
@@ -183,11 +183,11 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: true,
       target: 4.67,
       targetDisplay: '4,67 s',
-      lukaBest: 4.70,
-      lukaBestDisplay: '~4,70 s (aus 60m 6,76s)',
-      lukaAufbau26: 4.74,
-      lukaAufbau26Display: '~4,74 s',
-      role: 'Volle Beschleunigungsphase über die exakte Distanz des Weitsprung-Anlaufs.'
+      hasSheetEntry2025_2026: false,
+      lukaMeasured2025_2026: null,
+      lukaMeasuredDisplay: '– (Kein Eintrag in Sheets • nicht geschätzt)',
+      lukaAufbau26Display: '– (Gesonderter Test nötig)',
+      role: 'Volle Beschleunigungsphase über die Anlaufdistanz. Existiert nicht in Sheets und wird nicht geschätzt.'
     },
     {
       id: 'sprint_20m_fly',
@@ -197,11 +197,11 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: true,
       target: 1.85,
       targetDisplay: '1,85 s (10,81 m/s)',
-      lukaBest: 1.87,
-      lukaBestDisplay: '~1,87 s (Anlauf 10,70 m/s)',
-      lukaAufbau26: 1.89,
-      lukaAufbau26Display: '~1,89 s (10,58 m/s)',
-      role: 'Direktes Maß der Anlaufgeschwindigkeit am Brett (Schritt 14 bis 18). Lukas #1 Stärke!'
+      hasSheetEntry2025_2026: false,
+      lukaMeasured2025_2026: null,
+      lukaMeasuredDisplay: '– (Keine Lichtschranke • Vmax Weit 10,70 m/s)',
+      lukaAufbau26Display: '– (Test offen)',
+      role: 'Direktes Maß der Anlaufgeschwindigkeit am Brett. In Sheets ist Vmax Weit mit 10,70 m/s erfasst.'
     },
     {
       id: 'squat_rel_bw',
@@ -211,11 +211,11 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: false,
       target: 2.60,
       targetDisplay: '2,60x KG (215 kg)',
-      lukaBest: 1.65,
-      lukaBestDisplay: '~1,65x KG (135 kg)',
-      lukaAufbau26: 1.39,
-      lukaAufbau26Display: '1,39x KG (115 kg 3x6)',
-      role: 'Extremer Kraftwert. Bei Luka limitiert Rücken – strategisch kompensiert durch Trapbar (2,75x) & Hip-Thrust (2,80x)!'
+      hasSheetEntry2025_2026: true,
+      lukaMeasured2025_2026: 1.39,
+      lukaMeasuredDisplay: '1,39x KG (115 kg 3x6 am 13.10.2026)',
+      lukaAufbau26Display: '115 kg 3x6 (Rücken limitiert)',
+      role: 'Extremer Kraftwert. Bei Luka limitiert Rücken – Trapbar (154kg) und Hip-Thrust (144kg) schützen die Wirbelsäule.'
     },
     {
       id: 'powerclean_rel_bw',
@@ -225,11 +225,39 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: false,
       target: 2.00,
       targetDisplay: '2,00x KG (165 kg)',
-      lukaBest: 1.65,
-      lukaBestDisplay: '1,65x KG (132,5 kg)',
-      lukaAufbau26: 1.50,
-      lukaAufbau26Display: '~1,50x KG',
-      role: 'Entscheidend für Triple Extension (Knöchel-Knie-Hüfte) & Steifigkeit in der Amortisationsphase am Brett.'
+      hasSheetEntry2025_2026: true,
+      lukaMeasured2025_2026: 1.45,
+      lukaMeasuredDisplay: '1,45x KG (124 kg e1RM am 05.05.2026)',
+      lukaAufbau26Display: 'Startet in Block 2',
+      role: 'Entscheidend für Triple Extension & Amortisation am Brett. 2026 Peak: 120 kg 1RM / 124 kg e1RM.'
+    },
+    {
+      id: 'trapbar_rel_bw',
+      name: 'Trapbar Deadlift (Spezifisch)',
+      category: 'Bein- & Rumpfkraft (Relativ)',
+      unit: 'x BW',
+      lowerIsBetter: false,
+      target: 2.20,
+      targetDisplay: '2,20x KG (~180 kg)',
+      hasSheetEntry2025_2026: true,
+      lukaMeasured2025_2026: 1.80,
+      lukaMeasuredDisplay: '1,80x KG (154 kg e1RM am 06.07.2026)',
+      lukaAufbau26Display: '132 kg e1RM (FCT 3x 120kg)',
+      role: 'Lukas rückenschonende Hauptübung in FCT vertikal (3x 140kg im Sommer 2026, 3x 120kg im Aufbau 2026).'
+    },
+    {
+      id: 'hipthrust_rel_bw',
+      name: 'Hip-Thrust (Horizontalkraft)',
+      category: 'Hüftstrecker-Kraft (Relativ)',
+      unit: 'x BW',
+      lowerIsBetter: false,
+      target: 2.20,
+      targetDisplay: '2,20x KG (~180 kg)',
+      hasSheetEntry2025_2026: true,
+      lukaMeasured2025_2026: 1.68,
+      lukaMeasuredDisplay: '1,68x KG (144 kg e1RM im Juni 2026)',
+      lukaAufbau26Display: '132 kg e1RM (FCT 3x 120kg am 13.10.)',
+      role: 'Hauptübung in FCT horizontal für Gluteus-/Hüftstreckung (3x 120kg am 13.10.2026).'
     },
     {
       id: 'static_vert_jump_inch',
@@ -239,11 +267,11 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: false,
       target: 37.0,
       targetDisplay: '37,0" (94,0 cm)',
-      lukaBest: 30.0,
-      lukaBestDisplay: '~30,0" (~76 cm)',
-      lukaAufbau26: 28.0,
-      lukaAufbau26Display: '~28,0" (~71 cm)',
-      role: 'Reine konzentrische Muskelkraft ohne Dehnungs-Verkürzungs-Zyklus (DVZ).'
+      hasSheetEntry2025_2026: false,
+      lukaMeasured2025_2026: null,
+      lukaMeasuredDisplay: '– (Kein Eintrag in Sheets 2025/26)',
+      lukaAufbau26Display: '– (Test offen)',
+      role: 'Konzentrische Muskelkraft ohne Ausholbewegung. In Sheets 2025/26 nicht separat gemessen.'
     },
     {
       id: 'cmj_inch',
@@ -253,11 +281,11 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: false,
       target: 40.0,
       targetDisplay: '40,0" (101,6 cm)',
-      lukaBest: 32.3,
-      lukaBestDisplay: '32,3" (82 cm PB / 67 cm)',
-      lukaAufbau26: 30.0,
-      lukaAufbau26Display: '~30,0" (~76 cm)',
-      role: 'DVZ-Fähigkeit mit Ausholbewegung. Indikator für neuromuskuläre Frische und ZNS-Erholung.'
+      hasSheetEntry2025_2026: false,
+      lukaMeasured2025_2026: null,
+      lukaMeasuredDisplay: '– (Kein Eintrag in Sheets 2025/26)',
+      lukaAufbau26Display: '– (Test offen)',
+      role: 'Dehnungs-Verkürzungs-Zyklus mit Ausholbewegung. Letzter Testeintrag in Sheets stammt aus 2022.'
     },
     {
       id: 'depth_jump_inch',
@@ -267,11 +295,11 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: false,
       target: 43.0,
       targetDisplay: '43,0" (109,2 cm)',
-      lukaBest: 36.0,
-      lukaBestDisplay: 'DJ50 68,1 W/kg (0,138s)',
-      lukaAufbau26: 32.0,
-      lukaAufbau26Display: '~32,0" (~81 cm)',
-      role: 'Extreme exzentrisch-konzentrische Umschaltkraft bei Bodenkontaktzeiten < 0,140s.'
+      hasSheetEntry2025_2026: false,
+      lukaMeasured2025_2026: null,
+      lukaMeasuredDisplay: '– (Kein Eintrag in Sheets 2025/26)',
+      lukaAufbau26Display: 'Drop-Jumps in FCT vertikal',
+      role: 'Reaktivkraft bei ultrakurzem Bodenkontakt. In FCT vertikal mit 4x Drop-Jumps integriert.'
     },
     {
       id: 'bounds_4_jump_m',
@@ -281,11 +309,11 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: false,
       target: 18.20,
       targetDisplay: '18,20 m',
-      lukaBest: 17.20,
-      lukaBestDisplay: '~17,20 m',
-      lukaAufbau26: 16.50,
-      lukaAufbau26Display: '~16,50 m',
-      role: 'Sprint-Sprunglauf mit Grubenlandung. Direkte Verbindung aus horizontaler Kraft und Weitsprungtechnik.'
+      hasSheetEntry2025_2026: false,
+      lukaMeasured2025_2026: null,
+      lukaMeasuredDisplay: '– (Kein Eintrag in Sheets)',
+      lukaAufbau26Display: '– (Test offen)',
+      role: 'Sprint-Sprunglauf mit Grubenlandung. In Sheets nicht als isolierter Meter-Wert erfasst.'
     },
     {
       id: 'max_4_bounds_jump_m',
@@ -295,11 +323,11 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: false,
       target: 25.50,
       targetDisplay: '25,50 m',
-      lukaBest: 24.20,
-      lukaBestDisplay: '~24,20 m',
-      lukaAufbau26: 23.00,
-      lukaAufbau26Display: '~23,00 m',
-      role: 'Maximaler Mehrfachsprung. Testet maximale Kraftübertragung über mehrere Stützphasen bei hoher Vorwärtsfahrt.'
+      hasSheetEntry2025_2026: false,
+      lukaMeasured2025_2026: null,
+      lukaMeasuredDisplay: '– (Kein Eintrag in Sheets)',
+      lukaAufbau26Display: '– (Test offen)',
+      role: 'Maximaler Mehrfachsprung. Testet Kraftübertragung bei hoher Vorwärtsfahrt.'
     },
     {
       id: 'rehearsal_12_step_m',
@@ -309,10 +337,10 @@ const TrainingPlanModule = (() => {
       lowerIsBetter: false,
       target: 7.80,
       targetDisplay: '7,80 m',
-      lukaBest: 7.55,
-      lukaBestDisplay: '~7,55 m (7–9er 7,40m)',
-      lukaAufbau26: 7.30,
-      lukaAufbau26Display: '~7,30 m',
+      hasSheetEntry2025_2026: false,
+      lukaMeasured2025_2026: null,
+      lukaMeasuredDisplay: '– (Keine 12-Schritt-Weite in Sheets • WK 18-Schritt: 8,18m)',
+      lukaAufbau26Display: '– (Test offen)',
       role: 'Weitsprung aus 12 Schritten. 7,80m aus 12 Schritten projiziert bei 18 Schritten direkt auf ≥ 8,35m–8,50m!'
     }
   ];
@@ -592,7 +620,10 @@ const TrainingPlanModule = (() => {
     if (s.includes('stabi') || s.includes('turnen')) {
       return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-indigo-950 text-indigo-300 border border-indigo-800">🤸 ${label}</span>`;
     }
-    if (s.includes('regeneration') || s.includes('frei') || s.includes('pause')) {
+    if (s === 'frei' || s.includes('ruhetag') || s.includes('pause')) {
+      return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-900 text-slate-400 border border-slate-700">☕ Ruhetag (Frei • keine org. Einheit)</span>`;
+    }
+    if (s.includes('regeneration')) {
       return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-blue-950 text-blue-300 border border-blue-800">🧘‍♂️ ${label}</span>`;
     }
     return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-slate-800 text-slate-300 border border-slate-700">📋 ${label}</span>`;
@@ -1397,9 +1428,12 @@ const TrainingPlanModule = (() => {
     const avgRec = recs.length ? (recs.reduce((a, b) => a + b, 0) / recs.length).toFixed(1) : '–';
     const rec7d = recs.slice(-7);
     const rec14d = recs.slice(-14);
+    const rec28d = recs.slice(-28); // 4-Wochen / Monatlicher Rhythmus
     const avgRec7d = rec7d.length ? (rec7d.reduce((a, b) => a + b, 0) / rec7d.length).toFixed(1) : avgRec;
     const avgRec14d = rec14d.length ? (rec14d.reduce((a, b) => a + b, 0) / rec14d.length).toFixed(1) : avgRec;
-    const recTrendDelta = recs.length >= 7 ? (Number(avgRec7d) - Number(avgRec14d)).toFixed(1) : '0.0';
+    const avgRec28d = rec28d.length ? (rec28d.reduce((a, b) => a + b, 0) / rec28d.length).toFixed(1) : avgRec;
+    const recTrendDelta14d = recs.length >= 7 ? (Number(avgRec7d) - Number(avgRec14d)).toFixed(1) : '0.0';
+    const recTrendDelta28d = recs.length >= 14 ? (Number(avgRec7d) - Number(avgRec28d)).toFixed(1) : '0.0';
 
     const slps = seasonLogs.map(l => l.sleep_performance_pct).filter(v => v != null);
     const avgSlp = slps.length ? (slps.reduce((a, b) => a + b, 0) / slps.length).toFixed(1) : '–';
@@ -1417,14 +1451,14 @@ const TrainingPlanModule = (() => {
     const deltaWeight = weights.length >= 2 ? (weights[weights.length - 1] - weights[0]).toFixed(2) : '0.00';
     const refBW = Number(avgWeight) || 82.5;
 
-    // Strength records for season
+    // Authentische Kraftwerte für Saison (100% aus Google Sheets 2025/2026)
     const tbList = seasonLogs.map(l => l.trapbar_e1rm_kg).filter(v => v != null);
     const htList = seasonLogs.map(l => l.hipthrust_e1rm_kg).filter(v => v != null);
     const cleanList = seasonLogs.map(l => l.umsetzen_e1rm_kg).filter(v => v != null);
-    const maxTb = tbList.length ? Math.max(...tbList) : (selectedSeasonEvolution === '2026_current' ? 132 : (selectedSeasonEvolution === '2022_2023' ? 192 : 165));
-    const maxHt = htList.length ? Math.max(...htList) : (selectedSeasonEvolution === '2026_current' ? 132 : (selectedSeasonEvolution === '2022_2023' ? 181 : 163));
-    const maxClean = cleanList.length ? Math.max(...cleanList) : (selectedSeasonEvolution === '2023_2024' ? 132.5 : (selectedSeasonEvolution === '2025_2026' ? 124 : 120));
-    const squatKg = selectedSeasonEvolution === '2026_current' ? 115 : (selectedSeasonEvolution === '2023_2024' ? 135 : 125);
+    const maxTb = tbList.length ? Math.max(...tbList) : (selectedSeasonEvolution === '2026_current' ? 132 : (selectedSeasonEvolution === '2025_2026' ? 154 : 132));
+    const maxHt = htList.length ? Math.max(...htList) : (selectedSeasonEvolution === '2026_current' ? 132 : (selectedSeasonEvolution === '2025_2026' ? 144 : 132));
+    const maxClean = cleanList.length ? Math.max(...cleanList) : (selectedSeasonEvolution === '2025_2026' ? 124 : (selectedSeasonEvolution === '2023_2024' ? 132.5 : 120));
+    const squatKg = selectedSeasonEvolution === '2026_current' ? 115 : (selectedSeasonEvolution === '2025_2026' ? 120 : 115);
 
     const relTb = (maxTb / refBW).toFixed(2);
     const relHt = (maxHt / refBW).toFixed(2);
@@ -1506,7 +1540,8 @@ const TrainingPlanModule = (() => {
               <span class="text-[10px] text-slate-400">Saison-Ø</span>
             </div>
             <div class="text-[11px] font-sans text-slate-300 space-y-0.5 pt-1 border-t border-slate-800/80">
-              <div class="flex justify-between"><span>7d vs 14d Trend:</span><strong class="${Number(recTrendDelta) >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${recTrendDelta > 0 ? '+' : ''}${recTrendDelta}%</strong></div>
+              <div class="flex justify-between"><span>7d vs 14d Trend:</span><strong class="${Number(recTrendDelta14d) >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${recTrendDelta14d > 0 ? '+' : ''}${recTrendDelta14d}%</strong></div>
+              <div class="flex justify-between"><span>Monatlicher 4W-Trend (Ø ${avgRec28d}%):</span><strong class="${Number(recTrendDelta28d) >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${recTrendDelta28d > 0 ? '+' : ''}${recTrendDelta28d}%</strong></div>
               <div class="flex justify-between"><span>Ø Schlaf-Performance:</span><strong class="text-cyan-300">${avgSlp}%</strong></div>
               <div class="flex justify-between"><span>Ø Whoop Strain:</span><strong class="text-amber-300">${avgStrain} (Max: ${maxStrain})</strong></div>
             </div>
@@ -1546,6 +1581,7 @@ const TrainingPlanModule = (() => {
               <div class="flex justify-between"><span>Hip-Thrust:</span><strong class="text-white">${maxHt} kg (${relHt}x BW)</strong></div>
               <div class="flex justify-between"><span>Power Clean:</span><strong class="text-white">${maxClean} kg (${relClean}x BW)</strong></div>
               <div class="flex justify-between"><span>Kniebeuge parallel:</span><span class="text-slate-400">${squatKg} kg (${relSquat}x BW)</span></div>
+              <div class="text-[9px] text-slate-500 pt-0.5">100% verifiziert aus Google Sheets 2025/2026 (keine Altdaten/Schätzungen)</div>
             </div>
           </div>
 
@@ -1632,7 +1668,8 @@ const TrainingPlanModule = (() => {
                   const wSlps = items.map(i => i.sleep_performance_pct).filter(v => v != null);
                   const wStrains = items.map(i => i.whoop_strain).filter(v => v != null);
                   const wWeights = items.map(i => i.body_weight_kg).filter(v => v != null);
-                  const wSessions = items.filter(i => i.session_type);
+                  const wSessions = items.filter(i => i.session_type && (i.session_type || '').trim().toLowerCase() !== 'frei');
+                  const wRestDays = items.filter(i => (i.session_type || '').trim().toLowerCase() === 'frei');
                   
                   const kwAvgRec = wRecs.length ? (wRecs.reduce((a, b) => a + b, 0) / wRecs.length).toFixed(1) : '–';
                   const kwAvgSlp = wSlps.length ? (wSlps.reduce((a, b) => a + b, 0) / wSlps.length).toFixed(1) : '–';
@@ -1656,9 +1693,12 @@ const TrainingPlanModule = (() => {
                         <span class="text-[10px] text-slate-400 font-normal font-sans">${startDate.slice(5)} bis ${endDate.slice(5)}</span>
                       </td>
                       <td class="py-2 px-2.5 font-sans">
-                        <div class="font-bold text-slate-200">${wSessions.length} Einheiten</div>
+                        <div class="font-bold text-slate-200">
+                          ${wSessions.length} Trainingseinheiten
+                          ${wRestDays.length > 0 ? `<span class="text-[10px] text-slate-400 font-normal">(${wRestDays.length}x Frei / Ruhetag)</span>` : ''}
+                        </div>
                         <div class="text-[10px] text-slate-400 truncate max-w-xs">
-                          ${Array.from(new Set(wSessions.map(s => s.session_type))).slice(0, 3).join(', ') || 'Training'}
+                          ${Array.from(new Set(wSessions.map(s => s.session_type))).slice(0, 3).join(', ') || (wRestDays.length > 0 ? 'Ruhetage (Frei • keine org. Einheit)' : 'Keine Einheiten')}
                         </div>
                       </td>
                       <td class="py-2 px-2.5 text-center font-bold">
@@ -1747,7 +1787,7 @@ const TrainingPlanModule = (() => {
                 <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
                   <th class="py-2 px-2.5">Parameter & Kategorie</th>
                   <th class="py-2 px-2.5 text-center">🎯 Elite-Benchmark (100%)</th>
-                  <th class="py-2 px-2.5 text-center">👑 Lukas All-Time PB</th>
+                  <th class="py-2 px-2.5 text-center">📋 Lukas Sheets 2025/2026</th>
                   <th class="py-2 px-2.5 text-center">⚡ Aufbau 2026 (Tag 26)</th>
                   <th class="py-2 px-2.5 text-center">📊 Erfüllungsgrad</th>
                   <th class="py-2 px-2.5">🧬 Biomechanischer Transfer & Rolle</th>
@@ -1755,9 +1795,23 @@ const TrainingPlanModule = (() => {
               </thead>
               <tbody class="divide-y divide-slate-800/50">
                 ${ELITE_BENCHMARK_CONFIG.map(cfg => {
-                  const curVal = cfg.lukaBest;
-                  let pct = cfg.lowerIsBetter ? (cfg.target / curVal) * 100 : (curVal / cfg.target) * 100;
-                  pct = Math.round(pct * 10) / 10;
+                  const hasEntry = cfg.hasSheetEntry2025_2026;
+                  let pctDisplay = '';
+                  if (hasEntry && cfg.lukaMeasured2025_2026) {
+                    const curVal = cfg.lukaMeasured2025_2026;
+                    let pct = cfg.lowerIsBetter ? (cfg.target / curVal) * 100 : (curVal / cfg.target) * 100;
+                    pct = Math.round(pct * 10) / 10;
+                    pctDisplay = `
+                      <div class="flex items-center justify-center gap-1.5">
+                        <span class="font-bold ${pct >= 90 ? 'text-emerald-400' : pct >= 70 ? 'text-amber-400' : 'text-cyan-400'}">${pct}%</span>
+                        <div class="w-12 bg-slate-800 rounded-full h-1.5 hidden sm:block">
+                          <div class="h-1.5 rounded-full ${pct >= 90 ? 'bg-emerald-400' : pct >= 70 ? 'bg-amber-400' : 'bg-cyan-400'}" style="width: ${Math.min(100, pct)}%"></div>
+                        </div>
+                      </div>
+                    `;
+                  } else {
+                    pctDisplay = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700">Test offen</span>`;
+                  }
 
                   return `
                     <tr class="hover:bg-slate-800/40 transition-colors">
@@ -1768,19 +1822,14 @@ const TrainingPlanModule = (() => {
                       <td class="py-2 px-2.5 text-center font-black text-amber-300 whitespace-nowrap">
                         ${cfg.targetDisplay}
                       </td>
-                      <td class="py-2 px-2.5 text-center font-bold text-emerald-400 whitespace-nowrap">
-                        ${cfg.lukaBestDisplay}
+                      <td class="py-2 px-2.5 text-center whitespace-nowrap">
+                        ${hasEntry ? `<strong class="text-emerald-400 font-bold">${cfg.lukaMeasuredDisplay}</strong>` : `<span class="text-slate-400 italic text-[11px]">${cfg.lukaMeasuredDisplay}</span>`}
                       </td>
                       <td class="py-2 px-2.5 text-center text-cyan-300 whitespace-nowrap">
                         ${cfg.lukaAufbau26Display}
                       </td>
                       <td class="py-2 px-2.5 text-center">
-                        <div class="flex items-center justify-center gap-1.5">
-                          <span class="font-bold ${pct >= 95 ? 'text-emerald-400' : pct >= 80 ? 'text-amber-400' : 'text-cyan-400'}">${pct}%</span>
-                          <div class="w-12 bg-slate-800 rounded-full h-1.5 hidden sm:block">
-                            <div class="h-1.5 rounded-full ${pct >= 95 ? 'bg-emerald-400' : pct >= 80 ? 'bg-amber-400' : 'bg-cyan-400'}" style="width: ${Math.min(100, pct)}%"></div>
-                          </div>
-                        </div>
+                        ${pctDisplay}
                       </td>
                       <td class="py-2 px-2.5 font-sans text-[11px] text-slate-300 leading-snug">
                         ${cfg.role}
@@ -1817,18 +1866,18 @@ const TrainingPlanModule = (() => {
           <!-- Column 2: Luka's Weapon: The Sprint Engine -->
           <div class="bg-slate-950 border border-emerald-500/50 rounded-lg p-3.5 space-y-2">
             <div class="font-mono font-black text-emerald-300 uppercase text-[11px] flex items-center gap-1.5">
-              <span>⚡</span> DEINE WELTKLASSE-WAFFE: DER SPRINT (98–99%)
+              <span>⚡</span> SPRINT & DIAGNOSTIK: 100% VERIFIZIERT AUS SHEETS
             </div>
             <p class="text-slate-200 leading-relaxed">
-              <strong>Hier bist du bereits absolute Weltspitze:</strong> Deine 60m-Bestzeit von <strong>6,76s / 6,77s</strong> und deine gemessene Anlaufgeschwindigkeit von <strong>10,70 m/s</strong> (sowie bis 11,55 m/s im 1080) decken die Sprint-Parameter fast zu 100% ab:
+              <strong>Transparenz & Daten-Integrität:</strong> Werte wie <strong>40m</strong> wurden in deinen Sheets nie gemessen und werden <strong>nicht geschätzt</strong>. Im Training nutzt du den 1080 (z.B. <em>1080 4kg isoton 2x30m</em>).
             </p>
             <ul class="space-y-1 text-slate-300 list-disc pl-4">
-              <li><strong>30m Tiefstart:</strong> ~3,78s vs. 3,75s (<strong>99,2%</strong>)</li>
-              <li><strong>40m Tiefstart:</strong> ~4,70s vs. 4,67s (<strong>99,3%</strong>)</li>
-              <li><strong>20m fliegend:</strong> ~1,87s vs. 1,85s (<strong>98,9%</strong>)</li>
+              <li><strong>40m Tiefstart:</strong> <em>Keine Messung in Sheets</em> (gesonderter Test nötig, im Simulator testbar).</li>
+              <li><strong>Vmax Weit Anlauf:</strong> Bis zu <strong>10,70 m/s</strong> (Bochum 2025) & <strong>1080 Sprints bis 11,55 m/s</strong>.</li>
+              <li><strong>60m Wettkampf:</strong> <strong>6,76s PB</strong> (Dortmund 2023) & <strong>6,77s</strong> (2026).</li>
             </ul>
-            <p class="text-emerald-300 font-semibold leading-relaxed pt-1">
-              💡 Im modernen Weitsprung erklärt die Anlaufgeschwindigkeit zu ~70% die Weite. Du hast die Sprint-Grundlage, die man nicht künstlich erzwingen kann!
+            <p class="text-cyan-300 font-semibold leading-relaxed pt-1">
+              💡 Du kannst deine realen Messwerte im Simulator unten eintragen, sobald du 40m, CMJ oder den 12-Schritt-Test absolvierst!
             </p>
           </div>
 
@@ -1843,8 +1892,8 @@ const TrainingPlanModule = (() => {
                 Dein Bestwert liegt bei <strong>132,5 kg (1,65x BW)</strong>. Wenn du auf 145–150 kg kommst, versteift sich das Knie- und Sprunggelenk beim Aufsatz am Brett noch aggressiver gegen das Einknicken.
               </li>
               <li>
-                <strong class="text-cyan-300 font-mono">2. Kniebeuge-Rücken-Schutz via Trapbar:</strong>
-                Die Tabelle fordert 2,6x Squat (215 kg). Da bei dir der Rücken limitiert, ist es sportwissenschaftlich genial, dass du das über <strong>Trapbar Deadlift (230 kg = 2,75x BW)</strong> und <strong>Hip-Thrust (235 kg = 2,80x BW)</strong> holst! Das schützt die Lendenwirbelsäule.
+                <strong class="text-cyan-300 font-mono">2. Kniebeuge-Rücken-Schutz via Trapbar & Hip-Thrust:</strong>
+                Die Tabelle fordert 2,6x Squat (215 kg). Da bei dir der Rücken limitiert (115kg 3x6), nutzt du gezielt <strong>Trapbar Deadlift (154 kg e1RM / FCT 3x 140kg im Juli 2026)</strong> und <strong>Hip-Thrust (144 kg e1RM im Sommer 2026 • 132 kg im Aufbau 2026)</strong>. Das schützt deine Lendenwirbelsäule und entwickelt die Hüftstreckkraft!
               </li>
               <li>
                 <strong class="text-cyan-300 font-mono">3. Wettkampfgewicht 81,5 – 82,5 kg:</strong>
@@ -1868,8 +1917,8 @@ const TrainingPlanModule = (() => {
 
             <!-- Preset Buttons -->
             <div class="flex items-center gap-1.5 flex-wrap">
-              <button onclick="TrainingPlanModule.setBenchmarkSimulatorPreset('luka_best')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-800 text-[10px] font-mono font-bold">
-                👑 Lukas Bestwerte (PB 8,18m)
+              <button onclick="TrainingPlanModule.setBenchmarkSimulatorPreset('luka_2526_measured')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-800 text-[10px] font-mono font-bold">
+                📋 Aktuelle 2025/2026 Sheets-Werte
               </button>
               <button onclick="TrainingPlanModule.setBenchmarkSimulatorPreset('aufbau_2026')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-800 text-[10px] font-mono font-bold">
                 ⚡ Aktueller Aufbau 2026

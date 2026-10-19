@@ -3521,135 +3521,6 @@
       ]
     },
     {
-      "id": "dl-xiamen-2027",
-      "wa_id": null,
-      "date": "2027-05-22",
-      "displayDate": "22. MAI 2027",
-      "month": "Mai 2027",
-      "year": 2027,
-      "name": "Xiamen Diamond League 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "isChampionship": false,
-      "venue": "Egret Stadium",
-      "city": "Xiamen",
-      "country": "CHN",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": true,
-      "dlDisciplineStatus": "Disziplin-Zuteilung 2027 noch offen (TBA)",
-      "status": "Diamond League (Kat. GW • 200 Pkt Sieg • Disziplinen TBA)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.46m, 20x über 8,00m)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.46,
-        8.43,
-        8.32,
-        8.29,
-        8.28
-      ],
-      "websiteUrl": "https://www.diamondleague.com/calendar/",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "Wanda Diamond League Office",
-          "email": "office@diamondleague.com",
-          "phone": "",
-          "title": "Diamond League Series"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump (TBA)"
-      ],
-      "disciplinesWomen": [],
-      "disciplines_status": "Offiziell bestätigt: Weitsprung Männer im Hauptprogramm"
-    },
-    {
-      "id": "dl-rome-2027",
-      "wa_id": null,
-      "date": "2027-05-27",
-      "displayDate": "27. MAI 2027",
-      "month": "Mai 2027",
-      "year": 2027,
-      "name": "Golden Gala Pietro Mennea 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "isChampionship": false,
-      "venue": "Stadio Olimpico",
-      "city": "Rom",
-      "country": "ITA",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": true,
-      "dlDisciplineStatus": "Disziplin-Zuteilung 2027 noch offen (TBA)",
-      "status": "Diamond League (Kat. GW • 200 Pkt Sieg • Disziplinen TBA)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Stadio Olimpico Rom: Luka sprang hier 8,08m und 8,01m bei der EM 2024)",
-      "lukaHistory": [
-        {
-          "mark": 7.7,
-          "year": 2026,
-          "date": "13 JUN 2026",
-          "place": "2."
-        },
-        {
-          "mark": 7.87,
-          "year": 2025,
-          "date": "07 JUN 2025",
-          "place": "1."
-        },
-        {
-          "mark": 7.75,
-          "year": 2024,
-          "date": "18 MAY 2024",
-          "place": "3."
-        },
-        {
-          "mark": 7.76,
-          "year": 2023,
-          "date": "03 JUN 2023",
-          "place": "2."
-        },
-        {
-          "mark": 7.79,
-          "year": 2023,
-          "date": "27 MAY 2023",
-          "place": "3."
-        }
-      ],
-      "topHistoricalMarks": [
-        8.34,
-        8.34,
-        8.3,
-        8.3,
-        8.26
-      ],
-      "websiteUrl": "https://www.diamondleague.com/calendar/",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "Wanda Diamond League Office",
-          "email": "office@diamondleague.com",
-          "phone": "",
-          "title": "Diamond League Series"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump (TBA)"
-      ],
-      "disciplinesWomen": [],
-      "disciplines_status": "Offiziell bestätigt: Weitsprung Männer im Hauptprogramm"
-    },
-    {
       "id": "dlv-dresden-goldenes-oval-2027",
       "wa_id": null,
       "date": "2027-05-30",
@@ -3695,6 +3566,34 @@
       "disciplinesWomen": [
         "Long Jump"
       ]
+    },
+    {
+      "id": "dl-rabat-2027",
+      "name": "Meeting International Mohammed VI d'Athlétisme Rabat 2027 (Diamond League)",
+      "shortName": "Rabat Diamond League",
+      "date": "2027-05-30",
+      "displayDate": "30.05.2027",
+      "city": "Rabat",
+      "country": "MAR",
+      "venue": "Prince Moulay Abdellah Stadium",
+      "category": "GW",
+      "tier": "Diamond League",
+      "indoor": false,
+      "series": "Wanda Diamond League 2027",
+      "discipline": "Weitsprung Männer",
+      "dl_discipline": "Long Jump Men",
+      "pointsCategory": "GW (70 Bonuspunkte)",
+      "placingScore1st": 70,
+      "placingScore2nd": 60,
+      "placingScore3rd": 52,
+      "placingScore4th": 46,
+      "placingScore5th": 40,
+      "placingScore6th": 36,
+      "placingScore7th": 32,
+      "placingScore8th": 28,
+      "officialUrl": "https://rabat.diamondleague.com/",
+      "disciplinesOfficialSource": "https://www.diamondleague.com/results-standings/disciplines/",
+      "notes": "Offizielle Wanda Diamond League 2027 Station für Weitsprung Männer."
     },
     {
       "id": "wa-7244281",
@@ -4275,55 +4174,6 @@
       ]
     },
     {
-      "id": "dl-monaco-2027",
-      "wa_id": null,
-      "date": "2027-07-09",
-      "displayDate": "09. JUL 2027",
-      "month": "Juli 2027",
-      "year": 2027,
-      "name": "Herculis EBS Monaco 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "isChampionship": false,
-      "venue": "Stade Louis II",
-      "city": "Monaco",
-      "country": "MON",
-      "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": true,
-      "dlDisciplineStatus": "Disziplin-Zuteilung 2027 noch offen (TBA)",
-      "status": "Diamond League (Kat. GW • 200 Pkt Sieg • Disziplinen TBA)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.61m, 10x über 8,00m)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.61,
-        8.39,
-        8.38,
-        8.36,
-        8.35
-      ],
-      "websiteUrl": "https://www.diamondleague.com/calendar/",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "Wanda Diamond League Office",
-          "email": "office@diamondleague.com",
-          "phone": "",
-          "title": "Diamond League Series"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump (TBA)"
-      ],
-      "disciplinesWomen": [],
-      "disciplines_status": "Offiziell bestätigt: Weitsprung Männer im Hauptprogramm"
-    },
-    {
       "id": "dlv-pfungstadt-flutlicht-2027",
       "wa_id": null,
       "date": "2027-07-10",
@@ -4393,52 +4243,31 @@
     },
     {
       "id": "dl-lausanne-2027",
-      "wa_id": null,
+      "name": "Athletissima Lausanne 2027 (Diamond League)",
+      "shortName": "Athletissima Lausanne",
       "date": "2027-07-13",
-      "displayDate": "13. JUL 2027",
-      "month": "Juli 2027",
-      "year": 2027,
-      "name": "Athletissima Lausanne 2027",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League",
-      "category": "GW",
-      "subgroup": "Diamond League",
-      "isChampionship": false,
-      "venue": "Stade Olympique de la Pontaise",
+      "displayDate": "13.07.2027",
       "city": "Lausanne",
       "country": "SUI",
+      "venue": "Stade Olympique de la Pontaise",
+      "category": "GW",
+      "tier": "Diamond League",
       "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": true,
-      "dlDisciplineStatus": "Disziplin-Zuteilung 2027 noch offen (TBA)",
-      "status": "Diamond League (Kat. GW • 200 Pkt Sieg • Disziplinen TBA)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.24m, 7x über 8,00m)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.24,
-        8.13,
-        8.11,
-        8.07,
-        8.06
-      ],
-      "websiteUrl": "https://www.diamondleague.com/calendar/",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "Wanda Diamond League Office",
-          "email": "office@diamondleague.com",
-          "phone": "",
-          "title": "Diamond League Series"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump (TBA)"
-      ],
-      "disciplinesWomen": [],
-      "disciplines_status": "Offiziell bestätigt: Weitsprung Männer im Hauptprogramm"
+      "series": "Wanda Diamond League 2027",
+      "discipline": "Weitsprung Männer",
+      "dl_discipline": "Long Jump Men",
+      "pointsCategory": "GW (70 Bonuspunkte)",
+      "placingScore1st": 70,
+      "placingScore2nd": 60,
+      "placingScore3rd": 52,
+      "placingScore4th": 46,
+      "placingScore5th": 40,
+      "placingScore6th": 36,
+      "placingScore7th": 32,
+      "placingScore8th": 28,
+      "officialUrl": "https://lausanne.diamondleague.com/",
+      "disciplinesOfficialSource": "https://www.diamondleague.com/results-standings/disciplines/",
+      "notes": "Offizielle Wanda Diamond League 2027 Station für Weitsprung Männer."
     },
     {
       "id": "wa-7247511",
@@ -4509,6 +4338,34 @@
         "Triple Jump",
         "Long Jump"
       ]
+    },
+    {
+      "id": "dl-london-2027",
+      "name": "Novuna London Athletics Meeting 2027 (Diamond League)",
+      "shortName": "London Diamond League",
+      "date": "2027-07-17",
+      "displayDate": "17.07.2027",
+      "city": "London",
+      "country": "GBR",
+      "venue": "London Stadium (Queen Elizabeth Olympic Park)",
+      "category": "GW",
+      "tier": "Diamond League",
+      "indoor": false,
+      "series": "Wanda Diamond League 2027",
+      "discipline": "Weitsprung Männer",
+      "dl_discipline": "Long Jump Men",
+      "pointsCategory": "GW (70 Bonuspunkte)",
+      "placingScore1st": 70,
+      "placingScore2nd": 60,
+      "placingScore3rd": 52,
+      "placingScore4th": 46,
+      "placingScore5th": 40,
+      "placingScore6th": 36,
+      "placingScore7th": 32,
+      "placingScore8th": 28,
+      "officialUrl": "https://london.diamondleague.com/",
+      "disciplinesOfficialSource": "https://www.diamondleague.com/results-standings/disciplines/",
+      "notes": "Offizielle Wanda Diamond League 2027 Station für Weitsprung Männer."
     },
     {
       "id": "dlv-inneringen-schlossberg-2027",
@@ -4752,53 +4609,60 @@
       "disciplinesWomen": []
     },
     {
+      "id": "dl-silesia-2027",
+      "name": "Kamila Skolimowska Memorial Silesia 2027 (Silesia Diamond League)",
+      "shortName": "Silesia Diamond League",
+      "date": "2027-08-15",
+      "displayDate": "15.08.2027",
+      "city": "Chorzów",
+      "country": "POL",
+      "venue": "Stadion Śląski",
+      "category": "GW",
+      "tier": "Diamond League",
+      "indoor": false,
+      "series": "Wanda Diamond League 2027",
+      "discipline": "Weitsprung Männer",
+      "dl_discipline": "Long Jump Men",
+      "pointsCategory": "GW (70 Bonuspunkte)",
+      "placingScore1st": 70,
+      "placingScore2nd": 60,
+      "placingScore3rd": 52,
+      "placingScore4th": 46,
+      "placingScore5th": 40,
+      "placingScore6th": 36,
+      "placingScore7th": 32,
+      "placingScore8th": 28,
+      "officialUrl": "https://silesia.diamondleague.com/",
+      "disciplinesOfficialSource": "https://www.diamondleague.com/results-standings/disciplines/",
+      "notes": "Offizielle Wanda Diamond League 2027 Station für Weitsprung Männer."
+    },
+    {
       "id": "dl-zurich-2027",
-      "wa_id": null,
-      "date": "2027-08-25",
-      "displayDate": "25. AUG 2027",
-      "month": "August 2027",
-      "year": 2027,
-      "name": "Weltklasse Zürich (Diamond League Final 2027)",
-      "tour": "Wanda Diamond League 2027",
-      "tier": "Diamond League Final",
-      "category": "DF",
-      "subgroup": "Diamond League",
-      "isChampionship": false,
-      "venue": "Letzigrund",
+      "name": "Weltklasse Zürich 2027 (Diamond League Final)",
+      "shortName": "Weltklasse Zürich Final",
+      "date": "2027-08-26",
+      "displayDate": "26.08.2027",
       "city": "Zürich",
       "country": "SUI",
+      "venue": "Letzigrund",
+      "category": "DF",
+      "tier": "Diamond League Final",
       "indoor": false,
-      "mensLongJump": true,
-      "womensLongJump": true,
-      "standardEligible": true,
-      "dlDisciplineStatus": "Fix gesetzt (DL Final)",
-      "status": "Diamond League (Kat. DF • 240 Pkt Sieg)",
-      "promisingRunway": true,
-      "runwayNote": "Anlage vielversprechend ⭐ (Historisch weite Sprünge: Bestmarke 8.45m, 31x über 8,00m)",
-      "lukaHistory": [],
-      "topHistoricalMarks": [
-        8.45,
-        8.43,
-        8.42,
-        8.33,
-        8.32
-      ],
-      "websiteUrl": "https://www.diamondleague.com/calendar/",
-      "resultsPageUrl": null,
-      "liveStreamingUrl": null,
-      "contactPersons": [
-        {
-          "name": "Wanda Diamond League Office",
-          "email": "office@diamondleague.com",
-          "phone": "",
-          "title": "Diamond League Series"
-        }
-      ],
-      "disciplinesMen": [
-        "Long Jump (Final)"
-      ],
-      "disciplinesWomen": [],
-      "disciplines_status": "Offiziell bestätigt: Weitsprung Männer im Hauptprogramm"
+      "series": "Wanda Diamond League 2027",
+      "discipline": "Weitsprung Männer (Final)",
+      "dl_discipline": "Long Jump Men",
+      "pointsCategory": "DF (100 Bonuspunkte)",
+      "placingScore1st": 100,
+      "placingScore2nd": 85,
+      "placingScore3rd": 75,
+      "placingScore4th": 65,
+      "placingScore5th": 55,
+      "placingScore6th": 45,
+      "placingScore7th": 35,
+      "placingScore8th": 25,
+      "officialUrl": "https://zurich.diamondleague.com/",
+      "disciplinesOfficialSource": "https://www.diamondleague.com/results-standings/disciplines/",
+      "notes": "Offizielles Wanda Diamond League Finale 2027 für Weitsprung Männer."
     },
     {
       "id": "dlv-berlin-istaf-outdoor-2027",
