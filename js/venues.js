@@ -3,14 +3,70 @@
  * Grounded in European Athletics & World Athletics Tour official documents.
  * Target Discipline: Weitsprung Männer (Men's LJ).
  * Excludes non-Men's LJ meetings via strict GraphQL units inspection.
+ * Includes interactive personal season planner (🟢 Sicher / ⭐ Merkliste / 🚫 Ausblenden).
  */
 const VenuesModule = (() => {
+  const STATUS_STORAGE_KEY = 'athletics_intel_user_meeting_statuses';
+
   let selectedTier = 'ALL';
+  let selectedStatusFilter = 'ALL'; // 'ALL' | 'MY_PLAN' | 'CONFIRMED' | 'WATCHLIST' | 'HIDDEN'
+  let hideExcludedMeetings = true; // Hide meetings marked as 'hidden' when not explicitly viewing 'HIDDEN'
   let currentViewMode = 'list'; // 'list' | 'calendar'
   let mensOnly = true;
   let initializedListeners = false;
   let searchQuery = '';
   let expandedMeetingId = null;
+
+  // --- LocalStorage Status Helpers ---
+  function getUserStatuses() {
+    try {
+      const data = localStorage.getItem(STATUS_STORAGE_KEY);
+      return data ? JSON.parse(data) : {};
+    } catch (e) {
+      console.warn('Error reading meeting statuses from localStorage', e);
+      return {};
+    }
+  }
+
+  function getMeetingStatus(id) {
+    const statuses = getUserStatuses();
+    return statuses[id] || 'none';
+  }
+
+  function setMeetingStatus(meetingId, status) {
+    const statuses = getUserStatuses();
+    if (!status || status === 'none') {
+      delete statuses[meetingId];
+    } else {
+      statuses[meetingId] = status;
+    }
+    try {
+      localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(statuses));
+    } catch (e) {
+      console.warn('Error writing meeting statuses to localStorage', e);
+    }
+
+    if (window.App && window.App.state) {
+      render(window.App.state);
+      if (currentViewMode === 'calendar') {
+        renderCalendarMonthGrid(window.App.state);
+      }
+    }
+  }
+
+  function toggleMeetingStatus(meetingId, targetStatus) {
+    const current = getMeetingStatus(meetingId);
+    if (current === targetStatus) {
+      setMeetingStatus(meetingId, 'none');
+    } else {
+      setMeetingStatus(meetingId, targetStatus);
+    }
+  }
+
+  function setMeetingStatusAndRefreshModal(meetingId, status) {
+    setMeetingStatus(meetingId, status);
+    openMeetingInfoModal(meetingId);
+  }
 
   function toggleMeetingRow(id) {
     expandedMeetingId = expandedMeetingId === id ? null : id;
@@ -65,6 +121,273 @@ const VenuesModule = (() => {
     return (m.tier || '').toLowerCase() === selectedTier.toLowerCase();
   }
 
+  function setStatusFilter(filterKey) {
+    selectedStatusFilter = filterKey;
+    updateStatusFilterButtonsUI();
+    if (window.App && window.App.state) {
+      render(window.App.state);
+      if (currentViewMode === 'calendar') {
+        renderCalendarMonthGrid(window.App.state);
+      }
+    }
+  }
+
+  function toggleHideExcluded() {
+    const chk = document.getElementById('hideExcludedMeetingsCheckbox');
+    hideExcludedMeetings = chk ? chk.checked : !hideExcludedMeetings;
+    if (window.App && window.App.state) {
+      render(window.App.state);
+      if (currentViewMode === 'calendar') {
+        renderCalendarMonthGrid(window.App.state);
+      }
+    }
+  }
+
+  function handleSearchInput(query) {
+    searchQuery = (query || '').trim();
+    if (window.App && window.App.state) {
+      render(window.App.state);
+      if (currentViewMode === 'calendar') {
+        renderCalendarMonthGrid(window.App.state);
+      }
+    }
+  }
+
+  function updateStatusFilterButtonsUI() {
+    const buttons = document.querySelectorAll('.cal-status-btn');
+    buttons.forEach(btn => {
+      const f = btn.getAttribute('data-status-filter');
+      if (f === selectedStatusFilter) {
+        if (f === 'MY_PLAN') {
+          btn.className = 'cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-emerald-500 text-slate-950 font-black shadow-sm flex items-center gap-1';
+        } else if (f === 'CONFIRMED') {
+          btn.className = 'cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-emerald-600 text-white font-black shadow-sm flex items-center gap-1';
+        } else if (f === 'WATCHLIST') {
+          btn.className = 'cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-amber-400 text-slate-950 font-black shadow-sm flex items-center gap-1';
+        } else if (f === 'HIDDEN') {
+          btn.className = 'cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-rose-700 text-white font-black shadow-sm flex items-center gap-1';
+        } else {
+          btn.className = 'cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-cyan-600 text-slate-950 font-black shadow-sm flex items-center gap-1';
+        }
+      } else {
+        btn.className = 'cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-slate-300 border border-slate-700 bg-slate-950 hover:bg-slate-800 flex items-center gap-1';
+      }
+    });
+  }
+
+  function updateStatusFilterCounts(meetings, statuses) {
+    const confirmedCount = meetings.filter(m => statuses[m.id] === 'confirmed').length;
+    const watchlistCount = meetings.filter(m => statuses[m.id] === 'watchlist').length;
+    const hiddenCount = meetings.filter(m => statuses[m.id] === 'hidden').length;
+    const myPlanCount = confirmedCount + watchlistCount;
+
+    const elAll = document.getElementById('statusCountAll');
+    if (elAll) elAll.textContent = meetings.length;
+    const elPlan = document.getElementById('statusCountMyPlan');
+    if (elPlan) elPlan.textContent = myPlanCount;
+    const elConf = document.getElementById('statusCountConfirmed');
+    if (elConf) elConf.textContent = confirmedCount;
+    const elWatch = document.getElementById('statusCountWatchlist');
+    if (elWatch) elWatch.textContent = watchlistCount;
+    const elHid = document.getElementById('statusCountHidden');
+    if (elHid) elHid.textContent = hiddenCount;
+  }
+
+  function renderSeasonPlanCockpit(meetings, statuses) {
+    const container = document.getElementById('mySeasonPlanSummaryContainer');
+    if (!container) return;
+
+    const confirmedMeets = meetings.filter(m => statuses[m.id] === 'confirmed')
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+    const watchlistMeets = meetings.filter(m => statuses[m.id] === 'watchlist')
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+    const allPlanMeets = [...confirmedMeets, ...watchlistMeets]
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
+    if (allPlanMeets.length === 0) {
+      container.innerHTML = `
+        <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/30 border border-emerald-900/50 rounded-xl p-3 sm:p-4 text-xs font-mono shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xl">💡</span>
+            <div>
+              <strong class="text-emerald-300 uppercase tracking-wide">Erstelle dein persönliches Wettkampf-Gerüst 2027:</strong>
+              <p class="text-slate-300 text-[11px] font-sans mt-0.5">
+                Klicke in der Tabelle oder im Kalender bei deinen Wunsch-Meetings auf <span class="text-emerald-400 font-bold font-mono">🟢 Sicher</span> oder <span class="text-amber-400 font-bold font-mono">⭐ Option</span>. Nicht relevante Wettkämpfe kannst du mit <span class="text-rose-400 font-bold font-mono">🚫 Weg</span> sauber ausblenden.
+              </p>
+            </div>
+          </div>
+          <button onclick="VenuesModule.loadDefaultLukaSchedule()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black rounded-lg text-xs font-mono transition-all shadow-sm shrink-0">
+            ⚡ Lukas Kern-Wettkämpfe als Basis laden
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    // Compute gaps between planned events
+    const planGaps = [];
+    for (let i = 1; i < allPlanMeets.length; i++) {
+      const d1 = new Date(allPlanMeets[i - 1].date);
+      const d2 = new Date(allPlanMeets[i].date);
+      const diffDays = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+      planGaps.push(diffDays);
+    }
+    const avgGap = planGaps.length > 0 ? (planGaps.reduce((a, b) => a + b, 0) / planGaps.length).toFixed(1) : '-';
+
+    const firstMeet = allPlanMeets[0];
+    const lastMeet = allPlanMeets[allPlanMeets.length - 1];
+
+    container.innerHTML = `
+      <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-500/50 rounded-xl p-3.5 sm:p-4 shadow-lg space-y-3 font-mono">
+        <!-- Top Row: Title, KPI & Action Buttons -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🏆</span>
+            <div>
+              <h3 class="text-xs sm:text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 flex-wrap">
+                <span>DEIN WETTKAMPF-GERÜST 2027</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500 text-slate-950">${confirmedMeets.length} FESTE STARTS</span>
+                ${watchlistMeets.length > 0 ? `<span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-400 text-slate-950">${watchlistMeets.length} OPTIONEN</span>` : ''}
+              </h3>
+              <p class="text-[11px] text-slate-300 font-sans mt-0.5">
+                Auftakt: <strong>${firstMeet.displayDate || firstMeet.date}</strong> (${firstMeet.city}) • Saisonhöhepunkt: <strong>${lastMeet.displayDate || lastMeet.date}</strong> (${lastMeet.name})
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="VenuesModule.copySeasonPlanText()" class="px-2.5 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black text-[11px] rounded-lg transition-all shadow-sm flex items-center gap-1">
+              <span>📋</span> Plan kopieren (Coach / WhatsApp)
+            </button>
+            <button onclick="VenuesModule.setStatusFilter('MY_PLAN')" class="px-2.5 py-1.5 ${selectedStatusFilter === 'MY_PLAN' ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-950 hover:bg-slate-800 text-emerald-400 border border-emerald-700'} text-[11px] rounded-lg transition-all flex items-center gap-1 font-bold">
+              <span>📅</span> ${selectedStatusFilter === 'MY_PLAN' ? '✓ Planansicht aktiv' : 'Nur Plan anzeigen'}
+            </button>
+          </div>
+        </div>
+
+        <!-- Metrics Row -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+          <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+            <span class="text-[9px] text-slate-400 block uppercase font-bold">Sichere Starts</span>
+            <span class="text-sm font-black text-emerald-400">${confirmedMeets.length}</span>
+          </div>
+          <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+            <span class="text-[9px] text-slate-400 block uppercase font-bold">Merkliste / Optionen</span>
+            <span class="text-sm font-black text-amber-300">${watchlistMeets.length}</span>
+          </div>
+          <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+            <span class="text-[9px] text-slate-400 block uppercase font-bold">Ø Pause zwischen WKs</span>
+            <span class="text-sm font-black text-cyan-400">${avgGap} ${avgGap !== '-' ? 'Tage' : ''}</span>
+          </div>
+          <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+            <span class="text-[9px] text-slate-400 block uppercase font-bold">Gesamt-Gerüst</span>
+            <span class="text-sm font-black text-white">${allPlanMeets.length} Wettkämpfe</span>
+          </div>
+        </div>
+
+        <!-- Timeline Strip of Planned Competitions -->
+        <div class="space-y-1.5 pt-1">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Chronologischer Saison-Fahrplan:</span>
+          <div class="flex items-center gap-2 overflow-x-auto pb-1.5 no-scrollbar">
+            ${allPlanMeets.map((m, idx) => {
+              const isConf = statuses[m.id] === 'confirmed';
+              return `
+                <div onclick="VenuesModule.openMeetingInfoModal('${m.id}')" class="shrink-0 cursor-pointer p-2 rounded-lg border transition-all hover:scale-[1.02] ${
+                  isConf
+                    ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-200 shadow-md ring-1 ring-emerald-500/40'
+                    : 'bg-amber-950/70 border-amber-500/80 text-amber-200'
+                }">
+                  <div class="flex items-center justify-between gap-1 text-[9px] font-bold mb-0.5">
+                    <span>${isConf ? '🟢 SICHER' : '⭐ OPTION'}</span>
+                    <span class="text-slate-400">${m.displayDate || m.date}</span>
+                  </div>
+                  <div class="text-[11px] font-bold text-white truncate max-w-[150px]" title="${m.name}">
+                    ${m.shortName || m.name}
+                  </div>
+                  <div class="flex items-center justify-between gap-1 text-[9px] text-slate-400 mt-1 font-mono">
+                    <span>📍 ${m.city}</span>
+                    <span class="font-bold text-cyan-400">Kat. ${m.category}</span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function loadDefaultLukaSchedule() {
+    // Sensible core defaults for Luka Herden (DM Halle, Gorzów, Hallen-EM Valencia, Weinheim, CISM, Team-EM, DM Freiluft, WM Peking)
+    const defaults = {
+      'dlv-dortmund-jnr-indoor-2027': 'watchlist',
+      'dlv-dortmund-sparkassen-2027': 'watchlist',
+      'wa-gorzow-indoor-2027': 'confirmed', // 8.18m PB track!
+      'dlv-karlsruhe-init-2027': 'watchlist',
+      'dlv-berlin-istaf-indoor-2027': 'watchlist',
+      'champ-dm-halle-2027': 'confirmed',
+      'champ-em-indoor-2027': 'confirmed',
+      'dlv-weinheim-kurpfalz-2027': 'confirmed',
+      'dl-rabat-2027': 'watchlist',
+      'dlv-dessau-anhalt-2027': 'watchlist',
+      'champ-cism-2027': 'confirmed',
+      'champ-team-em-2027': 'confirmed',
+      'dlv-essen-springer-2027': 'watchlist',
+      'champ-dm-outdoor-2027': 'confirmed',
+      'dl-lausanne-2027': 'watchlist',
+      'dl-london-2027': 'watchlist',
+      'dlv-inneringen-schlossberg-2027': 'confirmed',
+      'dl-silesia-2027': 'watchlist',
+      'dl-zurich-2027': 'watchlist',
+      'champ-wm-outdoor-2027': 'confirmed'
+    };
+
+    try {
+      localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(defaults));
+    } catch (e) {
+      console.warn('Could not save defaults', e);
+    }
+
+    if (window.App && window.App.state) {
+      render(window.App.state);
+      if (currentViewMode === 'calendar') {
+        renderCalendarMonthGrid(window.App.state);
+      }
+    }
+  }
+
+  function copySeasonPlanText() {
+    const calendar = (window.App && window.App.state && window.App.state.calendarData) || null;
+    const meetings = (calendar && calendar.meetings) ? calendar.meetings : [];
+    const statuses = getUserStatuses();
+    const planned = meetings.filter(m => statuses[m.id] === 'confirmed' || statuses[m.id] === 'watchlist')
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
+    if (planned.length === 0) {
+      alert('Du hast noch keine Meetings als sicher (🟢) oder Merkliste (⭐) markiert.');
+      return;
+    }
+
+    let text = `🏆 WETTKAMPF-SAISONPLAN 2027 • LUKA HERDEN\n`;
+    text += `Erstellt via Athletics Intelligence Dashboard (${new Date().toLocaleDateString('de-DE')})\n`;
+    text += `Ziel: Hallen-EM Valencia (März) & WM Peking (September)\n`;
+    text += `=========================================================\n\n`;
+
+    planned.forEach((m, i) => {
+      const statusIcon = statuses[m.id] === 'confirmed' ? '🟢 [FEST EINGEPLANT]' : '⭐ [MERKLISTE / OPTION]';
+      text += `${i + 1}. ${m.displayDate || m.date}: ${m.name}\n`;
+      text += `   ${statusIcon} • ${m.city} (${m.country}) • Kat. ${m.category} (${m.tier})\n`;
+      if (m.promisingRunway) text += `   Anlage: ${m.runwayNote}\n`;
+      text += `\n`;
+    });
+
+    navigator.clipboard.writeText(text).then(() => {
+      alert(`✅ Saisonplan in die Zwischenablage kopiert! (${planned.length} Wettkämpfe)`);
+    }).catch(() => {
+      prompt('Saisonplan kopieren (Strg+C / Cmd+C):', text);
+    });
+  }
+
   function render(state) {
     initListeners();
 
@@ -83,13 +406,27 @@ const VenuesModule = (() => {
       return;
     }
 
+    const statuses = getUserStatuses();
+    updateStatusFilterCounts(meetings, statuses);
+    renderSeasonPlanCockpit(meetings, statuses);
+
     // Filter meetings
     const filtered = meetings.filter(m => {
       if (mensOnly && !m.mensLongJump) return false;
       if (!matchesSelectedTier(m)) return false;
+
+      const status = statuses[m.id] || 'none';
+      if (hideExcludedMeetings && status === 'hidden' && selectedStatusFilter !== 'HIDDEN') {
+        return false;
+      }
+      if (selectedStatusFilter === 'CONFIRMED' && status !== 'confirmed') return false;
+      if (selectedStatusFilter === 'WATCHLIST' && status !== 'watchlist') return false;
+      if (selectedStatusFilter === 'MY_PLAN' && status !== 'confirmed' && status !== 'watchlist') return false;
+      if (selectedStatusFilter === 'HIDDEN' && status !== 'hidden') return false;
+
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
-        const str = `${m.name} ${m.venue} ${m.city} ${m.country} ${m.tier} ${m.championshipType || ''}`.toLowerCase();
+        const str = `${m.name} ${m.venue || ''} ${m.city} ${m.country} ${m.tier} ${m.championshipType || ''}`.toLowerCase();
         if (!str.includes(q)) return false;
       }
       return true;
@@ -97,9 +434,12 @@ const VenuesModule = (() => {
 
     if (filtered.length === 0) {
       container.innerHTML = `
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-8 text-center text-slate-400 font-mono">
-          <p>Keine Meetings gefunden für die Filterkriterien.</p>
-          <button onclick="VenuesModule.resetFilters()" class="mt-3 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded-lg text-xs font-bold font-mono">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-8 text-center text-slate-400 font-mono space-y-2">
+          <p class="text-sm font-bold text-slate-300">Keine Meetings gefunden für die ausgewählten Filterkriterien.</p>
+          <p class="text-xs text-slate-500">
+            ${selectedStatusFilter === 'MY_PLAN' ? 'Tipp: Markiere Meetings mit 🟢 Sicher oder ⭐ Option, um sie in deinen Saisonplan aufzunehmen.' : ''}
+          </p>
+          <button onclick="VenuesModule.resetFilters()" class="mt-2 px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded-lg text-xs font-bold font-mono transition-all">
             Filter zurücksetzen
           </button>
         </div>
@@ -140,6 +480,7 @@ const VenuesModule = (() => {
                 <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
                   <th class="py-2 px-2.5 whitespace-nowrap">Datum</th>
                   <th class="py-2 px-2.5">Meeting & Ort</th>
+                  <th class="py-2 px-2 text-center whitespace-nowrap">Planung / Status</th>
                   <th class="py-2 px-2 text-center whitespace-nowrap">Kategorie</th>
                   <th class="py-2 px-2 text-center whitespace-nowrap">Standard (Kat C+)</th>
                   <th class="py-2 px-2 whitespace-nowrap">Anlage & Historie</th>
@@ -147,7 +488,7 @@ const VenuesModule = (() => {
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800/50">
-                ${list.map(m => renderMeetingRow(m)).join('')}
+                ${list.map(m => renderMeetingRow(m, statuses)).join('')}
               </tbody>
             </table>
           </div>
@@ -158,7 +499,13 @@ const VenuesModule = (() => {
     container.innerHTML = html;
   }
 
-  function renderMeetingRow(m) {
+  function renderMeetingRow(m, statuses) {
+    if (!statuses) statuses = getUserStatuses();
+    const status = statuses[m.id] || 'none';
+    const isConfirmed = status === 'confirmed';
+    const isWatchlist = status === 'watchlist';
+    const isHidden = status === 'hidden';
+
     const isGorzow = m.name.toLowerCase().includes('gorzów') || (m.city && m.city.toLowerCase().includes('gorzów'));
     const isPromising = m.promisingRunway;
     const isExpanded = expandedMeetingId === m.id;
@@ -183,9 +530,24 @@ const VenuesModule = (() => {
     const hasContacts = m.contactPersons && m.contactPersons.length > 0;
     const contactCount = hasContacts ? m.contactPersons.length : 0;
 
+    // Status visual accents
+    let rowStatusClass = '';
+    let statusPillHtml = '';
+
+    if (isConfirmed) {
+      rowStatusClass = 'border-l-4 border-l-emerald-500 bg-emerald-950/25';
+      statusPillHtml = '<span class="px-2 py-0.5 rounded-full text-[9px] font-black font-mono bg-emerald-500 text-slate-950 shadow-sm flex items-center gap-1 shrink-0">🟢 SICHERER START</span>';
+    } else if (isWatchlist) {
+      rowStatusClass = 'border-l-4 border-l-amber-400 bg-amber-950/20';
+      statusPillHtml = '<span class="px-2 py-0.5 rounded-full text-[9px] font-black font-mono bg-amber-400 text-slate-950 shadow-sm flex items-center gap-1 shrink-0">⭐ MERKLISTE</span>';
+    } else if (isHidden) {
+      rowStatusClass = 'border-l-4 border-l-slate-700 bg-slate-950/50 opacity-40 hover:opacity-85 transition-opacity';
+      statusPillHtml = '<span class="px-1.5 py-0.2 rounded text-[8px] font-mono text-slate-500 bg-slate-900 border border-slate-800 shrink-0">🚫 Ausgeblendet</span>';
+    }
+
     let mainRow = `
-      <tr onclick="VenuesModule.toggleMeetingRow('${m.id}')" class="cursor-pointer hover:bg-slate-800/40 transition-colors ${
-        isExpanded ? 'bg-slate-800/70 border-b border-slate-800' : isChamp ? 'bg-purple-950/15' : isGorzow ? 'bg-amber-950/15' : ''
+      <tr onclick="VenuesModule.toggleMeetingRow('${m.id}')" class="cursor-pointer hover:bg-slate-800/40 transition-colors ${rowStatusClass} ${
+        isExpanded ? 'bg-slate-800/70 border-b border-slate-800' : isChamp && !isConfirmed ? 'bg-purple-950/15' : isGorzow && !isConfirmed ? 'bg-amber-950/15' : ''
       }">
         <!-- Datum -->
         <td class="py-2 px-2.5 whitespace-nowrap font-bold text-white">
@@ -199,16 +561,37 @@ const VenuesModule = (() => {
         <td class="py-2 px-2.5">
           <div class="flex flex-col">
             <div class="flex items-center gap-1.5 flex-wrap">
+              ${statusPillHtml}
               <span class="font-bold text-slate-100 font-sans text-xs">${m.name}</span>
               <span class="px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 text-[10px] text-slate-400 font-mono">${m.country}</span>
               ${isChamp ? `<span class="px-1.5 py-0.2 rounded bg-purple-600 text-white font-black text-[9px] font-mono">🏆 ${m.championshipType || 'MEISTERSCHAFT'}</span>` : ''}
-              ${m.isDlvTerm && !isChamp ? '<span class="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold text-[9px] font-mono">🇩🇪 DLV Plan</span>' : ''}
-              ${m.dlDisciplineStatus === 'TBA' ? '<span class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-700 font-bold text-[9px] font-mono" title="Wanda Diamond League 2027 Termin steht fest; Disziplinverteilung Weitsprung Männer noch offen">⏳ Disziplinen offen (TBA)</span>' : ''}
+              ${m.tour && m.tour.includes('DLV') && !isChamp ? '<span class="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold text-[9px] font-mono">🇩🇪 DLV Plan</span>' : ''}
               ${isGorzow ? '<span class="px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 font-black text-[9px] font-mono">LUKA 8.18m</span>' : ''}
             </div>
             <span class="text-[10px] text-slate-400 font-sans mt-0.5">
               ${m.venue ? `${m.venue}, ` : ''}${m.city}
             </span>
+          </div>
+        </td>
+
+        <!-- Planung / Status Controls (1-Click Selector) -->
+        <td class="py-2 px-2 text-center whitespace-nowrap" onclick="event.stopPropagation()">
+          <div class="inline-flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+            <button title="${isConfirmed ? 'Klicken zum Abwählen' : 'Als sicheren Start fest einplanen'}" onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'confirmed')" class="px-2 py-0.5 rounded text-[10px] font-bold font-mono transition-all ${
+              isConfirmed ? 'bg-emerald-500 text-slate-950 font-black shadow-sm ring-1 ring-white/50 scale-105' : 'text-slate-400 hover:text-emerald-400 hover:bg-slate-900'
+            }">
+              🟢 Sicher
+            </button>
+            <button title="${isWatchlist ? 'Klicken zum Abwählen' : 'Auf die Merkliste / als Option setzen'}" onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'watchlist')" class="px-2 py-0.5 rounded text-[10px] font-bold font-mono transition-all ${
+              isWatchlist ? 'bg-amber-400 text-slate-950 font-black shadow-sm ring-1 ring-white/50 scale-105' : 'text-slate-400 hover:text-amber-400 hover:bg-slate-900'
+            }">
+              ⭐ Option
+            </button>
+            <button title="${isHidden ? 'Klicken zum Wieder-Einblenden' : 'Nicht interessant / Ausblenden'}" onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'hidden')" class="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono transition-all ${
+              isHidden ? 'bg-rose-600 text-white font-black shadow-sm scale-105' : 'text-slate-500 hover:text-rose-400 hover:bg-slate-900'
+            }">
+              🚫 Weg
+            </button>
           </div>
         </td>
 
@@ -261,7 +644,7 @@ const VenuesModule = (() => {
 
     const accordionRow = `
       <tr class="bg-slate-950/90 border-b border-slate-800">
-        <td colspan="6" class="p-3">
+        <td colspan="7" class="p-3">
           <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-3 shadow-md">
             <!-- 1. Header with Title & Action Shortcuts -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
@@ -280,6 +663,28 @@ const VenuesModule = (() => {
                 </button>
                 <button onclick="event.stopPropagation(); VenuesModule.openMeetingInfoModal('${m.id}')" class="px-2.5 py-1 bg-slate-950 hover:bg-slate-800 border border-slate-700 text-cyan-300 font-bold font-mono text-[10px] rounded transition-all">
                   Vollansicht / Kontakte ↗
+                </button>
+              </div>
+            </div>
+
+            <!-- Status Control Quick-Bar in Accordion -->
+            <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 flex items-center justify-between gap-2 flex-wrap">
+              <span class="text-[10px] font-bold font-mono uppercase text-slate-400">Dein Status für diesen Termin:</span>
+              <div class="flex items-center gap-1.5 font-mono text-xs">
+                <button onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'confirmed')" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
+                  isConfirmed ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-900 text-slate-400 hover:text-emerald-400 border border-slate-800'
+                }">
+                  🟢 Fest eingeplant
+                </button>
+                <button onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'watchlist')" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
+                  isWatchlist ? 'bg-amber-400 text-slate-950 font-black' : 'bg-slate-900 text-slate-400 hover:text-amber-400 border border-slate-800'
+                }">
+                  ⭐ Merkliste
+                </button>
+                <button onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'hidden')" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
+                  isHidden ? 'bg-rose-600 text-white font-black' : 'bg-slate-900 text-slate-500 hover:text-rose-400 border border-slate-800'
+                }">
+                  🚫 Ausblenden
                 </button>
               </div>
             </div>
@@ -363,10 +768,15 @@ const VenuesModule = (() => {
     const modal = document.getElementById('meetingInfoModal');
     if (!modal) return;
 
+    const status = getMeetingStatus(m.id);
+    const isConfirmed = status === 'confirmed';
+    const isWatchlist = status === 'watchlist';
+    const isHidden = status === 'hidden';
+
     // Header elements
     const catBadge = document.getElementById('modalMeetingCategoryBadge');
     if (catBadge) {
-      catBadge.textContent = `${m.tier.toUpperCase()} • KAT. ${m.category}`;
+      catBadge.textContent = `${(m.tier || '').toUpperCase()} • KAT. ${m.category}`;
       let tierBadge = 'bg-slate-800 text-slate-300 border-slate-700';
       if (m.tier === 'Gold') tierBadge = 'bg-amber-950 text-amber-300 border-amber-700';
       else if (m.tier === 'Silver') tierBadge = 'bg-cyan-950 text-cyan-300 border-cyan-700';
@@ -385,6 +795,44 @@ const VenuesModule = (() => {
     // Modal Body Content
     const bodyEl = document.getElementById('modalMeetingBody');
     if (bodyEl) {
+      // Interactive Status Selector Bar
+      const statusControlHtml = `
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shadow-sm">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">${isConfirmed ? '🟢' : isWatchlist ? '⭐' : isHidden ? '🚫' : '📌'}</span>
+            <div>
+              <span class="text-[10px] uppercase font-bold text-slate-400 font-mono block">Mein Saison-Planungsstatus:</span>
+              <span class="text-xs font-black font-mono ${isConfirmed ? 'text-emerald-400' : isWatchlist ? 'text-amber-400' : isHidden ? 'text-rose-400' : 'text-slate-300'}">
+                ${isConfirmed ? 'FEST EINGEPLANT (SICHERER START)' : isWatchlist ? 'AUF DER MERKLISTE (INTERESSANTE OPTION)' : isHidden ? 'NICHT RELEVANT (AUSGEBLENDET)' : 'NOCH OFFEN / NICHT MARKIERT'}
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'confirmed')" class="px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+              isConfirmed ? 'bg-emerald-500 text-slate-950 font-black shadow-md ring-1 ring-white' : 'bg-slate-900 hover:bg-emerald-950 text-slate-300 border border-slate-700 hover:border-emerald-600'
+            }">
+              🟢 Sicherer Start
+            </button>
+            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'watchlist')" class="px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+              isWatchlist ? 'bg-amber-400 text-slate-950 font-black shadow-md ring-1 ring-white' : 'bg-slate-900 hover:bg-amber-950 text-slate-300 border border-slate-700 hover:border-amber-600'
+            }">
+              ⭐ Merkliste
+            </button>
+            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'hidden')" class="px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+              isHidden ? 'bg-rose-600 text-white font-black shadow-md ring-1 ring-white' : 'bg-slate-900 hover:bg-rose-950 text-slate-300 border border-slate-700 hover:border-rose-600'
+            }">
+              🚫 Ausblenden
+            </button>
+            ${status !== 'none' ? `
+              <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'none')" class="px-2 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800">
+                ✕ Reset
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+
       // Contacts HTML
       let contactsHtml = '';
       if (m.contactPersons && m.contactPersons.length > 0) {
@@ -438,6 +886,7 @@ const VenuesModule = (() => {
       }
 
       bodyEl.innerHTML = `
+        ${statusControlHtml}
         ${historyHtml}
 
         <!-- Organizer Contacts -->
@@ -544,10 +993,22 @@ const VenuesModule = (() => {
 
   function resetFilters() {
     selectedTier = 'ALL';
+    selectedStatusFilter = 'ALL';
     mensOnly = true;
     searchQuery = '';
+    hideExcludedMeetings = true;
+
+    const searchInput = document.getElementById('meetingSearchInput');
+    if (searchInput) searchInput.value = '';
+
     const filterCheckbox = document.getElementById('filterMensLjOnly');
     if (filterCheckbox) filterCheckbox.checked = true;
+
+    const hideChk = document.getElementById('hideExcludedMeetingsCheckbox');
+    if (hideChk) hideChk.checked = true;
+
+    updateStatusFilterButtonsUI();
+
     document.querySelectorAll('.cal-tier-btn').forEach(b => {
       if (b.getAttribute('data-tier') === 'ALL') {
         b.className = 'cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold bg-cyan-600 text-white shadow-sm';
@@ -555,11 +1016,11 @@ const VenuesModule = (() => {
         b.className = 'cal-tier-btn px-2.5 py-1 rounded text-[10px] font-bold text-slate-300 border border-slate-700 bg-slate-950 hover:bg-slate-800';
       }
     });
+
     if (window.App && window.App.state) {
       render(window.App.state);
     }
   }
-
 
   function setViewMode(mode) {
     currentViewMode = mode;
@@ -650,13 +1111,25 @@ const VenuesModule = (() => {
     const calendar = state.calendarData;
     const rawMeetings = (calendar && calendar.meetings) ? calendar.meetings : [];
 
+    const statuses = getUserStatuses();
+
     // Filter according to active filters
     const filtered = rawMeetings.filter(m => {
       if (mensOnly && !m.mensLongJump) return false;
       if (!matchesSelectedTier(m)) return false;
+
+      const status = statuses[m.id] || 'none';
+      if (hideExcludedMeetings && status === 'hidden' && selectedStatusFilter !== 'HIDDEN') {
+        return false;
+      }
+      if (selectedStatusFilter === 'CONFIRMED' && status !== 'confirmed') return false;
+      if (selectedStatusFilter === 'WATCHLIST' && status !== 'watchlist') return false;
+      if (selectedStatusFilter === 'MY_PLAN' && status !== 'confirmed' && status !== 'watchlist') return false;
+      if (selectedStatusFilter === 'HIDDEN' && status !== 'hidden') return false;
+
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
-        const str = `${m.name} ${m.venue} ${m.city} ${m.country} ${m.tier} ${m.championshipType || ''}`.toLowerCase();
+        const str = `${m.name} ${m.venue || ''} ${m.city} ${m.country} ${m.tier} ${m.championshipType || ''}`.toLowerCase();
         if (!str.includes(q)) return false;
       }
       return true;
@@ -709,7 +1182,7 @@ const VenuesModule = (() => {
                 MEETING-MONATSKALENDER (WOCHENANSICHT MO–SO)
               </h3>
               <p class="text-[10px] text-slate-400 font-mono">
-                Wochenraster mit Farbkodierung der Meetingkategorien & Visualisierung der Wettkampfpausen
+                Wochenraster mit persönlicher Farbmarkierung (🟢 Sicher / ⭐ Option) & Visualisierung der Wettkampfpausen
               </p>
             </div>
           </div>
@@ -739,7 +1212,7 @@ const VenuesModule = (() => {
                 isActive ? 'bg-cyan-500 text-slate-950 font-black shadow-md' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
               }">
                 <span>${mName.replace(' 2027', '').replace(' 2026', ' \'26')}</span>
-                <span class="text-[9px] px-1 py-0.2 rounded ${isActive ? 'bg-slate-950 text-cyan-300' : 'bg-slate-900 text-slate-500'}">
+                <span class="text-[9px] px-1 py-0.2 rounded ${isActive ? 'bg-slate-950 text-cyan-300 font-bold' : 'bg-slate-900 text-slate-500'}">
                   ${mCount}
                 </span>
               </button>
@@ -787,7 +1260,7 @@ const VenuesModule = (() => {
         const dayName = dayNames[dObj.getDay()];
 
         cellsHtml += `
-          <div class="rounded-xl p-2 flex flex-col justify-between transition-all min-h-[115px] sm:min-h-[135px] border ${
+          <div class="rounded-xl p-2 flex flex-col justify-between transition-all min-h-[120px] sm:min-h-[145px] border ${
             hasMeeting ? 'bg-slate-900/90 border-slate-700 shadow-md ring-1 ring-cyan-500/20' : 'bg-slate-950/60 border-slate-850/80 hover:border-slate-800'
           }">
             <!-- Day Top Bar -->
@@ -808,6 +1281,11 @@ const VenuesModule = (() => {
             <!-- Meetings Content or Rest Day Indicator -->
             <div class="space-y-1.5 my-1 flex-1 flex flex-col justify-center">
               ${hasMeeting ? dayMeetings.map(m => {
+                const mStatus = statuses[m.id] || 'none';
+                const isConfirmed = mStatus === 'confirmed';
+                const isWatchlist = mStatus === 'watchlist';
+                const isHidden = mStatus === 'hidden';
+
                 const isDiamond = Boolean(m.tier && m.tier.includes('Diamond League'));
                 const isChampionship = Boolean(m.tier === 'Major' || m.tier === 'World Athletics Series' || m.category === 'OW' || m.category === 'GL' || m.name.includes('DM') || m.name.includes('EM') || m.name.includes('WM') || m.name.includes('CISM'));
                 const isGold = m.tier === 'Gold';
@@ -817,7 +1295,7 @@ const VenuesModule = (() => {
                 // Color-coded Category Badge
                 let badgeStyle = 'bg-slate-850 border-slate-700 text-slate-300';
                 let catBadge = `<span class="px-1 py-0.2 rounded text-[8px] font-black bg-slate-900 border border-slate-700 text-slate-300">Kat. ${m.category}</span>`;
-                
+
                 if (isDiamond) {
                   badgeStyle = 'bg-cyan-950/90 border-cyan-500/90 text-cyan-200 shadow-sm shadow-cyan-950/50 hover:border-cyan-400';
                   catBadge = `<span class="px-1.5 py-0.2 rounded text-[8px] font-black bg-cyan-900 border border-cyan-400 text-cyan-200">💎 DL • ${m.category}</span>`;
@@ -838,30 +1316,59 @@ const VenuesModule = (() => {
                   catBadge = `<span class="px-1 py-0.2 rounded text-[8px] font-black bg-blue-900 border border-blue-700 text-blue-200">🔹 Chall. • ${m.category}</span>`;
                 }
 
+                // Status ring overrides
+                if (isConfirmed) {
+                  badgeStyle = 'bg-emerald-950 border-emerald-400 text-emerald-100 ring-2 ring-emerald-400 shadow-md shadow-emerald-950/80';
+                } else if (isWatchlist) {
+                  badgeStyle = 'bg-amber-950 border-amber-400 text-amber-100 ring-2 ring-amber-400 shadow-md shadow-amber-950/80';
+                } else if (isHidden) {
+                  badgeStyle = 'bg-slate-950/60 border-slate-800 text-slate-500 opacity-30 grayscale hover:opacity-80';
+                }
+
                 return `
                   <div onclick="VenuesModule.openMeetingInfoModal('${m.id}')" class="cursor-pointer border rounded-lg p-2 font-mono text-[11px] transition-all hover:scale-[1.02] space-y-1 ${badgeStyle}">
                     <div class="flex items-center justify-between gap-1">
                       <span class="font-bold text-white text-[10px] sm:text-[11px] leading-tight line-clamp-2" title="${m.name}">
-                        ${m.name}
+                        ${m.shortName || m.name}
                       </span>
                     </div>
 
                     <div class="flex items-center justify-between text-[9px] text-slate-300">
-                      <span class="font-mono">📍 ${m.city} (${m.country})</span>
+                      <span class="font-mono">📍 ${m.city}</span>
                       ${catBadge}
                     </div>
 
                     ${m.promisingRunway ? `
-                      <div class="text-[8px] font-bold text-amber-400 flex items-center gap-1">
+                      <div class="text-[8px] font-bold text-amber-300 flex items-center gap-1">
                         <span>⭐</span>
                         <span>Schnelle Bahn</span>
                       </div>
                     ` : ''}
 
+                    <!-- 1-Click Quick Status Pills on Card -->
+                    <div class="flex items-center justify-between gap-1 pt-1 border-t border-slate-800/80 mt-1" onclick="event.stopPropagation()">
+                      <span class="text-[8px] font-bold uppercase truncate ${
+                        isConfirmed ? 'text-emerald-300' : isWatchlist ? 'text-amber-300' : isHidden ? 'text-rose-400' : 'text-slate-500'
+                      }">
+                        ${isConfirmed ? '🟢 Sicher' : isWatchlist ? '⭐ Gemerkt' : isHidden ? '🚫 Weg' : 'Planung:'}
+                      </span>
+                      <div class="flex items-center gap-0.5">
+                        <button title="Sicherer Start" onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'confirmed')" class="px-1.5 py-0.2 rounded text-[8px] font-bold font-mono transition-all ${
+                          isConfirmed ? 'bg-emerald-500 text-slate-950 font-black scale-105' : 'bg-slate-950 text-slate-400 hover:text-emerald-300 border border-slate-800'
+                        }">🟢</button>
+                        <button title="Merkliste / Option" onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'watchlist')" class="px-1.5 py-0.2 rounded text-[8px] font-bold font-mono transition-all ${
+                          isWatchlist ? 'bg-amber-400 text-slate-950 font-black scale-105' : 'bg-slate-950 text-slate-400 hover:text-amber-300 border border-slate-800'
+                        }">⭐</button>
+                        <button title="Ausblenden" onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'hidden')" class="px-1.5 py-0.2 rounded text-[8px] font-bold font-mono transition-all ${
+                          isHidden ? 'bg-rose-600 text-white font-black scale-105' : 'bg-slate-950 text-slate-500 hover:text-rose-300 border border-slate-800'
+                        }">🚫</button>
+                      </div>
+                    </div>
+
                     <!-- Pause Tracker Badge -->
                     ${m.gapSincePrev != null ? `
                       <div class="text-[8px] px-1 py-0.2 rounded bg-slate-950/80 border border-slate-700/60 text-slate-300 font-mono flex items-center justify-between" title="${m.gapSincePrev} Tage Pause seit ${m.prevMeetingName}">
-                        <span>⚡ ${m.gapSincePrev} Tage Pause</span>
+                        <span>⚡ ${m.gapSincePrev}d Pause</span>
                         <span class="text-slate-500 truncate ml-1">seit ${m.prevMeetingName}</span>
                       </div>
                     ` : ''}
@@ -877,7 +1384,7 @@ const VenuesModule = (() => {
             <!-- Footer: Next Gap Indicator -->
             ${hasMeeting && dayMeetings[0]?.gapUntilNext != null ? `
               <div class="pt-0.5 border-t border-slate-800/50 text-[8px] font-mono text-slate-400 text-right">
-                ⏳ Noch ${dayMeetings[0].gapUntilNext} Tage bis nächstes Event
+                ⏳ Noch ${dayMeetings[0].gapUntilNext}d bis nächstes Event
               </div>
             ` : ''}
           </div>
@@ -942,18 +1449,6 @@ const VenuesModule = (() => {
 
     container.innerHTML = `
       <div class="space-y-4">
-        <!-- Changes Notification Banner -->
-        <div class="bg-gradient-to-r from-cyan-950/60 to-slate-900 border border-cyan-800/80 rounded-xl p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-mono">
-          <div class="flex items-center gap-2">
-            <span class="text-base">💎</span>
-            <div>
-              <strong class="text-cyan-300">Tour- & Diamond League Update 2027:</strong>
-              <span class="text-slate-300 ml-1">Wanda Diamond League Meetings mit Weitsprung Männer integriert • Pausenberechnung aktiv • Kalenderwochen Mo–So.</span>
-            </div>
-          </div>
-          <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-bold shrink-0">Wöchentlich verifiziert</span>
-        </div>
-
         ${monthSelectorHtml}
         ${gridsHtml}
       </div>
@@ -971,7 +1466,18 @@ const VenuesModule = (() => {
     setCalendarMonth,
     nextCalendarMonth,
     prevCalendarMonth,
-    toggleShowAllMonths
+    toggleShowAllMonths,
+    // Personal Season Planner Exports
+    getUserStatuses,
+    getMeetingStatus,
+    setMeetingStatus,
+    toggleMeetingStatus,
+    setMeetingStatusAndRefreshModal,
+    setStatusFilter,
+    toggleHideExcluded,
+    handleSearchInput,
+    copySeasonPlanText,
+    loadDefaultLukaSchedule
   };
 })();
 

@@ -31,17 +31,6 @@ const QualificationModule = (() => {
 
   const CHAMPIONSHIPS_2027 = [
     {
-      id: 'DM_HALLE',
-      preset: 'DM',
-      code: 'DM Halle',
-      title: '74. Deutsche Hallenmeisterschaften',
-      date: '20.–21.02.2027',
-      city: 'Dortmund 🇩🇪',
-      cat: 'Kat. B',
-      norm: 'DLV Top 12 / 7.45m',
-      accent: 'border-cyan-500/60 bg-cyan-950/20 text-cyan-300'
-    },
-    {
       id: 'VALENCIA_EM',
       preset: 'VALENCIA',
       code: 'Hallen-EM',
@@ -73,28 +62,6 @@ const QualificationModule = (() => {
       cat: 'Kat. A',
       norm: 'Nur 1 Starter / Nation (GER #1)',
       accent: 'border-amber-500/60 bg-amber-950/20 text-amber-300'
-    },
-    {
-      id: 'DM_OUTDOOR',
-      preset: 'DM',
-      code: 'DM Freiluft',
-      title: '127. Deutsche Meisterschaften',
-      date: '02.–04.07.2027',
-      city: 'Deutschland 🇩🇪',
-      cat: 'Kat. B (+100 Pkt)',
-      norm: 'DLV Top 12 • WM-Quali Pflicht',
-      accent: 'border-cyan-500/60 bg-cyan-950/20 text-cyan-300'
-    },
-    {
-      id: 'FISU_WUG',
-      preset: 'TEAM_EM',
-      code: 'FISU WUG',
-      title: 'FISU World University Games',
-      date: '01.–12.08.2027',
-      city: 'Chungcheong 🇰🇷',
-      cat: 'Kat. B (adh)',
-      norm: 'Max 2 / Nation • DLV/adh Norm',
-      accent: 'border-indigo-500/50 bg-indigo-950/20 text-indigo-300'
     },
     {
       id: 'BEIJING_WM',
@@ -143,10 +110,9 @@ const QualificationModule = (() => {
     const ruleBadge = document.getElementById('periodInfoRuleBadge');
     const emBtn = document.getElementById('presetHallenEmBtn');
     const wmBtn = document.getElementById('presetWm2027Btn');
-    const dmBtn = document.getElementById('presetDm2027Btn');
     const teamBtn = document.getElementById('presetTeamEmBtn');
 
-    [emBtn, wmBtn, dmBtn, teamBtn].forEach(b => {
+    [emBtn, wmBtn, teamBtn].forEach(b => {
       if (b) b.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all flex items-center gap-1 shadow-sm';
     });
 
@@ -172,17 +138,6 @@ const QualificationModule = (() => {
       state.isHallenEmPreset = false;
       if (wmBtn) wmBtn.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-cyan-600 text-slate-950 font-black shadow-sm flex items-center gap-1';
       if (ruleBadge) ruleBadge.textContent = 'WM Peking 2027 Modus (11.–19.09.27 • Norm 8.27m • 36 Plätze Weltweit)';
-    } else if (presetKey === 'DM') {
-      state.periodFieldSize = 12;
-      state.periodMaxPerNation = 12;
-      state.periodScope = 'germany';
-      state.periodMode = 'toplist';
-      state.periodStartDate = '2026-01-01';
-      state.periodStandardStartDate = '2026-01-01';
-      state.periodEntryStandard = 7.90;
-      state.isHallenEmPreset = false;
-      if (dmBtn) dmBtn.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-cyan-600 text-slate-950 font-black shadow-sm flex items-center gap-1';
-      if (ruleBadge) ruleBadge.textContent = 'DM Halle Dortmund (20.02.27) & DM Freiluft (02.07.27) • DLV Kader & Top-12';
     } else if (presetKey === 'TEAM_EM') {
       state.periodFieldSize = 2;
       state.periodMaxPerNation = 2;
@@ -193,7 +148,7 @@ const QualificationModule = (() => {
       state.periodEntryStandard = 8.05;
       state.isHallenEmPreset = false;
       if (teamBtn) teamBtn.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-bold font-mono bg-amber-500 text-slate-950 font-black shadow-sm flex items-center gap-1';
-      if (ruleBadge) ruleBadge.textContent = 'Team-EM Istanbul (GER #1), CISM Militär-WM & FISU WUG 2027 (GER #1–#2)';
+      if (ruleBadge) ruleBadge.textContent = 'Team-EM Istanbul (GER #1) & CISM Militär-WM 2027 (Sportsoldaten GER #1–#2)';
     }
 
     const fsInput = document.getElementById('periodFieldSizeInput');
