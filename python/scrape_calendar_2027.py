@@ -269,44 +269,6 @@ CHAMPIONSHIPS_2027 = [
         "liveStreamingUrl": None
     },
     {
-        "id": "champ-fisu-2027",
-        "wa_id": 9908,
-        "date": "2027-08-06",
-        "endDate": "2027-08-12",
-        "displayDate": "01.–12. AUG 2027",
-        "month": "August 2027",
-        "year": 2027,
-        "name": "FISU World University Games 2027 (Welthochschulspiele Chungcheong)",
-        "tour": "Meisterschaften (FISU)",
-        "tier": "Meisterschaft",
-        "category": "B",
-        "subgroup": "World University Games",
-        "isChampionship": True,
-        "championshipType": "FISU",
-        "venue": "Chungcheong Main Stadium",
-        "city": "Chungcheong",
-        "country": "KOR",
-        "indoor": False,
-        "mensLongJump": True,
-        "womensLongJump": True,
-        "standardEligible": True,
-        "status": "FISU World University Games (Kat. B) • 60 Bonuspunkte für Sieg",
-        "promisingRunway": True,
-        "runwayNote": "Anlage vielversprechend ⭐ (Luka gewann 2025 mit 2x 7,96m Bronze bei den FISU Games!)",
-        "lukaHistory": [
-            {"mark": 7.96, "year": 2025, "date": "24. JUL 2025", "place": "3. F"}
-        ],
-        "topHistoricalMarks": [8.12, 8.05, 8.00, 7.96, 7.92],
-        "contactPersons": [
-            {"name": "adh - Allgemeiner Deutscher Hochschulsportverband", "email": "adh@adh.de", "phone": "+49 6071 2086-0", "title": "adh Wettkampfsport"}
-        ],
-        "disciplinesMen": ["Long Jump", "100m", "200m", "400m", "High Jump", "Triple Jump"],
-        "disciplinesWomen": ["Long Jump", "100m", "200m", "400m", "High Jump", "Triple Jump"],
-        "websiteUrl": "https://www.fisu.net",
-        "resultsPageUrl": None,
-        "liveStreamingUrl": None
-    },
-    {
         "id": "champ-wm-outdoor-2027",
         "wa_id": 9907,
         "date": "2027-09-11",
@@ -344,23 +306,13 @@ CHAMPIONSHIPS_2027 = [
     }
 ]
 
-# 2. Official 2027 Wanda Diamond League Calendar (https://www.diamondleague.com/calendar/)
+# 2. Official 2027 Wanda Diamond League Stops for Men's Long Jump (https://www.diamondleague.com/results-standings/disciplines/)
 DIAMOND_LEAGUE_2027_STOPS = [
-    ("dl-doha-2027", "2027-05-07", "Doha Diamond League 2027", "Suheim bin Hamad Stadium", "Doha", "QAT", "GW"),
-    ("dl-shanghai-2027", "2027-05-15", "Yangtze Delta Athletics Diamond Gala 2027", "China Textile City Sports Centre", "Shanghai/Keqiao", "CHN", "GW"),
-    ("dl-xiamen-2027", "2027-05-22", "Xiamen Diamond League 2027", "Egret Stadium", "Xiamen", "CHN", "GW"),
-    ("dl-rome-2027", "2027-05-27", "Golden Gala Pietro Mennea 2027", "Stadio Olimpico", "Rom", "ITA", "GW"),
-    ("dl-rabat-2027", "2027-05-30", "Meeting International Mohammed VI d'Athlétisme 2027", "Complexe Sportif Prince Moulay Abdellah", "Rabat", "MAR", "GW"),
-    ("dl-oslo-2027", "2027-06-03", "Oslo Bislett Games 2027", "Bislett Stadion", "Oslo", "NOR", "GW"),
-    ("dl-stockholm-2027", "2027-06-06", "BAUHAUS-Galan 2027", "Olympiastadion", "Stockholm", "SWE", "GW"),
-    ("dl-paris-2027", "2027-06-25", "Meeting de Paris 2027", "Stade Sébastien Charléty", "Paris", "FRA", "GW"),
-    ("dl-eugene-2027", "2027-07-03", "Prefontaine Classic 2027", "Hayward Field", "Eugene", "USA", "GW"),
-    ("dl-monaco-2027", "2027-07-09", "Herculis EBS Monaco 2027", "Stade Louis II", "Monaco", "MON", "GW"),
-    ("dl-lausanne-2027", "2027-07-13", "Athletissima Lausanne 2027", "Stade Olympique de la Pontaise", "Lausanne", "SUI", "GW"),
-    ("dl-london-2027", "2027-07-17", "London Athletics Meet 2027", "London Stadium", "London", "GBR", "GW"),
-    ("dl-silesia-2027", "2027-08-15", "Kamila Skolimowska Memorial 2027", "Silesian Stadium", "Chorzów", "POL", "GW"),
-    ("dl-brussels-2027", "2027-08-20", "Allianz Memorial Van Damme 2027", "King Baudouin Stadium", "Brüssel", "BEL", "GW"),
-    ("dl-zurich-2027", "2027-08-25", "Weltklasse Zürich (Diamond League Final 2027)", "Letzigrund", "Zürich", "SUI", "DF"),
+    ("dl-rabat-2027", "2027-05-30", "Meeting International Mohammed VI Rabat 2027 (Diamond League)", "Complexe Sportif Prince Moulay Abdellah", "Rabat", "MAR", "GW"),
+    ("dl-lausanne-2027", "2027-07-13", "Athletissima Lausanne 2027 (Diamond League)", "Stade Olympique de la Pontaise", "Lausanne", "SUI", "GW"),
+    ("dl-london-2027", "2027-07-17", "Novuna London Athletics Meeting 2027 (Diamond League)", "London Stadium (Queen Elizabeth Olympic Park)", "London", "GBR", "GW"),
+    ("dl-silesia-2027", "2027-08-15", "Kamila Skolimowska Memorial Silesia 2027 (Silesia Diamond League)", "Stadion Śląski", "Chorzów", "POL", "GW"),
+    ("dl-zurich-2027", "2027-08-26", "Weltklasse Zürich 2027 (Diamond League Final)", "Letzigrund", "Zürich", "SUI", "DF"),
 ]
 
 # 3. Official DLV Rahmenterminplan 2027 Men's Elite Meetings (excluding Jugend/Masters)
