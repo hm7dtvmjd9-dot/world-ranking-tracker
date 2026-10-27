@@ -24,8 +24,8 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 COMP_DB_PATH = os.path.join(DATA_DIR, "competitions_database.json")
 OUTPUT_CALENDAR_PATH = os.path.join(DATA_DIR, "calendar_2027.json")
 
-GRAPHQL_ENDPOINT = "https://ptibh4tbzjfmnjn7c5jj6bu2ai.appsync-api.eu-west-1.amazonaws.com/graphql"
-GRAPHQL_API_KEY = "da2-q7toieeiobcjxbov4abq3abk5u"
+GRAPHQL_ENDPOINT = "https://4qkglvbp2bekdeyuubqhklfsru.appsync-api.eu-west-1.amazonaws.com/graphql"
+GRAPHQL_API_KEY = "da2-rg637liqmjat5azoaaxfbpd7iq"
 CTX = ssl._create_unverified_context()
 
 MONTH_NAMES_DE = {
@@ -315,15 +315,11 @@ DIAMOND_LEAGUE_2027_STOPS = [
     ("dl-zurich-2027", "2027-08-26", "Weltklasse Zürich 2027 (Diamond League Final)", "Letzigrund", "Zürich", "SUI", "DF"),
 ]
 
-# 3. Official DLV Rahmenterminplan 2027 Men's Elite Meetings (excluding Jugend/Masters)
+# 3. Official DLV Rahmenterminplan 2027 Men's Elite Meetings (Outdoor with Men's Long Jump)
+# NOTE: All indoor one-day DLV meetings (Karlsruhe, ISTAF Berlin/Düsseldorf, Dortmund, Erfurt, Cottbus)
+# have NO Men's Long Jump and are strictly excluded. The German Indoor Championship (DM Halle Dortmund)
+# is included under CHAMPIONSHIPS_2027.
 DLV_RAHMENTERMINPLAN_2027 = [
-    ("dlv-dortmund-jnr-indoor-2027", "2027-01-16", "Indoor Jump'n'Run Meeting Dortmund 2027", "Helmut-Körnig-Halle", "Dortmund", "GER", "E", "DLV Rahmenterminplan", True),
-    ("dlv-dortmund-sparkassen-2027", "2027-01-23", "Sparkassen Indoor Meeting Dortmund 2027", "Helmut-Körnig-Halle", "Dortmund", "GER", "C", "World Athletics Indoor Tour 2027", True),
-    ("dlv-cottbus-springer-2027", "2027-01-27", "23. Internationales Springer-Meeting Cottbus 2027", "Lausitz-Arena", "Cottbus", "GER", "C", "World Athletics Indoor Tour 2027", True),
-    ("dlv-erfurt-indoor-2027", "2027-01-29", "14. Erfurt Indoor 2027", "Hartwig-Gauder-Halle", "Erfurt", "GER", "D", "World Athletics Indoor Tour 2027", True),
-    ("dlv-karlsruhe-init-2027", "2027-02-05", "INIT INDOOR MEETING Karlsruhe 2027", "Europahalle / Messe", "Karlsruhe", "GER", "A", "World Athletics Indoor Tour 2027", True),
-    ("dlv-berlin-istaf-indoor-2027", "2027-02-07", "ISTAF INDOOR Berlin 2027", "Uber Arena", "Berlin", "GER", "B", "World Athletics Indoor Tour 2027", True),
-    ("dlv-duesseldorf-istaf-2027", "2027-02-13", "ISTAF INDOOR Düsseldorf 2027", "PSD Bank Dome", "Düsseldorf", "GER", "B", "World Athletics Indoor Tour 2027", True),
     ("dlv-weinheim-kurpfalz-2027", "2027-05-15", "Kurpfalz-Gala Weinheim 2027", "Sepp-Herberger-Stadion", "Weinheim", "GER", "D", "DLV Rahmenterminplan / Continental Tour", False),
     ("dlv-dessau-anhalt-2027", "2027-05-21", "Internationales Leichtathletik-Meeting Anhalt 2027", "Paul-Greifzu-Stadion", "Dessau", "GER", "C", "World Athletics Continental Tour 2027", False),
     ("dlv-dresden-goldenes-oval-2027", "2027-05-30", "Goldenes Oval Dresden 2027", "Heinz-Steyer-Stadion", "Dresden", "GER", "B", "World Athletics Continental Tour 2027", False),
@@ -493,13 +489,11 @@ def main():
         other_events_women = []
 
         if units:
-            has_any_men_events = False
             for u in units:
                 gender = u.get("gender")
                 evts = u.get("events") or []
                 is_lj = any("long jump" in e.lower() or "weitsprung" in e.lower() for e in evts)
                 if gender == "Men":
-                    has_any_men_events = True
                     other_events_men.extend(evts)
                     if is_lj:
                         has_mens_lj = True
@@ -507,10 +501,11 @@ def main():
                     other_events_women.extend(evts)
                     if is_lj:
                         has_womens_lj = True
-            if has_any_men_events and not has_mens_lj:
+            if not has_mens_lj:
                 return None
         else:
-            has_mens_lj = True
+            # Strictly exclude any event without confirmed units/disciplines
+            return None
 
         raw_venue = ev.get("venue", "")
         venue_city = ""

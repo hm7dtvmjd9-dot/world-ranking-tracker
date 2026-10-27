@@ -320,16 +320,17 @@ const VenuesModule = (() => {
   function loadDefaultLukaSchedule() {
     // Sensible core defaults for Luka Herden (DM Halle, Gorzów, Hallen-EM Valencia, Weinheim, CISM, Team-EM, DM Freiluft, WM Peking)
     const defaults = {
-      'dlv-dortmund-jnr-indoor-2027': 'watchlist',
-      'dlv-dortmund-sparkassen-2027': 'watchlist',
-      'wa-gorzow-indoor-2027': 'confirmed', // 8.18m PB track!
-      'dlv-karlsruhe-init-2027': 'watchlist',
-      'dlv-berlin-istaf-indoor-2027': 'watchlist',
-      'champ-dm-halle-2027': 'confirmed',
-      'champ-em-indoor-2027': 'confirmed',
+      'wa-7244484': 'watchlist',           // Chemnitz Indoor (Kat. D)
+      'wa-7244518': 'confirmed',           // Gorzów Jump Festival (Kat. B Silver • 8.18m PB Track!)
+      'wa-7238588': 'watchlist',           // Ostrava Czech Indoor Gala (Kat. A Gold)
+      'wa-7240482': 'watchlist',           // Madrid Indoor (Kat. A Gold)
+      'wa-7244475': 'watchlist',           // Paris Indoor (Kat. B Silver)
+      'champ-dm-halle-2027': 'confirmed',  // DM Halle Dortmund (Kat. B)
+      'champ-em-indoor-2027': 'confirmed', // Hallen-EM Valencia (Kat. GL)
       'dlv-weinheim-kurpfalz-2027': 'confirmed',
       'dl-rabat-2027': 'watchlist',
       'dlv-dessau-anhalt-2027': 'watchlist',
+      'dlv-dresden-goldenes-oval-2027': 'watchlist',
       'champ-cism-2027': 'confirmed',
       'champ-team-em-2027': 'confirmed',
       'dlv-essen-springer-2027': 'watchlist',

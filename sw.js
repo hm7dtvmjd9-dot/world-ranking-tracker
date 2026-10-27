@@ -1,4 +1,4 @@
-const CACHE_NAME = 'athletics-intel-v7.3-20261026';
+const CACHE_NAME = 'athletics-intel-v7.4-20261027';
 const STATIC_ASSETS = [
   './',
   './index.html',
