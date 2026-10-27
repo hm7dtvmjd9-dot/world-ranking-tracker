@@ -1,6 +1,6 @@
 {
-  "date": "2026-10-13",
   "event": "Men's Long Jump",
+  "date": "2026-10-20",
   "athletes_count": 100,
   "athletes": [
     {
@@ -10,7 +10,7 @@
       "dob": "18 MAR 1998",
       "ranking_score": 1402,
       "profile_url": "https://worldathletics.org/athletes/greece/miltiadis-tentoglou-14669734",
-      "data_id": "144837244",
+      "data_id": "145138460",
       "counted_competitions": [
         {
           "date": "12 SEP 2026",
@@ -86,7 +86,7 @@
       "dob": "02 AUG 1996",
       "ranking_score": 1364,
       "profile_url": "https://worldathletics.org/athletes/jamaica/tajay-gayle-14631861",
-      "data_id": "144837245",
+      "data_id": "145138461",
       "counted_competitions": [
         {
           "date": "17 SEP 2025",
@@ -162,7 +162,7 @@
       "dob": "06 AUG 2004",
       "ranking_score": 1357,
       "profile_url": "https://worldathletics.org/athletes/bulgaria/bozhidar-saraboyukov-14927349",
-      "data_id": "144837246",
+      "data_id": "145138462",
       "counted_competitions": [
         {
           "date": "12 SEP 2026",
@@ -238,7 +238,7 @@
       "dob": "07 FEB 2005",
       "ranking_score": 1352,
       "profile_url": "https://worldathletics.org/athletes/italy/mattia-furlani-14905216",
-      "data_id": "144837247",
+      "data_id": "145138463",
       "counted_competitions": [
         {
           "date": "17 SEP 2025",
@@ -314,7 +314,7 @@
       "dob": "07 FEB 2000",
       "ranking_score": 1339,
       "profile_url": "https://worldathletics.org/athletes/switzerland/simon-ehammer-14730721",
-      "data_id": "144837248",
+      "data_id": "145138464",
       "counted_competitions": [
         {
           "date": "17 SEP 2025",
@@ -390,7 +390,7 @@
       "dob": "16 MAY 2007",
       "ranking_score": 1297,
       "profile_url": "https://worldathletics.org/athletes/cuba/jorge-a-hodelin-15111238",
-      "data_id": "144837249",
+      "data_id": "145138465",
       "counted_competitions": [
         {
           "date": "10 JUL 2026",
@@ -466,7 +466,7 @@
       "dob": "28 JAN 2000",
       "ranking_score": 1289,
       "profile_url": "https://worldathletics.org/athletes/portugal/gerson-balde-14849980",
-      "data_id": "144837250",
+      "data_id": "145138466",
       "counted_competitions": [
         {
           "date": "22 MAR 2026",
@@ -542,7 +542,7 @@
       "dob": "24 OCT 2000",
       "ranking_score": 1269,
       "profile_url": "https://worldathletics.org/athletes/jamaica/wayne-pinnock-14693852",
-      "data_id": "144837251",
+      "data_id": "145138467",
       "counted_competitions": [
         {
           "date": "10 JUL 2026",
@@ -618,7 +618,7 @@
       "dob": "22 OCT 2000",
       "ranking_score": 1264,
       "profile_url": "https://worldathletics.org/athletes/uzbekistan/anvar-anvarov-14934300",
-      "data_id": "144837252",
+      "data_id": "145138468",
       "counted_competitions": [
         {
           "date": "12 SEP 2026",
@@ -694,7 +694,7 @@
       "dob": "20 OCT 2000",
       "ranking_score": 1257,
       "profile_url": "https://worldathletics.org/athletes/pr-of-china/mingkun-zhang-14884079",
-      "data_id": "144837253",
+      "data_id": "145138469",
       "counted_competitions": [
         {
           "date": "17 SEP 2025",
@@ -770,7 +770,7 @@
       "dob": "26 SEP 1998",
       "ranking_score": 1255,
       "profile_url": "https://worldathletics.org/athletes/pr-of-china/yuhao-shi-14714402",
-      "data_id": "144837254",
+      "data_id": "145138470",
       "counted_competitions": [
         {
           "date": "17 SEP 2025",
@@ -846,7 +846,7 @@
       "dob": "17 FEB 2001",
       "ranking_score": 1250,
       "profile_url": "https://worldathletics.org/athletes/zimbabwe/tafadzwa-chikomba-14890453",
-      "data_id": "144837255",
+      "data_id": "145138471",
       "counted_competitions": [
         {
           "date": "10 JUN 2026",
@@ -922,7 +922,7 @@
       "dob": "06 JUL 2006",
       "ranking_score": 1248,
       "profile_url": "https://worldathletics.org/athletes/serbia/luka-boskovic-15037455",
-      "data_id": "144837256",
+      "data_id": "145138472",
       "counted_competitions": [
         {
           "date": "26 JUN 2026",
@@ -998,7 +998,7 @@
       "dob": "27 MAR 1999",
       "ranking_score": 1247,
       "profile_url": "https://worldathletics.org/athletes/india/sreeshankar-14734673",
-      "data_id": "144837257",
+      "data_id": "145138473",
       "counted_competitions": [
         {
           "date": "28 JUN 2026",
@@ -1074,7 +1074,7 @@
       "dob": "15 FEB 1996",
       "ranking_score": 1235,
       "profile_url": "https://worldathletics.org/athletes/sweden/thobias-montler-14487329",
-      "data_id": "144837258",
+      "data_id": "145138474",
       "counted_competitions": [
         {
           "date": "17 SEP 2025",
@@ -1150,7 +1150,7 @@
       "dob": "08 JAN 1991",
       "ranking_score": 1233,
       "profile_url": "https://worldathletics.org/athletes/south-africa/luvo-manyonga-14365377",
-      "data_id": "144837259",
+      "data_id": "145138475",
       "counted_competitions": [
         {
           "date": "13 MAY 2026",
@@ -1226,7 +1226,7 @@
       "dob": "31 AUG 2001",
       "ranking_score": 1233,
       "profile_url": "https://worldathletics.org/athletes/united-states/jeremiah-davis-14926128",
-      "data_id": "144837260",
+      "data_id": "145138476",
       "counted_competitions": [
         {
           "date": "22 MAR 2026",
@@ -1302,7 +1302,7 @@
       "dob": "15 OCT 2001",
       "ranking_score": 1226,
       "profile_url": "https://worldathletics.org/athletes/spain/lester-lescay-14742125",
-      "data_id": "144837261",
+      "data_id": "145138477",
       "counted_competitions": [
         {
           "date": "17 SEP 2025",
@@ -1378,7 +1378,7 @@
       "dob": "26 FEB 2005",
       "ranking_score": 1224,
       "profile_url": "https://worldathletics.org/athletes/italy/francesco-ettore-inzoli-14918764",
-      "data_id": "144837262",
+      "data_id": "145138478",
       "counted_competitions": [
         {
           "date": "26 JUL 2026",
@@ -1454,7 +1454,7 @@
       "dob": "07 OCT 2000",
       "ranking_score": 1219,
       "profile_url": "https://worldathletics.org/athletes/jamaica/nikaoli-williams-14828429",
-      "data_id": "144837263",
+      "data_id": "145138479",
       "counted_competitions": [
         {
           "date": "16 AUG 2025",
@@ -1530,7 +1530,7 @@
       "dob": "21 JUN 1996",
       "ranking_score": 1213,
       "profile_url": "https://worldathletics.org/athletes/australia/liam-adcock-14572123",
-      "data_id": "144837264",
+      "data_id": "145138480",
       "counted_competitions": [
         {
           "date": "12 APR 2026",
@@ -1606,7 +1606,7 @@
       "dob": "23 JAN 1999",
       "ranking_score": 1211,
       "profile_url": "https://worldathletics.org/athletes/japan/yuki-hashioka-14719623",
-      "data_id": "144837265",
+      "data_id": "145138481",
       "counted_competitions": [
         {
           "date": "17 MAY 2026",
@@ -1682,7 +1682,7 @@
       "dob": "30 OCT 1999",
       "ranking_score": 1209,
       "profile_url": "https://worldathletics.org/athletes/spain/jaime-guerra-14734117",
-      "data_id": "144837266",
+      "data_id": "145138482",
       "counted_competitions": [
         {
           "date": "26 JUL 2026",
@@ -1758,7 +1758,7 @@
       "dob": "10 SEP 1991",
       "ranking_score": 1209,
       "profile_url": "https://worldathletics.org/athletes/spain/eusebio-caceres-14166878",
-      "data_id": "144837267",
+      "data_id": "145138483",
       "counted_competitions": [
         {
           "date": "26 JUL 2026",
@@ -1834,7 +1834,7 @@
       "dob": "01 DEC 2002",
       "ranking_score": 1208,
       "profile_url": "https://worldathletics.org/athletes/germany/simon-batz-14845074",
-      "data_id": "144837268",
+      "data_id": "145138484",
       "counted_competitions": [
         {
           "date": "25 JUL 2026",
@@ -1910,7 +1910,7 @@
       "dob": "12 JUL 1996",
       "ranking_score": 1207,
       "profile_url": "https://worldathletics.org/athletes/australia/christopher-mitrevski-14552175",
-      "data_id": "144837269",
+      "data_id": "145138485",
       "counted_competitions": [
         {
           "date": "17 MAY 2026",
@@ -1986,7 +1986,7 @@
       "dob": "23 SEP 2000",
       "ranking_score": 1207,
       "profile_url": "https://worldathletics.org/athletes/colombia/arnovis-dalmero-14768739",
-      "data_id": "144837270",
+      "data_id": "145138486",
       "counted_competitions": [
         {
           "date": "24 SEP 2026",
@@ -2062,7 +2062,7 @@
       "dob": "11 MAY 2000",
       "ranking_score": 1201,
       "profile_url": "https://worldathletics.org/athletes/chinese-taipei/yu-tang-lin-14831893",
-      "data_id": "144837271",
+      "data_id": "145138487",
       "counted_competitions": [
         {
           "date": "30 MAY 2025",
@@ -2117,15 +2117,15 @@
           "indoor": false
         },
         {
-          "date": "19 OCT 2025",
-          "competition": "2025 National Games, Yunlin",
+          "date": "29 MAY 2025",
+          "competition": "26th Asian Athletics Championships, Gumi Civic Stadium, Gumi",
           "venue": "",
-          "category": "F",
-          "mark": "7.90",
-          "wind": "+15.0",
-          "place": "1.",
-          "result_score": 1116,
-          "placing_score": 11,
+          "category": "GL",
+          "mark": "7.82",
+          "wind": "0.0",
+          "place": "3.",
+          "result_score": 1099,
+          "placing_score": 28,
           "performance_score": 1127,
           "indoor": false
         }
@@ -2138,7 +2138,7 @@
       "dob": "22 MAY 2004",
       "ranking_score": 1197,
       "profile_url": "https://worldathletics.org/athletes/pr-of-china/heng-shu-15072915",
-      "data_id": "144837272",
+      "data_id": "145138488",
       "counted_competitions": [
         {
           "date": "30 MAY 2025",
@@ -2214,7 +2214,7 @@
       "dob": "07 FEB 1998",
       "ranking_score": 1197,
       "profile_url": "https://worldathletics.org/athletes/united-states/isaac-grimes-14820319",
-      "data_id": "144837273",
+      "data_id": "145138489",
       "counted_competitions": [
         {
           "date": "23 JUL 2026",
@@ -2290,7 +2290,7 @@
       "dob": "07 NOV 2004",
       "ranking_score": 1196,
       "profile_url": "https://worldathletics.org/athletes/united-states/gregory-foster-15013363",
-      "data_id": "144837274",
+      "data_id": "145138490",
       "counted_competitions": [
         {
           "date": "13 FEB 2026",
@@ -2366,7 +2366,7 @@
       "dob": "25 JAN 1990",
       "ranking_score": 1193,
       "profile_url": "https://worldathletics.org/athletes/uruguay/emiliano-lasa-14374159",
-      "data_id": "144837275",
+      "data_id": "145138491",
       "counted_competitions": [
         {
           "date": "27 APR 2025",
@@ -2442,7 +2442,7 @@
       "dob": "19 JAN 1997",
       "ranking_score": 1188,
       "profile_url": "https://worldathletics.org/athletes/united-states/steffin-mccarter-14659719",
-      "data_id": "144837276",
+      "data_id": "145138492",
       "counted_competitions": [
         {
           "date": "20 JUN 2026",
@@ -2518,7 +2518,7 @@
       "dob": "02 FEB 2008",
       "ranking_score": 1183,
       "profile_url": "https://worldathletics.org/athletes/india/shahnavaz-khan-15139285",
-      "data_id": "144837277",
+      "data_id": "145138493",
       "counted_competitions": [
         {
           "date": "28 JUN 2026",
@@ -2594,7 +2594,7 @@
       "dob": "15 SEP 1996",
       "ranking_score": 1183,
       "profile_url": "https://worldathletics.org/athletes/south-africa/divan-manuel-14690793",
-      "data_id": "144837278",
+      "data_id": "145138494",
       "counted_competitions": [
         {
           "date": "28 APR 2026",
@@ -2670,7 +2670,7 @@
       "dob": "21 DEC 1999",
       "ranking_score": 1182,
       "profile_url": "https://worldathletics.org/athletes/india/lokesh-sathyanathan-14734782",
-      "data_id": "144837279",
+      "data_id": "145138495",
       "counted_competitions": [
         {
           "date": "13 MAR 2026",
@@ -2746,7 +2746,7 @@
       "dob": "18 APR 2003",
       "ranking_score": 1180,
       "profile_url": "https://worldathletics.org/athletes/france/erwan-konate-14898142",
-      "data_id": "144837280",
+      "data_id": "145138496",
       "counted_competitions": [
         {
           "date": "25 JUL 2026",
@@ -2822,7 +2822,7 @@
       "dob": "28 AUG 2001",
       "ranking_score": 1179,
       "profile_url": "https://worldathletics.org/athletes/great-britain-ni/stephen-mackenzie-14810203",
-      "data_id": "144837281",
+      "data_id": "145138497",
       "counted_competitions": [
         {
           "date": "20 JUN 2026",
@@ -2898,7 +2898,7 @@
       "dob": "08 MAR 1993",
       "ranking_score": 1178,
       "profile_url": "https://worldathletics.org/athletes/czechia/radek-juska-14403432",
-      "data_id": "144837282",
+      "data_id": "145138498",
       "counted_competitions": [
         {
           "date": "21 JUL 2026",
@@ -2974,7 +2974,7 @@
       "dob": "30 DEC 2005",
       "ranking_score": 1178,
       "profile_url": "https://worldathletics.org/athletes/australia/alex-epitropakis-15127738",
-      "data_id": "144837283",
+      "data_id": "145138499",
       "counted_competitions": [
         {
           "date": "18 MAY 2026",
@@ -3050,7 +3050,7 @@
       "dob": "12 SEP 2002",
       "ranking_score": 1178,
       "profile_url": "https://worldathletics.org/athletes/jamaica/jordan-turner-14828412",
-      "data_id": "144837284",
+      "data_id": "145138500",
       "counted_competitions": [
         {
           "date": "20 JUN 2026",
@@ -3126,7 +3126,7 @@
       "dob": "28 JUL 1995",
       "ranking_score": 1178,
       "profile_url": "https://worldathletics.org/athletes/croatia/filip-pravdica-14436507",
-      "data_id": "144837285",
+      "data_id": "145138501",
       "counted_competitions": [
         {
           "date": "26 JUN 2026",
@@ -3202,7 +3202,7 @@
       "dob": "17 APR 2001",
       "ranking_score": 1177,
       "profile_url": "https://worldathletics.org/athletes/trinidad-and-tobago/kelsey-daniel-14801143",
-      "data_id": "144837286",
+      "data_id": "145138502",
       "counted_competitions": [
         {
           "date": "13 FEB 2026",
@@ -3278,7 +3278,7 @@
       "dob": "22 MAR 2004",
       "ranking_score": 1177,
       "profile_url": "https://worldathletics.org/athletes/saint-vincent/uroy-ryan-14893615",
-      "data_id": "144837287",
+      "data_id": "145138503",
       "counted_competitions": [
         {
           "date": "10 JUN 2026",
@@ -3354,7 +3354,7 @@
       "dob": "26 DEC 2001",
       "ranking_score": 1173,
       "profile_url": "https://worldathletics.org/athletes/norway/henrik-flatnes-14762156",
-      "data_id": "144837288",
+      "data_id": "145138504",
       "counted_competitions": [
         {
           "date": "28 JUN 2026",
@@ -3430,7 +3430,7 @@
       "dob": "06 JAN 1998",
       "ranking_score": 1173,
       "profile_url": "https://worldathletics.org/athletes/spain/hector-santos-14586694",
-      "data_id": "144837289",
+      "data_id": "145138505",
       "counted_competitions": [
         {
           "date": "09 JUN 2026",
@@ -3506,7 +3506,7 @@
       "dob": "02 SEP 1994",
       "ranking_score": 1166,
       "profile_url": "https://worldathletics.org/athletes/finland/kristian-pulli-14432960",
-      "data_id": "144837290",
+      "data_id": "145138506",
       "counted_competitions": [
         {
           "date": "11 FEB 2026",
@@ -3582,7 +3582,7 @@
       "dob": "10 AUG 1999",
       "ranking_score": 1165,
       "profile_url": "https://worldathletics.org/athletes/poland/piotr-tarkowski-14796711",
-      "data_id": "144837291",
+      "data_id": "145138507",
       "counted_competitions": [
         {
           "date": "25 JUL 2026",
@@ -3658,7 +3658,7 @@
       "dob": "08 MAR 2002",
       "ranking_score": 1161,
       "profile_url": "https://worldathletics.org/athletes/united-states/malcolm-clemons-14787637",
-      "data_id": "144837292",
+      "data_id": "145138508",
       "counted_competitions": [
         {
           "date": "23 JUL 2026",
@@ -3734,7 +3734,7 @@
       "dob": "08 MAR 2002",
       "ranking_score": 1161,
       "profile_url": "https://worldathletics.org/athletes/germany/kevin-brucha-14777417",
-      "data_id": "144837293",
+      "data_id": "145138509",
       "counted_competitions": [
         {
           "date": "25 JUL 2026",
@@ -3810,7 +3810,7 @@
       "dob": "03 SEP 1999",
       "ranking_score": 1160,
       "profile_url": "https://worldathletics.org/athletes/united-states/cameron-crump-14874269",
-      "data_id": "144837294",
+      "data_id": "145138510",
       "counted_competitions": [
         {
           "date": "04 APR 2026",
@@ -3886,7 +3886,7 @@
       "dob": "14 JUL 1993",
       "ranking_score": 1160,
       "profile_url": "https://worldathletics.org/athletes/united-states/damarcus-simpson-14475042",
-      "data_id": "144837295",
+      "data_id": "145138511",
       "counted_competitions": [
         {
           "date": "11 JUL 2026",
@@ -3962,7 +3962,7 @@
       "dob": "07 OCT 2004",
       "ranking_score": 1158,
       "profile_url": "https://worldathletics.org/athletes/belgium/yanni-sampson-14949431",
-      "data_id": "144837296",
+      "data_id": "145138512",
       "counted_competitions": [
         {
           "date": "04 SEP 2026",
@@ -4038,7 +4038,7 @@
       "dob": "",
       "ranking_score": 1156,
       "profile_url": "https://worldathletics.org/athletes/united-states/tyler-nichols-15125722",
-      "data_id": "144837297",
+      "data_id": "145138513",
       "counted_competitions": [
         {
           "date": "15 MAY 2026",
@@ -4114,7 +4114,7 @@
       "dob": "21 NOV 1996",
       "ranking_score": 1156,
       "profile_url": "https://worldathletics.org/athletes/ukraine/vladyslav-mazur-14570936",
-      "data_id": "144837298",
+      "data_id": "145138514",
       "counted_competitions": [
         {
           "date": "08 SEP 2026",
@@ -4190,7 +4190,7 @@
       "dob": "18 FEB 1997",
       "ranking_score": 1153,
       "profile_url": "https://worldathletics.org/athletes/australia/jalen-rucker-14812769",
-      "data_id": "144837299",
+      "data_id": "145138515",
       "counted_competitions": [
         {
           "date": "18 MAY 2026",
@@ -4266,7 +4266,7 @@
       "dob": "21 JAN 1998",
       "ranking_score": 1153,
       "profile_url": "https://worldathletics.org/athletes/japan/hibiki-tsuha-14714426",
-      "data_id": "144837300",
+      "data_id": "145138516",
       "counted_competitions": [
         {
           "date": "30 MAY 2025",
@@ -4342,7 +4342,7 @@
       "dob": "23 JUL 1998",
       "ranking_score": 1153,
       "profile_url": "https://worldathletics.org/athletes/romania/gabriel-bitan-14516155",
-      "data_id": "144837301",
+      "data_id": "145138517",
       "counted_competitions": [
         {
           "date": "26 JUL 2026",
@@ -4418,7 +4418,7 @@
       "dob": "17 MAR 2002",
       "ranking_score": 1152,
       "profile_url": "https://worldathletics.org/athletes/india/david-patturaj-solomon-14918515",
-      "data_id": "144837302",
+      "data_id": "145138518",
       "counted_competitions": [
         {
           "date": "28 JUN 2026",
@@ -4494,7 +4494,7 @@
       "dob": "",
       "ranking_score": 1151,
       "profile_url": "https://worldathletics.org/athletes/united-states/deaundre-ward-15016970",
-      "data_id": "144837303",
+      "data_id": "145138519",
       "counted_competitions": [
         {
           "date": "13 MAR 2026",
@@ -4570,7 +4570,7 @@
       "dob": "06 DEC 1999",
       "ranking_score": 1151,
       "profile_url": "https://worldathletics.org/athletes/venezuela/eubrig-maza-14843418",
-      "data_id": "144837304",
+      "data_id": "145138520",
       "counted_competitions": [
         {
           "date": "16 MAY 2026",
@@ -4646,7 +4646,7 @@
       "dob": "31 JAN 1995",
       "ranking_score": 1150,
       "profile_url": "https://worldathletics.org/athletes/united-states/william-williams-14613733",
-      "data_id": "144837305",
+      "data_id": "145138521",
       "counted_competitions": [
         {
           "date": "16 AUG 2025",
@@ -4722,7 +4722,7 @@
       "dob": "25 SEP 2002",
       "ranking_score": 1149,
       "profile_url": "https://worldathletics.org/athletes/ethiopia/buli-melaku-15024092",
-      "data_id": "144837306",
+      "data_id": "145138522",
       "counted_competitions": [
         {
           "date": "28 MAR 2026",
@@ -4798,7 +4798,7 @@
       "dob": "28 MAR 2006",
       "ranking_score": 1149,
       "profile_url": "https://worldathletics.org/athletes/pr-of-china/zhuofan-xu-15096794",
-      "data_id": "144837307",
+      "data_id": "145138523",
       "counted_competitions": [
         {
           "date": "08 MAR 2026",
@@ -4874,7 +4874,7 @@
       "dob": "17 JAN 2005",
       "ranking_score": 1148,
       "profile_url": "https://worldathletics.org/athletes/united-states/kennedy-stringfellow-15127683",
-      "data_id": "144837308",
+      "data_id": "145138524",
       "counted_competitions": [
         {
           "date": "16 JAN 2026",
@@ -4950,7 +4950,7 @@
       "dob": "25 FEB 2005",
       "ranking_score": 1148,
       "profile_url": "https://worldathletics.org/athletes/germany/simon-plitzko-14910218",
-      "data_id": "144837309",
+      "data_id": "145138525",
       "counted_competitions": [
         {
           "date": "25 JUL 2026",
@@ -5026,7 +5026,7 @@
       "dob": "26 APR 2006",
       "ranking_score": 1148,
       "profile_url": "https://worldathletics.org/athletes/south-africa/temoso-masikane-14974012",
-      "data_id": "144837310",
+      "data_id": "145138526",
       "counted_competitions": [
         {
           "date": "13 FEB 2026",
@@ -5102,7 +5102,7 @@
       "dob": "28 MAY 2005",
       "ranking_score": 1147,
       "profile_url": "https://worldathletics.org/athletes/pr-of-china/maisong-wang-15138383",
-      "data_id": "144837311",
+      "data_id": "145138527",
       "counted_competitions": [
         {
           "date": "15 AUG 2026",
@@ -5178,7 +5178,7 @@
       "dob": "01 MAY 2002",
       "ranking_score": 1146,
       "profile_url": "https://worldathletics.org/athletes/spain/carlos-beltran-14858623",
-      "data_id": "144837312",
+      "data_id": "145138528",
       "counted_competitions": [
         {
           "date": "30 MAY 2026",
@@ -5254,7 +5254,7 @@
       "dob": "09 FEB 2000",
       "ranking_score": 1144,
       "profile_url": "https://worldathletics.org/athletes/germany/luka-herden-14717467",
-      "data_id": "144837313",
+      "data_id": "145138529",
       "counted_competitions": [
         {
           "date": "31 JAN 2026",
@@ -5330,7 +5330,7 @@
       "dob": "20 JAN 1997",
       "ranking_score": 1144,
       "profile_url": "https://worldathletics.org/athletes/jamaica/shawn-d-thompson-14691402",
-      "data_id": "144837314",
+      "data_id": "145138530",
       "counted_competitions": [
         {
           "date": "16 AUG 2025",
@@ -5406,7 +5406,7 @@
       "dob": "09 NOV 1996",
       "ranking_score": 1144,
       "profile_url": "https://worldathletics.org/athletes/algeria/tarek-hocine-14694306",
-      "data_id": "144837315",
+      "data_id": "145138531",
       "counted_competitions": [
         {
           "date": "13 MAY 2026",
@@ -5482,7 +5482,7 @@
       "dob": "13 MAY 2001",
       "ranking_score": 1143,
       "profile_url": "https://worldathletics.org/athletes/russia/yuriy-ozhgibesov-14910619",
-      "data_id": "144837316",
+      "data_id": "145138532",
       "counted_competitions": [
         {
           "date": "04 JUL 2026",
@@ -5558,7 +5558,7 @@
       "dob": "03 JAN 2003",
       "ranking_score": 1141,
       "profile_url": "https://worldathletics.org/athletes/sweden/niklas-wall-14835485",
-      "data_id": "144837317",
+      "data_id": "145138533",
       "counted_competitions": [
         {
           "date": "08 JUL 2026",
@@ -5634,7 +5634,7 @@
       "dob": "22 JUL 2002",
       "ranking_score": 1140,
       "profile_url": "https://worldathletics.org/athletes/brazil/breno-barbosa-14862465",
-      "data_id": "144837318",
+      "data_id": "145138534",
       "counted_competitions": [
         {
           "date": "31 JAN 2026",
@@ -5710,7 +5710,7 @@
       "dob": "16 JAN 2001",
       "ranking_score": 1139,
       "profile_url": "https://worldathletics.org/athletes/japan/riku-ito-14855118",
-      "data_id": "144837319",
+      "data_id": "145138535",
       "counted_competitions": [
         {
           "date": "17 MAY 2026",
@@ -5786,7 +5786,7 @@
       "dob": "17 APR 2004",
       "ranking_score": 1139,
       "profile_url": "https://worldathletics.org/athletes/nigeria/charles-godfred-15090505",
-      "data_id": "144837320",
+      "data_id": "145138536",
       "counted_competitions": [
         {
           "date": "17 APR 2026",
@@ -5862,7 +5862,7 @@
       "dob": "28 FEB 2003",
       "ranking_score": 1138,
       "profile_url": "https://worldathletics.org/athletes/greece/nikolaos-stamatonikolos-14911586",
-      "data_id": "144837321",
+      "data_id": "145138537",
       "counted_competitions": [
         {
           "date": "26 JUL 2026",
@@ -5938,7 +5938,7 @@
       "dob": "11 DEC 2002",
       "ranking_score": 1137,
       "profile_url": "https://worldathletics.org/athletes/pr-of-china/zhao-li-15117354",
-      "data_id": "144837322",
+      "data_id": "145138538",
       "counted_competitions": [
         {
           "date": "08 MAR 2026",
@@ -6014,7 +6014,7 @@
       "dob": "16 SEP 1998",
       "ranking_score": 1135,
       "profile_url": "https://worldathletics.org/athletes/hungary/kristof-pap-14626252",
-      "data_id": "144837323",
+      "data_id": "145138539",
       "counted_competitions": [
         {
           "date": "04 JUN 2026",
@@ -6090,7 +6090,7 @@
       "dob": "17 SEP 1997",
       "ranking_score": 1135,
       "profile_url": "https://worldathletics.org/athletes/italy/gabriele-chila-14573610",
-      "data_id": "144837324",
+      "data_id": "145138540",
       "counted_competitions": [
         {
           "date": "22 MAY 2026",
@@ -6166,7 +6166,7 @@
       "dob": "11 NOV 2004",
       "ranking_score": 1135,
       "profile_url": "https://worldathletics.org/athletes/japan/takuma-sekine-14959780",
-      "data_id": "144837325",
+      "data_id": "145138541",
       "counted_competitions": [
         {
           "date": "17 MAY 2026",
@@ -6242,7 +6242,7 @@
       "dob": "06 DEC 2005",
       "ranking_score": 1134,
       "profile_url": "https://worldathletics.org/athletes/russia/rodion-sevastyanov-14994507",
-      "data_id": "144837326",
+      "data_id": "145138542",
       "counted_competitions": [
         {
           "date": "24 JUL 2026",
@@ -6318,7 +6318,7 @@
       "dob": "06 MAY 1997",
       "ranking_score": 1134,
       "profile_url": "https://worldathletics.org/athletes/namibia/chenoult-lionel-coetzee-14842092",
-      "data_id": "144837327",
+      "data_id": "145138543",
       "counted_competitions": [
         {
           "date": "13 MAY 2026",
@@ -6394,7 +6394,7 @@
       "dob": "01 APR 2004",
       "ranking_score": 1134,
       "profile_url": "https://worldathletics.org/athletes/cuba/aniel-molina-15021400",
-      "data_id": "144837328",
+      "data_id": "145138544",
       "counted_competitions": [
         {
           "date": "01 JUL 2026",
@@ -6470,7 +6470,7 @@
       "dob": "24 JUL 1995",
       "ranking_score": 1134,
       "profile_url": "https://worldathletics.org/athletes/japan/natsuki-yamakawa-14635039",
-      "data_id": "144837329",
+      "data_id": "145138545",
       "counted_competitions": [
         {
           "date": "12 JUN 2026",
@@ -6525,16 +6525,16 @@
           "indoor": false
         },
         {
-          "date": "11 OCT 2026",
-          "competition": "The 8th Nihon University Competition, Nihon University Stadium, Tokyo",
+          "date": "16 OCT 2026",
+          "competition": "Japan Games Aomori, New Aomori Sports Park, Aomori",
           "venue": "",
-          "category": "F",
-          "mark": "7.87",
-          "wind": "+21.0",
+          "category": "E",
+          "mark": "7.79",
+          "wind": "+4.0",
           "place": "1.",
-          "result_score": 1097,
-          "placing_score": 11,
-          "performance_score": 1108,
+          "result_score": 1092,
+          "placing_score": 18,
+          "performance_score": 1110,
           "indoor": false
         }
       ]
@@ -6546,7 +6546,7 @@
       "dob": "26 SEP 1995",
       "ranking_score": 1133,
       "profile_url": "https://worldathletics.org/athletes/brazil/alexsandro-melo-14543320",
-      "data_id": "144837330",
+      "data_id": "145138546",
       "counted_competitions": [
         {
           "date": "01 MAR 2026",
@@ -6622,7 +6622,7 @@
       "dob": "15 JUL 1997",
       "ranking_score": 1130,
       "profile_url": "https://worldathletics.org/athletes/great-britain-ni/samuel-khogali-14660262",
-      "data_id": "144837331",
+      "data_id": "145138547",
       "counted_competitions": [
         {
           "date": "27 MAY 2026",
@@ -6698,7 +6698,7 @@
       "dob": "10 FEB 2006",
       "ranking_score": 1130,
       "profile_url": "https://worldathletics.org/athletes/india/mohd-atta-sazid-15035119",
-      "data_id": "144837332",
+      "data_id": "145138548",
       "counted_competitions": [
         {
           "date": "10 SEP 2026",
@@ -6774,7 +6774,7 @@
       "dob": "27 SEP 2005",
       "ranking_score": 1128,
       "profile_url": "https://worldathletics.org/athletes/united-states/juriad-hughes-15044693",
-      "data_id": "144837333",
+      "data_id": "145138549",
       "counted_competitions": [
         {
           "date": "10 JUN 2026",
@@ -6850,7 +6850,7 @@
       "dob": "19 DEC 1998",
       "ranking_score": 1128,
       "profile_url": "https://worldathletics.org/athletes/united-states/jason-smith-14780888",
-      "data_id": "144837334",
+      "data_id": "145138550",
       "counted_competitions": [
         {
           "date": "05 JUL 2026",
@@ -6926,7 +6926,7 @@
       "dob": "31 MAY 2002",
       "ranking_score": 1127,
       "profile_url": "https://worldathletics.org/athletes/japan/koki-fujihara-14854936",
-      "data_id": "144837335",
+      "data_id": "145138551",
       "counted_competitions": [
         {
           "date": "18 MAY 2026",
@@ -7002,7 +7002,7 @@
       "dob": "20 JAN 2005",
       "ranking_score": 1126,
       "profile_url": "https://worldathletics.org/athletes/united-states/dj-fillmore-15037055",
-      "data_id": "144837336",
+      "data_id": "145138552",
       "counted_competitions": [
         {
           "date": "27 FEB 2026",
@@ -7078,7 +7078,7 @@
       "dob": "16 JAN 2005",
       "ranking_score": 1126,
       "profile_url": "https://worldathletics.org/athletes/finland/kasperi-vehmaa-14927751",
-      "data_id": "144837337",
+      "data_id": "145138553",
       "counted_competitions": [
         {
           "date": "18 JUL 2026",
@@ -7154,7 +7154,7 @@
       "dob": "28 JAN 2004",
       "ranking_score": 1126,
       "profile_url": "https://worldathletics.org/athletes/morocco/zaid-latif-15007012",
-      "data_id": "144837338",
+      "data_id": "145138554",
       "counted_competitions": [
         {
           "date": "15 MAY 2026",
@@ -7230,7 +7230,7 @@
       "dob": "08 MAR 2003",
       "ranking_score": 1125,
       "profile_url": "https://worldathletics.org/athletes/great-britain-ni/archie-yeo-14851280",
-      "data_id": "144837339",
+      "data_id": "145138555",
       "counted_competitions": [
         {
           "date": "20 JUN 2026",
@@ -7306,7 +7306,7 @@
       "dob": "18 AUG 1994",
       "ranking_score": 1125,
       "profile_url": "https://worldathletics.org/athletes/germany/maximilian-entholzner-14454258",
-      "data_id": "144837340",
+      "data_id": "145138556",
       "counted_competitions": [
         {
           "date": "01 JUL 2026",
@@ -7382,7 +7382,7 @@
       "dob": "30 DEC 2003",
       "ranking_score": 1122,
       "profile_url": "https://worldathletics.org/athletes/sweden/samuel-ekelund-14993035",
-      "data_id": "144837341",
+      "data_id": "145138557",
       "counted_competitions": [
         {
           "date": "08 JUL 2026",
@@ -7458,7 +7458,7 @@
       "dob": "21 APR 2006",
       "ranking_score": 1121,
       "profile_url": "https://worldathletics.org/athletes/united-states/jayden-keys-14979287",
-      "data_id": "144837342",
+      "data_id": "145138558",
       "counted_competitions": [
         {
           "date": "10 JUN 2026",
@@ -7534,7 +7534,7 @@
       "dob": "21 MAY 1996",
       "ranking_score": 1120,
       "profile_url": "https://worldathletics.org/athletes/united-states/kemonie-briggs-14581153",
-      "data_id": "144837343",
+      "data_id": "145138559",
       "counted_competitions": [
         {
           "date": "05 JUL 2026",
