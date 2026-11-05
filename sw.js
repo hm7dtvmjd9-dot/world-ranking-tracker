@@ -1,12 +1,14 @@
-const CACHE_NAME = 'athletics-intel-v7.4-20261027';
+const CACHE_NAME = 'athletics-intel-v8.1-20261105';
 const STATIC_ASSETS = [
   './',
   './index.html',
+  './daily.html',
   './manifest.json',
   './icons/icon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
+  './js/next_session.js',
   './js/app.js',
   './js/rankings.js',
   './js/analytics.js',
@@ -20,7 +22,8 @@ const STATIC_ASSETS = [
   './data/calendar_2027.json',
   './data/luka_history.json',
   './data/venues_database.json',
-  './data/training_logs_full.json'
+  './data/training_logs_full.json',
+  './data/dlv_1080_bundle.json'
 ];
 
 self.addEventListener('install', (event) => {

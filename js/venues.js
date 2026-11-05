@@ -727,8 +727,13 @@ const VenuesModule = (() => {
                         </span>
                       `).join('')}
                     </div>
-                  ` : '<span class="text-slate-500 text-[10px] italic">Keine Weiten im WA-Archiv erfasst.</span>'}
+                  ` : '<span class="text-slate-500 text-[10px] italic">Klicke auf "ℹ️ Details / Historische Weiten" für alle Sprünge aus der Wettkampf-Datenbank.</span>'}
                 </div>
+              </div>
+              <div class="pt-2">
+                <button onclick="event.stopPropagation(); VenuesModule.openMeetingInfoModal('${m.id}')" class="px-3 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-600 text-cyan-300 font-mono text-xs font-bold transition-all">
+                  🏟️ Alle historischen Ergebnisse & Sprungweiten (2023–2026) für ${m.city || m.name} öffnen ↗
+                </button>
               </div>
             </div>
 
@@ -857,7 +862,75 @@ const VenuesModule = (() => {
       const menEvents = m.disciplinesMen || ['Long Jump'];
       const womenEvents = m.disciplinesWomen || [];
 
-      // Historical Benchmark HTML
+      // Historical Benchmark HTML + Live Lookup in competitions_database.json (1,728 competitions) & venues_database.json
+      const normStr = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ł/g, 'l');
+      const cityTokens = normStr(m.city || '')
+        .split(/[\s,\-\/()]+/)
+        .filter(t => t.length >= 4 && !['city', 'stadt', 'arena', 'stadion'].includes(t));
+      const nameTokens = normStr(m.name || '')
+        .split(/[\s,\-\/()]+/)
+        .filter(t => t.length >= 5 && !['world', 'athletics', 'indoor', 'outdoor', 'meeting', 'international', 'memorial', 'grand', 'jump', 'festival', 'golden', 'silver', 'bronze', 'challenger', '2026', '2027'].includes(t));
+
+      const compDb = (window.App && window.App.state && window.App.state.competitionsDatabase && window.App.state.competitionsDatabase.competitions) || [];
+      const matchedComps = compDb.filter(c => {
+        const cn = normStr((c.name || '') + ' ' + (c.venue || ''));
+        if (cityTokens.length > 0 && cityTokens.some(tok => cn.includes(tok))) return true;
+        if (nameTokens.length > 0 && nameTokens.some(tok => cn.includes(tok))) return true;
+        return false;
+      }).sort((a, b) => (b.year || 0) - (a.year || 0) || (b.best_mark || 0) - (a.best_mark || 0));
+
+      const venuesDb = (window.App && window.App.state && window.App.state.venuesData && window.App.state.venuesData.venues) || [];
+      const matchedVenue = venuesDb.find(v => {
+        const vn = normStr((v.city || '') + ' ' + (v.name || ''));
+        return cityTokens.some(tok => vn.includes(tok));
+      });
+
+      let dbCompsHtml = '';
+      if (matchedComps.length > 0) {
+        dbCompsHtml = `
+          <div class="bg-slate-950 border border-cyan-800/70 rounded-xl p-3.5 space-y-2.5 shadow-sm">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-1.5 text-cyan-400 font-black text-xs font-mono uppercase">
+                <span>🏟️</span>
+                <span>HISTORISCHE SPRUNGWEITEN & ERGEBNISSE BEI DIESEM MEETING (${matchedComps.length} Editionen in DB)</span>
+              </div>
+              ${matchedVenue ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-700">Anlagen-Rating: ${matchedVenue.pitRating}/10 (${matchedVenue.runwaySurface})</span>` : ''}
+            </div>
+            ${matchedVenue && matchedVenue.pitDescription ? `<p class="text-[11px] text-slate-300 font-sans leading-relaxed bg-slate-900/80 p-2 rounded border border-slate-800">${matchedVenue.pitDescription}</p>` : ''}
+            <div class="space-y-2 max-h-72 overflow-y-auto pr-1">
+              ${matchedComps.slice(0, 8).map(c => {
+                const topRes = (c.results || []).slice(0, 6);
+                const lukaRes = (c.results || []).find(r => (r.athlete || '').toLowerCase().includes('herden'));
+                return `
+                  <div class="bg-slate-900/90 border ${lukaRes ? 'border-cyan-500/70' : 'border-slate-800'} rounded-lg p-2.5 font-mono text-xs">
+                    <div class="flex items-center justify-between gap-2 flex-wrap mb-1.5">
+                      <div>
+                        <span class="font-bold text-white">${c.name}</span>
+                        <span class="text-[10px] text-slate-400 ml-1">(${(c.dates_seen && c.dates_seen[0]) || c.year} • Kat. ${c.category || '-'})</span>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="px-1.5 py-0.5 rounded bg-amber-950/80 border border-amber-700/60 text-amber-300 text-[10px] font-bold">Best: ${c.best_mark ? Number(c.best_mark).toFixed(2) + 'm' : '-'}</span>
+                        <span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-700 text-slate-300 text-[10px]">Ø ${c.avg_mark ? Number(c.avg_mark).toFixed(2) + 'm' : '-'} (${c.marks_over_8m || 0}x ≥8m)</span>
+                      </div>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">
+                      ${topRes.map(r => {
+                        const isLuka = (r.athlete || '').toLowerCase().includes('herden');
+                        return `
+                          <span class="px-2 py-0.5 rounded text-[10px] ${isLuka ? 'bg-cyan-500 text-slate-950 font-black ring-1 ring-white' : 'bg-slate-950 text-slate-300 border border-slate-800'}">
+                            ${r.place || ''} ${r.athlete} (${r.country}): <strong>${r.mark}m</strong> ${r.wind ? `(${r.wind})` : ''} · ${r.performance_score}p
+                          </span>
+                        `;
+                      }).join('')}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+
       let historyHtml = '';
       if (m.promisingRunway) {
         historyHtml = `
@@ -889,6 +962,7 @@ const VenuesModule = (() => {
       bodyEl.innerHTML = `
         ${statusControlHtml}
         ${historyHtml}
+        ${dbCompsHtml}
 
         <!-- Organizer Contacts -->
         <div class="space-y-2">

@@ -3,7 +3,7 @@
  */
 const App = (() => {
   const state = {
-    activeTab: 'analytics',
+    activeTab: 'next',
     athletes: [],
     previousAthletesMap: {},
     lukaHistory: null,
@@ -14,9 +14,10 @@ const App = (() => {
     athletesDatabase: null,
     competitionsDatabase: null,
     calendarData: null,
+    dlv1080Bundle: null,
 
     // Tab 1 filters
-    cutoffSpots: 32,
+    cutoffSpots: 36,
     selectedNation: 'ALL',
     searchQuery: '',
     expandedRowId: null,
@@ -256,6 +257,16 @@ const App = (() => {
       console.warn('Calendar 2027 auto-load fallback', e);
     }
 
+    // 10. DLV Biomechanics (68 PDFs incl. Simon Ehammer) & 1080 Sprint Bundle (87 runs)
+    try {
+      const resDlv = await fetch('./data/dlv_1080_bundle.json?t=' + Date.now());
+      if (resDlv.ok) {
+        state.dlv1080Bundle = await resDlv.json();
+      }
+    } catch (e) {
+      console.warn('DLV & 1080 bundle auto-load fallback', e);
+    }
+
     showSyncBadge('Live WA (' + state.athletes.length + ')', 'text-emerald-400');
     updateDataFreshnessCockpit(state);
     renderCurrentTab();
@@ -356,12 +367,14 @@ const App = (() => {
     });
 
     // Toggle content views
+    const tabNext = document.getElementById('tabContentNext');
     const tabRank = document.getElementById('tabContentRankings');
     const tabAna = document.getElementById('tabContentAnalytics');
     const tabQual = document.getElementById('tabContentQualification');
     const tabVen = document.getElementById('tabContentVenues');
     const tabPlan = document.getElementById('tabContentPlan');
 
+    if (tabNext) tabNext.classList.toggle('hidden', tabId !== 'next');
     if (tabRank) tabRank.classList.toggle('hidden', tabId !== 'rankings');
     if (tabAna) tabAna.classList.toggle('hidden', tabId !== 'analytics');
     if (tabQual) tabQual.classList.toggle('hidden', tabId !== 'qualification');
@@ -374,7 +387,9 @@ const App = (() => {
 
   function renderCurrentTab() {
     try {
-      if (state.activeTab === 'rankings') {
+      if (state.activeTab === 'next') {
+        if (window.NextSessionModule) NextSessionModule.renderTab1(state);
+      } else if (state.activeTab === 'rankings') {
         if (window.RankingsModule) RankingsModule.render(state);
       } else if (state.activeTab === 'analytics') {
         if (window.AnalyticsModule) AnalyticsModule.render(state);

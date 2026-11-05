@@ -120,6 +120,9 @@ const AnalyticsModule = (() => {
     renderStatsSummary(state);
     renderCorrelationExplorer(state);
     renderStrengthDiagnosticsChart(state);
+    if (window.NextSessionModule) {
+      NextSessionModule.renderTab2Extensions(state);
+    }
   }
 
   // ================= WHOOP 3-DIAL COCKPIT & DIRECT CENTERED DATE SWITCHER =================
@@ -564,6 +567,100 @@ ${protocolText}
         `;
       }).join('');
     }
+
+    // 7. Extract all unique Sleep habits dynamically
+    const sleepContainer = document.getElementById('journalSleepContainer');
+    if (sleepContainer) {
+      const sleepCounts = {};
+      logs.forEach(l => {
+        if (l.schlaf_notiz) {
+          l.schlaf_notiz.split(/[,;+•]/).forEach(item => {
+            const clean = item.trim();
+            if (clean && clean.length > 1 && clean.length < 35) {
+              sleepCounts[clean] = (sleepCounts[clean] || 0) + 1;
+            }
+          });
+        }
+      });
+      const todaySleepItems = (currentLog.schlaf_notiz || '').split(/[,;+•]/).map(s => s.trim().toLowerCase()).filter(Boolean);
+      const uniqueSleeps = Object.keys(sleepCounts).sort((a, b) => sleepCounts[b] - sleepCounts[a]);
+      sleepContainer.innerHTML = uniqueSleeps.map(item => {
+        const isActive = todaySleepItems.includes(item.toLowerCase());
+        const styleClasses = isActive
+          ? 'bg-purple-950 text-purple-200 border-purple-500 font-bold shadow-sm'
+          : 'bg-slate-950/80 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-white';
+        return `
+          <button onclick="AnalyticsModule.openInsightModal('${item.replace(/'/g, "\\'")}', 'sleep')" class="px-2 py-1 rounded-lg border text-[10px] font-mono transition-all flex items-center gap-1 ${styleClasses}" title="${sleepCounts[item]}x dokumentiert">
+            <span>💤</span>
+            <span>${item}</span>
+            ${isActive ? '<span class="text-purple-400 font-black ml-0.5">✓</span>' : ''}
+          </button>
+        `;
+      }).join('');
+    }
+
+    // 8. Extract all unique Social factors dynamically
+    const socialContainer = document.getElementById('journalSocialContainer');
+    if (socialContainer) {
+      const socialCounts = {};
+      logs.forEach(l => {
+        if (l.sozial) {
+          l.sozial.split(/[,;+•]/).forEach(item => {
+            const clean = item.trim();
+            if (clean && clean.length > 1 && clean.length < 35) {
+              socialCounts[clean] = (socialCounts[clean] || 0) + 1;
+            }
+          });
+        }
+      });
+      const todaySocialItems = (currentLog.sozial || '').split(/[,;+•]/).map(s => s.trim().toLowerCase()).filter(Boolean);
+      const uniqueSocials = Object.keys(socialCounts).sort((a, b) => socialCounts[b] - socialCounts[a]);
+      socialContainer.innerHTML = uniqueSocials.map(item => {
+        const isActive = todaySocialItems.includes(item.toLowerCase());
+        const styleClasses = isActive
+          ? 'bg-amber-950 text-amber-200 border-amber-500 font-bold shadow-sm'
+          : 'bg-slate-950/80 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-white';
+        return `
+          <button onclick="AnalyticsModule.openInsightModal('${item.replace(/'/g, "\\'")}', 'social')" class="px-2 py-1 rounded-lg border text-[10px] font-mono transition-all flex items-center gap-1 ${styleClasses}" title="${socialCounts[item]}x dokumentiert">
+            <span>👥</span>
+            <span>${item}</span>
+            ${isActive ? '<span class="text-amber-400 font-black ml-0.5">✓</span>' : ''}
+          </button>
+        `;
+      }).join('');
+    }
+
+    // 9. Extract all unique Problems & Pain areas dynamically
+    const probContainer = document.getElementById('journalProblemsContainer');
+    if (probContainer) {
+      const probCounts = {};
+      logs.forEach(l => {
+        const rawProb = [l.schmerzbereiche, l.probleme].filter(Boolean).join(',');
+        if (rawProb) {
+          rawProb.split(/[,;+•]/).forEach(item => {
+            const clean = item.trim();
+            if (clean && clean.length > 1 && clean.length < 35) {
+              probCounts[clean] = (probCounts[clean] || 0) + 1;
+            }
+          });
+        }
+      });
+      const todayProbItems = ([currentLog.schmerzbereiche, currentLog.probleme].filter(Boolean).join(',')).split(/[,;+•]/).map(s => s.trim().toLowerCase()).filter(Boolean);
+      const uniqueProbs = Object.keys(probCounts).sort((a, b) => probCounts[b] - probCounts[a]).slice(0, 24);
+      probContainer.innerHTML = uniqueProbs.map(item => {
+        const isActive = todayProbItems.includes(item.toLowerCase());
+        const styleClasses = isActive
+          ? 'bg-rose-950 text-rose-200 border-rose-500 font-bold shadow-sm'
+          : 'bg-slate-950/80 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-white';
+        return `
+          <button onclick="AnalyticsModule.openInsightModal('${item.replace(/'/g, "\\'")}', 'problem')" class="px-2 py-1 rounded-lg border text-[10px] font-mono transition-all flex items-center gap-1 ${styleClasses}" title="${probCounts[item]}x dokumentiert">
+            <span>⚠️</span>
+            <span>${item}</span>
+            ${isActive ? '<span class="text-rose-400 font-black ml-0.5">✓</span>' : ''}
+          </button>
+        `;
+      }).join('');
+    }
   }
 
   // ================= DATE PICKER MODAL & NAVIGATION =================
@@ -634,7 +731,7 @@ ${protocolText}
 
   function setWeightInterval(interval) {
     currentWeightInterval = interval;
-    ['1W', '1M', '3M', '6M', '1Y', '3Y', '5Y', 'ALL'].forEach(k => {
+    ['1W', '1M', '3M', '6M', 'SAISON', '1Y', '3Y', '5Y', 'ALL'].forEach(k => {
       const btn = document.getElementById(`weightBtn${k}`);
       if (btn) {
         if (k === interval) {
@@ -655,7 +752,7 @@ ${protocolText}
     const state = (window.App && window.App.state) || {};
     const logs = state.trainingLogs || [];
 
-    const refDate = new Date((currentSelectedDate || '2026-10-15') + 'T12:00:00');
+    const refDate = new Date((currentSelectedDate || '2026-11-01') + 'T12:00:00');
     const dayOffsets = {
       '1W': 7,
       '1M': 30,
@@ -667,7 +764,9 @@ ${protocolText}
       'ALL': 99999
     };
     const maxDays = dayOffsets[currentWeightInterval] || 99999;
-    const minTime = refDate.getTime() - maxDays * 86400000;
+    const minTime = currentWeightInterval === 'SAISON'
+      ? new Date('2026-09-01T00:00:00').getTime()
+      : refDate.getTime() - maxDays * 86400000;
 
     const weightLogs = logs.filter(l => {
       if (l.body_weight_kg == null) return false;
@@ -747,7 +846,7 @@ ${protocolText}
 
   function setScoresInterval(interval) {
     currentScoresInterval = interval;
-    ['1W', '1M', '3M', '6M', '1Y', '3Y', '5Y', 'ALL'].forEach(k => {
+    ['1W', '1M', '3M', '6M', 'SAISON', '1Y', '3Y', '5Y', 'ALL'].forEach(k => {
       const btn = document.getElementById(`scoresBtn${k}`);
       if (btn) {
         if (k === interval) {
@@ -766,7 +865,7 @@ ${protocolText}
 
     const state = (window.App && window.App.state) || {};
     const logs = state.trainingLogs || [];
-    const refDate = new Date((currentSelectedDate || '2026-10-15') + 'T12:00:00');
+    const refDate = new Date((currentSelectedDate || '2026-11-01') + 'T12:00:00');
     const dayOffsets = {
       '1W': 7,
       '1M': 30,
@@ -778,7 +877,9 @@ ${protocolText}
       'ALL': 99999
     };
     const maxDays = dayOffsets[currentScoresInterval] || 99999;
-    const minTime = refDate.getTime() - maxDays * 86400000;
+    const minTime = currentScoresInterval === 'SAISON'
+      ? new Date('2026-09-01T00:00:00').getTime()
+      : refDate.getTime() - maxDays * 86400000;
 
     const scoreLogs = logs.filter(l => {
       const p = l.performance_score != null ? l.performance_score : parseScore1to4(l.leistung);
@@ -880,6 +981,16 @@ ${protocolText}
   }
 
   // ================= 365-DAY HEATMAP & RECOVERY INSIGHT MODAL =================
+  function getInsightLogString(log, type) {
+    if (!log) return '';
+    if (type === 'supplement') return log.supplements || '';
+    if (type === 'regeneration') return log.regeneration || '';
+    if (type === 'sleep') return log.schlaf_faktoren || '';
+    if (type === 'social') return log.soziale_faktoren || '';
+    if (type === 'problem') return [log.probleme, log.schmerzbereiche].filter(Boolean).join(', ');
+    return log.regeneration || '';
+  }
+
   function openInsightModal(item, type = 'regeneration') {
     currentInsightItem = item;
     currentInsightType = type;
@@ -894,6 +1005,15 @@ ${protocolText}
       if (type === 'supplement') {
         badge.className = 'px-2 py-0.5 rounded text-xs font-black font-mono bg-cyan-950 text-cyan-300 border border-cyan-800';
         badge.textContent = 'SUPPLEMENT';
+      } else if (type === 'sleep') {
+        badge.className = 'px-2 py-0.5 rounded text-xs font-black font-mono bg-indigo-950 text-indigo-300 border border-indigo-800';
+        badge.textContent = 'SCHLAF-FAKTOR (TAG 0)';
+      } else if (type === 'social') {
+        badge.className = 'px-2 py-0.5 rounded text-xs font-black font-mono bg-purple-950 text-purple-300 border border-purple-800';
+        badge.textContent = 'SOZIALER FAKTOR (TAG +1)';
+      } else if (type === 'problem') {
+        badge.className = 'px-2 py-0.5 rounded text-xs font-black font-mono bg-rose-950 text-rose-300 border border-rose-800';
+        badge.textContent = 'PROBLEM / SCHMERZBEREICH';
       } else {
         badge.className = 'px-2 py-0.5 rounded text-xs font-black font-mono bg-emerald-950 text-emerald-300 border border-emerald-800';
         badge.textContent = 'REGENERATION';
@@ -901,7 +1021,7 @@ ${protocolText}
     }
 
     if (title) title.textContent = `INSIGHTS: ${item.toUpperCase()}`;
-    if (sub) sub.textContent = `365-Tage Heatmap & Punktbiseriale Korrelation mit Whoop Recovery Score`;
+    if (sub) sub.textContent = `365-Tage Heatmap & Punktbiseriale Korrelation mit Whoop Recovery Score (${type === 'sleep' ? 'Tag 0 / Morgen-Recovery' : 'Tag +1 / Folgetag'})`;
 
     const yearSelect = document.getElementById('insightYearSelect');
     if (yearSelect) {
@@ -927,36 +1047,40 @@ ${protocolText}
     const q = currentInsightItem.toLowerCase().trim();
 
     const matchLogs = logs.filter(l => {
-      const targetStr = currentInsightType === 'supplement' ? (l.supplements || '') : (l.regeneration || '');
+      const targetStr = getInsightLogString(l, currentInsightType);
       return targetStr.toLowerCase().includes(q);
     });
 
     const otherLogs = logs.filter(l => {
-      const targetStr = currentInsightType === 'supplement' ? (l.supplements || '') : (l.regeneration || '');
+      const targetStr = getInsightLogString(l, currentInsightType);
       return !targetStr.toLowerCase().includes(q);
     });
 
     const recentLogs = matchLogs.filter(l => (l.date || '') >= '2026-09-18');
     const recentPct = Math.min(100, Math.round((recentLogs.length / 30) * 100));
 
-    // Next-day (Tag +1 / Folgetag) recovery comparison within active Whoop + Tag tracking era (>= 2023-05-06)
+    // Next-day (Tag +1 / Folgetag) or Same-day (Tag 0 for sleep) recovery comparison within active Whoop + Tag tracking era (>= 2023-05-06)
     const byDate = {};
     logs.forEach(l => { if (l.date) byDate[l.date] = l; });
 
+    const isSameDay = currentInsightType === 'sleep';
     const nextDayRecsWith = [];
     const nextDayRecsWithout = [];
     logs.forEach(l => {
       if (!l.date || l.date < '2023-05-06') return;
-      const d = new Date(l.date + 'T12:00:00');
-      d.setDate(d.getDate() + 1);
-      const nextIso = d.toISOString().split('T')[0];
-      const nextLog = byDate[nextIso];
-      if (!nextLog || nextLog.whoop_recovery_pct == null) return;
-      const targetStr = currentInsightType === 'supplement' ? (l.supplements || '') : (l.regeneration || '');
+      let targetLog = l;
+      if (!isSameDay) {
+        const d = new Date(l.date + 'T12:00:00');
+        d.setDate(d.getDate() + 1);
+        const nextIso = d.toISOString().split('T')[0];
+        targetLog = byDate[nextIso];
+      }
+      if (!targetLog || targetLog.whoop_recovery_pct == null) return;
+      const targetStr = getInsightLogString(l, currentInsightType);
       if (targetStr.toLowerCase().includes(q)) {
-        nextDayRecsWith.push(nextLog.whoop_recovery_pct);
+        nextDayRecsWith.push(targetLog.whoop_recovery_pct);
       } else {
-        nextDayRecsWithout.push(nextLog.whoop_recovery_pct);
+        nextDayRecsWithout.push(targetLog.whoop_recovery_pct);
       }
     });
 
@@ -983,7 +1107,7 @@ ${protocolText}
 
     if (kpiTotal) kpiTotal.textContent = `${matchLogs.length}x`;
     if (kpiRecent) kpiRecent.textContent = `${recentLogs.length}x (${recentPct}%)`;
-    if (kpiRec) kpiRec.textContent = `${avgRec.toFixed(1)}% (Tag +1)`;
+    if (kpiRec) kpiRec.textContent = `${avgRec.toFixed(1)}% (${isSameDay ? 'Tag 0' : 'Tag +1'})`;
     if (kpiDelta) {
       kpiDelta.textContent = `${delta >= 0 ? '+' : ''}${delta.toFixed(1)}%`;
       kpiDelta.className = delta >= 0 ? 'text-base font-black text-emerald-300' : 'text-base font-black text-rose-300';
@@ -1024,7 +1148,7 @@ ${protocolText}
         const log = logsByDate[iso] || null;
         let used = false;
         if (log) {
-          const targetStr = currentInsightType === 'supplement' ? (log.supplements || '') : (log.regeneration || '');
+          const targetStr = getInsightLogString(log, currentInsightType);
           used = targetStr.toLowerCase().includes(q);
         }
 
@@ -1071,6 +1195,26 @@ ${protocolText}
     });
     html += '</div>';
 
+    const activeColorClass = currentInsightType === 'supplement'
+      ? 'bg-cyan-400 border border-cyan-300 shadow-sm shadow-cyan-400/50'
+      : currentInsightType === 'sleep'
+      ? 'bg-indigo-400 border border-indigo-300 shadow-sm shadow-indigo-400/50'
+      : currentInsightType === 'social'
+      ? 'bg-purple-400 border border-purple-300 shadow-sm shadow-purple-400/50'
+      : currentInsightType === 'problem'
+      ? 'bg-rose-400 border border-rose-300 shadow-sm shadow-rose-400/50'
+      : 'bg-emerald-400 border border-emerald-300 shadow-sm shadow-emerald-400/50';
+
+    const activeDotClass = currentInsightType === 'supplement'
+      ? 'bg-cyan-400'
+      : currentInsightType === 'sleep'
+      ? 'bg-indigo-400'
+      : currentInsightType === 'social'
+      ? 'bg-purple-400'
+      : currentInsightType === 'problem'
+      ? 'bg-rose-400'
+      : 'bg-emerald-400';
+
     for (let r = 0; r < 7; r++) {
       html += '<div class="flex gap-1">';
       weeks.forEach(w => {
@@ -1078,11 +1222,8 @@ ${protocolText}
         if (!day.isInYear) {
           html += '<div class="w-3 h-3 rounded-[2px] bg-slate-950 opacity-20"></div>';
         } else if (day.used) {
-          const colorClass = currentInsightType === 'supplement'
-            ? 'bg-cyan-400 border border-cyan-300 shadow-sm shadow-cyan-400/50'
-            : 'bg-emerald-400 border border-emerald-300 shadow-sm shadow-emerald-400/50';
           const tooltip = `${day.iso}: ${currentInsightItem} aktiv! ${day.recovery != null ? `(Recovery: ${day.recovery}%)` : ''}`;
-          html += `<div onclick="AnalyticsModule.onDatePicked('${day.iso}'); document.getElementById('insightCalendarModal').classList.add('hidden');" title="${tooltip}" class="w-3 h-3 rounded-[2px] ${colorClass} cursor-pointer hover:scale-125 transition-transform"></div>`;
+          html += `<div onclick="AnalyticsModule.onDatePicked('${day.iso}'); document.getElementById('insightCalendarModal').classList.add('hidden');" title="${tooltip}" class="w-3 h-3 rounded-[2px] ${activeColorClass} cursor-pointer hover:scale-125 transition-transform"></div>`;
         } else if (day.session) {
           const tooltip = `${day.iso}: ${day.session} (ohne ${currentInsightItem})`;
           html += `<div onclick="AnalyticsModule.onDatePicked('${day.iso}'); document.getElementById('insightCalendarModal').classList.add('hidden');" title="${tooltip}" class="w-3 h-3 rounded-[2px] bg-slate-800 border border-slate-700/60 cursor-pointer hover:bg-slate-700 transition-colors"></div>`;
@@ -1102,7 +1243,7 @@ ${protocolText}
           <span>Ruhetag</span>
           <span class="w-2.5 h-2.5 rounded-[2px] bg-slate-800 border border-slate-700 ml-2"></span>
           <span>Training (Nicht genutzt)</span>
-          <span class="w-2.5 h-2.5 rounded-[2px] ${currentInsightType === 'supplement' ? 'bg-cyan-400' : 'bg-emerald-400'} ml-2"></span>
+          <span class="w-2.5 h-2.5 rounded-[2px] ${activeDotClass} ml-2"></span>
           <span class="text-white font-bold">${currentInsightItem} genutzt</span>
         </div>
         <span class="text-slate-500 text-[9px]">Klicke auf Tag für Details</span>
@@ -1122,7 +1263,7 @@ ${protocolText}
 
     const yearMatches = logs.filter(l => {
       if (!l.date || !l.date.startsWith(currentInsightYear)) return false;
-      const targetStr = currentInsightType === 'supplement' ? (l.supplements || '') : (l.regeneration || '');
+      const targetStr = getInsightLogString(l, currentInsightType);
       return targetStr.toLowerCase().includes(q);
     });
 
@@ -1924,7 +2065,7 @@ ${protocolText}
 
   function setStrengthInterval(interval) {
     currentStrengthInterval = interval;
-    ['1W', '1M', '3M', '6M', '1Y', '3Y', '5Y', 'ALL'].forEach(k => {
+    ['1W', '1M', '3M', '6M', 'SAISON', '1Y', '3Y', '5Y', 'ALL'].forEach(k => {
       const btn = document.getElementById(`strengthBtn${k}`);
       if (btn) {
         if (k === interval) {
@@ -2049,7 +2190,7 @@ ${protocolText}
     if (!canvas) return;
 
     const logs = state.trainingLogs || [];
-    const refDate = new Date((currentSelectedDate || '2026-10-15') + 'T12:00:00');
+    const refDate = new Date((currentSelectedDate || '2026-11-01') + 'T12:00:00');
     const dayOffsets = {
       '1W': 7,
       '1M': 30,
@@ -2061,7 +2202,9 @@ ${protocolText}
       'ALL': 99999
     };
     const maxDays = dayOffsets[currentStrengthInterval] || 99999;
-    const minTime = refDate.getTime() - maxDays * 86400000;
+    const minTime = currentStrengthInterval === 'SAISON'
+      ? new Date('2026-09-01T00:00:00').getTime()
+      : refDate.getTime() - maxDays * 86400000;
 
     const filteredLogs = logs.filter(l => {
       const hasLift = l.umsetzen_e1rm_kg || l.hipthrust_e1rm_kg || l.trapbar_e1rm_kg || l.aufsteiger_e1rm_kg;

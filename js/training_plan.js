@@ -12,8 +12,8 @@
  * - Volltext Protokoll-Suche über alle 2.355 Einheiten
  */
 const TrainingPlanModule = (() => {
-  let activeView = 'block'; // 'week' | 'month' | 'block' | 'career_lab' | 'search'
-  let currentWeekStart = '2026-10-12';
+  let activeView = 'month'; // 'month' (Kalender wie Notion) | 'week' (Wochenansicht) | 'block' (Mehrjahres-Saisonvergleich) | 'career_lab' | 'search'
+  let currentWeekStart = '2026-10-26';
   let currentMonthYear = '2026-10';
   let activeBlockPreset = 'aufbau_gpp'; // 'aufbau_gpp' | 'spezial_fct_spikes' | 'hallenvorbereitung' | 'hallensaison' | 'sommeraufbau' | 'sommersaison'
   let blockSyncMode = 'block_day'; // 'block_day' (Tag 1..N des jeweiligen Blocks) | 'calendar_date'
@@ -43,12 +43,12 @@ const TrainingPlanModule = (() => {
     '2026_current': {
       title: '🔥 Aktueller Aufbau 2026 / Saison 2026/27',
       shortTitle: '2026/27 (Aktuell)',
-      badge: 'Aktuell • Tag 26',
+      badge: 'Aktuell • Block 2',
       badgeColor: 'bg-cyan-500 text-slate-950',
       start: '2026-09-23',
-      end: '2026-10-18',
+      end: '2026-11-01',
       targetCompetition: 'Hallen-EM 2027 / WM Peking 2027',
-      focusSummary: 'Grundaufbau, Tempoläufe, Gewichtsoptimierung (86.2kg ➔ 82.5kg!), ab 08.10. 1080 Sprints'
+      focusSummary: 'Grundaufbau, Tempoläufe, Gewichtsoptimierung (86.2kg ➔ 83.2kg!), ab 08.10. 1080 Sprints, ab 26.10. Block 2 (Power Clean 100kg, Trapbar 160kg, Hip Thrust 150kg)'
     },
     '2025_2026': {
       title: 'Saison 2025/2026 (8,18m PB Gorzów & FCT)',
@@ -654,17 +654,17 @@ const TrainingPlanModule = (() => {
 
           <!-- View Tabs -->
           <div class="flex items-center gap-1 flex-wrap bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs font-mono">
+            <button onclick="TrainingPlanModule.switchView('month')" id="planViewMonthBtn" class="px-2.5 py-1.5 rounded-md font-bold transition-all ${activeView === 'month' ? 'bg-cyan-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}">
+              🗓️ Kalender-Ansicht (wie Notion)
+            </button>
+            <button onclick="TrainingPlanModule.switchView('week')" id="planViewWeekBtn" class="px-2.5 py-1.5 rounded-md font-bold transition-all ${activeView === 'week' ? 'bg-cyan-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}">
+              📅 Wochen-Ansicht
+            </button>
             <button onclick="TrainingPlanModule.switchView('block')" id="planViewBlockBtn" class="px-2.5 py-1.5 rounded-md font-bold transition-all ${activeView === 'block' ? 'bg-cyan-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}">
-              📊 Blockvergleich
+              📊 Vergleich der Saisons
             </button>
             <button onclick="TrainingPlanModule.switchView('career_lab')" id="planViewCareerBtn" class="px-2.5 py-1.5 rounded-md font-bold transition-all ${activeView === 'career_lab' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-amber-300 hover:text-white'}">
               🧬 Muster-Analyse (2022–26)
-            </button>
-            <button onclick="TrainingPlanModule.switchView('week')" id="planViewWeekBtn" class="px-2.5 py-1.5 rounded-md font-bold transition-all ${activeView === 'week' ? 'bg-cyan-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}">
-              📅 Wochen-Plan
-            </button>
-            <button onclick="TrainingPlanModule.switchView('month')" id="planViewMonthBtn" class="px-2.5 py-1.5 rounded-md font-bold transition-all ${activeView === 'month' ? 'bg-cyan-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}">
-              🗓️ Monats-Übersicht
             </button>
             <button onclick="TrainingPlanModule.switchView('search')" id="planViewSearchBtn" class="px-2.5 py-1.5 rounded-md font-bold transition-all ${activeView === 'search' ? 'bg-cyan-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}">
               🔍 Protokoll-Suche
@@ -701,11 +701,14 @@ const TrainingPlanModule = (() => {
             <button onclick="TrainingPlanModule.navigateWeek(1)" class="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs font-mono font-bold transition-all">
               Nächste Woche ▶
             </button>
-            <button onclick="TrainingPlanModule.jumpToWeek('2026-10-12')" class="px-2.5 py-1 rounded transition-all text-xs font-mono font-bold ${currentWeekStart === '2026-10-12' ? 'bg-cyan-600 text-slate-950 font-black' : 'bg-slate-950 text-cyan-400 border border-slate-800 hover:bg-slate-800'}">
-              📍 KW 42 (12.10.–18.10.)
+            <button onclick="TrainingPlanModule.jumpToWeek('2026-10-26')" class="px-2.5 py-1 rounded transition-all text-xs font-mono font-bold ${currentWeekStart === '2026-10-26' ? 'bg-cyan-600 text-slate-950 font-black' : 'bg-slate-950 text-cyan-400 border border-slate-800 hover:bg-slate-800'}">
+              📍 KW 44 (26.10.–01.11.)
             </button>
-            <button onclick="TrainingPlanModule.jumpToWeek('2026-10-05')" class="px-2.5 py-1 rounded transition-all text-xs font-mono font-bold ${currentWeekStart === '2026-10-05' ? 'bg-cyan-600 text-slate-950 font-black' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
-              📋 KW 41 (05.10.–11.10.)
+            <button onclick="TrainingPlanModule.jumpToWeek('2026-10-19')" class="px-2.5 py-1 rounded transition-all text-xs font-mono font-bold ${currentWeekStart === '2026-10-19' ? 'bg-cyan-600 text-slate-950 font-black' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
+              📋 KW 43 (19.10.–25.10.)
+            </button>
+            <button onclick="TrainingPlanModule.jumpToWeek('2026-10-12')" class="px-2.5 py-1 rounded transition-all text-xs font-mono font-bold ${currentWeekStart === '2026-10-12' ? 'bg-cyan-600 text-slate-950 font-black' : 'bg-slate-950 text-slate-300 border border-slate-800 hover:bg-slate-800'}">
+              📋 KW 42 (12.10.–18.10.)
             </button>
           </div>
 
