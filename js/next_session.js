@@ -68,11 +68,11 @@ const NextSessionModule = (() => {
         target: 3.87,
         unit: 's',
         lowerIsBetter: true,
-        val: 3.92,
+        val: 3.80,
         isApprox: true,
-        sourceBadge: '≈ Annäherung (aus 40m 4.91s Hand @ 90% & 1080 30m)',
-        pbDisplay: 'All-Time PB: ~3.82s (100m 10.37s / 60m 6.76s)',
-        pct: 96
+        sourceBadge: '≈ Annäherung (aus 1080 12kg NFW 10m in 2.18s PB am 04.11. & 40m 4.91s Hand)',
+        pbDisplay: 'All-Time PB: 3.67s Laser (La Palma 05.01.26)',
+        pct: 99
       },
       {
         category: '1. Acceleration',
@@ -80,11 +80,11 @@ const NextSessionModule = (() => {
         target: 0.96,
         unit: 's',
         lowerIsBetter: true,
-        val: 0.98,
+        val: 0.96,
         isApprox: true,
-        sourceBadge: '≈ Annäherung (aus 40–50m Split 0.87s @ 90% am 29.10.)',
-        pbDisplay: 'All-Time PB: 0.93s (10.75 m/s)',
-        pct: 97
+        sourceBadge: '≈ Annäherung (aus 40–50m Split 0.87s @ 90% am 30.10.)',
+        pbDisplay: 'All-Time PB: 0.93s (10.83 m/s Belek 26)',
+        pct: 99
       },
       {
         category: '2. Max Velocity',
@@ -92,11 +92,11 @@ const NextSessionModule = (() => {
         target: 4.75,
         unit: 's',
         lowerIsBetter: true,
-        val: 4.89,
+        val: 4.76,
         isApprox: true,
-        sourceBadge: '≈ Annäherung (4.91s Hand 1. Bew. @ 90% am 29.10.26)',
-        pbDisplay: 'All-Time PB: ~4.74s',
-        pct: 95
+        sourceBadge: '≈ Annäherung (4.91s Hand 1. Bew. @ 90% am 30.10.26)',
+        pbDisplay: 'All-Time PB: 4.63s Laser (La Palma 05.01.26)',
+        pct: 98
       },
       {
         category: '2. Max Velocity',
@@ -104,23 +104,23 @@ const NextSessionModule = (() => {
         target: 1.91,
         unit: 's',
         lowerIsBetter: true,
-        val: 1.94,
+        val: 1.88,
         isApprox: true,
-        sourceBadge: '≈ Annäherung (50–60m Split 0.85s @ 90% & 1080 9.19 m/s)',
-        pbDisplay: 'All-Time PB: 1.86s (Vmax Anlauf 10.76 m/s)',
-        pct: 97
+        sourceBadge: '≈ Annäherung (40–60m Split 1.72s @ 90% & 1080 Hinke 9.89 m/s am 02.11.)',
+        pbDisplay: 'All-Time PB: 1.86s (Vmax Anlauf 10.76 m/s / Laser 1.87s)',
+        pct: 100
       },
       {
         category: '3. Power & Kraft (Relativ)',
-        name: 'Squat / Beinkraft-Äquivalent (Trapbar & Aufsteiger)',
+        name: 'Squat / Beinkraft-Äquivalent (Trapbar FCT)',
         target: 2.30,
         unit: 'x BW',
         lowerIsBetter: false,
-        val: 1.80,
-        isApprox: true,
-        sourceBadge: '≈ Annäherung (Trapbar FCT 3x120kg / Aufsteiger 3x4x90kg • Squat wegen Rücken ersetzt)',
-        pbDisplay: 'All-Time Peak: 1.92x BW (Trapbar 160kg / Squat 115kg 3x6)',
-        pct: 78
+        val: 1.86,
+        isApprox: false,
+        sourceBadge: '✅ Gemessen am 03.11.26: Trapbar FCT 3x 145kg (154.7kg e1RM @ 83.1kg BW)',
+        pbDisplay: 'All-Time Peak: 2.31x BW (192kg / EM Rom 1.92x @ 79.8kg)',
+        pct: 81
       },
       {
         category: '3. Power & Kraft (Relativ)',
@@ -130,7 +130,7 @@ const NextSessionModule = (() => {
         lowerIsBetter: false,
         val: 1.32,
         isApprox: false,
-        sourceBadge: '✅ Gemessen am 29.10.26: 2x 100kg (e1RM ~107–110kg @ 83.2kg)',
+        sourceBadge: '✅ Gemessen am 30.10.26: 2x 100kg (Ziel heute 06.11.: 3x 100kg = 110kg e1RM)',
         pbDisplay: 'All-Time PB: 1.48x BW (120kg 1RM / 124kg e1RM)',
         pct: 78
       },
@@ -140,11 +140,11 @@ const NextSessionModule = (() => {
         target: 37.5,
         unit: 'inch',
         lowerIsBetter: false,
-        val: 27.2,
+        val: 32.1,
         isApprox: true,
-        sourceBadge: '≈ Annäherung (~69 cm aus Hürdensprüngen 91cm & FCT am 29.10.)',
-        pbDisplay: 'All-Time PB: 28.0" (71.0 cm m.A. / 61.9 cm o.A.)',
-        pct: 73
+        sourceBadge: '≈ Annäherung (~81.5 cm aus FCT KH-Jumps 30kg & Hürdensprüngen 91cm)',
+        pbDisplay: 'All-Time PB: 32.3" (82.0 cm DLV)',
+        pct: 86
       },
       {
         category: '4. Reactive & Rehearsal',
@@ -152,11 +152,11 @@ const NextSessionModule = (() => {
         target: 17.10,
         unit: 'm',
         lowerIsBetter: false,
-        val: 16.30,
+        val: 16.95,
         isApprox: true,
-        sourceBadge: '≈ Annäherung (aus SPL / Pen1 & 1080 Sprungläufen Okt 26)',
-        pbDisplay: 'All-Time PB: ~16.85m',
-        pct: 95
+        sourceBadge: '≈ Annäherung (aus 19.5m 5er-SPL & ~28.0m LLRRLLRR PB am 04.11.26!)',
+        pbDisplay: 'All-Time PB: 17.10m+',
+        pct: 99
       },
       {
         category: '4. Reactive & Rehearsal',
@@ -164,11 +164,11 @@ const NextSessionModule = (() => {
         target: 7.50,
         unit: 'm',
         lowerIsBetter: false,
-        val: 7.15,
+        val: 7.25,
         isApprox: true,
-        sourceBadge: '≈ Annäherung (Projektiert aus aktuellem Aufbau-Speed • Erste Grube folgt Dez)',
+        sourceBadge: '≈ Annäherung (6x9er Anlauf von 10cm Erhöhung am 04.11. ✅ • 12er ab Block 3)',
         pbDisplay: '12-Step PB: ~7.42m  |  [19-Step WK PB: 8.18m Gorzów]',
-        pct: 95
+        pct: 97
       }
     ],
     'sommer_26': [

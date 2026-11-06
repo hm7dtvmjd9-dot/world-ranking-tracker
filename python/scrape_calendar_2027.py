@@ -377,6 +377,66 @@ def fetch_tour_events_graphql(season, group_id, tour_name):
         print(f"⚠️ Error fetching {tour_name} via GraphQL: {e}")
         return []
 
+def fetch_master_calendar_events_graphql(start_date="2026-12-01", end_date="2027-09-30"):
+    """Fetches all Track & Field (disciplineId: 5) events from the World Athletics Master Calendar
+    (https://worldathletics.org/competition/calendar-results) across all offsets."""
+    all_ev = []
+    for offset in range(0, 1500, 100):
+        query = f'''query {{
+          getCalendarEvents(startDate: "{start_date}", endDate: "{end_date}", disciplineId: 5, limit: 100, offset: {offset}) {{
+            hits
+            results {{
+              id
+              name
+              startDate
+              endDate
+              venue
+              area
+              rankingCategory
+              competitionGroup
+              competitionSubgroup
+            }}
+          }}
+        }}'''
+        payload = json.dumps({"query": query}).encode("utf-8")
+        req = urllib.request.Request(GRAPHQL_ENDPOINT, data=payload, headers={
+            "Content-Type": "application/json",
+            "x-api-key": GRAPHQL_API_KEY,
+            "User-Agent": "Mozilla/5.0"
+        })
+        try:
+            with urllib.request.urlopen(req, context=CTX, timeout=15) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                cal = data.get("data", {}).get("getCalendarEvents", {})
+                batch = cal.get("results") or []
+                hits = cal.get("hits") or 0
+                for ev in batch:
+                    cg = ev.get("competitionGroup") or ""
+                    cat = ev.get("rankingCategory") or "F"
+                    area = ev.get("area") or ""
+                    venue_str = (ev.get("venue") or "").upper()
+                    # Skip foreign national championships (keep GER national champs + all international meetings)
+                    if "national" in cg.lower() and "(GER)" not in venue_str:
+                        continue
+                    if any(x in cg.lower() for x in ["u20", "u18", "combined events", "race walking", "road", "cross country", "mountain"]):
+                        continue
+                    # For Category E & F (local/national permits), only include GER & direct neighbors; for B/C/D only Europe or global A/GL/GW/DF/OW
+                    if cat in ["E", "F"]:
+                        if not any(f"({c})" in venue_str for c in ["GER", "SUI", "AUT", "NED", "BEL", "LUX", "POL", "CZE", "FRA"]):
+                            continue
+                    elif cat in ["B", "C", "D"]:
+                        if area and area != "Europe" and "(GER)" not in venue_str:
+                            continue
+                    ev["tour_type"] = cg or ("World Athletics Indoor Tour 2027" if (ev.get("startDate") or "") < "2027-03-25" else "World Athletics Master Calendar 2027")
+                    all_ev.append(ev)
+                if offset + 100 >= hits or not batch:
+                    break
+        except Exception as e:
+            print(f"⚠️ Error fetching Master Calendar offset {offset}: {e}")
+            break
+    print(f"GraphQL Master Calendar: Found {len(all_ev)} international/GER Track & Field candidate events ({start_date} to {end_date})")
+    return all_ev
+
 def query_competition_organiser_info(comp_id):
     payload = json.dumps({
         "query": ORGANISER_INFO_QUERY,
@@ -467,7 +527,15 @@ def main():
 
     cont_events = fetch_tour_events_graphql("2027", 3773, "World Athletics Continental Tour 2027")
     indoor_events = fetch_tour_events_graphql("2026/27", 3677, "World Athletics Indoor Tour 2027")
-    all_raw_events = cont_events + indoor_events
+    master_events = fetch_master_calendar_events_graphql("2026-12-01", "2027-09-30")
+
+    by_id = {}
+    for ev in cont_events + indoor_events + master_events:
+        cid = ev.get("id")
+        if cid and cid not in by_id:
+            by_id[cid] = ev
+    all_raw_events = list(by_id.values())
+    print(f"Checking official Info-button disciplines (getCompetitionOrganiserInfo) for {len(all_raw_events)} unique events...")
 
     def process_event(ev):
         cid = ev.get("id")
@@ -492,7 +560,11 @@ def main():
             for u in units:
                 gender = u.get("gender")
                 evts = u.get("events") or []
-                is_lj = any("long jump" in e.lower() or "weitsprung" in e.lower() for e in evts)
+                is_lj = any(
+                    ("long jump" in e.lower() or "weitsprung" in e.lower())
+                    and not any(age in e.lower() for age in ["u20", "u18", "u16", "u14", "youth", "junior"])
+                    for e in evts
+                )
                 if gender == "Men":
                     other_events_men.extend(evts)
                     if is_lj:
@@ -507,9 +579,9 @@ def main():
             # Strictly exclude any event without confirmed units/disciplines
             return None
 
-        raw_venue = ev.get("venue", "")
+        raw_venue = ev.get("venue") or ""
         venue_city = ""
-        venue_country = ev.get("country", "")
+        venue_country = ev.get("country") or ""
         if "(" in raw_venue and ")" in raw_venue:
             parts = raw_venue.split("(")
             venue_country = parts[-1].replace(")", "").strip()
@@ -527,12 +599,12 @@ def main():
         else:
             clean_venue = raw_venue
 
-        start_date = ev.get("startDate", "")
+        start_date = ev.get("startDate") or ""
         display_date, month_name, year = format_date_info(start_date)
-        cat = ev.get("rankingCategory", "D")
-        subgroup = ev.get("competitionSubgroup", "")
-        tour_type = ev.get("tour_type", "")
-        is_indoor = "indoor" in tour_type.lower() or "(i)" in ev.get("name", "").lower()
+        cat = ev.get("rankingCategory") or "D"
+        subgroup = ev.get("competitionSubgroup") or ""
+        tour_type = ev.get("tour_type") or ""
+        is_indoor = "indoor" in tour_type.lower() or "(i)" in (ev.get("name") or "").lower()
 
         tier = "Challenger"
         if cat == "OW":
@@ -552,7 +624,7 @@ def main():
         status_desc = f"Kat. {cat} ({tier})"
 
         promising, runway_note, luka_hist, top_marks = analyze_venue_quality(
-            ev.get("name", ""), clean_venue, venue_city, venue_country, comp_db
+            ev.get("name") or "", clean_venue, venue_city, venue_country, comp_db
         )
 
         contacts = []
@@ -560,10 +632,10 @@ def main():
             for cp in info.get("contactPersons") or []:
                 if cp.get("name") or cp.get("email") or cp.get("phoneNumber"):
                     contacts.append({
-                        "name": cp.get("name", "").strip(),
-                        "email": cp.get("email", "").strip(),
-                        "phone": cp.get("phoneNumber", "").strip(),
-                        "title": cp.get("title", "").strip()
+                        "name": (cp.get("name") or "").strip(),
+                        "email": (cp.get("email") or "").strip(),
+                        "phone": (cp.get("phoneNumber") or "").strip(),
+                        "title": (cp.get("title") or "").strip()
                     })
 
         unique_contacts = []

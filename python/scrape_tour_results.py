@@ -109,6 +109,51 @@ def fetch_tour_events_graphql(season, group_id, tour_name):
         print(f"⚠️ Error fetching {tour_name} ({season}): {e}")
         return []
 
+def fetch_master_calendar_with_results(start_date="2026-08-01", end_date="2026-12-31"):
+    """Fetches all Track & Field (disciplineId: 5) competitions from the World Athletics Master Calendar
+    that have official results published (hideCompetitionsWithNoResults: true)."""
+    all_ev = []
+    for offset in range(0, 500, 100):
+        query = f'''query {{
+          getCalendarEvents(startDate: "{start_date}", endDate: "{end_date}", disciplineId: 5, hideCompetitionsWithNoResults: true, limit: 100, offset: {offset}) {{
+            hits
+            results {{
+              id
+              name
+              startDate
+              venue
+              area
+              rankingCategory
+              competitionGroup
+              competitionSubgroup
+            }}
+          }}
+        }}'''
+        payload = json.dumps({"query": query}).encode("utf-8")
+        req = urllib.request.Request(GRAPHQL_ENDPOINT, data=payload, headers={
+            "Content-Type": "application/json",
+            "x-api-key": GRAPHQL_API_KEY,
+            "User-Agent": "Mozilla/5.0"
+        })
+        try:
+            with urllib.request.urlopen(req, context=CTX, timeout=15) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                cal = data.get("data", {}).get("getCalendarEvents", {})
+                batch = cal.get("results") or []
+                hits = cal.get("hits") or 0
+                for ev in batch:
+                    cg = (ev.get("competitionGroup") or "").lower()
+                    if any(x in cg for x in ["u20", "u18", "combined events", "race walking", "road", "cross country", "mountain"]):
+                        continue
+                    ev["tour_type"] = ev.get("competitionGroup") or "World Athletics Master Calendar"
+                    all_ev.append(ev)
+                if offset + 100 >= hits or not batch:
+                    break
+        except Exception as e:
+            print(f"⚠️ Error fetching Master Calendar results offset {offset}: {e}")
+            break
+    return all_ev
+
 def fetch_lj_results_for_event(ev):
     cid = ev.get("id")
     if not cid:
@@ -209,7 +254,13 @@ def run_tour_results_scraper():
                 seen_ids.add(e.get("id"))
                 all_tour_events.append(e)
 
-    print(f"Inspecting {len(all_tour_events)} World Indoor Tour & Continental Tour meetings for Men's Long Jump results...")
+    master_res_evts = fetch_master_calendar_with_results("2026-08-01", "2027-03-31")
+    for e in master_res_evts:
+        if e.get("id") not in seen_ids:
+            seen_ids.add(e.get("id"))
+            all_tour_events.append(e)
+
+    print(f"Inspecting {len(all_tour_events)} World Indoor Tour, Continental Tour & Master Calendar meetings for Men's Long Jump results...")
     with ThreadPoolExecutor(max_workers=25) as ex:
         scraped_tour_comps = [r for r in ex.map(fetch_lj_results_for_event, all_tour_events) if r]
 

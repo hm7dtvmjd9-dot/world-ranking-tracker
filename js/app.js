@@ -3,7 +3,7 @@
  */
 const App = (() => {
   const state = {
-    activeTab: 'next',
+    activeTab: 'analytics',
     athletes: [],
     previousAthletesMap: {},
     lukaHistory: null,
