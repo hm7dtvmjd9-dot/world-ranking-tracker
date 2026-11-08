@@ -955,8 +955,8 @@
         <button id="subTabAthletesBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono bg-slate-900 text-slate-300 hover:text-white border border-slate-800 hover:border-cyan-500/50 transition-all flex items-center gap-1.5">
           <span>🏃‍♂️ Athletendatenbank</span>
         </button>
-        <button id="subTabMeetingsBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono bg-slate-900 text-slate-300 hover:text-white border border-slate-800 hover:border-cyan-500/50 transition-all flex items-center gap-1.5">
-          <span>🏟️ Wettkampf-Suche</span>
+        <button id="subTabMeetingsBtn" onclick="App.switchTab('venues'); VenuesModule.setViewMode('results');" class="px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono bg-slate-900 text-amber-300 hover:text-white border border-amber-800/70 hover:border-amber-400 transition-all flex items-center gap-1.5">
+          <span>🏟️ Universal-Kalender & Ergebnisse (2023–2027) ➔</span>
         </button>
       </div>
 
@@ -1445,13 +1445,16 @@
         <!-- Row 1: Views & Search -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-slate-800">
           <div class="flex items-center gap-2 flex-wrap">
-            <!-- View Toggle (List vs Calendar View) -->
-            <div class="flex items-center gap-1 font-mono text-xs bg-slate-950 p-1 rounded-lg border border-slate-800">
+            <!-- View Toggle (Universal Calendar: 2027 Plan vs Month Grid vs 2023-2026 Results) -->
+            <div class="flex items-center gap-1 font-mono text-xs bg-slate-950 p-1 rounded-lg border border-slate-800 flex-wrap">
               <button id="calViewListBtn" onclick="VenuesModule.setViewMode('list')" class="px-2.5 py-1 rounded text-[10px] font-bold bg-cyan-600 text-white transition-all shadow-sm">
-                📋 Liste
+                📋 Saisonplanung 2027 (86)
               </button>
               <button id="calViewCalendarBtn" onclick="VenuesModule.setViewMode('calendar')" class="px-2.5 py-1 rounded text-[10px] font-bold text-slate-400 hover:text-white transition-all">
-                📅 Monatskalender
+                📅 Monatskalender 2027
+              </button>
+              <button id="calViewResultsBtn" onclick="VenuesModule.setViewMode('results')" class="px-2.5 py-1 rounded text-[10px] font-bold text-slate-400 hover:text-white transition-all">
+                🏆 Ergebnis-Archiv 2023–2026 (1.020 ≥ 7,70m)
               </button>
             </div>
 
@@ -1471,25 +1474,28 @@
           </div>
         </div>
 
-        <!-- Row 2: Saison-Planungsfilter (Lukas Markierungen) -->
+        <!-- Row 2: Saison-Planungsfilter (Lukas Markierungen: Sicher=Grün, Option=Gelb, Ziel/Rahmen=Weiß, Weg=Rot) -->
         <div class="flex items-center gap-1.5 font-mono text-xs flex-wrap">
           <span class="text-[10px] text-slate-400 font-bold uppercase mr-1 flex items-center gap-1">
             <span>🎯</span> Planungs-Filter:
           </span>
           <button onclick="VenuesModule.setStatusFilter('ALL')" data-status-filter="ALL" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-cyan-600 text-slate-950 font-black shadow-sm flex items-center gap-1">
-            Alle Meetings (<span id="statusCountAll">75</span>)
+            Alle Meetings (<span id="statusCountAll">86</span>)
           </button>
           <button onclick="VenuesModule.setStatusFilter('MY_PLAN')" data-status-filter="MY_PLAN" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-emerald-300 border border-emerald-600/70 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
             📅 Mein Saisonplan (<span id="statusCountMyPlan">0</span>)
           </button>
           <button onclick="VenuesModule.setStatusFilter('CONFIRMED')" data-status-filter="CONFIRMED" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-emerald-400 border border-emerald-800 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
-            🟢 Sicherer Start (<span id="statusCountConfirmed">0</span>)
+            🟢 Sicher (<span id="statusCountConfirmed">0</span>)
           </button>
-          <button onclick="VenuesModule.setStatusFilter('WATCHLIST')" data-status-filter="WATCHLIST" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-amber-300 border border-amber-800 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
-            ⭐ Merkliste (<span id="statusCountWatchlist">0</span>)
+          <button onclick="VenuesModule.setStatusFilter('WATCHLIST')" data-status-filter="WATCHLIST" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-yellow-300 border border-yellow-700 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
+            🟡 Option (<span id="statusCountWatchlist">0</span>)
           </button>
-          <button onclick="VenuesModule.setStatusFilter('HIDDEN')" data-status-filter="HIDDEN" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-slate-400 border border-slate-800 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
-            🚫 Ausgeblendet (<span id="statusCountHidden">0</span>)
+          <button onclick="VenuesModule.setStatusFilter('GOAL')" data-status-filter="GOAL" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-white border border-white/70 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
+            ⚪ Ziel & Rahmen (EM/WM/DM) (<span id="statusCountGoal">7</span>)
+          </button>
+          <button onclick="VenuesModule.setStatusFilter('HIDDEN')" data-status-filter="HIDDEN" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-red-400 border border-red-800 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
+            🔴 Weg (<span id="statusCountHidden">0</span>)
           </button>
         </div>
 
@@ -2173,13 +2179,13 @@
     </button>
   </nav>
 
-  <!-- Load Modular Application Logic (with Cache-Buster v7.1) -->
-  <script src="js/next_session.js?v=7.1.0"></script>
-  <script src="js/rankings.js?v=7.1.0"></script>
-  <script src="js/analytics.js?v=7.1.0"></script>
-  <script src="js/qualification.js?v=7.1.0"></script>
-  <script src="js/venues.js?v=7.1.0"></script>
-  <script src="js/training_plan.js?v=7.1.0"></script>
-  <script src="js/app.js?v=7.1.0"></script>
+  <!-- Load Modular Application Logic (with Cache-Buster v9.0) -->
+  <script src="js/next_session.js?v=9.0.0"></script>
+  <script src="js/rankings.js?v=9.0.0"></script>
+  <script src="js/analytics.js?v=9.0.0"></script>
+  <script src="js/qualification.js?v=9.0.0"></script>
+  <script src="js/venues.js?v=9.0.0"></script>
+  <script src="js/training_plan.js?v=9.0.0"></script>
+  <script src="js/app.js?v=9.0.0"></script>
 </body>
 </html>

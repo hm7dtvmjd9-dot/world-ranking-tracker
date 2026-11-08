@@ -267,6 +267,16 @@ const App = (() => {
       console.warn('DLV & 1080 bundle auto-load fallback', e);
     }
 
+    // 11. Weekly Scraper Briefing
+    try {
+      const resWb = await fetch('./data/weekly_scraper_briefing.json?t=' + Date.now());
+      if (resWb.ok) {
+        state.weeklyBriefing = await resWb.json();
+      }
+    } catch (e) {
+      console.warn('Weekly briefing auto-load fallback', e);
+    }
+
     showSyncBadge('Live WA (' + state.athletes.length + ')', 'text-emerald-400');
     updateDataFreshnessCockpit(state);
     renderCurrentTab();

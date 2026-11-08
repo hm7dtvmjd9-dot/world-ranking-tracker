@@ -690,7 +690,7 @@ const RankingsModule = (() => {
                       ${m.competition && m.competition.toLowerCase().includes('gorz') ? '<span class="ml-1 px-1 py-0.2 rounded bg-amber-500 text-slate-950 font-black text-[9px]">PEAK 1247</span>' : ''}
                     </td>
                     <td class="py-1.5 px-2 text-center text-slate-400 whitespace-nowrap">${m.date || '-'}</td>
-                    <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${m.category || '-'}</span></td>
+                    <td class="py-1.5 px-2 text-center">${window.getUniversalCategoryBadge ? window.getUniversalCategoryBadge(m.category, '', m.competition || '', true) : `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${m.category || '-'}</span>`}</td>
                     <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${m.mark}m</td>
                     <td class="py-1.5 px-2 text-right font-black text-amber-400">${m.performance_score || m.performanceScore || '-'} Pkt</td>
                     <td class="py-1.5 px-2 text-center text-white whitespace-nowrap font-bold">${m.expDateStr}</td>
@@ -999,7 +999,7 @@ const RankingsModule = (() => {
                 <span>${m.competition || '-'}</span>
                 ${m.remark ? `<span class="ml-1.5 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60">${m.remark}</span>` : ''}
               </td>
-              <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 border border-slate-700 text-cyan-300">${m.category || '-'}</span></td>
+              <td class="py-1.5 px-2 text-center">${window.getUniversalCategoryBadge ? window.getUniversalCategoryBadge(m.category, '', m.competition || '', true) : `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 border border-slate-700 text-cyan-300">${m.category || '-'}</span>`}</td>
               <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${m.mark}m</td>
               <td class="py-1.5 px-2 text-center">${formatWindBadge(m.wind)}</td>
               <td class="py-1.5 px-2 text-center text-slate-300">
@@ -1315,7 +1315,7 @@ const RankingsModule = (() => {
               <span>${c.competition || '-'}</span>
               ${c.remark ? `<span class="ml-1.5 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60">${c.remark}</span>` : ''}
             </td>
-            <td class="py-2 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span></td>
+            <td class="py-2 px-2 text-center">${window.getUniversalCategoryBadge ? window.getUniversalCategoryBadge(c.category, '', c.competition || '', true) : `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span>`}</td>
             <td class="py-2 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m</td>
             <td class="py-2 px-2 text-center">${formatWindBadge(c.wind)}</td>
             <td class="py-2 px-2 text-center text-slate-300">${formatPlaceBadge(c)}</td>
@@ -1498,7 +1498,7 @@ const RankingsModule = (() => {
                           <span>${c.competition || '-'}</span>
                           ${c.remark ? `<span class="ml-1.5 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60">${c.remark}</span>` : ''}
                         </td>
-                        <td class="py-1.5 px-2 text-center"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span></td>
+                        <td class="py-1.5 px-2 text-center">${window.getUniversalCategoryBadge ? window.getUniversalCategoryBadge(c.category, '', c.competition || '', true) : `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">${c.category || '-'}</span>`}</td>
                         <td class="py-1.5 px-2 text-right font-bold text-cyan-400 text-xs">${c.mark}m</td>
                         <td class="py-1.5 px-2 text-center">${formatWindBadge(c.wind)}</td>
                         <td class="py-1.5 px-2 text-center text-slate-300">
@@ -1666,7 +1666,13 @@ const RankingsModule = (() => {
     const tbody = document.getElementById('compResModalTableBody');
 
     if (catBadge) {
-      catBadge.textContent = `KAT. ${meet.category || '-'}`;
+      if (window.VenuesModule && window.VenuesModule.getCategoryColorSpec) {
+        const spec = window.VenuesModule.getCategoryColorSpec(meet.category, meet.tour_label, meet.name);
+        catBadge.textContent = spec.label;
+        catBadge.setAttribute('style', spec.style);
+      } else {
+        catBadge.textContent = `KAT. ${meet.category || '-'}`;
+      }
     }
     if (tourBadge) {
       if (meet.tour_label) {
@@ -2104,14 +2110,12 @@ const RankingsModule = (() => {
   }
 
   function searchMeetingDirect(name) {
-    if (window.App && window.App.state) {
-      switchSubTab(window.App.state, 'meetings');
-      const input = document.getElementById('meetingsDbSearchInput');
-      if (input) {
-        input.value = name;
-        meetingSearchQuery = name;
-        renderMeetingsDatabase(window.App.state);
-      }
+    if (window.App && window.App.state && window.VenuesModule) {
+      window.App.switchTab('venues');
+      window.VenuesModule.setViewMode('results');
+      const input = document.getElementById('meetingSearchInput');
+      if (input) input.value = name;
+      window.VenuesModule.handleSearchInput(name);
     }
   }
 

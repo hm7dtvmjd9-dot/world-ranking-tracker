@@ -1,0 +1,218 @@
+{
+  "generated_at": "2026-11-08",
+  "rank_date": "2026-11-03",
+  "prev_rank_date": "2026-10-27",
+  "luka": {
+    "rank": 69,
+    "score": 1144,
+    "delta_rank": 0,
+    "delta_score": 0,
+    "rank_date": "2026-11-03"
+  },
+  "summary_note": "Offizielles World Ranking Update (03.11.2026): Du stehst stabil auf Weltrang #69 (1.144 Pkt • #27 in Europa • Bereinigt Q#21 für die Hallen-EM Valencia • #3 in Deutschland). In der aktuellen Off-Season gab es in Europa keine neuen Hallen-Wettkämpfe >= 7,70 m; die ersten relevanten World Indoor Tour Meetings starten im Januar 2027.",
+  "ranking_movers": [],
+  "recent_relevant_results": [
+    {
+      "date": "2026-10-11",
+      "name": "The 8th Nihon University Competition, Nihon University Stadium, Tokyo (JPN)",
+      "category": "F",
+      "best_mark": 7.87,
+      "marks_over_8m": 0,
+      "winner": "Natsuki YAMAKAWA (JPN) – 7.87m"
+    },
+    {
+      "date": "2026-09-12",
+      "name": "World Athletics Ultimate Championship 2026, Nemzeti Atlétikai Központ, Budapest",
+      "category": "OW",
+      "best_mark": 8.35,
+      "marks_over_8m": 3,
+      "winner": "Miltiadis TENTOGLOU (GRE) – 8.35m"
+    },
+    {
+      "date": "2026-09-12",
+      "name": "Croatian Cup And Team's Championships for Clubs, Sports Park Mladost, Zagreb (CRO)",
+      "category": "C",
+      "best_mark": 7.71,
+      "marks_over_8m": 0,
+      "winner": "Filip PRAVDICA (CRO) – 7.71m"
+    },
+    {
+      "date": "2026-09-10",
+      "name": "Indian Athletics Final Series 2026, Jawaharlal Nehru Stadium, New Delhi",
+      "category": "F",
+      "best_mark": 8.01,
+      "marks_over_8m": 1,
+      "winner": "Mohd. Atta SAZID (IND) – 8.01m"
+    },
+    {
+      "date": "2026-09-08",
+      "name": "Maloyan Brothers Memorial 2026, City stadium, Kapan",
+      "category": "F",
+      "best_mark": 8.11,
+      "marks_over_8m": 1,
+      "winner": "Vladyslav MAZUR (UKR) – 8.11m"
+    },
+    {
+      "date": "2026-09-08",
+      "name": "Dinamo Zrinjevac - International Athletics Meeting, Sports Park Mladost, Zagreb (CRO)",
+      "category": "C",
+      "best_mark": 7.78,
+      "marks_over_8m": 0,
+      "winner": "Roko FARKAŠ (CRO) – 7.78m"
+    },
+    {
+      "date": "2026-09-05",
+      "name": "Oman Athletics Grand Prix 2026, Sultan Qaboos Sports Complex, Muscat",
+      "category": "C",
+      "best_mark": 7.95,
+      "marks_over_8m": 0,
+      "winner": "Buli MELAKU (ETH) – 7.95m"
+    },
+    {
+      "date": "2026-09-05",
+      "name": "95th Japan Inter-University Athletics Championships 2026, International Stadium, Yokohama",
+      "category": "E",
+      "best_mark": 7.91,
+      "marks_over_8m": 0,
+      "winner": "Yukiya ONISHI (JPN) – 7.91m"
+    },
+    {
+      "date": "2026-09-04",
+      "name": "Allianz Memorial van Damme 2026, Boudewijnstadion, Bruxelles",
+      "category": "GW",
+      "best_mark": 8.46,
+      "marks_over_8m": 3,
+      "winner": "Tajay GAYLE (JAM) – 8.46m"
+    },
+    {
+      "date": "2026-09-02",
+      "name": "Serbia Athletics Meeting, Atletski stadion, Smederevo (SRB)",
+      "category": "C",
+      "best_mark": 7.82,
+      "marks_over_8m": 0,
+      "winner": "Isaac GRIMES (USA) – 7.82m"
+    }
+  ],
+  "upcoming_meetings": [
+    {
+      "date": "2026-12-05",
+      "displayDate": "05. DEZ 2026",
+      "name": "Visit Winston-Salem College Kickoff",
+      "city": "NC",
+      "country": "USA",
+      "category": "D",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": true
+    },
+    {
+      "date": "2026-12-12",
+      "displayDate": "12. DEZ 2026",
+      "name": "Jahresabschlusssportfest Dresdner SC 1898",
+      "city": "Dresden",
+      "country": "GER",
+      "category": "F",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": false
+    },
+    {
+      "date": "2026-12-13",
+      "displayDate": "13. DEZ 2026",
+      "name": "Adventscup",
+      "city": "Dortmund",
+      "country": "GER",
+      "category": "F",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": true
+    },
+    {
+      "date": "2026-12-19",
+      "displayDate": "19. DEZ 2026",
+      "name": "Xmas-Cup",
+      "city": "Dortmund",
+      "country": "GER",
+      "category": "F",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": true
+    },
+    {
+      "date": "2027-01-16",
+      "displayDate": "16. JAN 2027",
+      "name": "Indoor Jump'n'Run",
+      "city": "Dortmund",
+      "country": "GER",
+      "category": "F",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": true
+    },
+    {
+      "date": "2027-01-17",
+      "displayDate": "17. JAN 2027",
+      "name": "CMCM Luxembourg Indoor Meeting",
+      "city": "Luxembourg",
+      "country": "LUX",
+      "category": "B",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": false
+    },
+    {
+      "date": "2027-01-19",
+      "displayDate": "19. JAN 2027",
+      "name": "Aarhus SPRINT’n’JUMP",
+      "city": "Århus",
+      "country": "DEN",
+      "category": "C",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": true
+    },
+    {
+      "date": "2027-01-22",
+      "displayDate": "22. JAN 2027",
+      "name": "Meeting International de Nantes",
+      "city": "Nantes",
+      "country": "FRA",
+      "category": "C",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": false
+    },
+    {
+      "date": "2027-01-23",
+      "displayDate": "23. JAN 2027",
+      "name": "28. Internationales Leichtathletik Hallenmeeting",
+      "city": "Chemnitz",
+      "country": "GER",
+      "category": "D",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": false
+    },
+    {
+      "date": "2027-01-23",
+      "displayDate": "23. JAN 2027",
+      "name": "VI Memorial Alessio Giovannini",
+      "city": "Ancona",
+      "country": "ITA",
+      "category": "D",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": true
+    },
+    {
+      "date": "2027-01-26",
+      "displayDate": "26. JAN 2027",
+      "name": "Tampere Indoor Meeting",
+      "city": "Tampere",
+      "country": "FIN",
+      "category": "C",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": false
+    },
+    {
+      "date": "2027-01-27",
+      "displayDate": "27. JAN 2027",
+      "name": "Belgrade Indoor Meeting",
+      "city": "Beograd",
+      "country": "SRB",
+      "category": "A",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": true
+    }
+  ]
+}
