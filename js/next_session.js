@@ -1386,7 +1386,7 @@ const NextSessionModule = (() => {
             <span>DLV BIOMECHANIK-VERGLEICH (LUKA VS. SIMON EHAMMER 8.40m EFF.) & 1080 SPRINT-DATENBANK</span>
           </h3>
           <p class="text-[11px] text-slate-400 font-mono mt-0.5">
-            Direkter Parameter-Abgleich mit Simon Ehammer (07.05.2022 Ratingen • 8.30m / 8.40m eff.) + Alle 68 DLV-PDFs & 87 Läufe am 1080 Sprint
+            Direkter Parameter-Abgleich mit Simon Ehammer (07.05.2022 Ratingen • 8.30m / 8.40m eff.) + Alle 68 DLV-PDFs & ${bundle.runs_1080.length} Läufe am 1080 Sprint
           </p>
         </div>
 
