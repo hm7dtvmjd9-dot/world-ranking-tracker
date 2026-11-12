@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-11T10:23:42.388096",
+  "generated_at": "2026-11-12T18:07:32.268156",
   "whoop_supplements": {
     "by_supplement": {
       "AG1": {
@@ -9073,180 +9073,180 @@
         "category": "Supplements",
         "lag": "Tag +1",
         "n_yes": 10,
-        "n_no": 68,
+        "n_no": 70,
         "mean_yes": 74.5,
-        "mean_no": 65.5,
-        "delta_recovery_pct": 8.96
+        "mean_no": 65.8,
+        "delta_recovery_pct": 8.74
       },
       {
         "factor": "🧬 Kollagen",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 5,
-        "n_no": 73,
-        "mean_yes": 74.0,
-        "mean_no": 66.2,
-        "delta_recovery_pct": 7.81
+        "n_yes": 6,
+        "n_no": 74,
+        "mean_yes": 72.8,
+        "mean_no": 66.4,
+        "delta_recovery_pct": 6.47
       },
       {
         "factor": "💤 Schlafmaske",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 59,
+        "n_yes": 61,
         "n_no": 34,
-        "mean_yes": 69.4,
+        "mean_yes": 69.6,
         "mean_no": 63.7,
-        "delta_recovery_pct": 5.73
+        "delta_recovery_pct": 5.85
       },
       {
         "factor": "💊 Zink",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 66,
+        "n_yes": 68,
         "n_no": 12,
-        "mean_yes": 67.3,
+        "mean_yes": 67.5,
         "mean_no": 63.4,
-        "delta_recovery_pct": 3.87
+        "delta_recovery_pct": 4.04
       },
       {
         "factor": "💊 Magnesium",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 61,
+        "n_yes": 63,
         "n_no": 17,
-        "mean_yes": 67.3,
+        "mean_yes": 67.5,
         "mean_no": 64.5,
-        "delta_recovery_pct": 2.84
+        "delta_recovery_pct": 3.02
       },
       {
         "factor": "🧊 Blackroll",
         "category": "Regeneration",
         "lag": "Tag +1",
-        "n_yes": 39,
-        "n_no": 49,
+        "n_yes": 40,
+        "n_no": 50,
         "mean_yes": 68.4,
-        "mean_no": 65.9,
-        "delta_recovery_pct": 2.53
+        "mean_no": 66.1,
+        "delta_recovery_pct": 2.23
       },
       {
         "factor": "💊 Vitamin D",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 65,
+        "n_yes": 67,
         "n_no": 13,
-        "mean_yes": 66.9,
+        "mean_yes": 67.1,
         "mean_no": 65.6,
-        "delta_recovery_pct": 1.29
+        "delta_recovery_pct": 1.47
       },
       {
         "factor": "🧊 Dehnen",
         "category": "Regeneration",
         "lag": "Tag +1",
         "n_yes": 26,
-        "n_no": 62,
+        "n_no": 64,
         "mean_yes": 67.5,
-        "mean_no": 66.8,
-        "delta_recovery_pct": 0.71
+        "mean_no": 67.0,
+        "delta_recovery_pct": 0.52
       },
       {
         "factor": "💤 Gelesen",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 39,
-        "n_no": 54,
+        "n_yes": 40,
+        "n_no": 55,
         "mean_yes": 67.7,
-        "mean_no": 67.1,
-        "delta_recovery_pct": 0.6
+        "mean_no": 67.3,
+        "delta_recovery_pct": 0.37
       },
       {
         "factor": "⚠️ Anderes Bett / Reise",
         "category": "Schlaf",
         "lag": "Tag 0",
         "n_yes": 42,
-        "n_no": 51,
+        "n_no": 53,
         "mean_yes": 67.3,
-        "mean_no": 67.4,
-        "delta_recovery_pct": -0.11
+        "mean_no": 67.6,
+        "delta_recovery_pct": -0.32
       },
       {
         "factor": "💤 Bett geteilt",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 50,
+        "n_yes": 52,
         "n_no": 43,
-        "mean_yes": 66.8,
+        "mean_yes": 67.1,
         "mean_no": 67.9,
-        "delta_recovery_pct": -1.09
+        "delta_recovery_pct": -0.85
       },
       {
         "factor": "💊 Kreatin",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 51,
+        "n_yes": 53,
         "n_no": 27,
-        "mean_yes": 66.3,
+        "mean_yes": 66.5,
         "mean_no": 67.5,
-        "delta_recovery_pct": -1.26
+        "delta_recovery_pct": -1.01
       },
       {
         "factor": "💊 Omega-3",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 51,
+        "n_yes": 53,
         "n_no": 27,
-        "mean_yes": 66.3,
+        "mean_yes": 66.5,
         "mean_no": 67.5,
-        "delta_recovery_pct": -1.26
+        "delta_recovery_pct": -1.01
       },
       {
         "factor": "⚠️ Schlaf-Unterbrechung",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 47,
-        "n_no": 46,
+        "n_yes": 48,
+        "n_no": 47,
         "mean_yes": 66.6,
-        "mean_no": 68.1,
-        "delta_recovery_pct": -1.47
+        "mean_no": 68.3,
+        "delta_recovery_pct": -1.69
       },
       {
         "factor": "☕ Koffein",
         "category": "Supplements",
         "lag": "Tag +1",
         "n_yes": 23,
-        "n_no": 55,
+        "n_no": 57,
         "mean_yes": 64.4,
-        "mean_no": 67.7,
-        "delta_recovery_pct": -3.26
+        "mean_no": 67.8,
+        "delta_recovery_pct": -3.45
       },
       {
         "factor": "⚠️ Late Meal (Spät gegessen)",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 38,
-        "n_no": 55,
+        "n_yes": 39,
+        "n_no": 56,
         "mean_yes": 65.2,
-        "mean_no": 68.8,
-        "delta_recovery_pct": -3.65
+        "mean_no": 69.0,
+        "delta_recovery_pct": -3.79
       },
       {
         "factor": "💤 Hot-Shower",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 33,
-        "n_no": 60,
-        "mean_yes": 64.5,
+        "n_yes": 34,
+        "n_no": 61,
+        "mean_yes": 65.0,
         "mean_no": 68.9,
-        "delta_recovery_pct": -4.34
+        "delta_recovery_pct": -3.88
       },
       {
         "factor": "🧊 Spaziergang / Outdoor",
         "category": "Regeneration",
         "lag": "Tag +1",
-        "n_yes": 75,
-        "n_no": 13,
-        "mean_yes": 66.2,
-        "mean_no": 71.4,
-        "delta_recovery_pct": -5.14
+        "n_yes": 76,
+        "n_no": 14,
+        "mean_yes": 66.4,
+        "mean_no": 71.1,
+        "delta_recovery_pct": -4.66
       }
     ],
     "all_time_drivers": [
@@ -9254,181 +9254,181 @@
         "factor": "💊 Kreatin",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 602,
-        "n_no": 258,
-        "mean_yes": 70.8,
-        "mean_no": 65.4,
-        "delta_recovery_pct": 5.45
-      },
-      {
-        "factor": "🧬 Kollagen",
-        "category": "Supplements",
-        "lag": "Tag +1",
-        "n_yes": 5,
-        "n_no": 855,
-        "mean_yes": 74.0,
-        "mean_no": 69.1,
-        "delta_recovery_pct": 4.85
+        "n_yes": 606,
+        "n_no": 260,
+        "mean_yes": 70.9,
+        "mean_no": 65.5,
+        "delta_recovery_pct": 5.34
       },
       {
         "factor": "💤 Bett geteilt",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 679,
+        "n_yes": 685,
         "n_no": 288,
         "mean_yes": 70.5,
         "mean_no": 65.7,
-        "delta_recovery_pct": 4.72
+        "delta_recovery_pct": 4.8
       },
       {
         "factor": "💊 Magnesium",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 604,
-        "n_no": 256,
+        "n_yes": 608,
+        "n_no": 258,
         "mean_yes": 70.4,
-        "mean_no": 66.4,
-        "delta_recovery_pct": 4.02
+        "mean_no": 66.5,
+        "delta_recovery_pct": 3.92
+      },
+      {
+        "factor": "🧬 Kollagen",
+        "category": "Supplements",
+        "lag": "Tag +1",
+        "n_yes": 6,
+        "n_no": 860,
+        "mean_yes": 72.8,
+        "mean_no": 69.2,
+        "delta_recovery_pct": 3.61
       },
       {
         "factor": "💤 Gelesen",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 255,
-        "n_no": 712,
+        "n_yes": 256,
+        "n_no": 717,
         "mean_yes": 71.4,
-        "mean_no": 68.2,
-        "delta_recovery_pct": 3.19
+        "mean_no": 68.3,
+        "delta_recovery_pct": 3.08
       },
       {
         "factor": "🧊 Blackroll",
         "category": "Regeneration",
         "lag": "Tag +1",
-        "n_yes": 287,
-        "n_no": 675,
+        "n_yes": 288,
+        "n_no": 680,
         "mean_yes": 71.3,
-        "mean_no": 68.2,
-        "delta_recovery_pct": 3.08
+        "mean_no": 68.3,
+        "delta_recovery_pct": 2.96
       },
       {
         "factor": "💊 Vitamin D",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 561,
-        "n_no": 299,
-        "mean_yes": 70.1,
+        "n_yes": 566,
+        "n_no": 300,
+        "mean_yes": 70.2,
         "mean_no": 67.4,
-        "delta_recovery_pct": 2.74
-      },
-      {
-        "factor": "💊 Zink",
-        "category": "Supplements",
-        "lag": "Tag +1",
-        "n_yes": 375,
-        "n_no": 485,
-        "mean_yes": 70.1,
-        "mean_no": 68.5,
-        "delta_recovery_pct": 1.66
+        "delta_recovery_pct": 2.78
       },
       {
         "factor": "💊 Omega-3",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 562,
-        "n_no": 298,
-        "mean_yes": 69.7,
+        "n_yes": 567,
+        "n_no": 299,
+        "mean_yes": 69.8,
         "mean_no": 68.2,
-        "delta_recovery_pct": 1.51
+        "delta_recovery_pct": 1.56
       },
       {
-        "factor": "🧊 Spaziergang / Outdoor",
-        "category": "Regeneration",
+        "factor": "💊 Zink",
+        "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 787,
-        "n_no": 175,
-        "mean_yes": 69.3,
-        "mean_no": 68.2,
-        "delta_recovery_pct": 1.1
+        "n_yes": 377,
+        "n_no": 489,
+        "mean_yes": 70.1,
+        "mean_no": 68.6,
+        "delta_recovery_pct": 1.56
       },
       {
         "factor": "💤 Schlafmaske",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 420,
-        "n_no": 547,
+        "n_yes": 424,
+        "n_no": 549,
         "mean_yes": 69.7,
         "mean_no": 68.6,
-        "delta_recovery_pct": 1.09
+        "delta_recovery_pct": 1.11
       },
       {
-        "factor": "💤 Hot-Shower",
-        "category": "Schlaf",
-        "lag": "Tag 0",
-        "n_yes": 262,
-        "n_no": 705,
-        "mean_yes": 69.0,
-        "mean_no": 69.1,
-        "delta_recovery_pct": -0.04
+        "factor": "🧊 Spaziergang / Outdoor",
+        "category": "Regeneration",
+        "lag": "Tag +1",
+        "n_yes": 794,
+        "n_no": 174,
+        "mean_yes": 69.4,
+        "mean_no": 68.3,
+        "delta_recovery_pct": 1.06
       },
       {
         "factor": "🧊 Dehnen",
         "category": "Regeneration",
         "lag": "Tag +1",
-        "n_yes": 455,
-        "n_no": 507,
-        "mean_yes": 69.0,
+        "n_yes": 459,
+        "n_no": 509,
+        "mean_yes": 69.2,
         "mean_no": 69.2,
-        "delta_recovery_pct": -0.13
+        "delta_recovery_pct": -0.03
+      },
+      {
+        "factor": "💤 Hot-Shower",
+        "category": "Schlaf",
+        "lag": "Tag 0",
+        "n_yes": 263,
+        "n_no": 710,
+        "mean_yes": 69.1,
+        "mean_no": 69.1,
+        "delta_recovery_pct": -0.08
       },
       {
         "factor": "☕ Koffein",
         "category": "Supplements",
         "lag": "Tag +1",
         "n_yes": 318,
-        "n_no": 542,
+        "n_no": 548,
         "mean_yes": 68.5,
-        "mean_no": 69.6,
-        "delta_recovery_pct": -1.03
+        "mean_no": 69.7,
+        "delta_recovery_pct": -1.14
       },
       {
         "factor": "⚠️ Schlaf-Unterbrechung",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 249,
-        "n_no": 718,
+        "n_yes": 250,
+        "n_no": 723,
         "mean_yes": 67.5,
-        "mean_no": 69.6,
-        "delta_recovery_pct": -2.06
+        "mean_no": 69.7,
+        "delta_recovery_pct": -2.15
+      },
+      {
+        "factor": "⚠️ Late Meal (Spät gegessen)",
+        "category": "Schlaf",
+        "lag": "Tag 0",
+        "n_yes": 241,
+        "n_no": 732,
+        "mean_yes": 67.0,
+        "mean_no": 69.8,
+        "delta_recovery_pct": -2.8
       },
       {
         "factor": "⚠️ Anderes Bett / Reise",
         "category": "Schlaf",
         "lag": "Tag 0",
         "n_yes": 289,
-        "n_no": 678,
+        "n_no": 684,
         "mean_yes": 67.0,
-        "mean_no": 69.9,
-        "delta_recovery_pct": -2.91
-      },
-      {
-        "factor": "⚠️ Late Meal (Spät gegessen)",
-        "category": "Schlaf",
-        "lag": "Tag 0",
-        "n_yes": 228,
-        "n_no": 739,
-        "mean_yes": 66.8,
-        "mean_no": 69.7,
-        "delta_recovery_pct": -2.95
+        "mean_no": 70.0,
+        "delta_recovery_pct": -3.0
       },
       {
         "factor": "💊 Elektrolyte",
         "category": "Supplements",
         "lag": "Tag +1",
         "n_yes": 127,
-        "n_no": 733,
+        "n_no": 739,
         "mean_yes": 66.3,
-        "mean_no": 69.7,
-        "delta_recovery_pct": -3.38
+        "mean_no": 69.8,
+        "delta_recovery_pct": -3.46
       }
     ],
     "monthly_summary": [
@@ -9518,15 +9518,15 @@
       },
       {
         "month": "2026-11",
-        "days_logged": 10,
+        "days_logged": 12,
         "recovery_pct": 58.0,
         "hrv_ms": 75.0,
         "rhr_bpm": 47.0,
         "sleep_pct": 100.0,
         "strain": null,
-        "kcal": 2675.0,
-        "protein_g": 133.0,
-        "carbs_g": 321.3,
+        "kcal": 2623.0,
+        "protein_g": 134.4,
+        "carbs_g": 309.4,
         "expenditure_kcal": null,
         "bw_kg": 83.53
       }
