@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-12T18:07:32.268156",
+  "generated_at": "2026-11-13T18:49:14.011893",
   "whoop_supplements": {
     "by_supplement": {
       "AG1": {
@@ -3250,15 +3250,13 @@
         ]
       },
       "Vitamin C": {
-        "count": 4,
+        "count": 3,
         "first_date": "2026-04-08",
-        "last_date": "2026-05-06",
+        "last_date": "2026-04-10",
         "raw_names": [
-          "Fruit Drink or Punch, Fortified With Vitamin C",
           "Iron Supplement With Vitamin C"
         ],
         "dates": [
-          "2026-05-06",
           "2026-04-10",
           "2026-04-09",
           "2026-04-08"
@@ -3465,15 +3463,26 @@
         ]
       },
       "Electrolyte": {
-        "count": 2,
-        "first_date": "2026-01-18",
-        "last_date": "2026-04-15",
+        "count": 10,
+        "first_date": "2025-09-09",
+        "last_date": "2026-07-24",
         "raw_names": [
-          "Ensure Rapid Hydration Electrolyte Powder - Dry Mix, All Flavors"
+          "Ensure Rapid Hydration Electrolyte Powder - Dry Mix, All Flavors",
+          "Isolight - Grapefruit-Citrus",
+          "Lidl Vitamin Wasser Regain",
+          "Vitamin Water Tropical Citrus"
         ],
         "dates": [
+          "2026-07-24",
+          "2026-06-25",
+          "2026-06-19",
           "2026-04-15",
-          "2026-01-18"
+          "2026-04-07",
+          "2026-02-11",
+          "2026-02-05",
+          "2026-01-18",
+          "2025-12-18",
+          "2025-09-09"
         ]
       },
       "Kurkuma": {
@@ -3484,11 +3493,30 @@
         "dates": []
       },
       "Huel": {
-        "count": 0,
-        "first_date": null,
-        "last_date": null,
-        "raw_names": [],
-        "dates": []
+        "count": 14,
+        "first_date": "2025-09-09",
+        "last_date": "2026-08-17",
+        "raw_names": [
+          "Chocolate nutritionally complete food",
+          "Food in a Bottle",
+          "Food in a Bottle - Vanilla Dream"
+        ],
+        "dates": [
+          "2026-08-17",
+          "2026-07-21",
+          "2026-07-05",
+          "2026-07-03",
+          "2026-06-25",
+          "2026-06-16",
+          "2026-06-15",
+          "2026-06-03",
+          "2026-05-30",
+          "2026-05-29",
+          "2026-05-26",
+          "2026-05-24",
+          "2026-02-27",
+          "2025-09-09"
+        ]
       },
       "Daily Greens": {
         "count": 0,
@@ -3496,6 +3524,289 @@
         "last_date": null,
         "raw_names": [],
         "dates": []
+      },
+      "Pro Darm / Probiotics": {
+        "count": 40,
+        "first_date": "2026-03-10",
+        "last_date": "2026-07-16",
+        "raw_names": [
+          "Actimel",
+          "Pro Darm"
+        ],
+        "dates": [
+          "2026-07-16",
+          "2026-07-15",
+          "2026-07-14",
+          "2026-06-17",
+          "2026-06-10",
+          "2026-06-09",
+          "2026-06-02",
+          "2026-05-31",
+          "2026-05-29",
+          "2026-05-28",
+          "2026-05-27",
+          "2026-05-26",
+          "2026-05-24",
+          "2026-05-22",
+          "2026-05-20",
+          "2026-05-19",
+          "2026-05-18",
+          "2026-05-16",
+          "2026-05-15",
+          "2026-05-13",
+          "2026-04-23",
+          "2026-04-22",
+          "2026-04-16",
+          "2026-04-15",
+          "2026-04-14",
+          "2026-04-13",
+          "2026-04-11",
+          "2026-04-10",
+          "2026-04-08",
+          "2026-04-07",
+          "2026-04-05",
+          "2026-04-04",
+          "2026-04-01",
+          "2026-03-31",
+          "2026-03-30",
+          "2026-03-16",
+          "2026-03-15",
+          "2026-03-14",
+          "2026-03-13",
+          "2026-03-10"
+        ]
+      },
+      "Multivitamin A-Z": {
+        "count": 13,
+        "first_date": "2025-11-01",
+        "last_date": "2025-12-20",
+        "raw_names": [
+          "Multivitamin A-Z"
+        ],
+        "dates": [
+          "2025-12-20",
+          "2025-12-19",
+          "2025-12-18",
+          "2025-12-17",
+          "2025-12-16",
+          "2025-12-15",
+          "2025-12-14",
+          "2025-12-13",
+          "2025-12-11",
+          "2025-12-10",
+          "2025-12-09",
+          "2025-12-06",
+          "2025-11-01"
+        ]
+      },
+      "BCAA": {
+        "count": 12,
+        "first_date": "2026-01-12",
+        "last_date": "2026-08-06",
+        "raw_names": [
+          "Bcaa Tropical",
+          "Orthomol Performance BCAA Drink"
+        ],
+        "dates": [
+          "2026-08-06",
+          "2026-05-11",
+          "2026-05-10",
+          "2026-04-18",
+          "2026-04-16",
+          "2026-04-15",
+          "2026-04-13",
+          "2026-04-07",
+          "2026-03-14",
+          "2026-02-26",
+          "2026-02-25",
+          "2026-01-12"
+        ]
+      },
+      "Protein Powder (Vegan/Whey)": {
+        "count": 100,
+        "first_date": "2025-12-15",
+        "last_date": "2026-10-19",
+        "raw_names": [
+          "Clean Whey Protein Powder - Dry Mix, Vanilla Bean",
+          "Clear Vegan Protein",
+          "Iso Whey Clear Lemon Berry Blizzard Powder Mix",
+          "Iso-Whey Hardcore",
+          "Vanilla Vegan Protein Powder",
+          "Whey Protein Powder Isolate"
+        ],
+        "dates": [
+          "2026-10-19",
+          "2026-10-08",
+          "2026-10-05",
+          "2026-10-02",
+          "2026-09-28",
+          "2026-07-24",
+          "2026-07-23",
+          "2026-07-22",
+          "2026-06-19",
+          "2026-06-17",
+          "2026-06-12",
+          "2026-06-11",
+          "2026-06-10",
+          "2026-06-09",
+          "2026-06-02",
+          "2026-05-31",
+          "2026-05-28",
+          "2026-05-27",
+          "2026-05-22",
+          "2026-05-20",
+          "2026-05-19",
+          "2026-05-18",
+          "2026-05-17",
+          "2026-05-16",
+          "2026-05-15",
+          "2026-05-13",
+          "2026-05-11",
+          "2026-05-10",
+          "2026-04-27",
+          "2026-04-24",
+          "2026-04-23",
+          "2026-04-22",
+          "2026-04-16",
+          "2026-04-15",
+          "2026-04-14",
+          "2026-04-13",
+          "2026-04-11",
+          "2026-04-10",
+          "2026-04-08",
+          "2026-04-07",
+          "2026-04-05",
+          "2026-04-04",
+          "2026-04-01",
+          "2026-03-31",
+          "2026-03-30",
+          "2026-03-16",
+          "2026-03-15",
+          "2026-03-14",
+          "2026-03-13",
+          "2026-03-10",
+          "2026-03-09",
+          "2026-03-08",
+          "2026-03-07",
+          "2026-03-06",
+          "2026-03-05",
+          "2026-02-27",
+          "2026-02-26",
+          "2026-02-25",
+          "2026-02-24",
+          "2026-02-23",
+          "2026-02-21",
+          "2026-02-20",
+          "2026-02-19",
+          "2026-02-18",
+          "2026-02-17",
+          "2026-02-16",
+          "2026-02-15",
+          "2026-02-14",
+          "2026-02-13",
+          "2026-02-12",
+          "2026-02-11",
+          "2026-02-10",
+          "2026-01-28",
+          "2026-01-26",
+          "2026-01-24",
+          "2026-01-22",
+          "2026-01-19",
+          "2026-01-18",
+          "2026-01-17",
+          "2026-01-16",
+          "2026-01-13",
+          "2026-01-12",
+          "2026-01-11",
+          "2026-01-10",
+          "2026-01-08",
+          "2026-01-06",
+          "2026-01-05",
+          "2026-01-02",
+          "2026-01-01",
+          "2025-12-31",
+          "2025-12-29",
+          "2025-12-28",
+          "2025-12-27",
+          "2025-12-26",
+          "2025-12-20",
+          "2025-12-19",
+          "2025-12-18",
+          "2025-12-17",
+          "2025-12-16",
+          "2025-12-15"
+        ]
+      },
+      "PowerGel": {
+        "count": 9,
+        "first_date": "2025-09-08",
+        "last_date": "2026-04-10",
+        "raw_names": [
+          "Powergel Shots Cola Flavour"
+        ],
+        "dates": [
+          "2026-04-10",
+          "2026-03-06",
+          "2026-02-12",
+          "2026-01-28",
+          "2026-01-20",
+          "2025-12-15",
+          "2025-12-02",
+          "2025-10-13",
+          "2025-09-08"
+        ]
+      },
+      "Weizenkeime (Spermidin)": {
+        "count": 42,
+        "first_date": "2026-03-10",
+        "last_date": "2026-06-19",
+        "raw_names": [
+          "wheat germ"
+        ],
+        "dates": [
+          "2026-06-19",
+          "2026-06-17",
+          "2026-06-12",
+          "2026-06-11",
+          "2026-06-10",
+          "2026-06-09",
+          "2026-06-02",
+          "2026-05-31",
+          "2026-05-28",
+          "2026-05-27",
+          "2026-05-22",
+          "2026-05-20",
+          "2026-05-19",
+          "2026-05-18",
+          "2026-05-17",
+          "2026-05-16",
+          "2026-05-15",
+          "2026-05-13",
+          "2026-05-11",
+          "2026-05-10",
+          "2026-04-27",
+          "2026-04-24",
+          "2026-04-23",
+          "2026-04-22",
+          "2026-04-16",
+          "2026-04-15",
+          "2026-04-14",
+          "2026-04-13",
+          "2026-04-11",
+          "2026-04-10",
+          "2026-04-08",
+          "2026-04-07",
+          "2026-04-05",
+          "2026-04-04",
+          "2026-04-01",
+          "2026-03-31",
+          "2026-03-30",
+          "2026-03-16",
+          "2026-03-15",
+          "2026-03-14",
+          "2026-03-13",
+          "2026-03-10"
+        ]
       }
     },
     "daily_rows": [
@@ -3523,7 +3834,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-30",
@@ -3549,7 +3866,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-29",
@@ -3575,7 +3898,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-28",
@@ -3601,7 +3930,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-27",
@@ -3627,7 +3962,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-26",
@@ -3653,7 +3994,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-25",
@@ -3679,7 +4026,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-24",
@@ -3705,7 +4058,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-22",
@@ -3731,7 +4090,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-21",
@@ -3757,7 +4122,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-20",
@@ -3783,11 +4154,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-19",
-        "Supplements_List": "Prepare, Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Prepare, Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -3809,7 +4186,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-18",
@@ -3835,7 +4218,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-16",
@@ -3861,7 +4250,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-15",
@@ -3887,7 +4282,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-13",
@@ -3913,7 +4314,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-12",
@@ -3939,7 +4346,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-10",
@@ -3965,11 +4378,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-08",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -3991,11 +4410,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-05",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -4017,7 +4442,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-03",
@@ -4043,11 +4474,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-02",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -4069,7 +4506,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-10-01",
@@ -4095,7 +4538,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-09-29",
@@ -4121,11 +4570,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-09-28",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -4147,7 +4602,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-09-25",
@@ -4173,7 +4634,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-09-24",
@@ -4199,7 +4666,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-09-23",
@@ -4225,7 +4698,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-09-22",
@@ -4251,7 +4730,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-09-21",
@@ -4277,7 +4762,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-09-20",
@@ -4303,7 +4794,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-09-19",
@@ -4329,7 +4826,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-08-18",
@@ -4355,11 +4858,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-08-17",
-        "Supplements_List": "Zink, AG1 D3 + K2, Magnesium, B12",
+        "Supplements_List": "Zink, AG1 D3 + K2, Magnesium, B12, Huel",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -4380,12 +4889,18 @@
         "Kreatin": 0,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-08-06",
-        "Supplements_List": "Perform",
+        "Supplements_List": "Perform, BCAA",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -4407,11 +4922,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-24",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Electrolyte, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -4430,14 +4951,20 @@
         "Vitamin C": 0,
         "Iron": 0,
         "Kreatin": 1,
-        "Electrolyte": 0,
+        "Electrolyte": 1,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-23",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -4459,11 +4986,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-22",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -4485,11 +5018,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-21",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Huel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -4510,8 +5049,14 @@
         "Kreatin": 1,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-20",
@@ -4537,7 +5082,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-19",
@@ -4563,7 +5114,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-18",
@@ -4589,7 +5146,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-17",
@@ -4615,11 +5178,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-16",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Pro Darm / Probiotics",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -4641,11 +5210,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-15",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Pro Darm / Probiotics",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -4667,11 +5242,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-14",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Pro Darm / Probiotics",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -4693,7 +5274,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-13",
@@ -4719,11 +5306,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-05",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Huel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -4744,12 +5337,18 @@
         "Kreatin": 1,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-07-03",
-        "Supplements_List": "Orthomol Protein",
+        "Supplements_List": "Orthomol Protein, Huel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -4770,8 +5369,14 @@
         "Kreatin": 0,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-06-27",
@@ -4797,7 +5402,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-06-26",
@@ -4823,11 +5434,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-06-25",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Electrolyte, Huel",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -4846,14 +5463,20 @@
         "Vitamin C": 0,
         "Iron": 0,
         "Kreatin": 1,
-        "Electrolyte": 0,
+        "Electrolyte": 1,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-06-19",
-        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Electrolyte, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -4872,10 +5495,16 @@
         "Vitamin C": 0,
         "Iron": 0,
         "Kreatin": 1,
-        "Electrolyte": 0,
+        "Electrolyte": 1,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-06-18",
@@ -4901,11 +5530,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-06-17",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -4927,11 +5562,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-06-16",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Huel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -4952,12 +5593,18 @@
         "Kreatin": 1,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-06-15",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Huel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -4978,12 +5625,18 @@
         "Kreatin": 1,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-06-12",
-        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -5005,11 +5658,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-06-11",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -5031,11 +5690,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-06-10",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5057,11 +5722,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-06-09",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5083,7 +5754,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-06-04",
@@ -5109,11 +5786,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-06-03",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Huel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5134,12 +5817,18 @@
         "Kreatin": 1,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-06-02",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5161,11 +5850,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-31",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5187,11 +5882,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-30",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Huel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5212,12 +5913,18 @@
         "Kreatin": 1,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-05-29",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Huel, Pro Darm / Probiotics",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -5238,12 +5945,18 @@
         "Kreatin": 1,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-05-28",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5265,11 +5978,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-27",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -5291,11 +6010,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-26",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Huel, Pro Darm / Probiotics",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5316,12 +6041,50 @@
         "Kreatin": 1,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
+      },
+      {
+        "Date": "2026-05-24",
+        "Supplements_List": "Huel, Pro Darm / Probiotics",
+        "Ecdysteron": 0,
+        "Orthomol Protein": 0,
+        "Perform": 0,
+        "Recover": 0,
+        "Prepare": 0,
+        "Collagen": 0,
+        "Omega-3": 0,
+        "Orthomol Sport": 0,
+        "Zink": 0,
+        "AG1 D3 + K2": 0,
+        "AG1": 0,
+        "Magnesium": 0,
+        "B12": 0,
+        "Ashwagandha": 0,
+        "Spirulina": 0,
+        "Vitamin C": 0,
+        "Iron": 0,
+        "Kreatin": 0,
+        "Electrolyte": 0,
+        "Kurkuma": 0,
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-05-22",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5343,11 +6106,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-20",
-        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 1,
@@ -5369,11 +6138,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-19",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5395,11 +6170,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-18",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -5421,11 +6202,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-17",
-        "Supplements_List": "Perform, Prepare, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Perform, Prepare, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -5447,11 +6234,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-16",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5473,11 +6266,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-15",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -5499,11 +6298,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-13",
-        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 1,
@@ -5525,11 +6330,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-11",
-        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, BCAA, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 1,
@@ -5551,11 +6362,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-10",
-        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, BCAA, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -5577,11 +6394,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-05-06",
-        "Supplements_List": "Ecdysteron, Omega-3, Orthomol Sport, AG1 D3 + K2, Vitamin C, Kreatin",
+        "Supplements_List": "Ecdysteron, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
         "Ecdysteron": 1,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -5597,13 +6420,19 @@
         "B12": 0,
         "Ashwagandha": 0,
         "Spirulina": 0,
-        "Vitamin C": 1,
+        "Vitamin C": 0,
         "Iron": 0,
         "Kreatin": 1,
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-05-05",
@@ -5629,7 +6458,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-05-04",
@@ -5655,7 +6490,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-05-03",
@@ -5681,7 +6522,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-05-02",
@@ -5707,7 +6554,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-05-01",
@@ -5733,7 +6586,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-04-30",
@@ -5759,7 +6618,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-04-29",
@@ -5785,7 +6650,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-04-28",
@@ -5811,11 +6682,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-04-27",
-        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -5837,7 +6714,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-26",
@@ -5863,7 +6746,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-04-25",
@@ -5889,11 +6778,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-04-24",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5915,11 +6810,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-23",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -5941,11 +6842,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-22",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -5967,11 +6874,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-18",
-        "Supplements_List": "Perform",
+        "Supplements_List": "Perform, BCAA",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -5993,11 +6906,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-04-16",
-        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Pro Darm / Probiotics, BCAA, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 1,
@@ -6019,11 +6938,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-15",
-        "Supplements_List": "Perform, Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin, Electrolyte",
+        "Supplements_List": "Perform, Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin, Electrolyte, Pro Darm / Probiotics, BCAA, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -6045,11 +6970,17 @@
         "Electrolyte": 1,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-14",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -6071,11 +7002,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-13",
-        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, BCAA, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 1,
@@ -6097,11 +7034,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-11",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -6123,11 +7066,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-10",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Vitamin C, Iron, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Vitamin C, Iron, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), PowerGel, Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6149,7 +7098,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 1,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-09",
@@ -6175,11 +7130,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-04-08",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Vitamin C, Iron, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Vitamin C, Iron, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6201,11 +7162,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-07",
-        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha",
+        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Electrolyte, Pro Darm / Probiotics, BCAA, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -6224,10 +7191,16 @@
         "Vitamin C": 0,
         "Iron": 0,
         "Kreatin": 0,
-        "Electrolyte": 0,
+        "Electrolyte": 1,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-06",
@@ -6253,11 +7226,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-04-05",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6279,11 +7258,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-04",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -6305,11 +7290,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-04-01",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6331,11 +7322,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-03-31",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6357,11 +7354,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-03-30",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -6383,7 +7386,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-03-29",
@@ -6409,7 +7418,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-03-28",
@@ -6435,7 +7450,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-03-27",
@@ -6461,7 +7482,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-03-26",
@@ -6487,11 +7514,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-03-16",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -6513,11 +7546,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-03-15",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6539,11 +7578,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-03-14",
-        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, BCAA, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -6565,11 +7610,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-03-13",
-        "Supplements_List": "Recover, Collagen, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Recover, Collagen, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6591,7 +7642,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-03-12",
@@ -6617,7 +7674,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-03-11",
@@ -6643,11 +7706,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-03-10",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Ashwagandha, Kreatin, Pro Darm / Probiotics, Protein Powder (Vegan/Whey), Weizenkeime (Spermidin)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6669,11 +7738,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 1,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 1
       },
       {
         "Date": "2026-03-09",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -6695,11 +7770,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-03-08",
-        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6721,11 +7802,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-03-07",
-        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6747,11 +7834,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-03-06",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey), PowerGel",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6773,11 +7866,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 1,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-03-05",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -6799,11 +7898,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-27",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Huel, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -6824,12 +7929,18 @@
         "Kreatin": 1,
         "Electrolyte": 0,
         "Kurkuma": 0,
-        "Huel": 0,
-        "Daily Greens": 0
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-26",
-        "Supplements_List": "Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin",
+        "Supplements_List": "Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin, BCAA, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -6851,11 +7962,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-25",
-        "Supplements_List": "Perform, Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Perform, Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, BCAA, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -6877,11 +7994,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-24",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6903,11 +8026,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-23",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -6929,11 +8058,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-21",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6955,11 +8090,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-20",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -6981,11 +8122,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-19",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -7007,11 +8154,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-18",
-        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 1,
@@ -7033,11 +8186,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-17",
-        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 1,
@@ -7059,11 +8218,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-16",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -7085,11 +8250,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-15",
-        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7111,11 +8282,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-14",
-        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7137,11 +8314,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-13",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7163,11 +8346,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-12",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin, Protein Powder (Vegan/Whey), PowerGel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -7189,11 +8378,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 1,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-11",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin, Electrolyte, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7212,14 +8407,52 @@
         "Vitamin C": 0,
         "Iron": 0,
         "Kreatin": 1,
+        "Electrolyte": 1,
+        "Kurkuma": 0,
+        "Huel": 0,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
+      },
+      {
+        "Date": "2026-02-10",
+        "Supplements_List": "Protein Powder (Vegan/Whey)",
+        "Ecdysteron": 0,
+        "Orthomol Protein": 0,
+        "Perform": 0,
+        "Recover": 0,
+        "Prepare": 0,
+        "Collagen": 0,
+        "Omega-3": 0,
+        "Orthomol Sport": 0,
+        "Zink": 0,
+        "AG1 D3 + K2": 0,
+        "AG1": 0,
+        "Magnesium": 0,
+        "B12": 0,
+        "Ashwagandha": 0,
+        "Spirulina": 0,
+        "Vitamin C": 0,
+        "Iron": 0,
+        "Kreatin": 0,
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-02-05",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Magnesium, B12, Kreatin, Electrolyte",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -7238,14 +8471,20 @@
         "Vitamin C": 0,
         "Iron": 0,
         "Kreatin": 1,
-        "Electrolyte": 0,
+        "Electrolyte": 1,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-28",
-        "Supplements_List": "Perform, Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Perform, Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Protein Powder (Vegan/Whey), PowerGel",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -7267,11 +8506,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 1,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-26",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -7293,11 +8538,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-24",
-        "Supplements_List": "Orthomol Protein, Prepare, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Orthomol Protein, Prepare, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -7319,7 +8570,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-23",
@@ -7345,11 +8602,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-22",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7371,7 +8634,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-21",
@@ -7397,11 +8666,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-20",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, PowerGel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -7423,11 +8698,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 1,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-19",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -7449,11 +8730,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-18",
-        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Electrolyte",
+        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Electrolyte, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -7475,11 +8762,17 @@
         "Electrolyte": 1,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-17",
-        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Orthomol Protein, Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 1,
@@ -7501,11 +8794,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-16",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7527,11 +8826,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-13",
-        "Supplements_List": "Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -7553,11 +8858,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-12",
-        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, BCAA, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7579,11 +8890,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 1,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-11",
-        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -7605,11 +8922,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-10",
-        "Supplements_List": "Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -7631,11 +8954,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-08",
-        "Supplements_List": "Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin",
+        "Supplements_List": "Perform, Omega-3, Orthomol Sport, AG1 D3 + K2, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -7657,7 +8986,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-07",
@@ -7683,11 +9018,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-06",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7709,11 +9050,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-05",
-        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Perform, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 1,
@@ -7735,11 +9082,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-02",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -7761,11 +9114,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2026-01-01",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7787,11 +9146,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-31",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7813,7 +9178,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-30",
@@ -7839,11 +9210,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-29",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Kreatin, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -7865,11 +9242,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-28",
-        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium",
+        "Supplements_List": "Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7891,11 +9274,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-27",
-        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2",
+        "Supplements_List": "Omega-3, Orthomol Sport, AG1 D3 + K2, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7917,11 +9306,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-26",
-        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Spirulina",
+        "Supplements_List": "Recover, Omega-3, Orthomol Sport, AG1 D3 + K2, Spirulina, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7943,11 +9338,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-20",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Multivitamin A-Z, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7969,11 +9370,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-19",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, Kreatin, Multivitamin A-Z, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -7995,11 +9402,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-18",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, Kreatin, Electrolyte, Multivitamin A-Z, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8018,14 +9431,20 @@
         "Vitamin C": 0,
         "Iron": 0,
         "Kreatin": 1,
-        "Electrolyte": 0,
+        "Electrolyte": 1,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-17",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Multivitamin A-Z, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8047,11 +9466,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-16",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, Kreatin, Multivitamin A-Z, Protein Powder (Vegan/Whey)",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8073,11 +9498,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-15",
-        "Supplements_List": "Ecdysteron, Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Ecdysteron, Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Multivitamin A-Z, Protein Powder (Vegan/Whey), PowerGel",
         "Ecdysteron": 1,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8099,11 +9530,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 1,
+        "PowerGel": 1,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-14",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Multivitamin A-Z",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8125,11 +9562,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-13",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Multivitamin A-Z",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8151,11 +9594,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-11",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Multivitamin A-Z",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8177,11 +9626,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-10",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Multivitamin A-Z",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8203,11 +9658,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-09",
-        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Omega-3, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, Multivitamin A-Z",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8229,7 +9690,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-08",
@@ -8255,11 +9722,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-06",
-        "Supplements_List": "Orthomol Protein, Omega-3, Zink, AG1 D3 + K2, Magnesium, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Zink, AG1 D3 + K2, Magnesium, Kreatin, Multivitamin A-Z",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -8281,7 +9754,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-05",
@@ -8307,7 +9786,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-04",
@@ -8333,7 +9818,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-03",
@@ -8359,11 +9850,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-12-02",
-        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin",
+        "Supplements_List": "Orthomol Protein, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, B12, Kreatin, PowerGel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -8385,7 +9882,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 1,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-11-29",
@@ -8411,7 +9914,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-11-03",
@@ -8437,11 +9946,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-11-01",
-        "Supplements_List": "Recover, Omega-3, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Recover, Omega-3, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, Multivitamin A-Z",
         "Ecdysteron": 0,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8463,7 +9978,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 1,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-19",
@@ -8489,7 +10010,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-18",
@@ -8515,7 +10042,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-17",
@@ -8541,7 +10074,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-16",
@@ -8567,7 +10106,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-15",
@@ -8593,7 +10138,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-14",
@@ -8619,11 +10170,17 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-13",
-        "Supplements_List": "Ecdysteron, Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin",
+        "Supplements_List": "Ecdysteron, Recover, Omega-3, Orthomol Sport, Zink, AG1 D3 + K2, Magnesium, Ashwagandha, Kreatin, PowerGel",
         "Ecdysteron": 1,
         "Orthomol Protein": 0,
         "Perform": 0,
@@ -8645,7 +10202,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 1,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-12",
@@ -8671,7 +10234,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-11",
@@ -8697,7 +10266,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-10",
@@ -8723,7 +10298,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-09",
@@ -8749,7 +10330,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-08",
@@ -8775,7 +10362,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-07",
@@ -8801,7 +10394,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-06",
@@ -8827,7 +10426,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-05",
@@ -8853,7 +10458,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-10-04",
@@ -8879,7 +10490,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-09-19",
@@ -8905,7 +10522,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-09-16",
@@ -8931,7 +10554,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-09-15",
@@ -8957,7 +10586,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-09-12",
@@ -8983,7 +10618,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-09-11",
@@ -9009,11 +10650,49 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
+      },
+      {
+        "Date": "2025-09-09",
+        "Supplements_List": "Electrolyte, Huel",
+        "Ecdysteron": 0,
+        "Orthomol Protein": 0,
+        "Perform": 0,
+        "Recover": 0,
+        "Prepare": 0,
+        "Collagen": 0,
+        "Omega-3": 0,
+        "Orthomol Sport": 0,
+        "Zink": 0,
+        "AG1 D3 + K2": 0,
+        "AG1": 0,
+        "Magnesium": 0,
+        "B12": 0,
+        "Ashwagandha": 0,
+        "Spirulina": 0,
+        "Vitamin C": 0,
+        "Iron": 0,
+        "Kreatin": 0,
+        "Electrolyte": 1,
+        "Kurkuma": 0,
+        "Huel": 1,
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-09-08",
-        "Supplements_List": "Orthomol Protein",
+        "Supplements_List": "Orthomol Protein, PowerGel",
         "Ecdysteron": 0,
         "Orthomol Protein": 1,
         "Perform": 0,
@@ -9035,7 +10714,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 1,
+        "Weizenkeime (Spermidin)": 0
       },
       {
         "Date": "2025-09-05",
@@ -9061,7 +10746,13 @@
         "Electrolyte": 0,
         "Kurkuma": 0,
         "Huel": 0,
-        "Daily Greens": 0
+        "Daily Greens": 0,
+        "Pro Darm / Probiotics": 0,
+        "Multivitamin A-Z": 0,
+        "BCAA": 0,
+        "Protein Powder (Vegan/Whey)": 0,
+        "PowerGel": 0,
+        "Weizenkeime (Spermidin)": 0
       }
     ]
   },
@@ -9073,180 +10764,180 @@
         "category": "Supplements",
         "lag": "Tag +1",
         "n_yes": 10,
-        "n_no": 70,
+        "n_no": 71,
         "mean_yes": 74.5,
-        "mean_no": 65.8,
-        "delta_recovery_pct": 8.74
-      },
-      {
-        "factor": "🧬 Kollagen",
-        "category": "Supplements",
-        "lag": "Tag +1",
-        "n_yes": 6,
-        "n_no": 74,
-        "mean_yes": 72.8,
-        "mean_no": 66.4,
-        "delta_recovery_pct": 6.47
+        "mean_no": 65.7,
+        "delta_recovery_pct": 8.78
       },
       {
         "factor": "💤 Schlafmaske",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 61,
+        "n_yes": 62,
         "n_no": 34,
-        "mean_yes": 69.6,
+        "mean_yes": 69.5,
         "mean_no": 63.7,
-        "delta_recovery_pct": 5.85
+        "delta_recovery_pct": 5.75
+      },
+      {
+        "factor": "🧬 Kollagen",
+        "category": "Supplements",
+        "lag": "Tag +1",
+        "n_yes": 7,
+        "n_no": 74,
+        "mean_yes": 71.4,
+        "mean_no": 66.4,
+        "delta_recovery_pct": 5.06
       },
       {
         "factor": "💊 Zink",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 68,
+        "n_yes": 69,
         "n_no": 12,
-        "mean_yes": 67.5,
+        "mean_yes": 67.4,
         "mean_no": 63.4,
-        "delta_recovery_pct": 4.04
+        "delta_recovery_pct": 3.97
       },
       {
         "factor": "💊 Magnesium",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 63,
+        "n_yes": 64,
         "n_no": 17,
-        "mean_yes": 67.5,
+        "mean_yes": 67.4,
         "mean_no": 64.5,
-        "delta_recovery_pct": 3.02
+        "delta_recovery_pct": 2.95
       },
       {
         "factor": "🧊 Blackroll",
         "category": "Regeneration",
         "lag": "Tag +1",
-        "n_yes": 40,
+        "n_yes": 41,
         "n_no": 50,
-        "mean_yes": 68.4,
+        "mean_yes": 68.2,
         "mean_no": 66.1,
-        "delta_recovery_pct": 2.23
+        "delta_recovery_pct": 2.1
       },
       {
         "factor": "💊 Vitamin D",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 67,
+        "n_yes": 68,
         "n_no": 13,
-        "mean_yes": 67.1,
+        "mean_yes": 67.0,
         "mean_no": 65.6,
-        "delta_recovery_pct": 1.47
+        "delta_recovery_pct": 1.41
       },
       {
         "factor": "🧊 Dehnen",
         "category": "Regeneration",
         "lag": "Tag +1",
-        "n_yes": 26,
+        "n_yes": 27,
         "n_no": 64,
-        "mean_yes": 67.5,
+        "mean_yes": 67.3,
         "mean_no": 67.0,
-        "delta_recovery_pct": 0.52
+        "delta_recovery_pct": 0.35
       },
       {
         "factor": "💤 Gelesen",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 40,
+        "n_yes": 41,
         "n_no": 55,
-        "mean_yes": 67.7,
+        "mean_yes": 67.6,
         "mean_no": 67.3,
-        "delta_recovery_pct": 0.37
+        "delta_recovery_pct": 0.25
       },
       {
         "factor": "⚠️ Anderes Bett / Reise",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 42,
+        "n_yes": 43,
         "n_no": 53,
-        "mean_yes": 67.3,
+        "mean_yes": 67.2,
         "mean_no": 67.6,
-        "delta_recovery_pct": -0.32
+        "delta_recovery_pct": -0.42
       },
       {
         "factor": "💤 Bett geteilt",
         "category": "Schlaf",
         "lag": "Tag 0",
         "n_yes": 52,
-        "n_no": 43,
+        "n_no": 44,
         "mean_yes": 67.1,
-        "mean_no": 67.9,
-        "delta_recovery_pct": -0.85
+        "mean_no": 67.8,
+        "delta_recovery_pct": -0.74
       },
       {
         "factor": "💊 Kreatin",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 53,
+        "n_yes": 54,
         "n_no": 27,
-        "mean_yes": 66.5,
+        "mean_yes": 66.4,
         "mean_no": 67.5,
-        "delta_recovery_pct": -1.01
+        "delta_recovery_pct": -1.07
       },
       {
         "factor": "💊 Omega-3",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 53,
+        "n_yes": 54,
         "n_no": 27,
-        "mean_yes": 66.5,
+        "mean_yes": 66.4,
         "mean_no": 67.5,
-        "delta_recovery_pct": -1.01
+        "delta_recovery_pct": -1.07
       },
       {
         "factor": "⚠️ Schlaf-Unterbrechung",
         "category": "Schlaf",
         "lag": "Tag 0",
         "n_yes": 48,
-        "n_no": 47,
+        "n_no": 48,
         "mean_yes": 66.6,
-        "mean_no": 68.3,
-        "delta_recovery_pct": -1.69
+        "mean_no": 68.2,
+        "delta_recovery_pct": -1.58
       },
       {
         "factor": "☕ Koffein",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 23,
+        "n_yes": 24,
         "n_no": 57,
-        "mean_yes": 64.4,
+        "mean_yes": 64.3,
         "mean_no": 67.8,
-        "delta_recovery_pct": -3.45
-      },
-      {
-        "factor": "⚠️ Late Meal (Spät gegessen)",
-        "category": "Schlaf",
-        "lag": "Tag 0",
-        "n_yes": 39,
-        "n_no": 56,
-        "mean_yes": 65.2,
-        "mean_no": 69.0,
-        "delta_recovery_pct": -3.79
+        "delta_recovery_pct": -3.51
       },
       {
         "factor": "💤 Hot-Shower",
         "category": "Schlaf",
         "lag": "Tag 0",
         "n_yes": 34,
-        "n_no": 61,
+        "n_no": 62,
         "mean_yes": 65.0,
-        "mean_no": 68.9,
-        "delta_recovery_pct": -3.88
+        "mean_no": 68.8,
+        "delta_recovery_pct": -3.79
+      },
+      {
+        "factor": "⚠️ Late Meal (Spät gegessen)",
+        "category": "Schlaf",
+        "lag": "Tag 0",
+        "n_yes": 40,
+        "n_no": 56,
+        "mean_yes": 65.2,
+        "mean_no": 69.0,
+        "delta_recovery_pct": -3.84
       },
       {
         "factor": "🧊 Spaziergang / Outdoor",
         "category": "Regeneration",
         "lag": "Tag +1",
-        "n_yes": 76,
+        "n_yes": 77,
         "n_no": 14,
         "mean_yes": 66.4,
         "mean_no": 71.1,
-        "delta_recovery_pct": -4.66
+        "delta_recovery_pct": -4.71
       }
     ],
     "all_time_drivers": [
@@ -9254,17 +10945,17 @@
         "factor": "💊 Kreatin",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 606,
-        "n_no": 260,
-        "mean_yes": 70.9,
+        "n_yes": 608,
+        "n_no": 261,
+        "mean_yes": 70.8,
         "mean_no": 65.5,
-        "delta_recovery_pct": 5.34
+        "delta_recovery_pct": 5.32
       },
       {
         "factor": "💤 Bett geteilt",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 685,
+        "n_yes": 688,
         "n_no": 288,
         "mean_yes": 70.5,
         "mean_no": 65.7,
@@ -9274,161 +10965,161 @@
         "factor": "💊 Magnesium",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 608,
-        "n_no": 258,
+        "n_yes": 610,
+        "n_no": 259,
         "mean_yes": 70.4,
         "mean_no": 66.5,
-        "delta_recovery_pct": 3.92
-      },
-      {
-        "factor": "🧬 Kollagen",
-        "category": "Supplements",
-        "lag": "Tag +1",
-        "n_yes": 6,
-        "n_no": 860,
-        "mean_yes": 72.8,
-        "mean_no": 69.2,
-        "delta_recovery_pct": 3.61
+        "delta_recovery_pct": 3.9
       },
       {
         "factor": "💤 Gelesen",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 256,
-        "n_no": 717,
-        "mean_yes": 71.4,
+        "n_yes": 257,
+        "n_no": 719,
+        "mean_yes": 71.3,
         "mean_no": 68.3,
-        "delta_recovery_pct": 3.08
+        "delta_recovery_pct": 3.04
       },
       {
         "factor": "🧊 Blackroll",
         "category": "Regeneration",
         "lag": "Tag +1",
-        "n_yes": 288,
-        "n_no": 680,
-        "mean_yes": 71.3,
+        "n_yes": 289,
+        "n_no": 681,
+        "mean_yes": 71.2,
         "mean_no": 68.3,
-        "delta_recovery_pct": 2.96
+        "delta_recovery_pct": 2.92
       },
       {
         "factor": "💊 Vitamin D",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 566,
-        "n_no": 300,
+        "n_yes": 568,
+        "n_no": 301,
         "mean_yes": 70.2,
         "mean_no": 67.4,
-        "delta_recovery_pct": 2.78
+        "delta_recovery_pct": 2.76
+      },
+      {
+        "factor": "🧬 Kollagen",
+        "category": "Supplements",
+        "lag": "Tag +1",
+        "n_yes": 7,
+        "n_no": 862,
+        "mean_yes": 71.4,
+        "mean_no": 69.2,
+        "delta_recovery_pct": 2.2
       },
       {
         "factor": "💊 Omega-3",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 567,
-        "n_no": 299,
+        "n_yes": 569,
+        "n_no": 300,
         "mean_yes": 69.8,
         "mean_no": 68.2,
-        "delta_recovery_pct": 1.56
+        "delta_recovery_pct": 1.54
       },
       {
         "factor": "💊 Zink",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 377,
-        "n_no": 489,
+        "n_yes": 378,
+        "n_no": 491,
         "mean_yes": 70.1,
         "mean_no": 68.6,
-        "delta_recovery_pct": 1.56
+        "delta_recovery_pct": 1.53
       },
       {
         "factor": "💤 Schlafmaske",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 424,
+        "n_yes": 427,
         "n_no": 549,
         "mean_yes": 69.7,
         "mean_no": 68.6,
-        "delta_recovery_pct": 1.11
+        "delta_recovery_pct": 1.09
       },
       {
         "factor": "🧊 Spaziergang / Outdoor",
         "category": "Regeneration",
         "lag": "Tag +1",
-        "n_yes": 794,
-        "n_no": 174,
-        "mean_yes": 69.4,
-        "mean_no": 68.3,
-        "delta_recovery_pct": 1.06
+        "n_yes": 799,
+        "n_no": 171,
+        "mean_yes": 69.3,
+        "mean_no": 68.4,
+        "delta_recovery_pct": 0.98
       },
       {
         "factor": "🧊 Dehnen",
         "category": "Regeneration",
         "lag": "Tag +1",
-        "n_yes": 459,
-        "n_no": 509,
-        "mean_yes": 69.2,
+        "n_yes": 462,
+        "n_no": 508,
+        "mean_yes": 69.1,
         "mean_no": 69.2,
-        "delta_recovery_pct": -0.03
+        "delta_recovery_pct": -0.05
       },
       {
         "factor": "💤 Hot-Shower",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 263,
-        "n_no": 710,
-        "mean_yes": 69.1,
+        "n_yes": 264,
+        "n_no": 712,
+        "mean_yes": 69.0,
         "mean_no": 69.1,
-        "delta_recovery_pct": -0.08
+        "delta_recovery_pct": -0.09
       },
       {
         "factor": "☕ Koffein",
         "category": "Supplements",
         "lag": "Tag +1",
-        "n_yes": 318,
-        "n_no": 548,
+        "n_yes": 320,
+        "n_no": 549,
         "mean_yes": 68.5,
         "mean_no": 69.7,
-        "delta_recovery_pct": -1.14
+        "delta_recovery_pct": -1.16
       },
       {
         "factor": "⚠️ Schlaf-Unterbrechung",
         "category": "Schlaf",
         "lag": "Tag 0",
         "n_yes": 250,
-        "n_no": 723,
+        "n_no": 726,
         "mean_yes": 67.5,
         "mean_no": 69.7,
-        "delta_recovery_pct": -2.15
+        "delta_recovery_pct": -2.14
       },
       {
         "factor": "⚠️ Late Meal (Spät gegessen)",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 241,
-        "n_no": 732,
-        "mean_yes": 67.0,
-        "mean_no": 69.8,
-        "delta_recovery_pct": -2.8
+        "n_yes": 252,
+        "n_no": 724,
+        "mean_yes": 66.9,
+        "mean_no": 69.9,
+        "delta_recovery_pct": -2.97
       },
       {
         "factor": "⚠️ Anderes Bett / Reise",
         "category": "Schlaf",
         "lag": "Tag 0",
-        "n_yes": 289,
-        "n_no": 684,
+        "n_yes": 290,
+        "n_no": 686,
         "mean_yes": 67.0,
         "mean_no": 70.0,
-        "delta_recovery_pct": -3.0
+        "delta_recovery_pct": -3.01
       },
       {
         "factor": "💊 Elektrolyte",
         "category": "Supplements",
         "lag": "Tag +1",
         "n_yes": 127,
-        "n_no": 739,
+        "n_no": 742,
         "mean_yes": 66.3,
-        "mean_no": 69.8,
-        "delta_recovery_pct": -3.46
+        "mean_no": 69.7,
+        "delta_recovery_pct": -3.45
       }
     ],
     "monthly_summary": [
@@ -9518,7 +11209,7 @@
       },
       {
         "month": "2026-11",
-        "days_logged": 12,
+        "days_logged": 13,
         "recovery_pct": 58.0,
         "hrv_ms": 75.0,
         "rhr_bpm": 47.0,
@@ -9528,7 +11219,7 @@
         "protein_g": 134.4,
         "carbs_g": 309.4,
         "expenditure_kcal": null,
-        "bw_kg": 83.53
+        "bw_kg": 83.57
       }
     ]
   }

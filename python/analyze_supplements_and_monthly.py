@@ -113,7 +113,10 @@ def extract_whoop_supplements():
 
 
 def classify_macrofactor_food(food_name):
-    """Maps a MacroFactor Food Name to one or more of the 22 requested supplement categories."""
+    """Maps a MacroFactor Food Name to all matching supplement & functional nutrition categories.
+    Audited across all 1,066 unique Food Name entries in MacroFactor Food Logs (including items
+    where MacroFactor omitted the Brand Name column such as 'Chocolate nutritionally complete food' = Huel).
+    """
     fn = food_name.strip()
     fl = fn.lower()
     matched = []
@@ -150,18 +153,39 @@ def classify_macrofactor_food(food_name):
         matched.append("Spirulina")
     if "iron supplement" in fl or "eisen" in fl:
         matched.append("Iron")
-    if "vitamin c" in fl:
+    if "vitamin c" in fl and "punch" not in fl:
         matched.append("Vitamin C")
     if "kreatin" in fl or "creatin" in fl:
         matched.append("Kreatin")
-    if "electrolyte" in fl or "elektrolyt" in fl:
+    if any(x in fl for x in ["electrolyte", "elektrolyt", "isolight", "vitamin wasser regain", "vitamin water"]):
         matched.append("Electrolyte")
     if "kurkuma" in fl or "turmeric" in fl or "curcum" in fl:
         matched.append("Kurkuma")
-    if "huel" in fl:
+    # Huel is stored in MacroFactor Food Log without Brand Name as "Chocolate nutritionally complete food"
+    if "huel" in fl or "nutritionally complete food" in fl or "food in a bottle" in fl:
         matched.append("Huel")
     if "daily greens" in fl:
         matched.append("Daily Greens")
+    # Additional audited supplement categories discovered across the 1,066 unique food logs:
+    if "pro darm" in fl or "probiot" in fl or "actimel" in fl:
+        matched.append("Pro Darm / Probiotics")
+    if "multivitamin a-z" in fl:
+        matched.append("Multivitamin A-Z")
+    if "bcaa" in fl:
+        matched.append("BCAA")
+    if any(x in fl for x in [
+        "vanilla vegan protein powder",
+        "clear vegan protein",
+        "clean whey protein powder",
+        "iso-whey hardcore",
+        "iso whey clear",
+        "whey protein powder isolate",
+    ]):
+        matched.append("Protein Powder (Vegan/Whey)")
+    if "powergel" in fl:
+        matched.append("PowerGel")
+    if "wheat germ" in fl or "weizenkeim" in fl:
+        matched.append("Weizenkeime (Spermidin)")
 
     return matched
 
@@ -189,6 +213,12 @@ MACRO_SUPP_ORDER = [
     "Kurkuma",
     "Huel",
     "Daily Greens",
+    "Pro Darm / Probiotics",
+    "Multivitamin A-Z",
+    "BCAA",
+    "Protein Powder (Vegan/Whey)",
+    "PowerGel",
+    "Weizenkeime (Spermidin)",
 ]
 
 
