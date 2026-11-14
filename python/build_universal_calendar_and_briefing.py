@@ -14,8 +14,10 @@ Builds the Universal Competition & Meeting Calendar + Weekly Scraper Briefing fo
 import os
 import json
 import datetime
+import subprocess
 
-WRT_DATA = "/Users/luka/.gemini/antigravity/scratch/world-ranking-tracker/data"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WRT_DATA = os.path.join(BASE_DIR, "data")
 
 RANKING_LATEST = os.path.join(WRT_DATA, "ranking_latest.json")
 RANKING_ARCH = os.path.join(WRT_DATA, "rankings_archive.json")
@@ -175,37 +177,90 @@ def main():
             m["topHistoricalMarks"] = sorted([float(h["best_mark"]) for h in hist_editions if h.get("best_mark")], reverse=True)[:5]
         filtered_cal.append(m)
 
+    # Capture previous committed calendar (for condensed diff) before overwriting CAL_2027
+    prev_cal_map = {}
+    try:
+        repo_root = os.path.dirname(WRT_DATA)
+        prev_raw = subprocess.check_output(
+            ["git", "-C", repo_root, "show", "HEAD:data/calendar_2027.json"],
+            stderr=subprocess.DEVNULL
+        ).decode("utf-8")
+        prev_cal_data = json.loads(prev_raw)
+        for pm in prev_cal_data.get("meetings", []):
+            if pm.get("id"):
+                prev_cal_map[pm["id"]] = pm
+    except Exception:
+        prev_cal_map = {}
+
     cal_data["meetings"] = filtered_cal
     cal_data["totalMeetings"] = len(filtered_cal)
+    cal_data["total_meetings"] = len(filtered_cal)
     with open(CAL_2027, "w", encoding="utf-8") as f:
         json.dump(cal_data, f, ensure_ascii=False, indent=2)
 
     print(f"Strictly filtered calendar_2027.json: kept {len(filtered_cal)} Tour/Championship/DLV meetings, removed {removed_cal} Cat E/F meetings.")
 
+    # Compute Calendar Diff (New / Removed / Category Changes)
+    new_cal_map = {m["id"]: m for m in filtered_cal if m.get("id")}
+    cal_added = [new_cal_map[k] for k in new_cal_map if k not in prev_cal_map]
+    cal_removed = [prev_cal_map[k] for k in prev_cal_map if k not in new_cal_map]
+    cal_cat_changed = []
+    for k, m in new_cal_map.items():
+        if k in prev_cal_map:
+            old_c = str(prev_cal_map[k].get("category") or "")
+            new_c = str(m.get("category") or "")
+            if old_c != new_c:
+                cal_cat_changed.append({
+                    "id": k,
+                    "name": m.get("name"),
+                    "date": m.get("date"),
+                    "from": old_c,
+                    "to": new_c
+                })
+
     # 3. Build Weekly Scraper Briefing
     snaps = rk_arch.get("snapshots", [])
-    real_snaps = [s for s in snaps if not s.get("isPrognosis")]
+    real_snaps = [s for s in snaps if not s.get("isPrognosis") and not s.get("is_prognosis")]
     latest_snap = real_snaps[-1] if real_snaps else {}
     prev_snap = real_snaps[-2] if len(real_snaps) >= 2 else latest_snap
 
     prev_map = {a.get("name"): a for a in prev_snap.get("athletes", [])}
     movers = []
-    luka_status = {"rank": 70, "score": 1144, "delta_rank": 0, "delta_score": 0}
+    europe_codes = {
+        "GER", "GBR", "FRA", "ITA", "ESP", "GRE", "SUI", "SWE", "NOR", "FIN", "DEN",
+        "NED", "BEL", "LUX", "POL", "CZE", "SVK", "HUN", "ROU", "BUL", "SRB", "CRO",
+        "SLO", "AUT", "POR", "IRL", "TUR", "UKR", "EST", "LAT", "LTU", "BLR", "MDA",
+        "ISL", "CYP", "MLT", "ALB", "BIH", "MKD", "MNE", "GEO", "ARM", "AZE", "ISR"
+    }
+    eu_rank = 0
+    ger_rank = 0
+    luka_eu_rank = 0
+    luka_ger_rank = 0
+    luka_status = {"rank": 69, "score": 1144, "delta_rank": 0, "delta_score": 0, "eu_rank": 0, "ger_rank": 0}
 
     for a in athletes:
         nm = a.get("name", "")
+        cnt = str(a.get("country") or "").upper()
+        if cnt in europe_codes:
+            eu_rank += 1
+        if cnt == "GER":
+            ger_rank += 1
         rk = int(a.get("rank") or 999)
         sc = int(a.get("ranking_score") or 0)
         p = prev_map.get(nm)
         d_rk = (int(p.get("rank")) - rk) if p and p.get("rank") else 0
         d_sc = (sc - int(p.get("ranking_score") or p.get("score") or sc)) if p else 0
         if "herden" in nm.lower():
+            luka_eu_rank = eu_rank
+            luka_ger_rank = ger_rank
             luka_status = {
                 "rank": rk,
                 "score": sc,
                 "delta_rank": d_rk,
                 "delta_score": d_sc,
-                "rank_date": rk_latest.get("rank_date", "2026-11-03")
+                "eu_rank": luka_eu_rank,
+                "ger_rank": luka_ger_rank,
+                "rank_date": rk_latest.get("date") or rk_latest.get("rank_date") or latest_snap.get("date")
             }
         if abs(d_rk) >= 1 or abs(d_sc) >= 3:
             movers.append({
@@ -225,23 +280,51 @@ def main():
         reverse=True
     )[:10]
 
-    today_iso = "2026-11-08"
+    today_iso = datetime.date.today().isoformat()
+    rank_date_str = str(rk_latest.get("date") or rk_latest.get("rank_date") or latest_snap.get("date") or today_iso)
     upcoming_meets = sorted(
         [m for m in filtered_cal if (m.get("date") or "") >= today_iso],
         key=lambda x: x.get("date", "")
     )[:12]
 
+    cat_counts = {}
+    for m in filtered_cal:
+        mc = str(m.get("category") or "?")
+        cat_counts[mc] = cat_counts.get(mc, 0) + 1
+
+    movers_text = (
+        f"{len(movers)} Top-100 Änderungen seit {prev_snap.get('date', 'Vorwoche')}"
+        if movers
+        else f"0 Top-100 Änderungen seit {prev_snap.get('date', 'Vorwoche')} (Off-Season)"
+    )
+    cal_diff_text = f"Kalender: {len(filtered_cal)} Meetings (+{len(cal_added)} neu / -{len(cal_removed)} entfernt / {len(cal_cat_changed)} Kat.-Updates)"
+
     briefing = {
-        "generated_at": "2026-11-08",
-        "rank_date": rk_latest.get("rank_date", "2026-11-03"),
-        "prev_rank_date": prev_snap.get("date", "2026-10-20"),
+        "generated_at": today_iso,
+        "rank_date": rank_date_str,
+        "prev_rank_date": prev_snap.get("date", "2026-11-03"),
         "luka": luka_status,
         "summary_note": (
-            f"Offizielles World Ranking Update ({rk_latest.get('rank_date', '03.11.2026')}): "
-            f"Du stehst stabil auf Weltrang #{luka_status['rank']} (1.144 Pkt • #27 in Europa • Bereinigt Q#21 für die Hallen-EM Valencia • #3 in Deutschland). "
-            f"In der aktuellen Off-Season gab es in Europa keine neuen Hallen-Wettkämpfe >= 7,70 m; die ersten relevanten World Indoor Tour Meetings starten im Januar 2027."
+            f"WA Ranking-Stand ({rank_date_str}): Luka auf #{luka_status['rank']} Welt ({luka_status['score']} Pkt • "
+            f"#{luka_status['eu_rank']} Europa • #{luka_status['ger_rank']} GER, Δ {luka_status['delta_rank']:+d} Plätze). "
+            f"{movers_text}. {cal_diff_text}."
         ),
-        "ranking_movers": movers[:8],
+        "ranking_diff_summary": movers_text,
+        "calendar_diff": {
+            "total_kept": len(filtered_cal),
+            "removed_unrelevant": removed_cal,
+            "added_count": len(cal_added),
+            "removed_count": len(cal_removed),
+            "category_changed_count": len(cal_cat_changed),
+            "category_counts": cat_counts,
+            "notable_added": [
+                {"date": m.get("date"), "name": m.get("name"), "country": m.get("country"), "category": m.get("category")}
+                for m in sorted(cal_added, key=lambda x: x.get("date", ""))[:10]
+            ],
+            "category_changes": cal_cat_changed[:12],
+            "summary_text": cal_diff_text
+        },
+        "ranking_movers": movers[:12],
         "recent_relevant_results": [
             {
                 "date": c.get("iso_date"),
@@ -261,6 +344,7 @@ def main():
                 "city": m.get("city"),
                 "country": m.get("country"),
                 "category": m.get("category"),
+                "tier": m.get("tier"),
                 "tour": m.get("tour"),
                 "promisingRunway": m.get("promisingRunway")
             }

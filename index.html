@@ -262,6 +262,9 @@
         <button data-tab="trainingplan" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
           📋 Trainingsplan
         </button>
+        <button data-tab="videobio" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
+          🎥 Video-Bio (GPU)
+        </button>
       </div>
     </div>
   </header>
@@ -1528,6 +1531,226 @@
       <!-- Populated dynamically by js/training_plan.js -->
     </div>
 
+    <!-- ================= TAB 6: VIDEO-BIOMECHANIK, DLV-KALIBRIERUNG & ARCHIV (LOKAL GPU) ================= -->
+    <div id="tabContentVideoBio" class="hidden space-y-4">
+      <!-- Header & Control Bar -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="text-sm sm:text-base font-black text-white font-mono">🎥 VIDEO-BIOMECHANIK &amp; DLV-KALIBRIERUNG (LOKAL GPU)</h2>
+              <span id="gpuStatusBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-950 border border-slate-700 text-cyan-300">⚡ Bereit (Apple Silicon / WebGPU/WebGL • 0 AI-Tokens)</span>
+            </div>
+            <p class="text-[11px] text-slate-400 font-sans mt-0.5">
+              100% lokal im Browser auf deiner M3 Pro GPU. Winkel &amp; Normbereiche kalibriert auf OSP Hessen / DLV (Rom 8,01m, Bochum 8,07m eff., Ehammer 8,30m).
+            </p>
+          </div>
+          <label class="cursor-pointer px-3.5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black font-mono text-xs shadow-md transition-all text-center shrink-0">
+            📁 Video laden (.mov/.mp4)
+            <input type="file" id="bioVideoInput" accept="video/*" style="display:none" onchange="loadLocalBioVideo(this)">
+          </label>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono pt-1 border-t border-slate-800/80">
+          <label class="flex items-center gap-1 text-slate-300">
+            <span>FPS:</span>
+            <select id="bioFpsSelect" class="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white">
+              <option value="60">60 fps</option>
+              <option value="120" selected>120 fps (iPhone Slo-Mo)</option>
+              <option value="240">240 fps</option>
+            </select>
+          </label>
+          <label class="flex items-center gap-1 text-slate-300">
+            <span>Anlauf:</span>
+            <select id="bioRunDirSelect" class="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-cyan-300 font-bold" onchange="refreshBioCurrentFrame()">
+              <option value="ltr" selected>Links ➔ Rechts</option>
+              <option value="rtl">Rechts ➔ Links</option>
+            </select>
+          </label>
+          <label class="flex items-center gap-1 text-slate-300">
+            <span>Modell:</span>
+            <select id="bioModelSelect" class="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white" onchange="reinitPoseModel()">
+              <option value="full" selected>Full (M3 Pro Optimal)</option>
+              <option value="heavy">Heavy (Max Präzision)</option>
+              <option value="lite">Lite (Ultra-Fast)</option>
+            </select>
+          </label>
+          <div class="flex items-center gap-1 ml-auto flex-wrap">
+            <button onclick="stepVideoFrame(-5)" class="px-2 py-1 rounded bg-slate-950 border border-slate-700 hover:border-cyan-500 text-slate-200">-5F</button>
+            <button onclick="stepVideoFrame(-1)" class="px-2 py-1 rounded bg-slate-950 border border-slate-700 hover:border-cyan-500 text-slate-200">-1F</button>
+            <button id="bioPlayBtn" onclick="toggleBioPlay()" class="px-3 py-1 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black">▶ Play</button>
+            <button onclick="stepVideoFrame(1)" class="px-2 py-1 rounded bg-slate-950 border border-slate-700 hover:border-cyan-500 text-slate-200">+1F</button>
+            <button onclick="stepVideoFrame(5)" class="px-2 py-1 rounded bg-slate-950 border border-slate-700 hover:border-cyan-500 text-slate-200">+5F</button>
+            <button onclick="setVideoSpeed(0.25)" class="px-2 py-1 rounded bg-slate-950 border border-slate-700 text-amber-300">0.25x</button>
+            <button onclick="setVideoSpeed(0.5)" class="px-2 py-1 rounded bg-slate-950 border border-slate-700 text-amber-300">0.5x</button>
+            <button onclick="setVideoSpeed(1.0)" class="px-2 py-1 rounded bg-slate-950 border border-slate-700 text-slate-300">1x</button>
+          </div>
+        </div>
+
+        <!-- Video Canvas + Overlay -->
+        <div class="relative w-full bg-slate-950 border border-slate-800 rounded-xl overflow-hidden flex items-center justify-center min-h-[260px]">
+          <div id="bioPlaceholder" class="p-8 text-center text-slate-400 text-xs font-sans space-y-1">
+            <div class="text-3xl mb-1">🏃‍♂️💨</div>
+            <div class="font-bold text-slate-200">Lade ein Sprung-, Hürden- oder DLV-Diagnose-Video vom Mac/iPhone.</div>
+            <div>Grün = Sprungbein Links • Blau = Schwungbein Rechts • Gelb = Rumpf-Rücklage (DLV-konform).</div>
+          </div>
+          <video id="bioVideo" playsinline muted style="width:100%;max-height:540px;display:none;background:#000"></video>
+          <canvas id="bioCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none"></canvas>
+        </div>
+
+        <!-- Phase Markers & Status -->
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button onclick="markTakeoffPhase('TD')" class="px-2.5 py-1.5 rounded-lg bg-emerald-950 hover:bg-emerald-900 border border-emerald-700 text-emerald-300 font-bold">📌 1. Touchdown (TD)</button>
+            <button onclick="markTakeoffPhase('MKF')" class="px-2.5 py-1.5 rounded-lg bg-amber-950 hover:bg-amber-900 border border-amber-700 text-amber-300 font-bold">📐 2. Max. Beugung (MKF)</button>
+            <button onclick="markTakeoffPhase('TO')" class="px-2.5 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-700 text-cyan-300 font-bold">🚀 3. Take-off (TO)</button>
+            <button onclick="exportBioSnapshot()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold">📸 PNG-Frame</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="calcContactBadge" class="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-slate-300 font-bold">⏱ Kontaktzeit: TD &amp; TO markieren</span>
+            <span id="bioTimeReadout" class="text-cyan-400 font-bold">t = 0.000 s</span>
+          </div>
+        </div>
+
+        <!-- Live DLV Telemetry Tiles -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 font-mono text-center">
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase">Stemmwinkel (DLV)</div>
+            <div id="angPlantAngle" class="text-base font-black text-cyan-400">—°</div>
+            <div class="text-[9px] text-slate-500">Norm: 22–28° (Rom 23°)</div>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase">Rumpfwinkel (DLV)</div>
+            <div id="angTrunkTilt" class="text-base font-black text-amber-400">—°</div>
+            <div class="text-[9px] text-slate-500">Norm: 95–102° (Rom 97°)</div>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase">Sprungbein L Knie</div>
+            <div id="angLeftKnee" class="text-base font-black text-emerald-400">—°</div>
+            <div class="text-[9px] text-slate-500">Min Norm: &gt;134° (Rom 145°)</div>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase">Schwungbein R Knie</div>
+            <div id="angRightKnee" class="text-base font-black text-sky-400">—°</div>
+            <div class="text-[9px] text-slate-500">Eng-Ziel: ≤95° blockiert</div>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase">Schwungbein ω / Abflug</div>
+            <div id="angSwingVel" class="text-base font-black text-purple-400">— °/s</div>
+            <div class="text-[9px] text-slate-500">DLV &gt;730 °/s • Abflug &gt;19°</div>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase">Hüftöffnung / Knie-Linie</div>
+            <div id="angHipSep" class="text-base font-black text-rose-300">—°</div>
+            <div id="angKneeValgus" class="text-[9px] text-slate-500">Frontal-Abw.: —°</div>
+          </div>
+        </div>
+
+        <!-- Live Plot -->
+        <div class="space-y-1">
+          <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
+            <span>📈 Winkel-Kurve: <span class="text-emerald-400">■ Stützbein L</span> • <span class="text-sky-400">■ Schwungbein R</span> • <span class="text-amber-400">■ Rumpf-Rücklage (skaliert)</span></span>
+            <button onclick="clearAngleHistory()" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 hover:border-slate-600 text-slate-300">Kurve leeren</button>
+          </div>
+          <canvas id="bioPlotCanvas" width="900" height="145" class="w-full h-32 bg-slate-950 border border-slate-800 rounded-lg"></canvas>
+        </div>
+      </div>
+
+      <!-- DLV Calibration & Benchmark Comparison -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 class="text-xs sm:text-sm font-black text-white font-mono uppercase">📏 DLV-BIOMECHANIK KALIBRIERUNG &amp; SOLL-IST VERGLEICH</h3>
+            <p class="text-[11px] text-slate-400 font-sans">Vergleicht deinen markierten Sprung direkt mit den offiziellen OSP Hessen / DLV-Auswertungen.</p>
+          </div>
+          <select id="dlvBenchmarkSelect" onchange="VideoBiomechanicsModule.onBenchmarkChange(this.value)" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-mono text-amber-300 font-bold"></select>
+        </div>
+
+        <div id="dlvAutoDiagnosisBox" class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-1.5 text-xs text-slate-200 font-sans leading-relaxed"></div>
+
+        <div class="overflow-x-auto border border-slate-800 rounded-lg">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] font-mono uppercase">
+                <th class="py-2 px-2">DLV Parameter</th>
+                <th class="py-2 px-2">Dein Sprung</th>
+                <th class="py-2 px-2">Referenz</th>
+                <th class="py-2 px-2">Delta</th>
+                <th class="py-2 px-2">OSP Normbereich</th>
+                <th class="py-2 px-2 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="dlvComparisonBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Persistent Video Archive (IndexedDB) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="text-xs sm:text-sm font-black text-white font-mono uppercase">🗂️ PERSISTENTES VIDEO-ANALYSE-ARCHIV (LOKAL)</h3>
+            <span id="videoArchiveCountBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">0 Analysen</span>
+          </div>
+          <div class="flex items-center gap-1.5 font-mono text-[10px]">
+            <button onclick="VideoBiomechanicsModule.exportArchiveJson()" class="px-2.5 py-1 rounded bg-slate-950 border border-slate-700 hover:border-cyan-500 text-cyan-300 font-bold">⬇ Archiv JSON</button>
+            <label class="cursor-pointer px-2.5 py-1 rounded bg-slate-950 border border-slate-700 hover:border-emerald-500 text-emerald-300 font-bold">
+              ⬆ Import JSON
+              <input type="file" accept=".json,application/json" style="display:none" onchange="VideoBiomechanicsModule.importArchiveJson(this)">
+            </label>
+          </div>
+        </div>
+
+        <!-- Save Form -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 grid grid-cols-1 sm:grid-cols-12 gap-2 font-mono text-xs items-end">
+          <div class="sm:col-span-4">
+            <label class="text-[9px] text-slate-400 uppercase block mb-0.5">Titel / Einheit</label>
+            <input id="archiveTitleInput" type="text" placeholder="z.B. Kalbach 9er Erhöhung #4 (Michael)" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-white text-xs" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-[9px] text-slate-400 uppercase block mb-0.5">Datum</label>
+            <input id="archiveDateInput" type="date" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-white text-xs" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-[9px] text-slate-400 uppercase block mb-0.5">Kategorie</label>
+            <select id="archiveTypeSelect" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-white text-xs">
+              <option value="Training Sprung">Training Sprung</option>
+              <option value="Wettkampf">Wettkampf</option>
+              <option value="DLV-Video Vergleich">DLV-Video</option>
+              <option value="Anlauf/Sprint">Anlauf / Sprint</option>
+            </select>
+          </div>
+          <div class="sm:col-span-1">
+            <label class="text-[9px] text-slate-400 uppercase block mb-0.5">Weite</label>
+            <input id="archiveMarkInput" type="text" placeholder="7.95" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-white text-xs" />
+          </div>
+          <div class="sm:col-span-3 flex gap-1.5">
+            <input id="archiveNotesInput" type="text" placeholder="Notiz (Schwungbein, Druck...)" class="flex-1 bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-white text-xs" />
+            <button id="saveArchiveBtn" onclick="VideoBiomechanicsModule.saveCurrentToArchive()" class="px-3 py-1.5 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black whitespace-nowrap">💾 Speichern</button>
+          </div>
+        </div>
+
+        <!-- Filter & Search -->
+        <div class="flex flex-wrap items-center justify-between gap-2 font-mono text-[10px]">
+          <div class="flex flex-wrap items-center gap-1">
+            <button onclick="VideoBiomechanicsModule.setArchiveFilter('ALL')" class="px-2 py-1 rounded bg-slate-800 text-white font-bold">Alle</button>
+            <button onclick="VideoBiomechanicsModule.setArchiveFilter('Training Sprung')" class="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-slate-300">Training</button>
+            <button onclick="VideoBiomechanicsModule.setArchiveFilter('Wettkampf')" class="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-slate-300">Wettkampf</button>
+            <button onclick="VideoBiomechanicsModule.setArchiveFilter('DLV-Video Vergleich')" class="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-slate-300">DLV-Video</button>
+          </div>
+          <input type="text" oninput="VideoBiomechanicsModule.setArchiveSearch(this.value)" placeholder="Archiv durchsuchen..." class="bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-white text-xs w-52" />
+        </div>
+
+        <div id="videoArchiveList" class="space-y-2"></div>
+
+        <!-- Side-by-Side Comparison A vs B -->
+        <div class="pt-2 border-t border-slate-800 space-y-2">
+          <div class="text-[10px] font-mono font-bold text-amber-400 uppercase">⚖️ Direkter Archiv-Vergleich (Slot A vs. Slot B)</div>
+          <div id="videoArchiveCompareBox" class="bg-slate-950 border border-slate-800 rounded-xl p-3"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- ================= TOP 100 COMPETITOR DETAIL & COMPARISON MODAL ================= -->
     <div id="competitorModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl space-y-4 p-4 sm:p-5">
@@ -2177,15 +2400,422 @@
       <span class="text-base">📋</span>
       <span class="text-[9px] font-mono tracking-tight">Plan</span>
     </button>
+    <button data-tab="videobio" class="mobile-dock-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-500 hover:text-slate-300 font-medium transition-all">
+      <span class="text-base">🎥</span>
+      <span class="text-[9px] font-mono tracking-tight">Video</span>
+    </button>
   </nav>
 
-  <!-- Load Modular Application Logic (with Cache-Buster v9.0) -->
-  <script src="js/next_session.js?v=9.0.0"></script>
-  <script src="js/rankings.js?v=9.0.0"></script>
-  <script src="js/analytics.js?v=9.0.0"></script>
-  <script src="js/qualification.js?v=9.0.0"></script>
-  <script src="js/venues.js?v=9.0.0"></script>
-  <script src="js/training_plan.js?v=9.0.0"></script>
-  <script src="js/app.js?v=9.0.0"></script>
+  <!-- Load Modular Application Logic (with Cache-Buster v9.1) -->
+  <script src="js/next_session.js?v=9.1.0"></script>
+  <script src="js/rankings.js?v=9.1.0"></script>
+  <script src="js/analytics.js?v=9.1.0"></script>
+  <script src="js/qualification.js?v=9.1.0"></script>
+  <script src="js/venues.js?v=9.1.0"></script>
+  <script src="js/training_plan.js?v=9.1.0"></script>
+  <script src="js/video_biomechanics.js?v=9.1.0"></script>
+  <script src="js/app.js?v=9.1.0"></script>
+
+  <!-- Local M3 Pro GPU MediaPipe PoseLandmarker Engine (Calibrated to OSP / DLV Convention) -->
+  <script type="module">
+    import {
+      PoseLandmarker,
+      FilesetResolver
+    } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
+
+    let poseLandmarker = null;
+    let isInitializing = false;
+    let lastVideoTime = -1;
+    let currentMetrics = null;
+    let prevSwingState = null;
+    let prevComState = null;
+    let phaseMarks = { TD: null, MKF: null, TO: null };
+    let angleHistory = [];
+
+    const videoEl = document.getElementById("bioVideo");
+    const canvasEl = document.getElementById("bioCanvas");
+    const ctx = canvasEl ? canvasEl.getContext("2d") : null;
+    const badgeEl = document.getElementById("gpuStatusBadge");
+
+    async function initPoseEngine() {
+      if (poseLandmarker || isInitializing) return poseLandmarker;
+      isInitializing = true;
+      try {
+        if (badgeEl) badgeEl.textContent = "⏳ Lade M3 Pro GPU-Modell...";
+        const vision = await FilesetResolver.forVisionTasks(
+          "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
+        );
+        const modelType = document.getElementById("bioModelSelect")?.value || "full";
+        const modelUrl = `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_${modelType}/float16/1/pose_landmarker_${modelType}.task`;
+        poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
+          baseOptions: { modelAssetPath: modelUrl, delegate: "GPU" },
+          runningMode: "VIDEO",
+          numPoses: 1,
+          minPoseDetectionConfidence: 0.5,
+          minPosePresenceConfidence: 0.5,
+          minTrackingConfidence: 0.5
+        });
+        if (badgeEl) {
+          badgeEl.textContent = `✅ Lokal GPU aktiv (${modelType.toUpperCase()} • 0 Tokens)`;
+          badgeEl.style.color = "#10b981";
+        }
+      } catch (err) {
+        console.error("Pose init error:", err);
+        if (badgeEl) {
+          badgeEl.textContent = "⚠️ GPU-Fehler: " + err.message;
+          badgeEl.style.color = "#ef4444";
+        }
+      } finally {
+        isInitializing = false;
+      }
+      return poseLandmarker;
+    }
+
+    window.reinitPoseModel = async function() {
+      if (poseLandmarker) {
+        poseLandmarker.close();
+        poseLandmarker = null;
+      }
+      await initPoseEngine();
+      if (videoEl && videoEl.readyState >= 2) {
+        lastVideoTime = -1;
+        processCurrentFrame();
+      }
+    };
+
+    window.refreshBioCurrentFrame = function() {
+      if (videoEl && videoEl.readyState >= 2) processCurrentFrame();
+    };
+
+    function calcAngle2D(a, b, c) {
+      if (!a || !b || !c) return null;
+      const v1x = a.x - b.x, v1y = a.y - b.y;
+      const v2x = c.x - b.x, v2y = c.y - b.y;
+      const dot = v1x * v2x + v1y * v2y;
+      const m1 = Math.hypot(v1x, v1y), m2 = Math.hypot(v2x, v2y);
+      if (m1 < 1e-5 || m2 < 1e-5) return null;
+      const cos = Math.max(-1, Math.min(1, dot / (m1 * m2)));
+      return Math.acos(cos) * (180 / Math.PI);
+    }
+
+    function drawBone(p1, p2, w, h, color, lineW = 3.5) {
+      if (!p1 || !p2 || (p1.visibility !== undefined && p1.visibility < 0.25) || (p2.visibility !== undefined && p2.visibility < 0.25)) return;
+      ctx.beginPath();
+      ctx.moveTo(p1.x * w, p1.y * h);
+      ctx.lineTo(p2.x * w, p2.y * h);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineW;
+      ctx.lineCap = "round";
+      ctx.stroke();
+    }
+
+    function drawJoint(p, w, h, color, r = 4.5) {
+      if (!p || (p.visibility !== undefined && p.visibility < 0.25)) return;
+      ctx.beginPath();
+      ctx.arc(p.x * w, p.y * h, r, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = "#020617";
+      ctx.stroke();
+    }
+
+    function drawAngleLabel(p, w, h, text, bgCol = "rgba(2,6,23,0.88)", txtCol = "#f1f5f9", dx = 10, dy = -6) {
+      if (!p) return;
+      const x = p.x * w + dx;
+      const y = p.y * h + dy;
+      ctx.font = "bold 11px -apple-system, monospace";
+      const tw = ctx.measureText(text).width;
+      ctx.fillStyle = bgCol;
+      ctx.fillRect(x - 3, y - 11, tw + 6, 15);
+      ctx.fillStyle = txtCol;
+      ctx.fillText(text, x, y);
+    }
+
+    function renderAnglePlot() {
+      const pc = document.getElementById("bioPlotCanvas");
+      if (!pc) return;
+      const pctx = pc.getContext("2d");
+      const W = pc.width, H = pc.height;
+      pctx.clearRect(0, 0, W, H);
+
+      const y95 = H - ((95 - 40) / 150) * H;
+      const y134 = H - ((134 - 40) / 150) * H;
+      pctx.strokeStyle = "#1e293b";
+      pctx.lineWidth = 1;
+      pctx.beginPath();
+      pctx.moveTo(0, y95); pctx.lineTo(W, y95);
+      pctx.moveTo(0, y134); pctx.lineTo(W, y134);
+      pctx.stroke();
+      pctx.fillStyle = "#64748b";
+      pctx.font = "10px monospace";
+      pctx.fillText("134° (Min. Amortisation Stützbein L)", 6, Math.max(11, y134 - 3));
+      pctx.fillText("95° (Enges Schwungbein-Ziel R)", 6, Math.max(11, y95 - 3));
+
+      if (angleHistory.length < 2) return;
+      const recent = angleHistory.slice(-240);
+      const drawSeries = (key, color, scaleFn) => {
+        pctx.beginPath();
+        pctx.strokeStyle = color;
+        pctx.lineWidth = 2;
+        recent.forEach((pt, idx) => {
+          const x = (idx / Math.max(1, recent.length - 1)) * (W - 12) + 6;
+          const val = scaleFn(pt[key] ?? 0);
+          const y = H - ((val - 40) / 150) * (H - 12) - 6;
+          if (idx === 0) pctx.moveTo(x, y);
+          else pctx.lineTo(x, y);
+        });
+        pctx.stroke();
+      };
+      drawSeries("leftKnee", "#10b981", v => v);
+      drawSeries("rightKnee", "#38bdf8", v => v);
+      drawSeries("dlvRumpf", "#f59e0b", v => v);
+    }
+
+    async function processCurrentFrame() {
+      if (!videoEl || videoEl.readyState < 2) return;
+      const lm = await initPoseEngine();
+      if (!lm) return;
+
+      const vw = videoEl.clientWidth || videoEl.videoWidth;
+      const vh = videoEl.clientHeight || videoEl.videoHeight;
+      if (canvasEl.width !== vw || canvasEl.height !== vh) {
+        canvasEl.width = vw;
+        canvasEl.height = vh;
+      }
+
+      const fps = parseFloat(document.getElementById("bioFpsSelect")?.value || "120");
+      const dirSign = (document.getElementById("bioRunDirSelect")?.value || "ltr") === "rtl" ? -1 : 1;
+      const curT = videoEl.currentTime;
+      const frameNo = Math.round(curT * fps);
+      const ro = document.getElementById("bioTimeReadout");
+      if (ro) ro.textContent = `t = ${curT.toFixed(3)} s (F${frameNo} @ ${fps}fps)`;
+
+      const nowMs = performance.now();
+      const res = lm.detectForVideo(videoEl, nowMs);
+      ctx.clearRect(0, 0, vw, vh);
+
+      if (res && res.landmarks && res.landmarks.length > 0) {
+        const pts = res.landmarks[0];
+        const pLS = pts[11], pRS = pts[12], pLE = pts[13], pRE = pts[14], pLW = pts[15], pRW = pts[16];
+        const pLH = pts[23], pRH = pts[24], pLK = pts[25], pRK = pts[26], pLA = pts[27], pRA = pts[28];
+        const pLHeel = pts[29], pRHeel = pts[30], pLFoot = pts[31], pRFoot = pts[32];
+
+        drawBone(pLS, pRS, vw, vh, "#a855f7", 3);
+        drawBone(pLH, pRH, vw, vh, "#a855f7", 3);
+        drawBone(pLS, pLH, vw, vh, "#f59e0b", 3.5);
+        drawBone(pRS, pRH, vw, vh, "#f59e0b", 3.5);
+        drawBone(pLS, pLE, vw, vh, "#94a3b8", 2.5);
+        drawBone(pLE, pLW, vw, vh, "#94a3b8", 2.5);
+        drawBone(pRS, pRE, vw, vh, "#94a3b8", 2.5);
+        drawBone(pRE, pRW, vw, vh, "#94a3b8", 2.5);
+
+        drawBone(pRH, pRK, vw, vh, "#38bdf8", 4.5);
+        drawBone(pRK, pRA, vw, vh, "#38bdf8", 4.5);
+        drawBone(pRA, pRHeel, vw, vh, "#38bdf8", 3);
+        drawBone(pRHeel, pRFoot, vw, vh, "#38bdf8", 3);
+
+        drawBone(pLH, pLK, vw, vh, "#10b981", 5);
+        drawBone(pLK, pLA, vw, vh, "#10b981", 5);
+        drawBone(pLA, pLHeel, vw, vh, "#10b981", 3.5);
+        drawBone(pLHeel, pLFoot, vw, vh, "#10b981", 3.5);
+
+        [pLS, pRS, pLE, pRE, pLW, pRW].forEach(p => drawJoint(p, vw, vh, "#f59e0b", 3.5));
+        [pRH, pRK, pRA, pRFoot].forEach(p => drawJoint(p, vw, vh, "#38bdf8", 4.5));
+        [pLH, pLK, pLA, pLFoot].forEach(p => drawJoint(p, vw, vh, "#10b981", 5));
+
+        const sPt = p => ({ x: p.x * vw, y: p.y * vh });
+        const leftKnee = calcAngle2D(sPt(pLH), sPt(pLK), sPt(pLA));
+        const rightKnee = calcAngle2D(sPt(pRH), sPt(pRK), sPt(pRA));
+
+        // DLV Rumpfwinkel (>90° = Rücklage in Laufrichtung: dirSign * (midHip - midSh) > 0 => behind hip)
+        const midHip = { x: 0.5 * (pLH.x + pRH.x) * vw, y: 0.5 * (pLH.y + pRH.y) * vh };
+        const midSh = { x: 0.5 * (pLS.x + pRS.x) * vw, y: 0.5 * (pLS.y + pRS.y) * vh };
+        const backLeanRad = Math.atan2(dirSign * (midHip.x - midSh.x), Math.max(1e-5, midHip.y - midSh.y));
+        const dlvRumpf = 90 + backLeanRad * (180 / Math.PI);
+
+        // DLV Stemmwinkel (Auslage des Sprungbeins vs. Vertikale: Knöchel vor Hüfte in Laufrichtung)
+        const dxFootAhead = dirSign * (pLA.x - pLH.x) * vw;
+        const dyLeg = Math.max(1e-5, (pLA.y - pLH.y) * vh);
+        const dlvStemm = Math.atan2(dxFootAhead, dyLeg) * (180 / Math.PI);
+
+        // Schwungbein-Winkel (Hüfte -> Knie vs. Vertikale) & Winkelgeschwindigkeit [°/s]
+        const swingAngleVert = Math.atan2(dirSign * (pRK.x - pRH.x) * vw, Math.max(1e-5, (pRK.y - pRH.y) * vh)) * (180 / Math.PI);
+        let swingVelDegS = 0;
+        if (prevSwingState && curT > prevSwingState.t && (curT - prevSwingState.t) < 0.12) {
+          swingVelDegS = Math.abs((swingAngleVert - prevSwingState.ang) / (curT - prevSwingState.t));
+        }
+        prevSwingState = { t: curT, ang: swingAngleVert };
+
+        // KSP / Hüft-Abflugwinkel beim Take-off
+        let takeoffAngle = null;
+        if (prevComState && curT > prevComState.t && (curT - prevComState.t) < 0.12) {
+          const vx = dirSign * (midHip.x - prevComState.x);
+          const vyUp = prevComState.y - midHip.y; // y grows down
+          if (vx > 0.2) takeoffAngle = Math.atan2(vyUp, vx) * (180 / Math.PI);
+        }
+        prevComState = { t: curT, x: midHip.x, y: midHip.y };
+
+        const vLT = { x: (pLK.x - pLH.x) * vw, y: (pLK.y - pLH.y) * vh };
+        const vRT = { x: (pRK.x - pRH.x) * vw, y: (pRK.y - pRH.y) * vh };
+        const dotThigh = vLT.x * vRT.x + vLT.y * vRT.y;
+        const mLT = Math.hypot(vLT.x, vLT.y), mRT = Math.hypot(vRT.x, vRT.y);
+        const hipSep = (mLT > 1e-4 && mRT > 1e-4) ? Math.acos(Math.max(-1, Math.min(1, dotThigh / (mLT * mRT)))) * (180 / Math.PI) : 0;
+        const kneeValgus = leftKnee !== null ? Math.abs(180 - leftKnee) : 0;
+
+        if (leftKnee !== null) drawAngleLabel(pLK, vw, vh, `L: ${leftKnee.toFixed(0)}°`, "rgba(16,185,129,0.9)", "#020617", -48, -6);
+        if (rightKnee !== null) drawAngleLabel(pRK, vw, vh, `R: ${rightKnee.toFixed(0)}°`, "rgba(56,189,248,0.9)", "#020617", 10, -6);
+        drawAngleLabel({ x: midSh.x / vw, y: midSh.y / vh }, vw, vh, `Rumpf: ${dlvRumpf.toFixed(1)}°`, "rgba(245,158,11,0.9)", "#020617", 8, -10);
+
+        document.getElementById("angPlantAngle").textContent = `${dlvStemm.toFixed(1)}°`;
+        document.getElementById("angTrunkTilt").textContent = `${dlvRumpf.toFixed(1)}°`;
+        document.getElementById("angLeftKnee").textContent = leftKnee !== null ? `${leftKnee.toFixed(1)}°` : "—°";
+        document.getElementById("angRightKnee").textContent = rightKnee !== null ? `${rightKnee.toFixed(1)}°` : "—°";
+        document.getElementById("angSwingVel").textContent = `${Math.round(swingVelDegS)} °/s${takeoffAngle !== null ? ` / ${takeoffAngle.toFixed(1)}°` : ''}`;
+        document.getElementById("angHipSep").textContent = `${hipSep.toFixed(1)}°`;
+        document.getElementById("angKneeValgus").textContent = `Frontal-Abw.: ${kneeValgus.toFixed(1)}°`;
+
+        currentMetrics = {
+          t: curT,
+          frame: frameNo,
+          leftKnee: leftKnee || 0,
+          rightKnee: rightKnee || 0,
+          dlvRumpf,
+          dlvStemm,
+          swingVelDegS,
+          takeoffAngle,
+          hipSep
+        };
+        angleHistory.push(currentMetrics);
+        renderAnglePlot();
+      }
+    }
+
+    function animationLoop() {
+      if (videoEl && !videoEl.paused && !videoEl.ended) {
+        if (Math.abs(videoEl.currentTime - lastVideoTime) > 0.001) {
+          lastVideoTime = videoEl.currentTime;
+          processCurrentFrame();
+        }
+        requestAnimationFrame(animationLoop);
+      }
+    }
+
+    window.loadLocalBioVideo = async function(input) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      document.getElementById("bioPlaceholder").style.display = "none";
+      videoEl.style.display = "block";
+      videoEl.src = url;
+      videoEl.load();
+      angleHistory = [];
+      prevSwingState = null;
+      prevComState = null;
+      phaseMarks = { TD: null, MKF: null, TO: null };
+      await initPoseEngine();
+      videoEl.onloadeddata = () => {
+        videoEl.currentTime = 0;
+        setTimeout(() => processCurrentFrame(), 120);
+      };
+      videoEl.onseeked = () => processCurrentFrame();
+    };
+
+    window.toggleBioPlay = function() {
+      if (!videoEl || !videoEl.src) return;
+      const btn = document.getElementById("bioPlayBtn");
+      if (videoEl.paused || videoEl.ended) {
+        videoEl.play();
+        if (btn) btn.textContent = "⏸ Pause";
+        requestAnimationFrame(animationLoop);
+      } else {
+        videoEl.pause();
+        if (btn) btn.textContent = "▶ Play";
+        processCurrentFrame();
+      }
+    };
+
+    window.stepVideoFrame = function(framesDelta) {
+      if (!videoEl || !videoEl.src) return;
+      videoEl.pause();
+      const btn = document.getElementById("bioPlayBtn");
+      if (btn) btn.textContent = "▶ Play";
+      const fps = parseFloat(document.getElementById("bioFpsSelect")?.value || "120");
+      videoEl.currentTime = Math.max(0, Math.min(videoEl.duration || 999, videoEl.currentTime + framesDelta / fps));
+    };
+
+    window.setVideoSpeed = function(rate) {
+      if (videoEl) videoEl.playbackRate = rate;
+    };
+
+    window.markTakeoffPhase = function(phase) {
+      if (!currentMetrics) return;
+      phaseMarks[phase] = { ...currentMetrics };
+      if (phaseMarks.TD && phaseMarks.TO) {
+        const contactMs = Math.round((phaseMarks.TO.t - phaseMarks.TD.t) * 1000);
+        const badge = document.getElementById("calcContactBadge");
+        if (badge) {
+          badge.textContent = `⏱ Kontaktzeit (TD➔TO): ${contactMs} ms`;
+          badge.style.color = contactMs <= 125 ? "#10b981" : "#f59e0b";
+        }
+      }
+      if (window.VideoBiomechanicsModule) {
+        VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
+      }
+    };
+
+    window.clearAngleHistory = function() {
+      angleHistory = [];
+      renderAnglePlot();
+    };
+
+    window.exportBioSnapshot = function() {
+      if (!videoEl || !videoEl.src) return;
+      const out = document.createElement("canvas");
+      const vw = canvasEl.width, vh = canvasEl.height;
+      out.width = vw; out.height = vh;
+      const octx = out.getContext("2d");
+      octx.drawImage(videoEl, 0, 0, vw, vh);
+      octx.drawImage(canvasEl, 0, 0, vw, vh);
+      const a = document.createElement("a");
+      a.download = `Luka_Biomechanik_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.png`;
+      a.href = out.toDataURL("image/png");
+      a.click();
+    };
+
+    if (window.VideoBiomechanicsModule) {
+      VideoBiomechanicsModule.registerEngineBridge({
+        getCurrentMetrics: () => currentMetrics,
+        getPhaseMarks: () => phaseMarks,
+        getAngleHistory: () => angleHistory,
+        getCaptureThumbnail: () => {
+          if (!videoEl || !videoEl.videoWidth) return null;
+          const tCanvas = document.createElement("canvas");
+          tCanvas.width = 320;
+          tCanvas.height = Math.round(320 * (videoEl.videoHeight / Math.max(1, videoEl.videoWidth)));
+          const tctx = tCanvas.getContext("2d");
+          tctx.drawImage(videoEl, 0, 0, tCanvas.width, tCanvas.height);
+          if (canvasEl && canvasEl.width) tctx.drawImage(canvasEl, 0, 0, tCanvas.width, tCanvas.height);
+          return tCanvas.toDataURL("image/jpeg", 0.72);
+        },
+        loadSavedAnalysisToView: (item) => {
+          angleHistory = Array.isArray(item.angleHistory) ? [...item.angleHistory] : [];
+          phaseMarks = item.phaseMarks ? { ...item.phaseMarks } : { TD: null, MKF: null, TO: null };
+          renderAnglePlot();
+          if (phaseMarks.TD && phaseMarks.TO) {
+            const ms = Math.round((phaseMarks.TO.t - phaseMarks.TD.t) * 1000);
+            const badge = document.getElementById("calcContactBadge");
+            if (badge) badge.textContent = `⏱ Kontaktzeit (TD➔TO): ${ms} ms (Archiv)`;
+          }
+          const m = item.summary || {};
+          document.getElementById("angPlantAngle").textContent = m.stemmwinkel_deg != null ? `${m.stemmwinkel_deg}°` : "—°";
+          document.getElementById("angTrunkTilt").textContent = m.rumpfwinkel_td_deg != null ? `${m.rumpfwinkel_td_deg}°` : "—°";
+          document.getElementById("angLeftKnee").textContent = m.kniewinkel_min_deg != null ? `${m.kniewinkel_min_deg}°` : "—°";
+          document.getElementById("angRightKnee").textContent = m.schwungbein_knie_kompakt_deg != null ? `${m.schwungbein_knie_kompakt_deg}°` : "—°";
+          document.getElementById("angSwingVel").textContent = m.schwungbein_deg_s != null ? `${m.schwungbein_deg_s} °/s` : "— °/s";
+        }
+      });
+    }
+  </script>
 </body>
 </html>

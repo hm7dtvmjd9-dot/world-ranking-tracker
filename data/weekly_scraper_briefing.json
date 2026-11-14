@@ -1,15 +1,55 @@
 {
-  "generated_at": "2026-11-08",
-  "rank_date": "2026-11-03",
-  "prev_rank_date": "2026-10-27",
+  "generated_at": "2026-11-14",
+  "rank_date": "2026-11-10",
+  "prev_rank_date": "2026-11-03",
   "luka": {
     "rank": 69,
     "score": 1144,
     "delta_rank": 0,
     "delta_score": 0,
-    "rank_date": "2026-11-03"
+    "eu_rank": 27,
+    "ger_rank": 4,
+    "rank_date": "2026-11-10"
   },
-  "summary_note": "Offizielles World Ranking Update (03.11.2026): Du stehst stabil auf Weltrang #69 (1.144 Pkt • #27 in Europa • Bereinigt Q#21 für die Hallen-EM Valencia • #3 in Deutschland). In der aktuellen Off-Season gab es in Europa keine neuen Hallen-Wettkämpfe >= 7,70 m; die ersten relevanten World Indoor Tour Meetings starten im Januar 2027.",
+  "summary_note": "WA Ranking-Stand (2026-11-10): Luka auf #69 Welt (1144 Pkt • #27 Europa • #4 GER, Δ +0 Plätze). 0 Top-100 Änderungen seit 2026-11-03 (Off-Season). Kalender: 117 Meetings (+1 neu / -75 entfernt / 1 Kat.-Updates).",
+  "ranking_diff_summary": "0 Top-100 Änderungen seit 2026-11-03 (Off-Season)",
+  "calendar_diff": {
+    "total_kept": 117,
+    "removed_unrelevant": 90,
+    "added_count": 1,
+    "removed_count": 75,
+    "category_changed_count": 1,
+    "category_counts": {
+      "D": 35,
+      "F": 10,
+      "B": 22,
+      "C": 28,
+      "A": 12,
+      "GL": 2,
+      "GW": 4,
+      "E": 2,
+      "DF": 1,
+      "OW": 1
+    },
+    "notable_added": [
+      {
+        "date": "2027-07-22",
+        "name": "Meeting Madrid",
+        "country": "ESP",
+        "category": "C"
+      }
+    ],
+    "category_changes": [
+      {
+        "id": "dlv-weinheim-kurpfalz-2027",
+        "name": "Kurpfalz-Gala Weinheim 2027",
+        "date": "2027-05-15",
+        "from": "D",
+        "to": "F"
+      }
+    ],
+    "summary_text": "Kalender: 117 Meetings (+1 neu / -75 entfernt / 1 Kat.-Updates)"
+  },
   "ranking_movers": [],
   "recent_relevant_results": [
     {
@@ -97,10 +137,22 @@
     {
       "date": "2026-12-05",
       "displayDate": "05. DEZ 2026",
+      "name": "Premier Track Classic",
+      "city": "KY",
+      "country": "USA",
+      "category": "D",
+      "tier": "Challenger",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": false
+    },
+    {
+      "date": "2026-12-05",
+      "displayDate": "05. DEZ 2026",
       "name": "Visit Winston-Salem College Kickoff",
       "city": "NC",
       "country": "USA",
       "category": "D",
+      "tier": "Challenger",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": true
     },
@@ -111,6 +163,7 @@
       "city": "Dresden",
       "country": "GER",
       "category": "F",
+      "tier": "National Permit",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": false
     },
@@ -121,6 +174,7 @@
       "city": "Dortmund",
       "country": "GER",
       "category": "F",
+      "tier": "National Permit",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": true
     },
@@ -131,6 +185,7 @@
       "city": "Dortmund",
       "country": "GER",
       "category": "F",
+      "tier": "National Permit",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": true
     },
@@ -141,6 +196,7 @@
       "city": "Dortmund",
       "country": "GER",
       "category": "F",
+      "tier": "National Permit",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": true
     },
@@ -151,6 +207,7 @@
       "city": "Luxembourg",
       "country": "LUX",
       "category": "B",
+      "tier": "Silver",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": false
     },
@@ -161,8 +218,9 @@
       "city": "Århus",
       "country": "DEN",
       "category": "C",
+      "tier": "Bronze",
       "tour": "World Athletics Indoor Tour 2027",
-      "promisingRunway": true
+      "promisingRunway": false
     },
     {
       "date": "2027-01-22",
@@ -171,6 +229,7 @@
       "city": "Nantes",
       "country": "FRA",
       "category": "C",
+      "tier": "Bronze",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": false
     },
@@ -181,18 +240,9 @@
       "city": "Chemnitz",
       "country": "GER",
       "category": "D",
+      "tier": "Challenger",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": false
-    },
-    {
-      "date": "2027-01-23",
-      "displayDate": "23. JAN 2027",
-      "name": "VI Memorial Alessio Giovannini",
-      "city": "Ancona",
-      "country": "ITA",
-      "category": "D",
-      "tour": "World Athletics Indoor Tour 2027",
-      "promisingRunway": true
     },
     {
       "date": "2027-01-26",
@@ -201,6 +251,7 @@
       "city": "Tampere",
       "country": "FIN",
       "category": "C",
+      "tier": "Bronze",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": false
     },
@@ -211,6 +262,7 @@
       "city": "Beograd",
       "country": "SRB",
       "category": "A",
+      "tier": "Gold",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": true
     }

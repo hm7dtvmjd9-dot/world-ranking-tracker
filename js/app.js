@@ -42,6 +42,13 @@ const App = (() => {
     registerServiceWorker();
     checkIosPwa();
 
+    // Support direct deep links like index.html?tab=videobio
+    const reqTab = new URLSearchParams(window.location.search).get('tab') || (window.location.hash || '').replace('#', '');
+    if (['analytics', 'rankings', 'qualification', 'venues', 'trainingplan', 'videobio'].includes(reqTab)) {
+      state.activeTab = reqTab;
+      switchTab(reqTab);
+    }
+
     // Auto-bootstrap data
     await loadInitialData();
   }
@@ -383,6 +390,7 @@ const App = (() => {
     const tabQual = document.getElementById('tabContentQualification');
     const tabVen = document.getElementById('tabContentVenues');
     const tabPlan = document.getElementById('tabContentPlan');
+    const tabVideo = document.getElementById('tabContentVideoBio');
 
     if (tabNext) tabNext.classList.toggle('hidden', tabId !== 'next');
     if (tabRank) tabRank.classList.toggle('hidden', tabId !== 'rankings');
@@ -390,6 +398,7 @@ const App = (() => {
     if (tabQual) tabQual.classList.toggle('hidden', tabId !== 'qualification');
     if (tabVen) tabVen.classList.toggle('hidden', tabId !== 'venues');
     if (tabPlan) tabPlan.classList.toggle('hidden', tabId !== 'trainingplan');
+    if (tabVideo) tabVideo.classList.toggle('hidden', tabId !== 'videobio');
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
     renderCurrentTab();
@@ -409,6 +418,8 @@ const App = (() => {
         if (window.VenuesModule) VenuesModule.render(state);
       } else if (state.activeTab === 'trainingplan') {
         if (window.TrainingPlanModule) TrainingPlanModule.render(state);
+      } else if (state.activeTab === 'videobio') {
+        if (window.VideoBiomechanicsModule) VideoBiomechanicsModule.render(state);
       }
     } catch (e) {
       console.error(`Error rendering active tab '${state.activeTab}':`, e);

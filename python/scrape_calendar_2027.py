@@ -320,13 +320,13 @@ DIAMOND_LEAGUE_2027_STOPS = [
 # have NO Men's Long Jump and are strictly excluded. The German Indoor Championship (DM Halle Dortmund)
 # is included under CHAMPIONSHIPS_2027.
 DLV_RAHMENTERMINPLAN_2027 = [
-    ("dlv-weinheim-kurpfalz-2027", "2027-05-15", "Kurpfalz-Gala Weinheim 2027", "Sepp-Herberger-Stadion", "Weinheim", "GER", "D", "DLV Rahmenterminplan / Continental Tour", False),
+    ("dlv-weinheim-kurpfalz-2027", "2027-05-15", "Kurpfalz-Gala Weinheim 2027", "Sepp-Herberger-Stadion", "Weinheim", "GER", "F", "DLV Rahmenterminplan (2026 Kat. F / ehem. D)", False),
     ("dlv-dessau-anhalt-2027", "2027-05-21", "Internationales Leichtathletik-Meeting Anhalt 2027", "Paul-Greifzu-Stadion", "Dessau", "GER", "C", "World Athletics Continental Tour 2027", False),
     ("dlv-dresden-goldenes-oval-2027", "2027-05-30", "Goldenes Oval Dresden 2027", "Heinz-Steyer-Stadion", "Dresden", "GER", "B", "World Athletics Continental Tour 2027", False),
     ("dlv-regensburg-gala-2027", "2027-06-05", "Sparkassen-Gala Regensburg 2027", "Universitätsstadion", "Regensburg", "GER", "D", "DLV Rahmenterminplan", False),
     ("dlv-rehlingen-pfingst-2027", "2027-06-13", "62. Internationales Pfingstsportfest Rehlingen 2027", "Bungertstadion", "Rehlingen", "GER", "C", "World Athletics Continental Tour 2027", False),
     ("dlv-essen-springer-2027", "2027-06-20", "Internationales Essener Springer-Meeting 2027", "Sportpark Am Hallo", "Essen", "GER", "D", "DLV Rahmenterminplan", False),
-    ("dlv-rhede-laz-2027", "2027-06-26", "55. Internationales LAZ Meeting Rhede 2027", "Besagroup-Sportpark", "Rhede", "GER", "D", "DLV Rahmenterminplan", False),
+    ("dlv-rhede-laz-2027", "2027-06-26", "55. Internationales LAZ Meeting Rhede 2027", "Besagroup-Sportpark", "Rhede", "GER", "F", "DLV Rahmenterminplan (2026 Kat. F)", False),
     ("dlv-pfungstadt-flutlicht-2027", "2027-07-10", "Pfungstädter Leichtathletik-Gala 2027", "TSV-Stadion", "Pfungstadt", "GER", "E", "DLV Rahmenterminplan", False),
     ("dlv-inneringen-schlossberg-2027", "2027-07-18", "Schloßberg-Weitsprungmeeting Inneringen 2027", "Weitsprunganlage Inneringen", "Inneringen", "GER", "E", "DLV Rahmenterminplan", False),
     ("dlv-berlin-istaf-outdoor-2027", "2027-08-29", "ISTAF Berlin 2027", "Olympiastadion", "Berlin", "GER", "B", "World Athletics Continental Tour 2027", False),
@@ -601,24 +601,31 @@ def main():
 
         start_date = ev.get("startDate") or ""
         display_date, month_name, year = format_date_info(start_date)
-        cat = ev.get("rankingCategory") or "D"
-        subgroup = ev.get("competitionSubgroup") or ""
+        subgroup = (ev.get("competitionSubgroup") or "").strip()
+        raw_cat = (ev.get("rankingCategory") or "").strip().upper()
+        sub_to_cat = {"gold": "A", "silver": "B", "bronze": "C", "challenger": "D"}
+        cat = raw_cat if raw_cat else sub_to_cat.get(subgroup.lower(), "F")
         tour_type = ev.get("tour_type") or ""
         is_indoor = "indoor" in tour_type.lower() or "(i)" in (ev.get("name") or "").lower()
 
-        tier = "Challenger"
         if cat == "OW":
             tier = "World Athletics Series"
         elif cat == "DF":
             tier = "Diamond League Final"
         elif cat == "GW":
             tier = "Diamond League"
-        elif cat in ["GL", "A"] or subgroup.lower() == "gold":
+        elif cat in ["GL", "A"]:
             tier = "Gold"
-        elif cat == "B" or subgroup.lower() == "silver":
+        elif cat == "B":
             tier = "Silver"
-        elif cat == "C" or subgroup.lower() == "bronze":
+        elif cat == "C":
             tier = "Bronze"
+        elif cat == "D":
+            tier = "Challenger"
+        elif cat == "E":
+            tier = "Area / National"
+        else:
+            tier = "National Permit"
 
         standard_eligible = cat in ["OW", "DF", "GW", "GL", "A", "B", "C"]
         status_desc = f"Kat. {cat} ({tier})"
@@ -729,14 +736,20 @@ def main():
         })
         existing_keys.add((dl_date, dl_city.lower()[:6]))
 
-    # Add Official DLV Rahmenterminplan 2027 Men's Elite Meetings
+    # Add Official DLV Rahmenterminplan 2027 Men's Elite Meetings (skip placeholders already confirmed in WA GraphQL)
+    existing_ger_outdoor_cities = set(
+        (m.get("city") or "").lower()[:5]
+        for m in verified_meetings
+        if m.get("country") == "GER" and (m.get("date") or "") >= "2027-04-01" and m.get("city")
+    )
     for dlv_id, dlv_date, dlv_name, dlv_venue, dlv_city, dlv_country, dlv_cat, dlv_tour, dlv_indoor in DLV_RAHMENTERMINPLAN_2027:
-        if (dlv_date, dlv_city.lower()[:6]) in existing_keys:
+        city_key = dlv_city.lower()[:6]
+        if (dlv_date, city_key) in existing_keys or (not dlv_indoor and dlv_city.lower()[:5] in existing_ger_outdoor_cities):
             continue
         display_date, month_name, year = format_date_info(dlv_date)
         promising, runway_note, luka_hist, top_marks = analyze_venue_quality(dlv_name, dlv_venue, dlv_city, dlv_country, comp_db)
-        tier_map = {"A": "Gold", "B": "Silver", "C": "Bronze", "D": "Challenger", "E": "National Permit"}
-        tier = tier_map.get(dlv_cat, "Challenger")
+        tier_map = {"A": "Gold", "B": "Silver", "C": "Bronze", "D": "Challenger", "E": "Area / National", "F": "National Permit"}
+        tier = tier_map.get(dlv_cat, "National Permit")
         verified_meetings.append({
             "id": dlv_id,
             "wa_id": None,

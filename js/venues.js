@@ -92,7 +92,15 @@ const VenuesModule = (() => {
         style: 'background:rgba(217,119,6,0.24);color:#fdba74;border:1px solid #d97706;font-weight:800'
       };
     }
-    // 8. Kat. D = Holz/Braun
+    // 8. Kat. E & F = Grau (explicit check BEFORE challenger tier fallback!)
+    if (c === 'E' || c === 'F') {
+      return {
+        label: `⬜ KAT. ${c}`,
+        shortLabel: `Kat. ${c}`,
+        style: 'background:rgba(100,116,139,0.22);color:#94a3b8;border:1px solid #64748b;font-weight:700'
+      };
+    }
+    // 9. Kat. D = Holz/Braun
     if (c === 'D' || t === 'challenger') {
       return {
         label: `🪵 KAT. D (HOLZ)`,
@@ -100,7 +108,7 @@ const VenuesModule = (() => {
         style: 'background:rgba(133,77,14,0.36);color:#fbbf24;border:1px solid #a16207;font-weight:800'
       };
     }
-    // 9. Kat. E & F = Grau
+    // 10. Sonstige = Grau
     return {
       label: `⬜ KAT. ${c || 'E/F'}`,
       shortLabel: `Kat. ${c || 'E/F'}`,
@@ -319,18 +327,27 @@ const VenuesModule = (() => {
     const el = document.getElementById('calendarChangelogNotice');
     if (!el) return;
     const wb = state.weeklyBriefing || {};
-    const recent = wb.recent_highlights || [];
-    const upcoming = wb.upcoming_highlights || [];
+    const recent = wb.recent_relevant_results || wb.recent_highlights || [];
+    const upcoming = wb.upcoming_meetings || wb.upcoming_highlights || [];
+    const movers = wb.ranking_movers || [];
+    const luka = wb.luka || {};
+    const calDiff = wb.calendar_diff || {};
+
+    const fmtIso = (iso) => {
+      const p = String(iso || '').split('-');
+      return p.length === 3 ? `${p[2]}.${p[1]}.${p[0]}` : (iso || '-');
+    };
+    const standStr = fmtIso(wb.rank_date || wb.generated_at);
 
     const recentHtml = recent.slice(0, 5).map(r => `
       <div class="bg-slate-950 border border-slate-800 rounded-lg p-2 flex items-center justify-between gap-2 text-[11px]">
         <div class="truncate">
           ${getCategoryBadgeHtml(r.category, '', r.name, true)}
           <strong class="text-white ml-1">${r.name}</strong>
-          <span class="text-slate-400">(${r.date})</span>
+          <span class="text-slate-400">(${fmtIso(r.date)})</span>
         </div>
         <div class="shrink-0 font-mono text-right">
-          <span class="text-emerald-400 font-bold">${r.winner} • ${Number(r.best_mark).toFixed(2)}m</span>
+          <span class="text-emerald-400 font-bold">${r.winner || (r.best_mark ? Number(r.best_mark).toFixed(2) + 'm' : '-')}</span>
           ${r.luka_mark ? `<span class="ml-1 px-1.5 py-0.2 rounded bg-cyan-500 text-slate-950 font-black text-[9px]">Luka: ${r.luka_mark}m</span>` : ''}
         </div>
       </div>
@@ -342,9 +359,17 @@ const VenuesModule = (() => {
           ${getCategoryBadgeHtml(u.category, u.tier, u.name, true)}
           <strong class="text-white ml-1">${u.name}</strong>
         </div>
-        <span class="text-cyan-400 font-mono font-bold shrink-0">${u.date} (${u.city})</span>
+        <span class="text-cyan-400 font-mono font-bold shrink-0">${u.displayDate || fmtIso(u.date)}${u.city ? ` (${u.city})` : ''}</span>
       </div>
     `).join('');
+
+    const moversHtml = movers.length > 0
+      ? movers.slice(0, 4).map(mv => `<span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 text-[10px]">${mv.name} (${mv.country}): #${mv.rank} (${mv.delta_score >= 0 ? '+' : ''}${mv.delta_score} Pkt)</span>`).join(' ')
+      : `<span class="text-slate-400 text-[10px]">${wb.ranking_diff_summary || 'Off-Season: 0 Top-100 Änderungen'}</span>`;
+
+    const calChangesHtml = (calDiff.notable_added && calDiff.notable_added.length > 0)
+      ? `<div class="text-[10px] text-amber-300">🆕 Kalender-Diff: +${calDiff.added_count || 0} neu (${calDiff.notable_added.slice(0, 3).map(x => `${x.name} [${x.category}]`).join(', ')}) • -${calDiff.removed_count || 0} entfernt • ${calDiff.category_changed_count || 0} Kat.-Updates</div>`
+      : `<div class="text-[10px] text-slate-400">${calDiff.summary_text || `Bereinigter Kalender (${calDiff.total_kept || upcoming.length} Events)`}</div>`;
 
     el.innerHTML = `
       <details class="w-full" open>
@@ -352,18 +377,22 @@ const VenuesModule = (() => {
           <div class="flex items-center gap-2 flex-wrap">
             <span class="text-base">🗞️</span>
             <span class="font-black text-emerald-400 uppercase tracking-wider text-xs font-mono">
-              WÖCHENTLICHES SCRAPER- & RANKING-BRIEFING (STAND: 08.11.2026 • KW 45/46)
+              SCRAPER- &amp; RANKING-DIFF BRIEFING (STAND: ${standStr})
             </span>
             <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-700">
-              Luka: #70 Welt (1.144 Pkt) • #23 Europa • #2 GER
+              Luka: #${luka.rank || 69} Welt (${(luka.score || 1144).toLocaleString('de-DE')} Pkt) • #${luka.eu_rank || 26} Europa • #${luka.ger_rank || 4} GER
             </span>
           </div>
           <span class="text-[10px] text-slate-400 font-mono">Ein-/Ausklappen ▾</span>
         </summary>
-        <div class="mt-3 pt-3 border-t border-slate-800 space-y-3 font-mono text-xs">
+        <div class="mt-3 pt-3 border-t border-slate-800 space-y-2.5 font-mono text-xs">
           <p class="text-[11px] text-slate-300 font-sans leading-relaxed">
-            ${wb.summary_text || 'Alle inoffiziellen Kleinstwettkämpfe (< 7,70 m oder ohne Top-100-Beteiligung) wurden entfernt. Der Universal-Kalender bündelt jetzt deine 86 Planungs-Meetings 2027 und alle 1.020 relevanten Top-100-Wettkämpfe (2023–2026).'}
+            ${wb.summary_note || wb.summary_text || 'Universal-Kalender & World Ranking Scraper aktiv.'}
           </p>
+          <div class="bg-slate-950/70 border border-slate-800 rounded-lg p-2 space-y-1">
+            <div class="flex flex-wrap items-center gap-1.5">${moversHtml}</div>
+            ${calChangesHtml}
+          </div>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <div class="space-y-1.5">
               <span class="text-[10px] font-bold text-amber-400 uppercase block">🏆 Letzte Top-100-Ergebnisse (≥ 7,70 m):</span>
