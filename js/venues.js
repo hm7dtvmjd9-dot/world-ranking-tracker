@@ -351,6 +351,8 @@ const VenuesModule = (() => {
     setEl('statusCountGoal', goalCount);
     setEl('statusCountUnsorted', unsortedCount);
     setEl('statusCountHidden', hiddenCount);
+    const listBtn = document.getElementById('calViewListBtn');
+    if (listBtn) listBtn.textContent = `📋 Saisonplanung 2027 (${meetings.length})`;
   }
 
   function renderTriageButtonsHtml(meetingId, curStatus, compact = false) {
@@ -508,8 +510,8 @@ const VenuesModule = (() => {
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <div class="space-y-1.5">
-              <span class="text-[10px] font-bold text-amber-400 uppercase block">🏆 Letzte Top-100-Ergebnisse (≥ 7,70 m):</span>
-              ${recentHtml || '<span class="text-slate-500 text-[11px]">Off-Season / Hallenvorbereitung läuft.</span>'}
+              <span class="text-[10px] font-bold text-amber-400 uppercase block">🏆 Abgeschlossene Wettkämpfe (ab 05.12.2026) &amp; Top-100 Ergebnisse:</span>
+              ${recentHtml || '<span class="text-slate-500 text-[11px]">Erste Hallen-Wettkämpfe starten am 05.12.2026 — ab dann werden Ergebnisse wöchentlich automatisch gezogen.</span>'}
             </div>
             <div class="space-y-1.5">
               <span class="text-[10px] font-bold text-cyan-400 uppercase block">📅 Nächste Schlüssel-Termine (Saison 2026/27):</span>
@@ -635,13 +637,14 @@ const VenuesModule = (() => {
 
   function loadDefaultLukaSchedule() {
     const defaults = {
+      'wa-7244492': 'confirmed',           // CMCM Luxembourg Indoor Meeting (17.01.2027 bestätigt!)
       'wa-7244484': 'watchlist',           // Chemnitz Indoor
-      'wa-7244518': 'confirmed',           // Gorzów Jump Festival (8.18m PB!)
+      'wa-7244518': 'confirmed',           // Gorzów Jump Festival (30.01.2027 • 8.18m PB!)
       'wa-7238588': 'watchlist',           // Ostrava Czech Indoor Gala
       'wa-7240482': 'watchlist',           // Madrid Indoor
       'wa-7244475': 'watchlist',           // Paris Indoor
-      'champ-dm-halle-2027': 'goal',       // DM Halle Dortmund (Weiß: Ziel/Rahmen)
-      'champ-em-indoor-2027': 'goal',      // Hallen-EM Valencia (Weiß: Ziel/Rahmen)
+      'champ-dm-halle-2027': 'goal',       // DM Halle Dortmund (~21.02.2027 • Kat. D)
+      'wa-7204665': 'goal',                // Hallen-EM Valencia (04.-07.03.2027 • Kat. A)
       'dlv-weinheim-kurpfalz-2027': 'confirmed',
       'dl-rabat-2027': 'watchlist',
       'dlv-dessau-anhalt-2027': 'watchlist',

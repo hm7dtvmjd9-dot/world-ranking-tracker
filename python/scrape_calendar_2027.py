@@ -93,7 +93,7 @@ CHAMPIONSHIPS_2027 = [
         "name": "Deutsche Hallenmeisterschaften 2027 (DM Halle)",
         "tour": "Meisterschaften (DLV)",
         "tier": "Meisterschaft",
-        "category": "B",
+        "category": "D",
         "subgroup": "National Championships",
         "isChampionship": True,
         "championshipType": "DM",
@@ -103,13 +103,13 @@ CHAMPIONSHIPS_2027 = [
         "indoor": True,
         "mensLongJump": True,
         "womensLongJump": True,
-        "standardEligible": True,
-        "status": "Nationale Meisterschaft (Kat. B) • 60 Bonuspunkte für Sieg",
+        "standardEligible": False,
+        "status": "Nationale Hallenmeisterschaft (Kat. D laut WA-Kategorie)",
         "promisingRunway": True,
         "runwayNote": "Anlage vielversprechend ⭐ (Helmut-Körnig-Halle Dortmund: Schneller Anlauf, DM-Hallen-Klassiker)",
         "lukaHistory": [
-            {"mark": 7.92, "year": 2024, "date": "18. FEB 2024", "place": "2. F"},
-            {"mark": 7.78, "year": 2026, "date": "28. FEB 2026", "place": "3. F"}
+            {"mark": 7.78, "year": 2026, "date": "28. FEB 2026", "place": "2. F"},
+            {"mark": 7.72, "year": 2023, "date": "19. FEB 2023", "place": "3. F"}
         ],
         "topHistoricalMarks": [8.18, 8.05, 7.98, 7.92, 7.88],
         "contactPersons": [
@@ -122,9 +122,9 @@ CHAMPIONSHIPS_2027 = [
         "liveStreamingUrl": None
     },
     {
-        "id": "champ-em-indoor-2027",
-        "wa_id": 9902,
-        "date": "2027-03-05",
+        "id": "wa-7204665",
+        "wa_id": 7204665,
+        "date": "2027-03-04",
         "endDate": "2027-03-07",
         "displayDate": "04.–07. MRZ 2027",
         "month": "März 2027",
@@ -132,8 +132,8 @@ CHAMPIONSHIPS_2027 = [
         "name": "European Athletics Indoor Championships 2027 (Hallen-EM Valencia)",
         "tour": "Meisterschaften (European Athletics)",
         "tier": "Meisterschaft",
-        "category": "GL",
-        "subgroup": "European Championships",
+        "category": "A",
+        "subgroup": "Area Indoor Championships",
         "isChampionship": True,
         "championshipType": "EM",
         "venue": "Velódromo Luis Puig",
@@ -143,7 +143,7 @@ CHAMPIONSHIPS_2027 = [
         "mensLongJump": True,
         "womensLongJump": True,
         "standardEligible": True,
-        "status": "Hallen-Europameisterschaft (Kat. GL) • 140 Bonuspunkte für Sieg",
+        "status": "Hallen-Europameisterschaft (Kat. A laut WA-Kalender)",
         "promisingRunway": True,
         "runwayNote": "Anlage vielversprechend ⭐ (Hallen-EM Valencia im Velódromo Luis Puig • Hauptziel Hallensaison 2027)",
         "lukaHistory": [],
@@ -420,13 +420,7 @@ def fetch_master_calendar_events_graphql(start_date="2026-12-01", end_date="2027
                         continue
                     if any(x in cg.lower() for x in ["u20", "u18", "combined events", "race walking", "road", "cross country", "mountain"]):
                         continue
-                    # For Category E & F (local/national permits), only include GER & direct neighbors; for B/C/D only Europe or global A/GL/GW/DF/OW
-                    if cat in ["E", "F"]:
-                        if not any(f"({c})" in venue_str for c in ["GER", "SUI", "AUT", "NED", "BEL", "LUX", "POL", "CZE", "FRA"]):
-                            continue
-                    elif cat in ["B", "C", "D"]:
-                        if area and area != "Europe" and "(GER)" not in venue_str:
-                            continue
+                    # Do NOT exclude any international or national meetings up front: Luka triages everything himself in the UI
                     ev["tour_type"] = cg or ("World Athletics Indoor Tour 2027" if (ev.get("startDate") or "") < "2027-03-25" else "World Athletics Master Calendar 2027")
                     all_ev.append(ev)
                 if offset + 100 >= hits or not batch:
@@ -454,35 +448,59 @@ def query_competition_organiser_info(comp_id):
     except Exception:
         return None
 
-def analyze_venue_quality(comp_name, venue, city, country, comp_db):
+def analyze_venue_quality(comp_name, venue, city, country, is_indoor, comp_db):
     if not comp_db or "competitions" not in comp_db:
-        return False, "Standard Wettkampfanlage", [], []
+        return False, "Solide Wettkampfanlage mit regulären Bedingungen", [], []
 
-    tokens = set()
-    if city:
-        c = city.strip().lower()
-        if len(c) >= 3 and c not in STOP_WORDS:
-            tokens.add(c)
-    for w in re.split(r'[, \-/\'\"]+', comp_name):
-        w = w.strip().lower()
-        if len(w) >= 4 and w not in STOP_WORDS and not re.match(r'^\d+$', w):
-            tokens.add(w)
+    # Match strictly by specific city / exact venue (NEVER by generic words like 'internacional', 'gala', 'meeting')
+    # AND strictly separate Indoor vs. Outdoor (e.g. Regensburg Indoor != Regensburg Outdoor)
+    clean_city = (city or "").strip().lower()
+    if clean_city in ["deutschland", "kassel / deutschland", "tba", ""]:
+        clean_city = ""
+    if len(clean_city) < 4:
+        clean_city = ""
+
+    explicit_venues = [
+        "helmut-körnig", "luis puig", "gallur", "arena gorz", "sepp-herberger",
+        "paul-greifzu", "auestadion", "universitätsstadion", "kennedyplatz",
+        "stade de la charri", "olympiastadion"
+    ]
+    venue_low = (venue or "").lower()
+    matched_venue_keys = [kv for kv in explicit_venues if kv in venue_low]
 
     matched_comps = []
+    comp_tokens = {
+        w for w in re.split(r'[, \-/\'\"]+', (comp_name or "").lower())
+        if len(w) >= 4 and w not in STOP_WORDS and not re.match(r'^\d+$', w) and w != clean_city
+    }
     for c in comp_db["competitions"]:
-        c_text = (c.get("name", "") + " " + c.get("venue", "")).lower()
-        if any(re.search(r'\b' + re.escape(tok) + r'\b', c_text) for tok in tokens):
-            matched_comps.append(c)
+        c_text = (str(c.get("name", "")) + " " + str(c.get("venue", ""))).lower()
+        c_indoor = bool(c.get("indoor")) or "(i)" in c_text or "indoor" in c_text or "hallen" in c_text
+        if c_indoor != bool(is_indoor):
+            continue
+        c_cnt = re.search(r'\(([a-z]{3})\)\s*$', c_text)
+        if country and c_cnt and c_cnt.group(1).upper() != str(country).upper():
+            continue
+
+        city_ok = bool(clean_city and re.search(r'\b' + re.escape(clean_city) + r'\b', c_text))
+        venue_ok = any(vk in c_text for vk in matched_venue_keys)
+        if not (city_ok or venue_ok):
+            continue
+        # When matching a generic city (e.g. Regensburg, Luxembourg, Dortmund), require at least 1 distinctive meet word match for Luka marks
+        matched_comps.append(c)
 
     all_marks = []
     luka_marks = []
     for mc in matched_comps:
+        mc_text = (str(mc.get("name", "")) + " " + str(mc.get("venue", ""))).lower()
+        mc_words = {w for w in re.split(r'[, \-/\'\"]+', mc_text) if len(w) >= 4 and w not in STOP_WORDS and not re.match(r'^\d+$', w) and w != clean_city}
+        name_overlap = bool(comp_tokens & mc_words) or any(vk in mc_text for vk in matched_venue_keys) or not comp_tokens
         for r in mc.get("results", []):
             try:
                 m_val = float(str(r.get("mark", 0)).replace(',', '.').replace('m', ''))
                 if m_val > 5.0:
                     all_marks.append(m_val)
-                    if "herden" in r.get("athlete", "").lower():
+                    if "herden" in r.get("athlete", "").lower() and name_overlap:
                         luka_marks.append({
                             "mark": m_val,
                             "year": mc.get("year"),
@@ -631,8 +649,20 @@ def main():
         status_desc = f"Kat. {cat} ({tier})"
 
         promising, runway_note, luka_hist, top_marks = analyze_venue_quality(
-            ev.get("name") or "", clean_venue, venue_city, venue_country, comp_db
+            ev.get("name") or "", clean_venue, venue_city, venue_country, is_indoor, comp_db
         )
+
+        # Official championship enrichment if this WA event matches a 2027 Championship (avoid duplicates!)
+        is_champ = False
+        champ_type = None
+        if cid == 7204665 or "european athletics indoor championships" in name_lower:
+            is_champ = True
+            champ_type = "EM"
+            tier = "Meisterschaft"
+            runway_note = "Anlage vielversprechend ⭐ (Hallen-EM Valencia im Velódromo Luis Puig • Hauptziel Hallensaison 2027)"
+            promising = True
+            display_date = "04.–07. MRZ 2027"
+            luka_hist = []  # Luka has not competed at Hallen-EM Valencia before
 
         contacts = []
         if info:
@@ -665,7 +695,8 @@ def main():
             "tier": tier,
             "category": cat,
             "subgroup": subgroup,
-            "isChampionship": False,
+            "isChampionship": is_champ,
+            "championshipType": champ_type,
             "venue": clean_venue,
             "city": venue_city,
             "country": venue_country,
@@ -687,11 +718,12 @@ def main():
         }
 
     verified_meetings = []
-    with ThreadPoolExecutor(max_workers=15) as executor:
+    with ThreadPoolExecutor(max_workers=25) as executor:
         for item in executor.map(process_event, all_raw_events):
             if item:
                 verified_meetings.append(item)
 
+    existing_ids = set(m.get("id") for m in verified_meetings if m.get("id"))
     existing_keys = set((m["date"], m["city"].lower()[:6]) for m in verified_meetings if m.get("city"))
 
     # Add Official 2027 Wanda Diamond League Calendar
@@ -699,7 +731,7 @@ def main():
         if (dl_date, dl_city.lower()[:6]) in existing_keys:
             continue
         display_date, month_name, year = format_date_info(dl_date)
-        promising, runway_note, luka_hist, top_marks = analyze_venue_quality(dl_name, dl_venue, dl_city, dl_country, comp_db)
+        promising, runway_note, luka_hist, top_marks = analyze_venue_quality(dl_name, dl_venue, dl_city, dl_country, False, comp_db)
         is_final = dl_cat == "DF"
         verified_meetings.append({
             "id": dl_id,
@@ -747,7 +779,7 @@ def main():
         if (dlv_date, city_key) in existing_keys or (not dlv_indoor and dlv_city.lower()[:5] in existing_ger_outdoor_cities):
             continue
         display_date, month_name, year = format_date_info(dlv_date)
-        promising, runway_note, luka_hist, top_marks = analyze_venue_quality(dlv_name, dlv_venue, dlv_city, dlv_country, comp_db)
+        promising, runway_note, luka_hist, top_marks = analyze_venue_quality(dlv_name, dlv_venue, dlv_city, dlv_country, dlv_indoor, comp_db)
         tier_map = {"A": "Gold", "B": "Silver", "C": "Bronze", "D": "Challenger", "E": "Area / National", "F": "National Permit"}
         tier = tier_map.get(dlv_cat, "National Permit")
         verified_meetings.append({
@@ -784,9 +816,20 @@ def main():
         })
         existing_keys.add((dlv_date, dlv_city.lower()[:6]))
 
-    # Add Championships 2027
+    # Add Championships 2027 (deduplicated against already-scraped WA IDs like wa-7204665!)
     for champ in CHAMPIONSHIPS_2027:
-        verified_meetings.append(champ)
+        if champ.get("id") in existing_ids:
+            continue
+        # Ensure champ doesn't duplicate same date+city+indoor championship already scraped from WA
+        cname_low = (champ.get("name") or "").lower()
+        dup = any(
+            (m.get("wa_id") and m.get("wa_id") == champ.get("wa_id")) or
+            ("european athletics indoor" in cname_low and "european athletics indoor" in (m.get("name") or "").lower())
+            for m in verified_meetings
+        )
+        if not dup:
+            verified_meetings.append(champ)
+            existing_ids.add(champ.get("id"))
 
     verified_meetings.sort(key=lambda x: x["date"])
 

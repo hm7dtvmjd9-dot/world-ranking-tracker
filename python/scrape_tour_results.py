@@ -209,12 +209,18 @@ def fetch_lj_results_for_event(ev):
             return None
         iso_d = ev.get("startDate", "")
         yr = int(iso_d[:4]) if iso_d and len(iso_d) >= 4 else 2026
-        is_ind = "indoor" in (ev.get("tour_type") or "").lower() or "(i)" in (ev.get("name") or "").lower()
         ev_title = ev.get("name", "")
         ev_venue = ev.get("venue", "")
+        full_name = f"{ev_title}, {ev_venue}" if ev_venue and ev_venue not in ev_title else ev_title
+        is_ind = (
+            "indoor" in (ev.get("tour_type") or "").lower()
+            or "indoor" in full_name.lower()
+            or "(i)" in full_name.lower()
+            or "hallen" in full_name.lower()
+        )
         return {
             "wa_id": cid,
-            "name": f"{ev_title}, {ev_venue}" if ev_venue and ev_venue not in ev_title else ev_title,
+            "name": full_name,
             "raw_name": ev_title,
             "tour": ev.get("tour_type"),
             "round": "Finale",
@@ -240,6 +246,8 @@ def run_tour_results_scraper():
     print(f"Loaded {len(existing_comps)} existing competitions from database.")
 
     tours = [
+        ("2026/27", 3677, "World Athletics Indoor Tour"),
+        ("2027", 3773, "World Athletics Continental Tour"),
         ("2025/26", 3677, "World Athletics Indoor Tour"),
         ("2026", 3773, "World Athletics Continental Tour"),
         ("2024/25", 3677, "World Athletics Indoor Tour"),
@@ -254,11 +262,35 @@ def run_tour_results_scraper():
                 seen_ids.add(e.get("id"))
                 all_tour_events.append(e)
 
-    master_res_evts = fetch_master_calendar_with_results("2026-08-01", "2027-03-31")
+    today_iso = datetime.now().strftime("%Y-%m-%d")
+    master_end = max(today_iso, "2026-12-31")
+    master_res_evts = fetch_master_calendar_with_results("2026-08-01", master_end)
     for e in master_res_evts:
         if e.get("id") not in seen_ids:
             seen_ids.add(e.get("id"))
             all_tour_events.append(e)
+
+    # Directly check ALL completed meetings from calendar_2027.json (starting 2026-12-05+) whose date <= today
+    cal_path = os.path.join(BASE_DIR, "data", "calendar_2027.json")
+    if os.path.exists(cal_path):
+        try:
+            with open(cal_path, "r", encoding="utf-8") as cf:
+                cal_meetings = json.load(cf).get("meetings", [])
+            for m in cal_meetings:
+                wid = m.get("wa_id")
+                mdate = m.get("date") or ""
+                if wid and mdate and mdate <= today_iso and wid not in seen_ids and wid < 9000000:
+                    seen_ids.add(wid)
+                    all_tour_events.append({
+                        "id": wid,
+                        "name": m.get("name"),
+                        "startDate": mdate,
+                        "venue": f"{m.get('venue', '')}, {m.get('city', '')} ({m.get('country', '')})".strip(", "),
+                        "rankingCategory": m.get("category"),
+                        "tour_type": m.get("tour") or "World Athletics Calendar"
+                    })
+        except Exception as e:
+            print(f"⚠️ Could not read calendar_2027.json for completed events: {e}")
 
     print(f"Inspecting {len(all_tour_events)} World Indoor Tour, Continental Tour & Master Calendar meetings for Men's Long Jump results...")
     with ThreadPoolExecutor(max_workers=25) as ex:

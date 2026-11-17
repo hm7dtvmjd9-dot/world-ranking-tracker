@@ -9176,7 +9176,7 @@
       "year": 2026,
       "category": "D",
       "venue": "Maria-Theresien-Straße, Innsbruck (AUT)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "13 JUN 2026"
       ],
@@ -9820,7 +9820,7 @@
       "iso_date": "2026-06-07",
       "category": "D",
       "venue": "Gobierno Autónomo Municipal de Cochabamba, Cochabamba (BOL)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 JUN 2026"
       ],
@@ -10413,7 +10413,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "03 JUN 2026"
       ],
@@ -14813,7 +14813,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "24 APR 2026"
       ],
@@ -16234,7 +16234,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 MAR 2026"
       ],
@@ -16279,7 +16279,7 @@
       "year": 2026,
       "category": "OW",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "22 MAR 2026"
       ],
@@ -16661,7 +16661,7 @@
       "year": 2026,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "13 MAR 2026"
       ],
@@ -16794,7 +16794,7 @@
       "year": 2026,
       "category": "D",
       "venue": "Xipu Training Base Indoor Athletics Stadium, Chengdu (CHN)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "11 MAR 2026"
       ],
@@ -17589,7 +17589,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "08 MAR 2026"
       ],
@@ -17724,7 +17724,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "01 MAR 2026"
       ],
@@ -17802,7 +17802,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "01 MAR 2026"
       ],
@@ -17836,7 +17836,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "01 MAR 2026"
       ],
@@ -17870,7 +17870,7 @@
       "year": 2026,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "01 MAR 2026"
       ],
@@ -17948,7 +17948,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "01 MAR 2026"
       ],
@@ -17982,7 +17982,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2026"
       ],
@@ -18016,7 +18016,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2026"
       ],
@@ -18072,7 +18072,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2026"
       ],
@@ -18139,7 +18139,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2026"
       ],
@@ -18184,7 +18184,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2026"
       ],
@@ -18252,7 +18252,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2026"
       ],
@@ -18331,7 +18331,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2026"
       ],
@@ -18365,7 +18365,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2026"
       ],
@@ -18399,7 +18399,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2026"
       ],
@@ -18433,7 +18433,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2026"
       ],
@@ -18467,7 +18467,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "27 FEB 2026"
       ],
@@ -18512,7 +18512,7 @@
       "year": 2026,
       "category": "D",
       "venue": "Indoor Athletics Stadium in Training Center of GAS, Beijing (CHN)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "27 FEB 2026"
       ],
@@ -18625,7 +18625,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "27 FEB 2026"
       ],
@@ -18670,7 +18670,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "26 FEB 2026"
       ],
@@ -18759,7 +18759,7 @@
       "year": 2026,
       "category": "D",
       "venue": "Gobierno Autónomo Municipal de Cochabamba, Cochabamba (BOL)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "26 FEB 2026"
       ],
@@ -18850,7 +18850,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "21 FEB 2026"
       ],
@@ -18895,7 +18895,7 @@
       "year": 2026,
       "category": "D",
       "venue": "Pista de atletismo Cuberta de Ourense, Ourense (ESP)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "21 FEB 2026"
       ],
@@ -19030,7 +19030,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "20 FEB 2026"
       ],
@@ -19075,7 +19075,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "20 FEB 2026"
       ],
@@ -19109,7 +19109,7 @@
       "year": 2026,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "20 FEB 2026"
       ],
@@ -19199,7 +19199,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "14 FEB 2026"
       ],
@@ -19742,7 +19742,7 @@
       "year": 2026,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "13 FEB 2026"
       ],
@@ -19908,7 +19908,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "13 FEB 2026"
       ],
@@ -19964,7 +19964,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "13 FEB 2026"
       ],
@@ -19998,7 +19998,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "13 FEB 2026"
       ],
@@ -20043,7 +20043,7 @@
       "year": 2026,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "11 FEB 2026"
       ],
@@ -20166,7 +20166,7 @@
       "year": 2026,
       "category": "B",
       "venue": "L'Anneau-Halle d'athlétisme de Metz, Metz (FRA)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "08 FEB 2026"
       ],
@@ -20279,7 +20279,7 @@
       "year": 2026,
       "category": "C",
       "venue": "Helmut-Körnig-Halle, Dortmund (GER)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "08 FEB 2026"
       ],
@@ -20392,7 +20392,7 @@
       "year": 2026,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "08 FEB 2026"
       ],
@@ -20481,7 +20481,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 FEB 2026"
       ],
@@ -20526,7 +20526,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 FEB 2026"
       ],
@@ -20560,7 +20560,7 @@
       "year": 2026,
       "category": "D",
       "venue": "President Valdas Adamkus athletics indoor arena, Kaunas (LTU)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 FEB 2026"
       ],
@@ -20673,7 +20673,7 @@
       "year": 2026,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "03 FEB 2026"
       ],
@@ -20864,7 +20864,7 @@
       "year": 2026,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "31 JAN 2026"
       ],
@@ -20976,7 +20976,7 @@
       "year": 2026,
       "category": "C",
       "venue": "Velódromo Luis Puig, Valencia (ESP)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "31 JAN 2026"
       ],
@@ -21045,7 +21045,7 @@
       "year": 2026,
       "category": "D",
       "venue": "Emirates Arena, Glasgow (GBR)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "31 JAN 2026"
       ],
@@ -21213,7 +21213,7 @@
       "year": 2026,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "30 JAN 2026"
       ],
@@ -21540,7 +21540,7 @@
       "year": 2026,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "25 JAN 2026"
       ],
@@ -21663,7 +21663,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "24 JAN 2026"
       ],
@@ -21697,7 +21697,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "23 JAN 2026"
       ],
@@ -21731,7 +21731,7 @@
       "year": 2026,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "21 JAN 2026"
       ],
@@ -21911,7 +21911,7 @@
       "year": 2026,
       "category": "B",
       "venue": "Coque Sport Center, Luxembourg (LUX)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 JAN 2026"
       ],
@@ -22035,7 +22035,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 JAN 2026"
       ],
@@ -22103,7 +22103,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 JAN 2026"
       ],
@@ -22137,7 +22137,7 @@
       "year": 2026,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "16 JAN 2026"
       ],
@@ -23481,7 +23481,7 @@
       "year": 2025,
       "category": "D",
       "venue": "CNDA, Bragança Paulista (BRA)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "24 AUG 2025"
       ],
@@ -33156,7 +33156,7 @@
       "year": 2025,
       "category": "D",
       "venue": "Maria-Theresien-Straße, Innsbruck (AUT)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 JUN 2025"
       ],
@@ -37897,7 +37897,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 APR 2025"
       ],
@@ -38794,7 +38794,7 @@
       "year": 2025,
       "category": "OW",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "23 MAR 2025"
       ],
@@ -39041,7 +39041,7 @@
       "year": 2025,
       "category": "OW",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "22 MAR 2025"
       ],
@@ -39075,7 +39075,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "22 MAR 2025"
       ],
@@ -39109,7 +39109,7 @@
       "year": 2025,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "14 MAR 2025"
       ],
@@ -39243,7 +39243,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "09 MAR 2025"
       ],
@@ -39378,7 +39378,7 @@
       "year": 2025,
       "category": "GL",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 MAR 2025"
       ],
@@ -39489,7 +39489,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 MAR 2025"
       ],
@@ -39523,7 +39523,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 MAR 2025"
       ],
@@ -39590,7 +39590,7 @@
       "year": 2025,
       "category": "GL",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "06 MAR 2025"
       ],
@@ -39702,7 +39702,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "01 MAR 2025"
       ],
@@ -39758,7 +39758,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2025"
       ],
@@ -39792,7 +39792,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "27 FEB 2025"
       ],
@@ -39837,7 +39837,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "23 FEB 2025"
       ],
@@ -39937,7 +39937,7 @@
       "year": 2025,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "23 FEB 2025"
       ],
@@ -40026,7 +40026,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "23 FEB 2025"
       ],
@@ -40082,7 +40082,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "23 FEB 2025"
       ],
@@ -40161,7 +40161,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "22 FEB 2025"
       ],
@@ -40240,7 +40240,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "22 FEB 2025"
       ],
@@ -40274,7 +40274,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "22 FEB 2025"
       ],
@@ -40319,7 +40319,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "22 FEB 2025"
       ],
@@ -40353,7 +40353,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "22 FEB 2025"
       ],
@@ -40387,7 +40387,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "21 FEB 2025"
       ],
@@ -40432,7 +40432,7 @@
       "year": 2025,
       "category": "D",
       "venue": "Gobierno Autónomo Municipal de Cochabamba, Cochabamba (BOL)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "20 FEB 2025"
       ],
@@ -40501,7 +40501,7 @@
       "year": 2025,
       "category": "D",
       "venue": "Shandong Sports Training Center, Jinan (CHN)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 FEB 2025"
       ],
@@ -40812,7 +40812,7 @@
       "year": 2025,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "16 FEB 2025"
       ],
@@ -40890,7 +40890,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "16 FEB 2025"
       ],
@@ -40924,7 +40924,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "15 FEB 2025"
       ],
@@ -41049,7 +41049,7 @@
       "year": 2025,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "15 FEB 2025"
       ],
@@ -41230,7 +41230,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "14 FEB 2025"
       ],
@@ -41264,7 +41264,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "14 FEB 2025"
       ],
@@ -41342,7 +41342,7 @@
       "year": 2025,
       "category": "D",
       "venue": "Shanxi Athletics Administrative Center, Xi'an (CHN)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "14 FEB 2025"
       ],
@@ -41664,7 +41664,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "14 FEB 2025"
       ],
@@ -41698,7 +41698,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "14 FEB 2025"
       ],
@@ -41743,7 +41743,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "14 FEB 2025"
       ],
@@ -41777,7 +41777,7 @@
       "year": 2025,
       "category": "A",
       "venue": "Arena Stade Couvert, Liévin (FRA)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "13 FEB 2025"
       ],
@@ -41890,7 +41890,7 @@
       "year": 2025,
       "category": "D",
       "venue": "Xipu Training Base Indoor Athletics Stadium, Chengdu (CHN)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "10 FEB 2025"
       ],
@@ -42556,7 +42556,7 @@
       "year": 2025,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "09 FEB 2025"
       ],
@@ -42612,7 +42612,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "09 FEB 2025"
       ],
@@ -42668,7 +42668,7 @@
       "year": 2025,
       "category": "C",
       "venue": "Velódromo Luis Puig, Valencia (ESP)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 FEB 2025"
       ],
@@ -42793,7 +42793,7 @@
       "year": 2025,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "06 FEB 2025"
       ],
@@ -42827,7 +42827,7 @@
       "year": 2025,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "04 FEB 2025"
       ],
@@ -43029,7 +43029,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "02 FEB 2025"
       ],
@@ -43085,7 +43085,7 @@
       "year": 2025,
       "category": "D",
       "venue": "Emirates Arena, Glasgow (GBR)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "02 FEB 2025"
       ],
@@ -43253,7 +43253,7 @@
       "year": 2025,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "01 FEB 2025"
       ],
@@ -43287,7 +43287,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "01 FEB 2025"
       ],
@@ -43556,7 +43556,7 @@
       "year": 2025,
       "category": "B",
       "venue": "Stadium Miramas Métropole, Miramas (FRA)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "31 JAN 2025"
       ],
@@ -43837,7 +43837,7 @@
       "year": 2025,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "30 JAN 2025"
       ],
@@ -43893,7 +43893,7 @@
       "year": 2025,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "29 JAN 2025"
       ],
@@ -43982,7 +43982,7 @@
       "year": 2025,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "29 JAN 2025"
       ],
@@ -44016,7 +44016,7 @@
       "year": 2025,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "26 JAN 2025"
       ],
@@ -44061,7 +44061,7 @@
       "year": 2025,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "25 JAN 2025"
       ],
@@ -44128,7 +44128,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "25 JAN 2025"
       ],
@@ -44275,7 +44275,7 @@
       "year": 2025,
       "category": "A",
       "venue": "Track & Field complex QAZAQSTAN, Astana (KAZ)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "25 JAN 2025"
       ],
@@ -44421,7 +44421,7 @@
       "year": 2025,
       "category": "C",
       "venue": "Stadium Pierre-Quinon, Nantes (FRA)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "25 JAN 2025"
       ],
@@ -44534,7 +44534,7 @@
       "year": 2025,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "21 JAN 2025"
       ],
@@ -44579,7 +44579,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 JAN 2025"
       ],
@@ -44613,7 +44613,7 @@
       "year": 2025,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 JAN 2025"
       ],
@@ -44647,7 +44647,7 @@
       "year": 2025,
       "category": "D",
       "venue": "Pista Coberta de Catalunya, Sabadell (ESP)",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "10 JAN 2025"
       ],
@@ -51697,7 +51697,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 MAY 2024"
       ],
@@ -53680,7 +53680,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "13 APR 2024"
       ],
@@ -53927,7 +53927,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "31 MAR 2024"
       ],
@@ -54207,7 +54207,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 MAR 2024"
       ],
@@ -54454,7 +54454,7 @@
       "year": 2024,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "08 MAR 2024"
       ],
@@ -54521,7 +54521,7 @@
       "year": 2024,
       "category": "OW",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "02 MAR 2024"
       ],
@@ -54654,7 +54654,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "02 MAR 2024"
       ],
@@ -54722,7 +54722,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "27 FEB 2024"
       ],
@@ -54789,7 +54789,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "24 FEB 2024"
       ],
@@ -54856,7 +54856,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "23 FEB 2024"
       ],
@@ -54890,7 +54890,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "23 FEB 2024"
       ],
@@ -54924,7 +54924,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "23 FEB 2024"
       ],
@@ -54969,7 +54969,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 FEB 2024"
       ],
@@ -55025,7 +55025,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 FEB 2024"
       ],
@@ -55059,7 +55059,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 FEB 2024"
       ],
@@ -55093,7 +55093,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 FEB 2024"
       ],
@@ -55127,7 +55127,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 FEB 2024"
       ],
@@ -55161,7 +55161,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 FEB 2024"
       ],
@@ -55195,7 +55195,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 FEB 2024"
       ],
@@ -55295,7 +55295,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 FEB 2024"
       ],
@@ -55329,7 +55329,7 @@
       "year": 2024,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 FEB 2024"
       ],
@@ -55429,7 +55429,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 FEB 2024"
       ],
@@ -55574,7 +55574,7 @@
       "year": 2024,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "13 FEB 2024"
       ],
@@ -55652,7 +55652,7 @@
       "year": 2024,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "11 FEB 2024"
       ],
@@ -55719,7 +55719,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "11 FEB 2024"
       ],
@@ -55753,7 +55753,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "10 FEB 2024"
       ],
@@ -55809,7 +55809,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "09 FEB 2024"
       ],
@@ -55865,7 +55865,7 @@
       "year": 2024,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "09 FEB 2024"
       ],
@@ -55932,7 +55932,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "09 FEB 2024"
       ],
@@ -55988,7 +55988,7 @@
       "year": 2024,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 FEB 2024"
       ],
@@ -56066,7 +56066,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 FEB 2024"
       ],
@@ -56100,7 +56100,7 @@
       "year": 2024,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "04 FEB 2024"
       ],
@@ -56178,7 +56178,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "04 FEB 2024"
       ],
@@ -56245,7 +56245,7 @@
       "year": 2024,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "03 FEB 2024"
       ],
@@ -56279,7 +56279,7 @@
       "year": 2024,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "03 FEB 2024"
       ],
@@ -56313,7 +56313,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "03 FEB 2024"
       ],
@@ -56347,7 +56347,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "02 FEB 2024"
       ],
@@ -56381,7 +56381,7 @@
       "year": 2024,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "30 JAN 2024"
       ],
@@ -56470,7 +56470,7 @@
       "year": 2024,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 JAN 2024"
       ],
@@ -56537,7 +56537,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "27 JAN 2024"
       ],
@@ -56571,7 +56571,7 @@
       "year": 2024,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "27 JAN 2024"
       ],
@@ -56605,7 +56605,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "26 JAN 2024"
       ],
@@ -56661,7 +56661,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "26 JAN 2024"
       ],
@@ -56695,7 +56695,7 @@
       "year": 2024,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "26 JAN 2024"
       ],
@@ -56729,7 +56729,7 @@
       "year": 2024,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "23 JAN 2024"
       ],
@@ -56763,7 +56763,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "20 JAN 2024"
       ],
@@ -56797,7 +56797,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "13 JAN 2024"
       ],
@@ -56831,7 +56831,7 @@
       "year": 2024,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "12 JAN 2024"
       ],
@@ -56865,7 +56865,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "29 DEC 2023"
       ],
@@ -57368,7 +57368,7 @@
       "year": 2023,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "01 OCT 2023"
       ],
@@ -57480,7 +57480,7 @@
       "year": 2023,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "24 SEP 2023"
       ],
@@ -63342,7 +63342,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "07 JUN 2023"
       ],
@@ -66434,7 +66434,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "15 MAR 2023"
       ],
@@ -66568,7 +66568,7 @@
       "year": 2023,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "10 MAR 2023"
       ],
@@ -66668,7 +66668,7 @@
       "year": 2023,
       "category": "GL",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "05 MAR 2023"
       ],
@@ -66757,7 +66757,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "04 MAR 2023"
       ],
@@ -66802,7 +66802,7 @@
       "year": 2023,
       "category": "GL",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "03 MAR 2023"
       ],
@@ -66858,7 +66858,7 @@
       "year": 2023,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 FEB 2023"
       ],
@@ -66903,7 +66903,7 @@
       "year": 2023,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "25 FEB 2023"
       ],
@@ -66992,7 +66992,7 @@
       "year": 2023,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "24 FEB 2023"
       ],
@@ -67070,7 +67070,7 @@
       "year": 2023,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "24 FEB 2023"
       ],
@@ -67171,7 +67171,7 @@
       "year": 2023,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "22 FEB 2023"
       ],
@@ -67260,7 +67260,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "19 FEB 2023"
       ],
@@ -67294,7 +67294,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "19 FEB 2023"
       ],
@@ -67339,7 +67339,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "19 FEB 2023"
       ],
@@ -67373,7 +67373,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 FEB 2023"
       ],
@@ -67418,7 +67418,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 FEB 2023"
       ],
@@ -67452,7 +67452,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 FEB 2023"
       ],
@@ -67486,7 +67486,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "18 FEB 2023"
       ],
@@ -67520,7 +67520,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "17 FEB 2023"
       ],
@@ -67588,7 +67588,7 @@
       "year": 2023,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "15 FEB 2023"
       ],
@@ -67666,7 +67666,7 @@
       "year": 2023,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "15 FEB 2023",
         "16 FEB 2023"
@@ -67723,7 +67723,7 @@
       "year": 2023,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "15 FEB 2023"
       ],
@@ -67790,7 +67790,7 @@
       "year": 2023,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "12 FEB 2023"
       ],
@@ -67901,7 +67901,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "12 FEB 2023"
       ],
@@ -67935,7 +67935,7 @@
       "year": 2023,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "11 FEB 2023"
       ],
@@ -67991,7 +67991,7 @@
       "year": 2023,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "10 FEB 2023"
       ],
@@ -68025,7 +68025,7 @@
       "year": 2023,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "10 FEB 2023"
       ],
@@ -68070,7 +68070,7 @@
       "year": 2023,
       "category": "A",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "08 FEB 2023"
       ],
@@ -68113,9 +68113,9 @@
       "raw_name": "Süddeutsche Hallenmeisterschaften, Glaspalast, Sindelfingen (i)",
       "round": "Finale",
       "year": 2023,
-      "category": "F",
+      "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "04 FEB 2023"
       ],
@@ -68140,7 +68140,7 @@
       "iso_date": "2023-02-04",
       "total_results_count": 1,
       "has_top100": true,
-      "is_tour_or_major": false
+      "is_tour_or_major": true
     },
     {
       "name": "Czech Indoor Gala 2023, Atletická hala, Ostrava (i)",
@@ -68149,7 +68149,7 @@
       "year": 2023,
       "category": "B",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "02 FEB 2023"
       ],
@@ -68205,7 +68205,7 @@
       "year": 2023,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "29 JAN 2023"
       ],
@@ -68250,7 +68250,7 @@
       "year": 2023,
       "category": "D",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "29 JAN 2023"
       ],
@@ -68284,7 +68284,7 @@
       "year": 2023,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 JAN 2023"
       ],
@@ -68351,7 +68351,7 @@
       "year": 2023,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 JAN 2023"
       ],
@@ -68396,7 +68396,7 @@
       "year": 2023,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "28 JAN 2023"
       ],
@@ -68441,7 +68441,7 @@
       "year": 2023,
       "category": "F",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "27 JAN 2023"
       ],
@@ -68676,7 +68676,7 @@
       "year": 2022,
       "category": "C",
       "venue": "",
-      "indoor": false,
+      "indoor": true,
       "dates_seen": [
         "02 OCT 2022"
       ],
@@ -71658,6 +71658,6 @@
       "is_tour_or_major": true
     }
   ],
-  "updated_at": "2026-11-06T11:37:17.602345",
+  "updated_at": "2026-11-17T18:20:03.435660",
   "filter_rule": "World Tour (OW/DF/GW/GL/A/B/C/D) + Top-100 Athlete + Siegerweite >= 7.70m (keine irrelevanten Kat. F Wettkämpfe)"
 }

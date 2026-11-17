@@ -12,6 +12,8 @@ Builds the Universal Competition & Meeting Calendar + Weekly Scraper Briefing fo
 """
 
 import os
+import re
+import sys
 import json
 import datetime
 import subprocess
@@ -36,8 +38,11 @@ def fix_known_category(name_str, current_cat):
         return "DF" if ("weltklasse" in nl or "van damme" in nl and "final" in nl) else "GW"
     if "world athletics championships" in nl or "olympic games" in nl or "world athletics indoor championships" in nl:
         return "OW"
-    if "european athletics championships" in nl or "european athletics indoor championships" in nl:
+    # Keep Outdoor European Athletics Championships as GL, but respect WA Calendar 'A' for 2027 Indoor EM
+    if "european athletics championships" in nl and "indoor" not in nl:
         return "GL"
+    if "german indoor championships" in nl or "deutsche hallenmeisterschaft" in nl:
+        return "D"
     if any(x in nl for x in ["p-t-s", "istaf", "goldenes oval", "anhalt", "rehlingen", "lappeenranta", "kuortane", "paavo nurmi", "ostrava", "gyulai", "zagreb", "hengelo", "madrid", "rovereto", "bellinzona", "chorz", "gorz", "koscierzyna", "athens", "dromia", "filothei", "kallithea"]):
         if current_cat == "F":
             return "B" if any(y in nl for y in ["p-t-s", "istaf", "goldenes oval", "dromia", "filothei"]) else "C"
@@ -45,6 +50,13 @@ def fix_known_category(name_str, current_cat):
 
 
 def main():
+    if "--skip-results" not in sys.argv:
+        try:
+            sys.path.insert(0, os.path.join(BASE_DIR, "python"))
+            from scrape_tour_results import run_tour_results_scraper
+            run_tour_results_scraper()
+        except Exception as e:
+            print(f"⚠️ Completed tour results fetch skipped/warn ({e}), continuing with local DB...")
     with open(RANKING_LATEST, "r", encoding="utf-8") as f:
         rk_latest = json.load(f)
     with open(RANKING_ARCH, "r", encoding="utf-8") as f:
@@ -81,6 +93,10 @@ def main():
 
     for c in raw_comps:
         cname = str(c.get("name") or "")
+        cnl = cname.lower()
+        # Normalize indoor flag reliably from WA "(i)" / "Indoor" / "Halle" marker
+        if "(i)" in cnl or "indoor" in cnl or "hallen" in cnl or "halle" in cnl:
+            c["indoor"] = True
         cat = fix_known_category(cname, str(c.get("category") or "F").upper())
         c["category"] = cat
         best_mark = float(c.get("best_mark") or 0.0)
@@ -97,14 +113,15 @@ def main():
             continue
 
         # Luka's Strict Relevance Filter:
-        # 1) Winning mark must be >= 7.70m (unless Luka competed there)
-        if best_mark < 7.70 and not has_luka:
+        # Always keep 2026/27 completed season results (starting 2026-12-01) so weekly briefing reports finished calendar meets
+        is_current_season_2027 = str(c.get("iso_date") or "") >= "2026-12-01"
+        if best_mark < 7.70 and not has_luka and not is_current_season_2027:
             removed_comps += 1
             continue
 
-        # 2) Exclude Cat E & F competitions unless Luka competed, or it's a German DLV >=7.70m meet,
-        #    or a Top-100 athlete competed AND jumped >= 7.80m in an official counting competition
-        if cat in ["E", "F"]:
+        # 2) Exclude Cat E & F pre-2026/27 competitions unless Luka competed, or it's a German DLV >=7.70m meet,
+        #    or a Top-100 athlete competed AND jumped >= 7.85m
+        if cat in ["E", "F"] and not is_current_season_2027:
             if not (has_luka or (is_ger_dlv and best_mark >= 7.70) or (has_top100 and best_mark >= 7.85)):
                 removed_comps += 1
                 continue
@@ -127,37 +144,39 @@ def main():
 
     print(f"Strictly filtered competitions_database.json: kept {len(filtered_comps)} relevant competitions, removed {removed_comps}.")
 
-    # 2. Strictly filter calendar_2027.json (No provincial/club Cat E/F meets!)
+    # 2. Keep ALL scraped 2027 Men's Long Jump calendar meetings (zero pre-filtering!) so Luka triages everything himself
     raw_cal = cal_data.get("meetings", [])
     filtered_cal = []
     removed_cal = 0
-
-    dlv_keywords = ["weinheim", "dessau", "dresden", "regensburg", "rehlingen", "essen", "rhede", "pfungstadt", "inneringen", "istaf", "deutsche meisterschaft", "dortmund", "anhal", "kurpfalz"]
+    seen_cal_ids = set()
 
     for m in raw_cal:
-        cat = str(m.get("category") or "F").upper()
+        mid = m.get("id")
+        if mid and mid in seen_cal_ids:
+            continue
+        if mid:
+            seen_cal_ids.add(mid)
+
+        # Deduplicate Hallen-EM Valencia if an older build left both champ-em-indoor-2027 and wa-7204665
         mname = str(m.get("name") or "").lower()
-        mcity = str(m.get("city") or "").lower()
-        mcnt = str(m.get("country") or "").upper()
-        is_champ = bool(m.get("isChampionship"))
-        is_major_cat = cat in ["OW", "DF", "GW", "GL", "A", "B", "C", "D"]
-        is_dlv_elite = mcnt == "GER" and any(k in (mname + " " + mcity) for k in dlv_keywords)
-
-        # Strictly exclude Category E & F unless it's an official DLV Rahmenterminplan Jump Meeting (Inneringen, Pfungstadt, Rhede, etc.)
-        if not (is_champ or is_major_cat or is_dlv_elite):
-            removed_cal += 1
+        if mid == "champ-em-indoor-2027" and any(x.get("id") == "wa-7204665" for x in raw_cal):
             continue
 
-        # Also exclude non-European Category D club/university meets if any slipped through
-        if cat == "D" and any(x in mname for x in ["u18", "u20", "u16", "provincial", "département", "zone"]):
-            removed_cal += 1
-            continue
+        mcity = str(m.get("city") or "").strip().lower()
+        mcnt = str(m.get("country") or "").strip().upper()
+        m_indoor = bool(m.get("indoor"))
 
-        # Link historical editions accurately (matching city or distinct meeting name keyword)
+        # Strict historical editions match: same indoor/outdoor setting + word-boundary city + compatible country
         hist_editions = []
+        valid_city = bool(mcity and len(mcity) >= 4 and mcity not in ["deutschland", "kassel / deutschland", "tba"])
         for c in filtered_comps:
+            if bool(c.get("indoor")) != m_indoor:
+                continue
             c_text = (str(c.get("name", "")) + " " + str(c.get("venue", ""))).lower()
-            city_match = (mcity and len(mcity) >= 4 and mcity not in ["deutschland", "kassel / deutschland"] and mcity in c_text)
+            c_cnt_m = re.search(r'\(([a-z]{3})\)\s*$', c_text)
+            if mcnt and c_cnt_m and c_cnt_m.group(1).upper() != mcnt:
+                continue
+            city_match = bool(valid_city and re.search(r'\b' + re.escape(mcity) + r'\b', c_text))
             if city_match:
                 hist_editions.append({
                     "date": c.get("iso_date") or c.get("date"),
@@ -167,6 +186,7 @@ def main():
                     "best_mark": c.get("best_mark"),
                     "marks_over_8m": c.get("marks_over_8m", 0),
                     "luka_mark": c.get("luka_mark"),
+                    "top_results": (c.get("results") or [])[:5],
                     "top3": [
                         f"{r.get('athlete')} ({r.get('country')}) {r.get('mark')}m"
                         for r in (c.get("results") or [])[:3]
@@ -344,6 +364,7 @@ def main():
                 "name": c.get("name"),
                 "category": c.get("category"),
                 "best_mark": c.get("best_mark"),
+                "luka_mark": c.get("luka_mark"),
                 "marks_over_8m": c.get("marks_over_8m", 0),
                 "winner": f"{c['results'][0]['athlete']} ({c['results'][0]['country']}) – {c['results'][0]['mark']}m" if c.get("results") else "-"
             }
