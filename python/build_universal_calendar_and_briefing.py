@@ -178,19 +178,23 @@ def main():
         filtered_cal.append(m)
 
     # Capture previous committed calendar (for condensed diff) before overwriting CAL_2027
+    # If HEAD already matches current calendar (e.g. second run same day), compare against HEAD~1
     prev_cal_map = {}
-    try:
-        repo_root = os.path.dirname(WRT_DATA)
-        prev_raw = subprocess.check_output(
-            ["git", "-C", repo_root, "show", "HEAD:data/calendar_2027.json"],
-            stderr=subprocess.DEVNULL
-        ).decode("utf-8")
-        prev_cal_data = json.loads(prev_raw)
-        for pm in prev_cal_data.get("meetings", []):
-            if pm.get("id"):
-                prev_cal_map[pm["id"]] = pm
-    except Exception:
-        prev_cal_map = {}
+    repo_root = os.path.dirname(WRT_DATA)
+    for ref in ["HEAD:data/calendar_2027.json", "HEAD~1:data/calendar_2027.json"]:
+        try:
+            prev_raw = subprocess.check_output(
+                ["git", "-C", repo_root, "show", ref],
+                stderr=subprocess.DEVNULL
+            ).decode("utf-8")
+            prev_cal_data = json.loads(prev_raw)
+            tmp_map = {pm["id"]: pm for pm in prev_cal_data.get("meetings", []) if pm.get("id")}
+            new_ids = {m["id"] for m in filtered_cal if m.get("id")}
+            if set(tmp_map.keys()) != new_ids or ref == "HEAD~1:data/calendar_2027.json":
+                prev_cal_map = tmp_map
+                break
+        except Exception:
+            continue
 
     cal_data["meetings"] = filtered_cal
     cal_data["totalMeetings"] = len(filtered_cal)
@@ -318,8 +322,17 @@ def main():
             "category_changed_count": len(cal_cat_changed),
             "category_counts": cat_counts,
             "notable_added": [
-                {"date": m.get("date"), "name": m.get("name"), "country": m.get("country"), "category": m.get("category")}
-                for m in sorted(cal_added, key=lambda x: x.get("date", ""))[:10]
+                {
+                    "id": m.get("id"),
+                    "date": m.get("date"),
+                    "displayDate": m.get("displayDate"),
+                    "name": m.get("name"),
+                    "city": m.get("city"),
+                    "country": m.get("country"),
+                    "category": m.get("category"),
+                    "tier": m.get("tier")
+                }
+                for m in sorted(cal_added, key=lambda x: x.get("date", ""))[:40]
             ],
             "category_changes": cal_cat_changed[:12],
             "summary_text": cal_diff_text

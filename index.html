@@ -1472,21 +1472,24 @@
           <div class="flex items-center gap-2 font-mono text-[11px]">
             <label class="flex items-center gap-1.5 cursor-pointer text-slate-300 select-none bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800 hover:border-slate-700">
               <input id="hideExcludedMeetingsCheckbox" type="checkbox" checked onchange="VenuesModule.toggleHideExcluded()" class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0">
-              <span class="text-[10px]">🚫 Uninteressante ausblenden</span>
+              <span class="text-[10px]">🚫 Irrelevante ausblenden</span>
             </label>
           </div>
         </div>
 
-        <!-- Row 2: Saison-Planungsfilter (Lukas Markierungen: Sicher=Grün, Option=Gelb, Ziel/Rahmen=Weiß, Weg=Rot) -->
+        <!-- Row 2: Saison-Planungsfilter (Lukas Markierungen: Ziel=Weiß, Sicher=Grün, Option=Gelb, Machbar=Blau, Irrelevant=Rot) -->
         <div class="flex items-center gap-1.5 font-mono text-xs flex-wrap">
           <span class="text-[10px] text-slate-400 font-bold uppercase mr-1 flex items-center gap-1">
-            <span>🎯</span> Planungs-Filter:
+            <span>🎯</span> Triage-Filter:
           </span>
           <button onclick="VenuesModule.setStatusFilter('ALL')" data-status-filter="ALL" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-cyan-600 text-slate-950 font-black shadow-sm flex items-center gap-1">
-            Alle Meetings (<span id="statusCountAll">86</span>)
+            Alle (<span id="statusCountAll">117</span>)
           </button>
           <button onclick="VenuesModule.setStatusFilter('MY_PLAN')" data-status-filter="MY_PLAN" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-emerald-300 border border-emerald-600/70 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
             📅 Mein Saisonplan (<span id="statusCountMyPlan">0</span>)
+          </button>
+          <button onclick="VenuesModule.setStatusFilter('GOAL')" data-status-filter="GOAL" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-white border border-white/70 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
+            ⚪ Ziel (<span id="statusCountGoal">0</span>)
           </button>
           <button onclick="VenuesModule.setStatusFilter('CONFIRMED')" data-status-filter="CONFIRMED" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-emerald-400 border border-emerald-800 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
             🟢 Sicher (<span id="statusCountConfirmed">0</span>)
@@ -1494,11 +1497,14 @@
           <button onclick="VenuesModule.setStatusFilter('WATCHLIST')" data-status-filter="WATCHLIST" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-yellow-300 border border-yellow-700 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
             🟡 Option (<span id="statusCountWatchlist">0</span>)
           </button>
-          <button onclick="VenuesModule.setStatusFilter('GOAL')" data-status-filter="GOAL" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-white border border-white/70 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
-            ⚪ Ziel & Rahmen (EM/WM/DM) (<span id="statusCountGoal">7</span>)
+          <button onclick="VenuesModule.setStatusFilter('FEASIBLE')" data-status-filter="FEASIBLE" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-sky-300 border border-sky-700 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
+            🔵 Machbar (<span id="statusCountFeasible">0</span>)
+          </button>
+          <button onclick="VenuesModule.setStatusFilter('UNSORTED')" data-status-filter="UNSORTED" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-slate-300 border border-slate-700 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
+            📥 Unsortiert (<span id="statusCountUnsorted">0</span>)
           </button>
           <button onclick="VenuesModule.setStatusFilter('HIDDEN')" data-status-filter="HIDDEN" class="cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold text-red-400 border border-red-800 bg-slate-950 hover:bg-slate-800 flex items-center gap-1">
-            🔴 Weg (<span id="statusCountHidden">0</span>)
+            🔴 Irrelevant (<span id="statusCountHidden">0</span>)
           </button>
         </div>
 
@@ -1661,10 +1667,13 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h3 class="text-xs sm:text-sm font-black text-white font-mono uppercase">📏 DLV-BIOMECHANIK KALIBRIERUNG &amp; SOLL-IST VERGLEICH</h3>
-            <p class="text-[11px] text-slate-400 font-sans">Vergleicht deinen markierten Sprung direkt mit den offiziellen OSP Hessen / DLV-Auswertungen.</p>
+            <p class="text-[11px] text-slate-400 font-sans">Verknüpft jede offizielle DLV-Diagnostik-Zeile (Datum / Versuch) 1:1 mit dem passenden DLV-Video und kalibriert dein Modell.</p>
           </div>
-          <select id="dlvBenchmarkSelect" onchange="VideoBiomechanicsModule.onBenchmarkChange(this.value)" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-mono text-amber-300 font-bold"></select>
+          <select id="dlvBenchmarkSelect" onchange="VideoBiomechanicsModule.onBenchmarkChange(this.value)" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-mono text-amber-300 font-bold max-w-full"></select>
         </div>
+
+        <div id="dlvMatchedVideoHint"></div>
+        <div id="dlvCalibrationModelBox" class="bg-slate-950/90 border border-amber-500/35 rounded-lg p-3"></div>
 
         <div id="dlvAutoDiagnosisBox" class="bg-slate-950 border border-slate-800 rounded-lg p-3 space-y-1.5 text-xs text-slate-200 font-sans leading-relaxed"></div>
 
@@ -2663,15 +2672,24 @@
         const hipSep = (mLT > 1e-4 && mRT > 1e-4) ? Math.acos(Math.max(-1, Math.min(1, dotThigh / (mLT * mRT)))) * (180 / Math.PI) : 0;
         const kneeValgus = leftKnee !== null ? Math.abs(180 - leftKnee) : 0;
 
-        if (leftKnee !== null) drawAngleLabel(pLK, vw, vh, `L: ${leftKnee.toFixed(0)}°`, "rgba(16,185,129,0.9)", "#020617", -48, -6);
-        if (rightKnee !== null) drawAngleLabel(pRK, vw, vh, `R: ${rightKnee.toFixed(0)}°`, "rgba(56,189,248,0.9)", "#020617", 10, -6);
-        drawAngleLabel({ x: midSh.x / vw, y: midSh.y / vh }, vw, vh, `Rumpf: ${dlvRumpf.toFixed(1)}°`, "rgba(245,158,11,0.9)", "#020617", 8, -10);
+        const calOff = (window.VideoBiomechanicsModule && VideoBiomechanicsModule.getActiveOffsets)
+          ? VideoBiomechanicsModule.getActiveOffsets()
+          : {};
+        const showStemm = dlvStemm + (calOff.stemmwinkel_deg || 0);
+        const showRumpf = dlvRumpf + (calOff.rumpfwinkel_td_deg || 0);
+        const showLeftKnee = leftKnee !== null ? (leftKnee + (calOff.kniewinkel_min_deg || 0)) : null;
+        const showSwingVel = swingVelDegS + (calOff.schwungbein_deg_s || 0);
+        const showTakeoff = takeoffAngle !== null ? (takeoffAngle + (calOff.abflugwinkel_deg || 0)) : null;
 
-        document.getElementById("angPlantAngle").textContent = `${dlvStemm.toFixed(1)}°`;
-        document.getElementById("angTrunkTilt").textContent = `${dlvRumpf.toFixed(1)}°`;
-        document.getElementById("angLeftKnee").textContent = leftKnee !== null ? `${leftKnee.toFixed(1)}°` : "—°";
+        if (showLeftKnee !== null) drawAngleLabel(pLK, vw, vh, `L: ${showLeftKnee.toFixed(0)}°`, "rgba(16,185,129,0.9)", "#020617", -48, -6);
+        if (rightKnee !== null) drawAngleLabel(pRK, vw, vh, `R: ${rightKnee.toFixed(0)}°`, "rgba(56,189,248,0.9)", "#020617", 10, -6);
+        drawAngleLabel({ x: midSh.x / vw, y: midSh.y / vh }, vw, vh, `Rumpf: ${showRumpf.toFixed(1)}°`, "rgba(245,158,11,0.9)", "#020617", 8, -10);
+
+        document.getElementById("angPlantAngle").textContent = `${showStemm.toFixed(1)}°`;
+        document.getElementById("angTrunkTilt").textContent = `${showRumpf.toFixed(1)}°`;
+        document.getElementById("angLeftKnee").textContent = showLeftKnee !== null ? `${showLeftKnee.toFixed(1)}°` : "—°";
         document.getElementById("angRightKnee").textContent = rightKnee !== null ? `${rightKnee.toFixed(1)}°` : "—°";
-        document.getElementById("angSwingVel").textContent = `${Math.round(swingVelDegS)} °/s${takeoffAngle !== null ? ` / ${takeoffAngle.toFixed(1)}°` : ''}`;
+        document.getElementById("angSwingVel").textContent = `${Math.round(showSwingVel)} °/s${showTakeoff !== null ? ` / ${showTakeoff.toFixed(1)}°` : ''}`;
         document.getElementById("angHipSep").textContent = `${hipSep.toFixed(1)}°`;
         document.getElementById("angKneeValgus").textContent = `Frontal-Abw.: ${kneeValgus.toFixed(1)}°`;
 
@@ -2713,6 +2731,9 @@
       prevSwingState = null;
       prevComState = null;
       phaseMarks = { TD: null, MKF: null, TO: null };
+      if (window.VideoBiomechanicsModule && VideoBiomechanicsModule.autoDetectTrialByFilename) {
+        VideoBiomechanicsModule.autoDetectTrialByFilename(file.name);
+      }
       await initPoseEngine();
       videoEl.onloadeddata = () => {
         videoEl.currentTime = 0;
@@ -2797,6 +2818,9 @@
           tctx.drawImage(videoEl, 0, 0, tCanvas.width, tCanvas.height);
           if (canvasEl && canvasEl.width) tctx.drawImage(canvasEl, 0, 0, tCanvas.width, tCanvas.height);
           return tCanvas.toDataURL("image/jpeg", 0.72);
+        },
+        onCalibrationChange: () => {
+          if (videoEl && videoEl.readyState >= 2) processCurrentFrame();
         },
         loadSavedAnalysisToView: (item) => {
           angleHistory = Array.isArray(item.angleHistory) ? [...item.angleHistory] : [];

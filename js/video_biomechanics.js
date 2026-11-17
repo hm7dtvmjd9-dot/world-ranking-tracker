@@ -1,30 +1,43 @@
 /**
- * Video-Biomechanik, DLV-Kalibrierung & Persistentes IndexedDB Analyse-Archiv
+ * Video-Biomechanik, DLV Ground-Truth Modell-Kalibrierung & Persistentes IndexedDB Analyse-Archiv
  * Läuft komplett lokal auf der Apple Silicon / M3 Pro GPU (MediaPipe PoseLandmarker • 0 AI Tokens).
- * Winkel-Konvention 1:1 kalibriert auf OSP Hessen / DLV Biomechanik (Rom 2024, Bochum 2026, Ehammer 2022).
+ * Paart offizielle DLV-Diagnostik-PDF-Zeilen (Datum / Versuch) 1:1 mit dem zugehörigen Video (wm...mp4)
+ * und kalibriert per-Metrik Offsets so, dass nachfolgende Trainingssprünge auf exakt derselben DLV-Skala landen.
  */
 const VideoBiomechanicsModule = (() => {
   const DB_NAME = 'AthleticsVideoArchiveDB';
   const DB_VERSION = 1;
   const STORE_NAME = 'analyses';
+  const CAL_STORAGE_KEY = 'luka_dlv_calibration_pairs_v1';
+  const CAL_ENABLED_KEY = 'luka_dlv_calibration_enabled_v1';
+
+  const CALIBRATABLE_KEYS = [
+    'stemmwinkel_deg',
+    'rumpfwinkel_td_deg',
+    'rumpfrotation_deg',
+    'kniewinkel_min_deg',
+    'abflugwinkel_deg',
+    'schwungbein_deg_s'
+  ];
 
   let dbPromise = null;
   let calibrationProfile = null;
   let cachedArchive = [];
-  let selectedBenchmarkId = 'dlv-luka-rom-2024';
+  let selectedTrialId = 'herden-2026-07-25-v5';
   let archiveFilterType = 'ALL';
   let archiveSearch = '';
   let compareIdA = null;
   let compareIdB = null;
   let initialized = false;
+  let currentVideoFilename = '';
 
-  // Engine bridge state (populated by the ES module script inside index.html)
   const runtime = {
     getCurrentMetrics: null,
     getPhaseMarks: null,
     getAngleHistory: null,
     getCaptureThumbnail: null,
-    loadSavedAnalysisToView: null
+    loadSavedAnalysisToView: null,
+    onCalibrationChange: null
   };
 
   function openDb() {
@@ -75,6 +88,81 @@ const VideoBiomechanicsModule = (() => {
     });
   }
 
+  function getCalibrationPairs() {
+    try {
+      const raw = localStorage.getItem(CAL_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveCalibrationPairs(pairs) {
+    try {
+      localStorage.setItem(CAL_STORAGE_KEY, JSON.stringify(pairs));
+    } catch (e) {}
+  }
+
+  function isCalibrationEnabled() {
+    try {
+      const val = localStorage.getItem(CAL_ENABLED_KEY);
+      return val === null ? true : val === 'true';
+    } catch (e) {
+      return true;
+    }
+  }
+
+  function setCalibrationEnabled(flag) {
+    try {
+      localStorage.setItem(CAL_ENABLED_KEY, flag ? 'true' : 'false');
+    } catch (e) {}
+    const marks = runtime.getPhaseMarks ? runtime.getPhaseMarks() : {};
+    const hist = runtime.getAngleHistory ? runtime.getAngleHistory() : [];
+    updateComparisonTable(marks, hist);
+    if (runtime.onCalibrationChange) runtime.onCalibrationChange(getActiveOffsets());
+    renderCalibrationModelPanel();
+  }
+
+  function computeOffsetsFromPairs(pairs) {
+    const offsets = {};
+    const counts = {};
+    CALIBRATABLE_KEYS.forEach(k => {
+      const deltas = [];
+      (pairs || []).forEach(p => {
+        const rawVal = p.rawSummary?.[k];
+        const gtVal = p.groundTruth?.[k];
+        if (typeof rawVal === 'number' && !Number.isNaN(rawVal) && typeof gtVal === 'number' && !Number.isNaN(gtVal)) {
+          deltas.push(gtVal - rawVal);
+        }
+      });
+      if (deltas.length > 0) {
+        const avg = deltas.reduce((s, x) => s + x, 0) / deltas.length;
+        offsets[k] = Number(avg.toFixed(2));
+        counts[k] = deltas.length;
+      } else {
+        offsets[k] = 0;
+        counts[k] = 0;
+      }
+    });
+    return { offsets, counts };
+  }
+
+  function getActiveOffsets() {
+    const pairs = getCalibrationPairs();
+    if (!isCalibrationEnabled() || pairs.length === 0) {
+      const zero = {};
+      CALIBRATABLE_KEYS.forEach(k => { zero[k] = 0; });
+      return zero;
+    }
+    return computeOffsetsFromPairs(pairs).offsets;
+  }
+
+  function applyCalibrationToScalar(metricKey, rawVal) {
+    if (rawVal === null || rawVal === undefined || Number.isNaN(rawVal)) return rawVal;
+    const off = getActiveOffsets()[metricKey] || 0;
+    return Number((rawVal + off).toFixed(1));
+  }
+
   async function loadCalibration() {
     if (calibrationProfile) return calibrationProfile;
     try {
@@ -90,31 +178,103 @@ const VideoBiomechanicsModule = (() => {
 
   function registerEngineBridge(bridge) {
     Object.assign(runtime, bridge);
+    if (runtime.onCalibrationChange) runtime.onCalibrationChange(getActiveOffsets());
+  }
+
+  function getAllReferenceTrials() {
+    const paired = calibrationProfile?.paired_trials || [];
+    if (paired.length > 0) return paired;
+    return calibrationProfile?.benchmarks || [];
   }
 
   function getSelectedBenchmark() {
-    const bms = calibrationProfile?.benchmarks || [];
-    return bms.find(b => b.id === selectedBenchmarkId) || bms[0] || null;
+    const list = getAllReferenceTrials();
+    return list.find(b => b.id === selectedTrialId) || list[0] || null;
   }
 
-  function computeSummaryFromState(phaseMarks, angleHistory) {
+  function autoDetectTrialByFilename(filename) {
+    currentVideoFilename = filename || '';
+    if (!filename || !calibrationProfile) return null;
+    const low = filename.toLowerCase();
+    const list = getAllReferenceTrials();
+    const match = list.find(t => {
+      const rec = t.video_match?.recommended_video?.toLowerCase();
+      if (rec && rec === low) return true;
+      const all = t.video_match?.all_attempt_videos || [];
+      return all.some(a => a.toLowerCase() === low);
+    });
+    if (match) {
+      selectedTrialId = match.id;
+      const sel = document.getElementById('dlvBenchmarkSelect');
+      if (sel) sel.value = match.id;
+      const titleEl = document.getElementById('archiveTitleInput');
+      const dateEl = document.getElementById('archiveDateInput');
+      const typeEl = document.getElementById('archiveTypeSelect');
+      const markEl = document.getElementById('archiveMarkInput');
+      if (titleEl && !titleEl.value) titleEl.value = `${match.display_ref} (${filename})`;
+      if (dateEl && match.date) dateEl.value = match.date;
+      if (typeEl) typeEl.value = 'DLV-Video Vergleich';
+      if (markEl && match.offiziell_m) markEl.value = String(match.offiziell_m);
+      renderSelectedTrialHint();
+      const marks = runtime.getPhaseMarks ? runtime.getPhaseMarks() : {};
+      const hist = runtime.getAngleHistory ? runtime.getAngleHistory() : [];
+      updateComparisonTable(marks, hist);
+    } else {
+      renderSelectedTrialHint();
+    }
+    return match || null;
+  }
+
+  function renderSelectedTrialHint() {
+    const hintEl = document.getElementById('dlvMatchedVideoHint');
+    if (!hintEl) return;
+    const bm = getSelectedBenchmark();
+    if (!bm) {
+      hintEl.innerHTML = '';
+      return;
+    }
+    const vm = bm.video_match;
+    const isMatched = Boolean(
+      currentVideoFilename &&
+      vm &&
+      ((vm.recommended_video || '').toLowerCase() === currentVideoFilename.toLowerCase() ||
+        (vm.all_attempt_videos || []).some(v => v.toLowerCase() === currentVideoFilename.toLowerCase()))
+    );
+    hintEl.innerHTML = `
+      <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono bg-slate-950 border ${isMatched ? 'border-emerald-500/70' : 'border-slate-800'} rounded-lg px-3 py-2">
+        <div class="space-y-0.5">
+          <div>
+            <span class="${isMatched ? 'text-emerald-400 font-black' : 'text-amber-300 font-bold'}">
+              ${isMatched ? '✅ 1:1 VIDEO-PAAR ERKANNT:' : '🎬 Passendes DLV-Video auf deinem Mac:'}
+            </span>
+            <code class="text-cyan-300 ml-1">${vm?.local_path_hint || 'Manuelle Zuordnung'}</code>
+          </div>
+          <div class="text-[10px] text-slate-400">
+            PDF Ground-Truth: <b class="text-white">${bm.display_ref || bm.date}</b> • ${bm.color_role || 'DLV-Referenz'} • Quelle: <span class="text-slate-300">${bm.source_pdf || 'DLV Weit PDF'}</span>
+          </div>
+        </div>
+        <button onclick="VideoBiomechanicsModule.saveCalibrationPairFromCurrent()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[11px] shrink-0 shadow">
+          🎯 Auf diesen DLV-Sprung kalibrieren
+        </button>
+      </div>
+    `;
+  }
+
+  function computeRawSummaryFromState(phaseMarks, angleHistory) {
     const td = phaseMarks?.TD || null;
     const mkf = phaseMarks?.MKF || null;
     const to = phaseMarks?.TO || null;
     const hist = Array.isArray(angleHistory) ? angleHistory : [];
 
-    // Minimum support knee flexion during contact window (or full clip if phases unset)
     const contactSlice = (td && to)
       ? hist.filter(p => p.t >= td.t - 0.01 && p.t <= to.t + 0.01)
       : hist;
     const kneeValues = contactSlice.map(p => p.leftKnee).filter(v => v > 40);
     const minSupportKnee = kneeValues.length ? Math.min(...kneeValues) : (mkf?.leftKnee ?? null);
 
-    // Swing leg knee compactness during drive (min rightKnee around MKF..TO)
     const swingKnValues = contactSlice.map(p => p.rightKnee).filter(v => v > 25);
     const minSwingKnee = swingKnValues.length ? Math.min(...swingKnValues) : (to?.rightKnee ?? mkf?.rightKnee ?? null);
 
-    // Peak swing thigh angular velocity [deg/s]
     const velValues = contactSlice.map(p => Math.abs(p.swingVelDegS || 0)).filter(v => v > 0 && v < 1800);
     const maxSwingVel = velValues.length ? Math.max(...velValues) : (to?.swingVelDegS || mkf?.swingVelDegS || null);
 
@@ -137,6 +297,136 @@ const VideoBiomechanicsModule = (() => {
     };
   }
 
+  function computeSummaryFromState(phaseMarks, angleHistory) {
+    const raw = computeRawSummaryFromState(phaseMarks, angleHistory);
+    const cal = { ...raw };
+    CALIBRATABLE_KEYS.forEach(k => {
+      if (raw[k] !== null && raw[k] !== undefined) {
+        cal[k] = applyCalibrationToScalar(k, raw[k]);
+      }
+    });
+    return cal;
+  }
+
+  function saveCalibrationPairFromCurrent() {
+    const bm = getSelectedBenchmark();
+    if (!bm) return;
+    const marks = runtime.getPhaseMarks ? runtime.getPhaseMarks() : {};
+    const hist = runtime.getAngleHistory ? runtime.getAngleHistory() : [];
+    const raw = computeRawSummaryFromState(marks, hist);
+    if (!marks.TD || !marks.TO) {
+      alert('Bitte zuerst Touchdown (TD), Max. Beugung (MKF) und Take-off (TO) im geladenen DLV-Video markieren, damit exakt dieser Sprung gegen die DLV-Zeile kalibriert werden kann.');
+      return;
+    }
+
+    const pairs = getCalibrationPairs().filter(p => p.trialId !== bm.id);
+    const gt = {};
+    CALIBRATABLE_KEYS.forEach(k => {
+      if (bm[k] !== null && bm[k] !== undefined) gt[k] = Number(bm[k]);
+    });
+
+    pairs.unshift({
+      trialId: bm.id,
+      label: bm.label,
+      display_ref: bm.display_ref || bm.date,
+      videoFilename: currentVideoFilename || bm.video_match?.recommended_video || 'manuell',
+      calibratedAt: new Date().toISOString(),
+      rawSummary: raw,
+      groundTruth: gt
+    });
+    saveCalibrationPairs(pairs);
+    try { localStorage.setItem(CAL_ENABLED_KEY, 'true'); } catch (e) {}
+
+    updateComparisonTable(marks, hist);
+    if (runtime.onCalibrationChange) runtime.onCalibrationChange(getActiveOffsets());
+    renderCalibrationModelPanel();
+  }
+
+  function removeCalibrationPair(trialId) {
+    const pairs = getCalibrationPairs().filter(p => p.trialId !== trialId);
+    saveCalibrationPairs(pairs);
+    const marks = runtime.getPhaseMarks ? runtime.getPhaseMarks() : {};
+    const hist = runtime.getAngleHistory ? runtime.getAngleHistory() : [];
+    updateComparisonTable(marks, hist);
+    if (runtime.onCalibrationChange) runtime.onCalibrationChange(getActiveOffsets());
+    renderCalibrationModelPanel();
+  }
+
+  function renderCalibrationModelPanel() {
+    const box = document.getElementById('dlvCalibrationModelBox');
+    if (!box) return;
+    const pairs = getCalibrationPairs();
+    const enabled = isCalibrationEnabled();
+    const { offsets, counts } = computeOffsetsFromPairs(pairs);
+
+    if (pairs.length === 0) {
+      box.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div>
+            <span class="font-bold text-amber-300 font-mono">🔬 Noch keine DLV-Video-Kalibrierungs-Paare hinterlegt (Roh-Modell aktiv).</span>
+            <p class="text-[11px] text-slate-400 mt-0.5">
+              So kalibrierst du exakt auf DLV-Niveau: Wähle rechts einen DLV-Versuch (z. B. <b>25.07.2026 / Versuch 5 Bochum</b>), lade rechts oben das angezeigte <code>wm...mp4</code>-Video, markiere <b>TD → MKF → TO</b> und klicke <b>„🎯 Auf diesen DLV-Sprung kalibrieren“</b>.
+            </p>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    const offsetBadges = [
+      ['Stemm', 'stemmwinkel_deg', '°'],
+      ['Rumpf TD', 'rumpfwinkel_td_deg', '°'],
+      ['Rumpfrot.', 'rumpfrotation_deg', '°'],
+      ['Knie min', 'kniewinkel_min_deg', '°'],
+      ['Abflug', 'abflugwinkel_deg', '°'],
+      ['Schwung ω', 'schwungbein_deg_s', '°/s']
+    ].map(([lbl, k, u]) => {
+      const off = offsets[k] || 0;
+      const col = Math.abs(off) < 0.5 ? 'text-emerald-400' : 'text-cyan-300';
+      return `<span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800">${lbl}: <b class="${col}">${off >= 0 ? '+' : ''}${off}${u}</b> <span class="text-slate-500">(n=${counts[k]})</span></span>`;
+    }).join(' ');
+
+    const pairsHtml = pairs.map(p => {
+      const errs = CALIBRATABLE_KEYS.map(k => {
+        const r = p.rawSummary?.[k];
+        const gt = p.groundTruth?.[k];
+        const cal = (typeof r === 'number') ? (r + (offsets[k] || 0)) : null;
+        if (typeof r !== 'number' || typeof gt !== 'number') return null;
+        return { k, rawErr: Math.abs(gt - r), calErr: Math.abs(gt - cal) };
+      }).filter(Boolean);
+      const maeRaw = errs.length ? (errs.filter(e => e.k !== 'schwungbein_deg_s').reduce((s, e) => s + e.rawErr, 0) / Math.max(1, errs.filter(e => e.k !== 'schwungbein_deg_s').length)) : null;
+      const maeCal = errs.length ? (errs.filter(e => e.k !== 'schwungbein_deg_s').reduce((s, e) => s + e.calErr, 0) / Math.max(1, errs.filter(e => e.k !== 'schwungbein_deg_s').length)) : null;
+      return `
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[10px] font-mono">
+          <div>
+            <strong class="text-white">${p.display_ref}</strong>
+            <span class="text-cyan-300 ml-1">(${p.videoFilename})</span>
+            ${maeRaw !== null ? `<span class="text-slate-400 ml-2">Winkel-MAE: Roh ${maeRaw.toFixed(1)}° ➔ Kalibriert <b class="text-emerald-400">${maeCal.toFixed(1)}°</b></span>` : ''}
+          </div>
+          <button onclick="VideoBiomechanicsModule.removeCalibrationPair('${p.trialId}')" class="text-rose-400 hover:text-rose-300 px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800">✕ Entfernen</button>
+        </div>
+      `;
+    }).join('');
+
+    box.innerHTML = `
+      <div class="space-y-2">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-black ${enabled ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-300'}">
+              ${enabled ? `✅ DLV-KALIBRIERUNG AKTIV (${pairs.length} Referenz-Sprünge)` : '⏸️ DLV-Kalibrierung pausiert (Rohwerte)'}
+            </span>
+            <label class="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-300 cursor-pointer">
+              <input type="checkbox" ${enabled ? 'checked' : ''} onchange="VideoBiomechanicsModule.setCalibrationEnabled(this.checked)" class="rounded bg-slate-900 border-slate-700 text-emerald-500">
+              <span>Kalibrierte DLV-Skala auf Trainingssprünge anwenden</span>
+            </label>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono">${offsetBadges}</div>
+        <div class="space-y-1">${pairsHtml}</div>
+      </div>
+    `;
+  }
+
   function statusClass(metricKey, val) {
     if (val === null || val === undefined || Number.isNaN(val)) return { cls: 'text-slate-400 border-slate-700', tag: '—' };
     const norm = calibrationProfile?.normbereich?.[metricKey];
@@ -152,24 +442,28 @@ const VideoBiomechanicsModule = (() => {
     const feedbackBox = document.getElementById('dlvAutoDiagnosisBox');
     if (!tbody) return;
 
+    const rawSummary = computeRawSummaryFromState(phaseMarks, angleHistory);
     const summary = computeSummaryFromState(phaseMarks, angleHistory);
+    const offsets = getActiveOffsets();
+    const calActive = isCalibrationEnabled() && getCalibrationPairs().length > 0;
     const bm = getSelectedBenchmark();
-    const norm = calibrationProfile?.normbereich || {};
 
     const rows = [
-      { key: 'stemmwinkel_deg', label: 'Stemmwinkel TD (Auslage)', val: summary.stemmwinkel_deg, bm: bm?.stemmwinkel_deg, unit: '°', norm: '22 – 28°' },
-      { key: 'rumpfwinkel_td_deg', label: 'Rumpfwinkel TD (>90° = Rücklage)', val: summary.rumpfwinkel_td_deg, bm: bm?.rumpfwinkel_td_deg, unit: '°', norm: '95 – 102°' },
-      { key: 'rumpfrotation_deg', label: 'Rumpfrotation (TD → TO)', val: summary.rumpfrotation_deg, bm: bm?.rumpfrotation_deg, unit: '°', norm: '4 – 12°' },
-      { key: 'kniewinkel_min_deg', label: 'Amortisation Stützbein-Knie min.', val: summary.kniewinkel_min_deg, bm: bm?.kniewinkel_min_deg, unit: '°', norm: '> 134°' },
-      { key: 'schwungbein_knie_kompakt_deg', label: 'Schwungbein-Knie Kompaktheit', val: summary.schwungbein_knie_kompakt_deg, bm: bm?.schwungbein_knie_kompakt_deg, unit: '°', norm: '60 – 95° (eng)' },
-      { key: 'schwungbein_deg_s', label: 'Schwungbein Geschwindigkeit max.', val: summary.schwungbein_deg_s, bm: bm?.schwungbein_deg_s, unit: '°/s', norm: '> 730 °/s' },
-      { key: 'abflugwinkel_deg', label: 'Abflugwinkel (Take-off Vektor)', val: summary.abflugwinkel_deg, bm: bm?.abflugwinkel_deg, unit: '°', norm: '> 19,0°' },
-      { key: 'kontaktzeit_ms', label: 'Bodenkontaktzeit (TD → TO)', val: summary.kontaktzeit_ms, bm: bm?.kontaktzeit_ms, unit: 'ms', norm: '100 – 125 ms' }
+      { key: 'stemmwinkel_deg', label: 'Stemmwinkel TD (Auslage)', raw: rawSummary.stemmwinkel_deg, val: summary.stemmwinkel_deg, bm: bm?.stemmwinkel_deg, unit: '°', norm: '22 – 28°' },
+      { key: 'rumpfwinkel_td_deg', label: 'Rumpfwinkel TD (>90° = Rücklage)', raw: rawSummary.rumpfwinkel_td_deg, val: summary.rumpfwinkel_td_deg, bm: bm?.rumpfwinkel_td_deg, unit: '°', norm: '95 – 102°' },
+      { key: 'rumpfrotation_deg', label: 'Rumpfrotation (TD → TO)', raw: rawSummary.rumpfrotation_deg, val: summary.rumpfrotation_deg, bm: bm?.rumpfrotation_deg, unit: '°', norm: '4 – 12°' },
+      { key: 'kniewinkel_min_deg', label: 'Amortisation Stützbein-Knie min.', raw: rawSummary.kniewinkel_min_deg, val: summary.kniewinkel_min_deg, bm: bm?.kniewinkel_min_deg, unit: '°', norm: '> 134°' },
+      { key: 'schwungbein_knie_kompakt_deg', label: 'Schwungbein-Knie Kompaktheit', raw: rawSummary.schwungbein_knie_kompakt_deg, val: summary.schwungbein_knie_kompakt_deg, bm: bm?.schwungbein_knie_kompakt_deg ?? 88, unit: '°', norm: '60 – 95° (eng)' },
+      { key: 'schwungbein_deg_s', label: 'Schwungbein Geschwindigkeit max.', raw: rawSummary.schwungbein_deg_s, val: summary.schwungbein_deg_s, bm: bm?.schwungbein_deg_s, unit: '°/s', norm: '> 730 °/s' },
+      { key: 'abflugwinkel_deg', label: 'Abflugwinkel (Take-off Vektor)', raw: rawSummary.abflugwinkel_deg, val: summary.abflugwinkel_deg, bm: bm?.abflugwinkel_deg, unit: '°', norm: '> 19,0°' },
+      { key: 'kontaktzeit_ms', label: 'Bodenkontaktzeit (TD → TO)', raw: rawSummary.kontaktzeit_ms, val: summary.kontaktzeit_ms, bm: bm?.kontaktzeit_ms ?? 112, unit: 'ms', norm: '100 – 125 ms' }
     ];
 
     tbody.innerHTML = rows.map(r => {
       const st = statusClass(r.key, r.val);
       const valStr = r.val !== null && r.val !== undefined ? `${r.val} ${r.unit}` : '—';
+      const hasOffset = calActive && (offsets[r.key] || 0) !== 0 && r.raw !== null;
+      const rawHint = hasOffset ? ` <span class="text-[9px] text-slate-500">(Roh: ${r.raw})</span>` : '';
       const bmStr = r.bm !== null && r.bm !== undefined ? `${r.bm} ${r.unit}` : '—';
       let deltaHtml = '<span class="text-slate-500">—</span>';
       if (r.val !== null && r.bm !== null && r.bm !== undefined) {
@@ -179,7 +473,7 @@ const VideoBiomechanicsModule = (() => {
       return `
         <tr class="border-b border-slate-800/80 text-xs font-mono">
           <td class="py-2 px-2 text-slate-200 font-sans font-semibold">${r.label}</td>
-          <td class="py-2 px-2"><span class="px-2 py-0.5 rounded border ${st.cls} font-bold">${valStr}</span></td>
+          <td class="py-2 px-2"><span class="px-2 py-0.5 rounded border ${st.cls} font-bold">${valStr}</span>${rawHint}</td>
           <td class="py-2 px-2 text-amber-300 font-bold">${bmStr}</td>
           <td class="py-2 px-2">${deltaHtml}</td>
           <td class="py-2 px-2 text-slate-400">${r.norm}</td>
@@ -208,13 +502,13 @@ const VideoBiomechanicsModule = (() => {
         notes.push(`⚠️ <b>Zu wenig Rücklage am Brett (${summary.rumpfwinkel_td_deg}° vs. Norm 95–102°):</b> Risiko für zu flachen Abflug / Vorrotation.`);
       }
       if (summary.kniewinkel_min_deg !== null && summary.kniewinkel_min_deg < 134) {
-        notes.push(`⚠️ <b>Stützbein knickt ein (${summary.kniewinkel_min_deg}° vs. Norm >134°):</b> Reaktive Exzentrik / Hürden-Stiffnes beachten.`);
+        notes.push(`⚠️ <b>Stützbein knickt ein (${summary.kniewinkel_min_deg}° vs. Norm >134°):</b> Reaktive Exzentrik / Hürden-Stiffness beachten.`);
       }
       if (summary.schwungbein_deg_s !== null && summary.schwungbein_deg_s >= 730) {
         notes.push(`✅ <b>Explosives Schwungbein (${summary.schwungbein_deg_s} °/s):</b> Über DLV-Mindestnorm (> 730 °/s).`);
       }
       if (!notes.length) {
-        notes.push('ℹ️ Lade ein Trainings- oder DLV-Video, spiele den Absprung ab und markiere <b>TD</b> + <b>MKF</b> + <b>TO</b> – dann berechnet das System deine exakte DLV-Kalibrierung.');
+        notes.push('ℹ️ Lade ein DLV-Video (oder Trainingssprung), spiele den Absprung ab und markiere <b>TD</b> + <b>MKF</b> + <b>TO</b> – dann berechnet das System die DLV-Werte & Kalibrierung.');
       }
       feedbackBox.innerHTML = notes.map(n => `<div>${n}</div>`).join('');
     }
@@ -223,9 +517,14 @@ const VideoBiomechanicsModule = (() => {
   function renderBenchmarkSelector() {
     const sel = document.getElementById('dlvBenchmarkSelect');
     if (!sel || !calibrationProfile) return;
-    sel.innerHTML = (calibrationProfile.benchmarks || []).map(b =>
-      `<option value="${b.id}" ${b.id === selectedBenchmarkId ? 'selected' : ''}>${b.label}</option>`
+    const list = getAllReferenceTrials();
+    if (!list.find(x => x.id === selectedTrialId) && list[0]) {
+      selectedTrialId = list[0].id;
+    }
+    sel.innerHTML = list.map(b =>
+      `<option value="${b.id}" ${b.id === selectedTrialId ? 'selected' : ''}>${b.label}</option>`
     ).join('');
+    renderSelectedTrialHint();
   }
 
   async function refreshArchiveList() {
@@ -253,7 +552,7 @@ const VideoBiomechanicsModule = (() => {
     if (!filtered.length) {
       listEl.innerHTML = `
         <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 text-center text-xs text-slate-400 font-sans">
-          Noch keine Video-Analysen im Archiv${archiveFilterType !== 'ALL' ? ` (Filter: ${archiveFilterType})` : ''}. Analysiere oben ein Video und klicke <b>„💾 Ins Archiv speichern“</b>!
+          Noch keine Video-Analysen im Archiv${archiveFilterType !== 'ALL' ? ` (Filter: ${archiveFilterType})` : ''}. Analysiere oben ein Video und klicke <b>„💾 Speichern“</b>!
         </div>
       `;
       renderSideBySideCompare();
@@ -276,6 +575,7 @@ const VideoBiomechanicsModule = (() => {
                 <span class="text-xs font-bold text-white truncate">${item.title || 'Unbenannter Sprung'}</span>
                 <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-800 text-cyan-300 border border-slate-700">${item.type || 'Training'}</span>
                 ${item.mark_m ? `<span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-emerald-950 text-emerald-300 border border-emerald-700">${item.mark_m} m</span>` : ''}
+                ${item.calibrated ? `<span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-950 text-amber-300 border border-amber-700">DLV-kalibriert</span>` : ''}
                 <span class="text-[10px] font-mono text-slate-400">${item.date || ''}</span>
               </div>
               <div class="flex flex-wrap gap-2 text-[10px] font-mono text-slate-300">
@@ -368,6 +668,7 @@ const VideoBiomechanicsModule = (() => {
       return;
     }
 
+    const rawSummary = computeRawSummaryFromState(phaseMarks, angleHistory);
     const summary = computeSummaryFromState(phaseMarks, angleHistory);
     const thumbnail = runtime.getCaptureThumbnail ? runtime.getCaptureThumbnail() : null;
 
@@ -381,7 +682,9 @@ const VideoBiomechanicsModule = (() => {
       notes: (notesEl?.value || '').trim(),
       fps: parseFloat(fpsEl?.value || '120'),
       runDirection: dirEl?.value || 'ltr',
+      calibrated: isCalibrationEnabled() && getCalibrationPairs().length > 0,
       phaseMarks,
+      rawSummary,
       summary,
       angleHistory: (angleHistory || []).slice(-600),
       thumbnail
@@ -426,7 +729,9 @@ const VideoBiomechanicsModule = (() => {
   function exportArchiveJson() {
     const payload = {
       exported_at: new Date().toISOString(),
-      app: 'Athletics Intelligence Video Archive (M3 Pro GPU)',
+      app: 'Athletics Intelligence Video Archive & DLV Calibration (M3 Pro GPU)',
+      calibration_enabled: isCalibrationEnabled(),
+      calibration_pairs: getCalibrationPairs(),
       count: cachedArchive.length,
       analyses: cachedArchive
     };
@@ -451,8 +756,12 @@ const VideoBiomechanicsModule = (() => {
           imported++;
         }
       }
+      if (!Array.isArray(parsed) && Array.isArray(parsed.calibration_pairs) && parsed.calibration_pairs.length > 0) {
+        saveCalibrationPairs(parsed.calibration_pairs);
+      }
       await refreshArchiveList();
-      alert(`✅ ${imported} Video-Analysen erfolgreich ins lokale Archiv importiert!`);
+      renderCalibrationModelPanel();
+      alert(`✅ ${imported} Video-Analysen (+ Kalibrierungs-Paare) erfolgreich importiert!`);
     } catch (e) {
       alert('Fehler beim JSON-Import: ' + e.message);
     }
@@ -466,6 +775,7 @@ const VideoBiomechanicsModule = (() => {
       if (dEl && !dEl.value) dEl.value = new Date().toISOString().slice(0, 10);
       renderBenchmarkSelector();
     }
+    renderCalibrationModelPanel();
     const marks = runtime.getPhaseMarks ? runtime.getPhaseMarks() : {};
     const hist = runtime.getAngleHistory ? runtime.getAngleHistory() : [];
     updateComparisonTable(marks, hist);
@@ -475,9 +785,15 @@ const VideoBiomechanicsModule = (() => {
   return {
     render,
     registerEngineBridge,
+    autoDetectTrialByFilename,
     updateComparisonTable,
+    getActiveOffsets,
+    saveCalibrationPairFromCurrent,
+    removeCalibrationPair,
+    setCalibrationEnabled,
     onBenchmarkChange: (id) => {
-      selectedBenchmarkId = id;
+      selectedTrialId = id;
+      renderSelectedTrialHint();
       const marks = runtime.getPhaseMarks ? runtime.getPhaseMarks() : {};
       const hist = runtime.getAngleHistory ? runtime.getAngleHistory() : [];
       updateComparisonTable(marks, hist);

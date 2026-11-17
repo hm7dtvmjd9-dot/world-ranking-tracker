@@ -1,6 +1,6 @@
 {
   "source": "OSP Hessen / DLV Biomechanik (Dr. L. Mendoza, C. Günther, E. Nixdorf)",
-  "calibrated_at": "2026-11-14",
+  "calibrated_at": "2026-11-17",
   "normbereich": {
     "stemmwinkel_deg": {
       "min": 22,
@@ -73,7 +73,15 @@
       "schwungbein_deg_s": 862.0,
       "geschw_bilanz": 4.0,
       "kontaktzeit_ms": 112,
-      "schwungbein_knie_kompakt_deg": 88.0
+      "schwungbein_knie_kompakt_deg": 88.0,
+      "video_match": {
+        "folder": "2024-06-07 EM Rom",
+        "recommended_video": "wm24 EM Herden (3).mp4",
+        "all_attempt_videos": [
+          "wm24 EM Herden (3).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2024-06-07 EM Rom/wm24 EM Herden (3).mp4"
+      }
     },
     {
       "id": "dlv-ehammer-2022",
@@ -90,7 +98,15 @@
       "schwungbein_deg_s": 833.0,
       "geschw_bilanz": -3.0,
       "kontaktzeit_ms": 110,
-      "schwungbein_knie_kompakt_deg": 85.0
+      "schwungbein_knie_kompakt_deg": 85.0,
+      "video_match": {
+        "folder": "2022-05-07 Ehammer",
+        "recommended_video": "WM22 Rt Ehammer 3.mp4",
+        "all_attempt_videos": [
+          "WM22 Rt Ehammer 3.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2022-05-07 Ehammer/WM22 Rt Ehammer 3.mp4"
+      }
     },
     {
       "id": "dlv-luka-bochum-2026",
@@ -107,7 +123,16 @@
       "schwungbein_deg_s": 841.0,
       "geschw_bilanz": -4.0,
       "kontaktzeit_ms": 118,
-      "schwungbein_knie_kompakt_deg": 94.0
+      "schwungbein_knie_kompakt_deg": 94.0,
+      "video_match": {
+        "folder": "2026-07-25_Bochum",
+        "recommended_video": "wm26 WA3 Herden 5.mp4",
+        "all_attempt_videos": [
+          "wm26 WA3 Herden 5.mp4",
+          "Herden (5).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2026-07-25_Bochum/wm26 WA3 Herden 5.mp4"
+      }
     },
     {
       "id": "dlv-luka-kassel-2023",
@@ -124,7 +149,16 @@
       "schwungbein_deg_s": 746.0,
       "geschw_bilanz": -8.0,
       "kontaktzeit_ms": 116,
-      "schwungbein_knie_kompakt_deg": 96.0
+      "schwungbein_knie_kompakt_deg": 96.0,
+      "video_match": {
+        "folder": "2023-07-09 DM Kassel",
+        "recommended_video": "wm23 KS Herden (2).mp4",
+        "all_attempt_videos": [
+          "wm23 KS Herden (2).mp4",
+          "Herden (2).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2023-07-09 DM Kassel/wm23 KS Herden (2).mp4"
+      }
     },
     {
       "id": "dlv-luka-dresden-2025",
@@ -141,7 +175,16 @@
       "schwungbein_deg_s": 831.0,
       "geschw_bilanz": 0.0,
       "kontaktzeit_ms": 124,
-      "schwungbein_knie_kompakt_deg": 102.0
+      "schwungbein_knie_kompakt_deg": 102.0,
+      "video_match": {
+        "folder": "2025-08-02_Dresden",
+        "recommended_video": "wm25 DD Herden 6.mp4",
+        "all_attempt_videos": [
+          "wm25 DD Herden 6.mp4",
+          "Herden (6)-Front.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2025-08-02_Dresden/wm25 DD Herden 6.mp4"
+      }
     }
   ],
   "all_luka_meets": [
@@ -560,6 +603,1005 @@
       "geschw_bilanz": -4.0,
       "schwungbein_deg_s": 841.0,
       "lande_index": -0.25
+    }
+  ],
+  "paired_trials": [
+    {
+      "id": "herden-2026-07-25-v5",
+      "athlete": "Luka Herden",
+      "date": "2026-07-25",
+      "display_ref": "25.07.2026 / Versuch 5",
+      "attempt": 5,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2026-07-25 Bochum.pdf",
+      "label": "2026-07-25 Bochum • V5 (7.86m | eff. 8.07m)",
+      "wind": 1.3,
+      "offiziell_m": 7.86,
+      "erwartet_m": 8.21,
+      "effektiv_m": 8.07,
+      "verlust_balken_m": 0.21,
+      "stemmwinkel_deg": 27.0,
+      "rumpfwinkel_td_deg": 100.0,
+      "rumpfrotation_deg": 9.0,
+      "kniewinkel_min_deg": 143.0,
+      "abflugwinkel_deg": 19.9,
+      "geschw_bilanz": -4.0,
+      "schwungbein_deg_s": 841.0,
+      "schwungbein_weite_m": 0.63,
+      "video_match": {
+        "folder": "2026-07-25_Bochum",
+        "recommended_video": "wm26 WA3 Herden 5.mp4",
+        "all_attempt_videos": [
+          "wm26 WA3 Herden 5.mp4",
+          "Herden (5).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2026-07-25_Bochum/wm26 WA3 Herden 5.mp4"
+      }
+    },
+    {
+      "id": "herden-2026-05-23-v5",
+      "athlete": "Luka Herden",
+      "date": "2026-05-23",
+      "display_ref": "23.05.2026 / Versuch 5",
+      "attempt": 5,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2026-05-23_Weinheim.pdf",
+      "label": "2026-05-23_Weinheim • V5 (7.74m | eff. 7.75m)",
+      "wind": 0.0,
+      "offiziell_m": 7.74,
+      "erwartet_m": 7.94,
+      "effektiv_m": 7.75,
+      "verlust_balken_m": 0.01,
+      "stemmwinkel_deg": 24.0,
+      "rumpfwinkel_td_deg": 101.0,
+      "rumpfrotation_deg": 6.0,
+      "kniewinkel_min_deg": 143.0,
+      "abflugwinkel_deg": 18.8,
+      "geschw_bilanz": -7.0,
+      "schwungbein_deg_s": 760.0,
+      "schwungbein_weite_m": 0.54,
+      "video_match": {
+        "folder": "2026-05-23_Weinheim",
+        "recommended_video": "wm26 Herden 5 (7,74).mp4",
+        "all_attempt_videos": [
+          "wm26 Herden 5 (7,74).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2026-05-23_Weinheim/wm26 Herden 5 (7,74).mp4"
+      }
+    },
+    {
+      "id": "herden-2026-05-14-v3",
+      "athlete": "Luka Herden",
+      "date": "2026-05-14",
+      "display_ref": "14.05.2026 / Versuch 3",
+      "attempt": 3,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2026-05-14_Wiesbaden.pdf",
+      "label": "2026-05-14_Wiesbaden • V3 (7.60m | eff. 7.64m)",
+      "wind": 1.1,
+      "offiziell_m": 7.6,
+      "erwartet_m": 7.92,
+      "effektiv_m": 7.64,
+      "verlust_balken_m": 0.04,
+      "stemmwinkel_deg": 26.0,
+      "rumpfwinkel_td_deg": 102.0,
+      "rumpfrotation_deg": 7.0,
+      "kniewinkel_min_deg": 139.0,
+      "abflugwinkel_deg": 19.5,
+      "geschw_bilanz": -4.0,
+      "schwungbein_deg_s": 740.0,
+      "schwungbein_weite_m": 0.64,
+      "video_match": {
+        "folder": "2026-05-14_Wiesbaden",
+        "recommended_video": "wm26 WI Herden, Luka 3 (7.60).mp4",
+        "all_attempt_videos": [
+          "wm26 WI Herden, Luka 3 (7.60).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2026-05-14_Wiesbaden/wm26 WI Herden, Luka 3 (7.60).mp4"
+      }
+    },
+    {
+      "id": "herden-2026-05-06-v6",
+      "athlete": "Luka Herden",
+      "date": "2026-05-06",
+      "display_ref": "06.05.2026 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2026-05-06_TL Belek.pdf",
+      "label": "2026-05-06_TL Belek • V6 (7.78m | eff. 7.51m)",
+      "wind": 0.0,
+      "offiziell_m": 7.78,
+      "erwartet_m": 7.45,
+      "effektiv_m": 7.51,
+      "verlust_balken_m": -0.27,
+      "stemmwinkel_deg": 28.0,
+      "rumpfwinkel_td_deg": 99.0,
+      "rumpfrotation_deg": 8.0,
+      "kniewinkel_min_deg": 131.0,
+      "abflugwinkel_deg": 21.7,
+      "geschw_bilanz": -6.0,
+      "schwungbein_deg_s": 684.0,
+      "schwungbein_weite_m": 0.69,
+      "video_match": {
+        "folder": "2026-05-06_Belek",
+        "recommended_video": "wm26 TLBl Herden 6 7.78 15s.mp4",
+        "all_attempt_videos": [
+          "wm26 TLBl Herden 6 7.78 15s.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2026-05-06_Belek/wm26 TLBl Herden 6 7.78 15s.mp4"
+      }
+    },
+    {
+      "id": "herden-2026-05-02-v1",
+      "athlete": "Luka Herden",
+      "date": "2026-05-02",
+      "display_ref": "02.05.2026 / Versuch 1",
+      "attempt": 1,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2026-05-02_TL Belek 2.pdf",
+      "label": "2026-05-02_TL Belek 2 • V1 (7.60m | eff. 7.12m)",
+      "wind": 0.0,
+      "offiziell_m": 7.6,
+      "erwartet_m": 7.05,
+      "effektiv_m": 7.12,
+      "verlust_balken_m": -0.48,
+      "stemmwinkel_deg": 26.0,
+      "rumpfwinkel_td_deg": 101.0,
+      "rumpfrotation_deg": 9.0,
+      "kniewinkel_min_deg": 138.0,
+      "abflugwinkel_deg": 22.9,
+      "geschw_bilanz": 0.0,
+      "schwungbein_deg_s": 725.0,
+      "schwungbein_weite_m": 0.64,
+      "video_match": {
+        "folder": "2026-05-06_Belek",
+        "recommended_video": "wm26 TlBl Herden 1 7.60 11s.mp4",
+        "all_attempt_videos": [
+          "wm26 TlBl Herden 1 7.60 11s.mp4",
+          "wm26 TLBl Herden 1 7.47 13s.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2026-05-06_Belek/wm26 TlBl Herden 1 7.60 11s.mp4"
+      }
+    },
+    {
+      "id": "herden-2026-03-01-v1",
+      "athlete": "Luka Herden",
+      "date": "2026-03-01",
+      "display_ref": "01.03.2026 / Versuch 1",
+      "attempt": 1,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2026-03-01_Dortmund.pdf",
+      "label": "2026-03-01_Dortmund • V1 (7.74m | eff. 7.86m)",
+      "wind": 0.0,
+      "offiziell_m": 7.74,
+      "erwartet_m": 7.96,
+      "effektiv_m": 7.86,
+      "verlust_balken_m": 0.12,
+      "stemmwinkel_deg": 28.0,
+      "rumpfwinkel_td_deg": 101.0,
+      "rumpfrotation_deg": 7.0,
+      "kniewinkel_min_deg": 137.0,
+      "abflugwinkel_deg": 20.5,
+      "geschw_bilanz": 1.0,
+      "schwungbein_deg_s": 806.0,
+      "schwungbein_weite_m": 0.55,
+      "video_match": {
+        "folder": "2026-02-28 Dortmund",
+        "recommended_video": "wm26 Do Herden 1.mp4",
+        "all_attempt_videos": [
+          "wm26 Do Herden 1.mp4",
+          "Herden (1).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2026-02-28 Dortmund/wm26 Do Herden 1.mp4"
+      }
+    },
+    {
+      "id": "herden-2026-01-10-v6",
+      "athlete": "Luka Herden",
+      "date": "2026-01-10",
+      "display_ref": "10.01.2026 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2026-01-10_La Palma.pdf",
+      "label": "2026-01-10_La Palma • V6 (7.93m | eff. 7.73m)",
+      "wind": 0.0,
+      "offiziell_m": 7.93,
+      "erwartet_m": 7.61,
+      "effektiv_m": 7.73,
+      "verlust_balken_m": -0.2,
+      "stemmwinkel_deg": 26.0,
+      "rumpfwinkel_td_deg": 100.0,
+      "rumpfrotation_deg": 7.0,
+      "kniewinkel_min_deg": 144.0,
+      "abflugwinkel_deg": 21.3,
+      "geschw_bilanz": -1.0,
+      "schwungbein_deg_s": 772.0,
+      "schwungbein_weite_m": 0.7,
+      "video_match": {
+        "folder": "2026-01-10_La Palma",
+        "recommended_video": "wm26 TlLP Herden 6 7.93.mp4",
+        "all_attempt_videos": [
+          "wm26 TlLP Herden 6 7.93.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2026-01-10_La Palma/wm26 TlLP Herden 6 7.93.mp4"
+      }
+    },
+    {
+      "id": "herden-2025-08-02-v6",
+      "athlete": "Luka Herden",
+      "date": "2025-08-02",
+      "display_ref": "02.08.2025 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2025-08-03_Dresden.pdf",
+      "label": "2025-08-03_Dresden • V6 (7.73m | eff. 7.84m)",
+      "wind": -0.6,
+      "offiziell_m": 7.73,
+      "erwartet_m": 8.13,
+      "effektiv_m": 7.84,
+      "verlust_balken_m": 0.11,
+      "stemmwinkel_deg": 27.0,
+      "rumpfwinkel_td_deg": 100.0,
+      "rumpfrotation_deg": 6.0,
+      "kniewinkel_min_deg": 132.0,
+      "abflugwinkel_deg": 18.8,
+      "geschw_bilanz": 0.0,
+      "schwungbein_deg_s": 831.0,
+      "schwungbein_weite_m": 0.6,
+      "video_match": {
+        "folder": "2025-08-02_Dresden",
+        "recommended_video": "wm25 DD Herden 6.mp4",
+        "all_attempt_videos": [
+          "wm25 DD Herden 6.mp4",
+          "Herden (6)-Front.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2025-08-02_Dresden/wm25 DD Herden 6.mp4"
+      }
+    },
+    {
+      "id": "herden-2025-05-25-v6",
+      "athlete": "Luka Herden",
+      "date": "2025-05-25",
+      "display_ref": "25.05.2025 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2025-05-27_Ettlingen.pdf",
+      "label": "2025-05-27_Ettlingen • V6 (7.74m | eff. 7.76m)",
+      "wind": 0.4,
+      "offiziell_m": 7.74,
+      "erwartet_m": 7.97,
+      "effektiv_m": 7.76,
+      "verlust_balken_m": 0.02,
+      "stemmwinkel_deg": 25.0,
+      "rumpfwinkel_td_deg": 99.0,
+      "rumpfrotation_deg": 5.0,
+      "kniewinkel_min_deg": 138.0,
+      "abflugwinkel_deg": 19.7,
+      "geschw_bilanz": -5.0,
+      "schwungbein_deg_s": 736.0,
+      "schwungbein_weite_m": 0.55,
+      "video_match": {
+        "folder": "2025-05-27_Ettlingen",
+        "recommended_video": "wm25 et Herden 6 (7,74).mp4",
+        "all_attempt_videos": [
+          "wm25 et Herden 6 (7,74).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2025-05-27_Ettlingen/wm25 et Herden 6 (7,74).mp4"
+      }
+    },
+    {
+      "id": "herden-2025-05-07-v5",
+      "athlete": "Luka Herden",
+      "date": "2025-05-07",
+      "display_ref": "07.05.2025 / Versuch 5",
+      "attempt": 5,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2025-04-28_TL Belek.pdf",
+      "label": "2025-04-28_TL Belek • V5 (7.93m | eff. 7.65m)",
+      "wind": 0.4,
+      "offiziell_m": 7.93,
+      "erwartet_m": 7.7,
+      "effektiv_m": 7.65,
+      "verlust_balken_m": -0.28,
+      "stemmwinkel_deg": 27.0,
+      "rumpfwinkel_td_deg": 98.0,
+      "rumpfrotation_deg": 5.0,
+      "kniewinkel_min_deg": 141.0,
+      "abflugwinkel_deg": 19.3,
+      "geschw_bilanz": -5.0,
+      "schwungbein_deg_s": 801.0,
+      "schwungbein_weite_m": 0.42,
+      "video_match": {
+        "folder": "2025-04-30_Belek",
+        "recommended_video": "wm25 TLBl 0507 Herden 5.mp4",
+        "all_attempt_videos": [
+          "wm25 TLBl 0507 Herden 5.mp4",
+          "wm25 TLBl Herden 5.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2025-04-30_Belek/wm25 TLBl 0507 Herden 5.mp4"
+      }
+    },
+    {
+      "id": "herden-2025-05-05-v5",
+      "athlete": "Luka Herden",
+      "date": "2025-05-05",
+      "display_ref": "05.05.2025 / Versuch 5",
+      "attempt": 5,
+      "color_role": "Referenz (PDF Zeile 2 / Blau)",
+      "source_pdf": "2026-01-10_La Palma.pdf",
+      "label": "05.05.2025 • V5 (7.93m | eff. 7.65m)",
+      "wind": 0.4,
+      "offiziell_m": 7.93,
+      "erwartet_m": 7.7,
+      "effektiv_m": 7.65,
+      "verlust_balken_m": -0.28,
+      "stemmwinkel_deg": 27.0,
+      "rumpfwinkel_td_deg": 98.0,
+      "rumpfrotation_deg": 5.0,
+      "kniewinkel_min_deg": 141.0,
+      "abflugwinkel_deg": 19.3,
+      "geschw_bilanz": -5.0,
+      "schwungbein_deg_s": 801.0,
+      "schwungbein_weite_m": 0.42,
+      "video_match": {
+        "folder": "2025-04-30_Belek",
+        "recommended_video": "wm25 TLBl 0507 Herden 5.mp4",
+        "all_attempt_videos": [
+          "wm25 TLBl 0507 Herden 5.mp4",
+          "wm25 TLBl Herden 5.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2025-04-30_Belek/wm25 TLBl 0507 Herden 5.mp4"
+      }
+    },
+    {
+      "id": "herden-2025-04-30-v6",
+      "athlete": "Luka Herden",
+      "date": "2025-04-30",
+      "display_ref": "30.04.2025 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2025-04-28_TL Belek 2.pdf",
+      "label": "2025-04-28_TL Belek 2 • V6 (7.65m | eff. 7.46m)",
+      "wind": 0.5,
+      "offiziell_m": 7.65,
+      "erwartet_m": 7.6,
+      "effektiv_m": 7.46,
+      "verlust_balken_m": -0.19,
+      "stemmwinkel_deg": 25.0,
+      "rumpfwinkel_td_deg": 97.0,
+      "rumpfrotation_deg": 3.0,
+      "kniewinkel_min_deg": 141.0,
+      "abflugwinkel_deg": 19.0,
+      "geschw_bilanz": -7.0,
+      "schwungbein_deg_s": 792.0,
+      "schwungbein_weite_m": 0.6,
+      "video_match": {
+        "folder": "2025-04-30_Belek",
+        "recommended_video": "wm25 TLBl Herden 6.mp4",
+        "all_attempt_videos": [
+          "wm25 TLBl Herden 6.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2025-04-30_Belek/wm25 TLBl Herden 6.mp4"
+      }
+    },
+    {
+      "id": "herden-2025-02-23-v6",
+      "athlete": "Luka Herden",
+      "date": "2025-02-23",
+      "display_ref": "23.02.2025 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2025-02-23_Dortmund.pdf",
+      "label": "2025-02-23_Dortmund • V6 (7.86m | eff. 7.85m)",
+      "wind": 0.0,
+      "offiziell_m": 7.86,
+      "erwartet_m": 7.94,
+      "effektiv_m": 7.85,
+      "verlust_balken_m": -0.01,
+      "stemmwinkel_deg": 28.0,
+      "rumpfwinkel_td_deg": 98.0,
+      "rumpfrotation_deg": 8.0,
+      "kniewinkel_min_deg": 142.0,
+      "abflugwinkel_deg": 21.3,
+      "geschw_bilanz": -7.0,
+      "schwungbein_deg_s": 781.0,
+      "schwungbein_weite_m": 0.58,
+      "video_match": {
+        "folder": "2025-02-23 DM Dortmund",
+        "recommended_video": "wm25 doDM Herden 6.mp4",
+        "all_attempt_videos": [
+          "wm25 doDM Herden 6.mp4",
+          "Herden (6).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2025-02-23 DM Dortmund/wm25 doDM Herden 6.mp4"
+      }
+    },
+    {
+      "id": "herden-2025-01-05-v4",
+      "athlete": "Luka Herden",
+      "date": "2025-01-05",
+      "display_ref": "05.01.2025 / Versuch 4",
+      "attempt": 4,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2025-01-05_Weit La Palma.pdf",
+      "label": "2025-01-05_La Palma • V4 (8.07m | eff. 7.47m)",
+      "wind": 0.0,
+      "offiziell_m": 8.07,
+      "erwartet_m": 7.42,
+      "effektiv_m": 7.47,
+      "verlust_balken_m": -0.6,
+      "stemmwinkel_deg": 26.0,
+      "rumpfwinkel_td_deg": 96.0,
+      "rumpfrotation_deg": 6.0,
+      "kniewinkel_min_deg": 139.0,
+      "abflugwinkel_deg": 22.1,
+      "geschw_bilanz": -4.0,
+      "schwungbein_deg_s": 761.0,
+      "schwungbein_weite_m": 0.7,
+      "video_match": {
+        "folder": "2025-01-05 TL La Palma",
+        "recommended_video": "wm25 TLLP0501 Herden (1).mp4",
+        "all_attempt_videos": [
+          "wm25 TLLP0501 Herden (1).mp4",
+          "wm25 TLLP0501 Herden (2).mp4",
+          "wm25 TLLP0501 Herden (3).mp4",
+          "wm25 TLLP0501 Herden (4).mp4",
+          "wm25 TLLP0501 Herden (5).mp4",
+          "wm25 TLLP0501 Herden (6).mp4",
+          "wm25 TLLP0501 Herden (7).mp4",
+          "wm25 TLLP0501 Herden (8).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2025-01-05 TL La Palma/wm25 TLLP0501 Herden (1).mp4"
+      }
+    },
+    {
+      "id": "herden-2024-06-29-v6",
+      "athlete": "Luka Herden",
+      "date": "2024-06-29",
+      "display_ref": "29.06.2024 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2024-06-29_Weit Braunschweig.pdf",
+      "label": "2024-06-29_Braunschweig • V6 (7.79m | eff. 7.94m)",
+      "wind": 0.7,
+      "offiziell_m": 7.79,
+      "erwartet_m": 7.93,
+      "effektiv_m": 7.94,
+      "verlust_balken_m": 0.15,
+      "stemmwinkel_deg": 24.0,
+      "rumpfwinkel_td_deg": 99.0,
+      "rumpfrotation_deg": 7.0,
+      "kniewinkel_min_deg": 149.0,
+      "abflugwinkel_deg": 20.4,
+      "geschw_bilanz": 0.0,
+      "schwungbein_deg_s": 853.0,
+      "schwungbein_weite_m": 0.69,
+      "video_match": {
+        "folder": "2024-06-29 DM Braunschweig",
+        "recommended_video": "wm24 BR Herden 6 (7.79).mp4",
+        "all_attempt_videos": [
+          "wm24 BR Herden 6 (7.79).mp4",
+          "Herden (6).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2024-06-29 DM Braunschweig/wm24 BR Herden 6 (7.79).mp4"
+      }
+    },
+    {
+      "id": "herden-2024-06-08-v3",
+      "athlete": "Luka Herden",
+      "date": "2024-06-08",
+      "display_ref": "08.06.2024 / Versuch 3",
+      "attempt": 3,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2024-06-08_Weit Rom.pdf",
+      "label": "2024-06-08_Rom • V3 (8.01m | eff. 8.11m)",
+      "wind": -0.3,
+      "offiziell_m": 8.01,
+      "erwartet_m": 8.06,
+      "effektiv_m": 8.11,
+      "verlust_balken_m": 0.1,
+      "stemmwinkel_deg": 23.0,
+      "rumpfwinkel_td_deg": 97.0,
+      "rumpfrotation_deg": 3.0,
+      "kniewinkel_min_deg": 145.0,
+      "abflugwinkel_deg": 20.3,
+      "geschw_bilanz": 4.0,
+      "schwungbein_deg_s": 862.0,
+      "schwungbein_weite_m": 0.51,
+      "video_match": {
+        "folder": "2024-06-07 EM Rom",
+        "recommended_video": "wm24 EM Herden (3).mp4",
+        "all_attempt_videos": [
+          "wm24 EM Herden (3).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2024-06-07 EM Rom/wm24 EM Herden (3).mp4"
+      }
+    },
+    {
+      "id": "herden-2024-05-18-v3",
+      "athlete": "Luka Herden",
+      "date": "2024-05-18",
+      "display_ref": "18.05.2024 / Versuch 3",
+      "attempt": 3,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2024-05-18_Weit Weinheim.pdf",
+      "label": "2024-05-18_Weinheim • V3 (7.75m | eff. 7.80m)",
+      "wind": 0.0,
+      "offiziell_m": 7.75,
+      "erwartet_m": 7.93,
+      "effektiv_m": 7.8,
+      "verlust_balken_m": 0.05,
+      "stemmwinkel_deg": 26.0,
+      "rumpfwinkel_td_deg": 98.0,
+      "rumpfrotation_deg": 7.0,
+      "kniewinkel_min_deg": 141.0,
+      "abflugwinkel_deg": 20.1,
+      "geschw_bilanz": 0.0,
+      "schwungbein_deg_s": 804.0,
+      "schwungbein_weite_m": 0.62,
+      "video_match": {
+        "folder": "2024-05-18 Weinheim",
+        "recommended_video": "wm24 wh Herden 3 (7,75).mp4",
+        "all_attempt_videos": [
+          "wm24 wh Herden 3 (7,75).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2024-05-18 Weinheim/wm24 wh Herden 3 (7,75).mp4"
+      }
+    },
+    {
+      "id": "herden-2024-05-12-v5",
+      "athlete": "Luka Herden",
+      "date": "2024-05-12",
+      "display_ref": "12.05.2024 / Versuch 5",
+      "attempt": 5,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2024-05-12_Weit Ettlingen.pdf",
+      "label": "2024-05-12_Ettlingen • V5 (7.70m | eff. 7.84m)",
+      "wind": -0.3,
+      "offiziell_m": 7.7,
+      "erwartet_m": 7.93,
+      "effektiv_m": 7.84,
+      "verlust_balken_m": 0.14,
+      "stemmwinkel_deg": 27.0,
+      "rumpfwinkel_td_deg": 95.0,
+      "rumpfrotation_deg": 4.0,
+      "kniewinkel_min_deg": 140.0,
+      "abflugwinkel_deg": 18.8,
+      "geschw_bilanz": -11.0,
+      "schwungbein_deg_s": 798.0,
+      "schwungbein_weite_m": 0.52,
+      "video_match": {
+        "folder": "2024-05-12 Ettlingen",
+        "recommended_video": "wm24 ETT Herden (5).mp4",
+        "all_attempt_videos": [
+          "wm24 ETT Herden (5).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2024-05-12 Ettlingen/wm24 ETT Herden (5).mp4"
+      }
+    },
+    {
+      "id": "herden-2024-04-23-v6",
+      "athlete": "Luka Herden",
+      "date": "2024-04-23",
+      "display_ref": "23.04.2024 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2024-04-23_Weit Belek.pdf",
+      "label": "2024-04-23_Belek • V6 (7.68m | eff. 7.35m)",
+      "wind": 0.5,
+      "offiziell_m": 7.68,
+      "erwartet_m": 7.43,
+      "effektiv_m": 7.35,
+      "verlust_balken_m": -0.33,
+      "stemmwinkel_deg": 24.0,
+      "rumpfwinkel_td_deg": 98.0,
+      "rumpfrotation_deg": 7.0,
+      "kniewinkel_min_deg": 142.0,
+      "abflugwinkel_deg": 18.9,
+      "geschw_bilanz": -2.0,
+      "schwungbein_deg_s": 792.0,
+      "schwungbein_weite_m": 0.59,
+      "video_match": {
+        "folder": "2024-04-16 TL Belek",
+        "recommended_video": "wm24 tlb 1904 Herden (6).mp4",
+        "all_attempt_videos": [
+          "wm24 tlb 1904 Herden (6).mp4",
+          "wm24 tlb 2304 Herden (6).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2024-04-16 TL Belek/wm24 tlb 1904 Herden (6).mp4"
+      }
+    },
+    {
+      "id": "herden-2024-04-19-v6",
+      "athlete": "Luka Herden",
+      "date": "2024-04-19",
+      "display_ref": "19.04.2024 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2024-04-19_Weit Belek.pdf",
+      "label": "2024-04-19_Belek • V6 (8.15m | eff. 7.37m)",
+      "wind": 0.0,
+      "offiziell_m": 8.15,
+      "erwartet_m": 7.26,
+      "effektiv_m": 7.37,
+      "verlust_balken_m": -0.78,
+      "stemmwinkel_deg": 25.0,
+      "rumpfwinkel_td_deg": 98.0,
+      "rumpfrotation_deg": 6.0,
+      "kniewinkel_min_deg": 138.0,
+      "abflugwinkel_deg": 19.2,
+      "geschw_bilanz": -7.0,
+      "schwungbein_deg_s": 730.0,
+      "schwungbein_weite_m": 0.52,
+      "video_match": {
+        "folder": "2024-04-16 TL Belek",
+        "recommended_video": "wm24 tlb 1904 Herden (6).mp4",
+        "all_attempt_videos": [
+          "wm24 tlb 1904 Herden (6).mp4",
+          "wm24 tlb 2304 Herden (6).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2024-04-16 TL Belek/wm24 tlb 1904 Herden (6).mp4"
+      }
+    },
+    {
+      "id": "herden-2024-04-16-v6",
+      "athlete": "Luka Herden",
+      "date": "2024-04-16",
+      "display_ref": "16.04.2024 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Referenz (PDF Zeile 2 / Blau)",
+      "source_pdf": "2025-04-28_TL Belek 2.pdf",
+      "label": "16.04.2024 • V6 (8.15m | eff. 7.37m)",
+      "wind": 0.0,
+      "offiziell_m": 8.15,
+      "erwartet_m": 7.26,
+      "effektiv_m": 7.37,
+      "verlust_balken_m": -0.78,
+      "stemmwinkel_deg": 25.0,
+      "rumpfwinkel_td_deg": 98.0,
+      "rumpfrotation_deg": 6.0,
+      "kniewinkel_min_deg": 138.0,
+      "abflugwinkel_deg": 19.2,
+      "geschw_bilanz": -7.0,
+      "schwungbein_deg_s": 730.0,
+      "schwungbein_weite_m": 0.52,
+      "video_match": {
+        "folder": "2024-04-16 TL Belek",
+        "recommended_video": "wm24 tlb 1904 Herden (6).mp4",
+        "all_attempt_videos": [
+          "wm24 tlb 1904 Herden (6).mp4",
+          "wm24 tlb 2304 Herden (6).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2024-04-16 TL Belek/wm24 tlb 1904 Herden (6).mp4"
+      }
+    },
+    {
+      "id": "herden-2024-02-18-v6",
+      "athlete": "Luka Herden",
+      "date": "2024-02-18",
+      "display_ref": "18.02.2024 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2024-02-18_Weit Leipzig.pdf",
+      "label": "2024-02-18_Leipzig • V6 (7.73m | eff. 7.75m)",
+      "wind": 0.0,
+      "offiziell_m": 7.73,
+      "erwartet_m": 7.97,
+      "effektiv_m": 7.75,
+      "verlust_balken_m": 0.02,
+      "stemmwinkel_deg": 26.0,
+      "rumpfwinkel_td_deg": 95.0,
+      "rumpfrotation_deg": 8.0,
+      "kniewinkel_min_deg": 142.0,
+      "abflugwinkel_deg": 18.8,
+      "geschw_bilanz": -13.0,
+      "schwungbein_deg_s": 764.0,
+      "schwungbein_weite_m": 0.54,
+      "video_match": {
+        "folder": "2024-02-17 DHM Leipzig",
+        "recommended_video": "wm24 dhm Herden 6.mp4",
+        "all_attempt_videos": [
+          "wm24 dhm Herden 6.mp4",
+          "Herden (6)-front.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2024-02-17 DHM Leipzig/wm24 dhm Herden 6.mp4"
+      }
+    },
+    {
+      "id": "herden-2024-01-06-v5",
+      "athlete": "Luka Herden",
+      "date": "2024-01-06",
+      "display_ref": "06.01.2024 / Versuch 5",
+      "attempt": 5,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2024-01-07_Weit La Palma.pdf",
+      "label": "2024-01-07_La Palma • V5 (7.60m | eff. 7.59m)",
+      "wind": 1.0,
+      "offiziell_m": 7.6,
+      "erwartet_m": 7.61,
+      "effektiv_m": 7.59,
+      "verlust_balken_m": -0.01,
+      "stemmwinkel_deg": 23.0,
+      "rumpfwinkel_td_deg": 97.0,
+      "rumpfrotation_deg": 7.0,
+      "kniewinkel_min_deg": 150.0,
+      "abflugwinkel_deg": 20.1,
+      "geschw_bilanz": -4.0,
+      "schwungbein_deg_s": 861.0,
+      "schwungbein_weite_m": 0.62,
+      "video_match": {
+        "folder": "2024-01-07 TL La Palma",
+        "recommended_video": "wm24 TLLP0701 Herden (5).mp4",
+        "all_attempt_videos": [
+          "wm24 TLLP0701 Herden (5).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2024-01-07 TL La Palma/wm24 TLLP0701 Herden (5).mp4"
+      }
+    },
+    {
+      "id": "herden-2023-07-09-v2",
+      "athlete": "Luka Herden",
+      "date": "2023-07-09",
+      "display_ref": "09.07.2023 / Versuch 2",
+      "attempt": 2,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2023-07-09_Weit Kassel.pdf",
+      "label": "2023-07-09_Kassel • V2 (7.91m | eff. 7.97m)",
+      "wind": 0.3,
+      "offiziell_m": 7.91,
+      "erwartet_m": 8.11,
+      "effektiv_m": 7.97,
+      "verlust_balken_m": 0.06,
+      "stemmwinkel_deg": 26.0,
+      "rumpfwinkel_td_deg": 99.0,
+      "rumpfrotation_deg": 4.0,
+      "kniewinkel_min_deg": 140.0,
+      "abflugwinkel_deg": 19.4,
+      "geschw_bilanz": -8.0,
+      "schwungbein_deg_s": 746.0,
+      "schwungbein_weite_m": 0.5,
+      "video_match": {
+        "folder": "2023-07-09 DM Kassel",
+        "recommended_video": "wm23 KS Herden (2).mp4",
+        "all_attempt_videos": [
+          "wm23 KS Herden (2).mp4",
+          "Herden (2).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2023-07-09 DM Kassel/wm23 KS Herden (2).mp4"
+      }
+    },
+    {
+      "id": "herden-2023-05-27-v5",
+      "athlete": "Luka Herden",
+      "date": "2023-05-27",
+      "display_ref": "27.05.2023 / Versuch 5",
+      "attempt": 5,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2023-05-27_Weit Weinheim.pdf",
+      "label": "2023-05-27_Weinheim • V5 (7.69m | eff. 7.95m)",
+      "wind": 2.1,
+      "offiziell_m": 7.69,
+      "erwartet_m": 8.08,
+      "effektiv_m": 7.95,
+      "verlust_balken_m": 0.26,
+      "stemmwinkel_deg": 27.0,
+      "rumpfwinkel_td_deg": 98.0,
+      "rumpfrotation_deg": 5.0,
+      "kniewinkel_min_deg": 144.0,
+      "abflugwinkel_deg": 19.4,
+      "geschw_bilanz": -13.0,
+      "schwungbein_deg_s": 738.0,
+      "schwungbein_weite_m": 0.5,
+      "video_match": {
+        "folder": "2023-05-27 Weinheim",
+        "recommended_video": "WM23 WH Herden (5).mp4",
+        "all_attempt_videos": [
+          "WM23 WH Herden (5).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2023-05-27 Weinheim/WM23 WH Herden (5).mp4"
+      }
+    },
+    {
+      "id": "herden-2023-02-19-v6",
+      "athlete": "Luka Herden",
+      "date": "2023-02-19",
+      "display_ref": "19.02.2023 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2023-02-19_Weit Dortmund.pdf",
+      "label": "2023-02-19_Dortmund • V6 (7.72m | eff. 7.81m)",
+      "wind": 0.0,
+      "offiziell_m": 7.72,
+      "erwartet_m": 7.92,
+      "effektiv_m": 7.81,
+      "verlust_balken_m": 0.09,
+      "stemmwinkel_deg": 25.0,
+      "rumpfwinkel_td_deg": 96.0,
+      "rumpfrotation_deg": 3.0,
+      "kniewinkel_min_deg": 142.0,
+      "abflugwinkel_deg": 20.4,
+      "geschw_bilanz": -1.0,
+      "schwungbein_deg_s": 814.0,
+      "schwungbein_weite_m": 0.48,
+      "video_match": {
+        "folder": "2023-02-19 Dortmund",
+        "recommended_video": "wm23 dhm Herden (6).mp4",
+        "all_attempt_videos": [
+          "wm23 dhm Herden (6).mp4",
+          "Herden 6-Front.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2023-02-19 Dortmund/wm23 dhm Herden (6).mp4"
+      }
+    },
+    {
+      "id": "ehammer-2022-05-07-v3",
+      "athlete": "Simon Ehammer",
+      "date": "2022-05-07",
+      "display_ref": "07.05.2022 / Versuch 3",
+      "attempt": 3,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2022-05-07 Ehammer.pdf",
+      "label": "2022-05-07 Ehammer • V3 (8.30m | eff. 8.40m)",
+      "wind": 0.0,
+      "offiziell_m": 8.3,
+      "erwartet_m": 8.29,
+      "effektiv_m": 8.4,
+      "verlust_balken_m": 0.1,
+      "stemmwinkel_deg": 24.0,
+      "rumpfwinkel_td_deg": 99.0,
+      "rumpfrotation_deg": 6.0,
+      "kniewinkel_min_deg": 144.0,
+      "abflugwinkel_deg": 19.6,
+      "geschw_bilanz": -3.0,
+      "schwungbein_deg_s": 833.0,
+      "schwungbein_weite_m": 0.59,
+      "video_match": {
+        "folder": "2022-05-07 Ehammer",
+        "recommended_video": "WM22 Rt Ehammer 3.mp4",
+        "all_attempt_videos": [
+          "WM22 Rt Ehammer 3.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2022-05-07 Ehammer/WM22 Rt Ehammer 3.mp4"
+      }
+    },
+    {
+      "id": "herden-2019-06-30-v5",
+      "athlete": "Luka Herden",
+      "date": "2019-06-30",
+      "display_ref": "30.06.2019 / Versuch 5",
+      "attempt": 5,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2019-06-30_Weit Mannheim.pdf",
+      "label": "2019-06-30_Mannheim • V5 (7.53m | eff. 7.59m)",
+      "wind": 1.6,
+      "offiziell_m": 7.53,
+      "erwartet_m": 7.71,
+      "effektiv_m": 7.59,
+      "verlust_balken_m": 0.06,
+      "stemmwinkel_deg": 28.0,
+      "rumpfwinkel_td_deg": 99.0,
+      "rumpfrotation_deg": 14.0,
+      "kniewinkel_min_deg": 145.0,
+      "abflugwinkel_deg": 21.9,
+      "geschw_bilanz": -7.0,
+      "schwungbein_deg_s": 713.0,
+      "schwungbein_weite_m": 0.5,
+      "video_match": {
+        "folder": "2019-06-30 Mannheim",
+        "recommended_video": "Herden5.mp4",
+        "all_attempt_videos": [
+          "Herden5.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2019-06-30 Mannheim/Herden5.mp4"
+      }
+    },
+    {
+      "id": "herden-2019-02-23-v6",
+      "athlete": "Luka Herden",
+      "date": "2019-02-23",
+      "display_ref": "23.02.2019 / Versuch 6",
+      "attempt": 6,
+      "color_role": "Primär (PDF Zeile 1 / Rot)",
+      "source_pdf": "2019-02-23_Weit Sindelfingen.pdf",
+      "label": "2019-02-23_Sindelfingen • V6 (7.61m | eff. 7.62m)",
+      "wind": -0.7,
+      "offiziell_m": 7.61,
+      "erwartet_m": 7.57,
+      "effektiv_m": 7.62,
+      "verlust_balken_m": 0.01,
+      "stemmwinkel_deg": 24.0,
+      "rumpfwinkel_td_deg": 102.0,
+      "rumpfrotation_deg": 11.0,
+      "kniewinkel_min_deg": 146.0,
+      "abflugwinkel_deg": 21.7,
+      "geschw_bilanz": -7.0,
+      "schwungbein_deg_s": 729.0,
+      "schwungbein_weite_m": 0.48,
+      "video_match": {
+        "folder": "2019-02-23 DJHM Sindelfingen",
+        "recommended_video": "Herden (6).mp4",
+        "all_attempt_videos": [
+          "Herden (6).mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2019-02-23 DJHM Sindelfingen/Herden (6).mp4"
+      }
+    },
+    {
+      "id": "herden-2018-12-08-v4",
+      "athlete": "Luka Herden",
+      "date": "2018-12-08",
+      "display_ref": "08.12.2018 / Versuch 4",
+      "attempt": 4,
+      "color_role": "Referenz (PDF Zeile 2 / Blau)",
+      "source_pdf": "2024-01-07_Weit La Palma.pdf",
+      "label": "08.12.2018 • V4 (6.35m | eff. 6.43m)",
+      "wind": 0.0,
+      "offiziell_m": 6.35,
+      "erwartet_m": 6.73,
+      "effektiv_m": 6.43,
+      "verlust_balken_m": 0.08,
+      "stemmwinkel_deg": 24.0,
+      "rumpfwinkel_td_deg": 101.0,
+      "rumpfrotation_deg": 11.0,
+      "kniewinkel_min_deg": 146.0,
+      "abflugwinkel_deg": 20.1,
+      "geschw_bilanz": -11.0,
+      "schwungbein_deg_s": 687.0,
+      "schwungbein_weite_m": 0.42,
+      "video_match": {
+        "folder": "2018-12-08 LD-Frankfurt",
+        "recommended_video": "Herden 1-Fuß.mp4",
+        "all_attempt_videos": [
+          "Herden 1-Fuß.mp4",
+          "Herden 1.mp4",
+          "Herden 2-Fuß.mp4",
+          "Herden 2.mp4",
+          "Herden 3-Fuß.mp4",
+          "Herden 3.mp4",
+          "Herden 4-Fuß.mp4",
+          "Herden 4.mp4",
+          "Herden 5-Fuß.mp4",
+          "Herden 5.mp4",
+          "Herden 6-Fuß.mp4",
+          "Herden 6.mp4",
+          "Herden 1-Front.mp4",
+          "Herden 2-Front.mp4",
+          "Herden 3-Front.mp4",
+          "Herden 4-Front.mp4",
+          "Herden 5-Front.mp4",
+          "Herden 6-Front.mp4"
+        ],
+        "local_path_hint": "dlv_diagnostik/Videos/2018-12-08 LD-Frankfurt/Herden 1-Fuß.mp4"
+      }
+    },
+    {
+      "id": "herden-2018-05-25-v7",
+      "athlete": "Luka Herden",
+      "date": "2018-05-25",
+      "display_ref": "25.05.2018 / Versuch 7",
+      "attempt": 7,
+      "color_role": "Referenz (PDF Zeile 2 / Blau)",
+      "source_pdf": "2019-06-30_Weit Mannheim.pdf",
+      "label": "25.05.2018 • V7 (7.61m | eff. 7.62m)",
+      "wind": -0.7,
+      "offiziell_m": 7.61,
+      "erwartet_m": 7.57,
+      "effektiv_m": 7.62,
+      "verlust_balken_m": 0.01,
+      "stemmwinkel_deg": 24.0,
+      "rumpfwinkel_td_deg": 102.0,
+      "rumpfrotation_deg": 11.0,
+      "kniewinkel_min_deg": 146.0,
+      "abflugwinkel_deg": 21.7,
+      "geschw_bilanz": -7.0,
+      "schwungbein_deg_s": 729.0,
+      "schwungbein_weite_m": 0.48,
+      "video_match": {
+        "folder": "2018-05-26 Weinheim",
+        "recommended_video": null,
+        "all_attempt_videos": [],
+        "local_path_hint": "dlv_diagnostik/Videos/2018-05-26 Weinheim/"
+      }
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-14",
+  "generated_at": "2026-11-17",
   "rank_date": "2026-11-10",
   "prev_rank_date": "2026-11-03",
   "luka": {
@@ -15,7 +15,7 @@
   "ranking_diff_summary": "0 Top-100 Änderungen seit 2026-11-03 (Off-Season)",
   "calendar_diff": {
     "total_kept": 117,
-    "removed_unrelevant": 90,
+    "removed_unrelevant": 0,
     "added_count": 1,
     "removed_count": 75,
     "category_changed_count": 1,
@@ -33,10 +33,14 @@
     },
     "notable_added": [
       {
+        "id": "wa-7248968",
         "date": "2027-07-22",
+        "displayDate": "22. JUL 2027",
         "name": "Meeting Madrid",
+        "city": "Madrid",
         "country": "ESP",
-        "category": "C"
+        "category": "C",
+        "tier": "Bronze"
       }
     ],
     "category_changes": [

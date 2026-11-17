@@ -275,6 +275,36 @@ const VenuesModule = (() => {
     }
   }
 
+  const EUROPE_CODES = new Set([
+    'GER', 'GBR', 'FRA', 'ITA', 'ESP', 'GRE', 'SUI', 'SWE', 'NOR', 'FIN', 'DEN',
+    'NED', 'BEL', 'LUX', 'POL', 'CZE', 'SVK', 'HUN', 'ROU', 'BUL', 'SRB', 'CRO',
+    'SLO', 'AUT', 'POR', 'IRL', 'TUR', 'UKR', 'EST', 'LAT', 'LTU', 'ISL', 'CYP', 'MLT'
+  ]);
+
+  function hideOverseasNonChampionship() {
+    const calendar = (window.App && window.App.state && window.App.state.calendarData) || null;
+    const meetings = (calendar && calendar.meetings) ? calendar.meetings : [];
+    const statuses = getUserStatuses();
+    let changed = 0;
+    meetings.forEach(m => {
+      const eff = getEffectiveStatus(m, statuses);
+      if (eff !== 'none') return;
+      const c = String(m.country || '').toUpperCase();
+      const isChamp = isDefaultGoalChampionship(m);
+      const isDL = m.category === 'GW' || m.category === 'DF';
+      if (c && !EUROPE_CODES.has(c) && !isChamp && !isDL) {
+        statuses[m.id] = 'hidden';
+        changed++;
+      }
+    });
+    try { localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(statuses)); } catch (e) {}
+    if (window.App && window.App.state) {
+      render(window.App.state);
+      if (currentViewMode === 'calendar') renderCalendarMonthGrid(window.App.state);
+    }
+    alert(`✅ ${changed} außereuropäische Meetings (Kat. A–F, ohne WM/EM/DL) als „🔴 Irrelevant“ ausgeblendet!`);
+  }
+
   function updateStatusFilterButtonsUI() {
     const buttons = document.querySelectorAll('.cal-status-btn');
     buttons.forEach(btn => {
@@ -284,6 +314,8 @@ const VenuesModule = (() => {
           btn.className = 'cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-emerald-500 text-slate-950 font-black shadow-sm flex items-center gap-1';
         } else if (f === 'WATCHLIST') {
           btn.className = 'cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-yellow-400 text-slate-950 font-black shadow-sm flex items-center gap-1';
+        } else if (f === 'FEASIBLE') {
+          btn.className = 'cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-sky-400 text-slate-950 font-black shadow-sm flex items-center gap-1';
         } else if (f === 'GOAL') {
           btn.className = 'cal-status-btn px-2.5 py-1 rounded text-[10px] font-bold bg-white text-slate-950 font-black shadow-sm flex items-center gap-1';
         } else if (f === 'HIDDEN') {
@@ -298,28 +330,40 @@ const VenuesModule = (() => {
   }
 
   function updateStatusFilterCounts(meetings, statuses) {
-    let confirmedCount = 0, watchlistCount = 0, goalCount = 0, hiddenCount = 0;
+    let confirmedCount = 0, watchlistCount = 0, feasibleCount = 0, goalCount = 0, hiddenCount = 0, unsortedCount = 0;
     meetings.forEach(m => {
       const st = getEffectiveStatus(m, statuses);
       if (st === 'confirmed') confirmedCount++;
       else if (st === 'watchlist') watchlistCount++;
+      else if (st === 'feasible') feasibleCount++;
       else if (st === 'goal') goalCount++;
       else if (st === 'hidden') hiddenCount++;
+      else unsortedCount++;
     });
-    const myPlanCount = confirmedCount + watchlistCount + goalCount;
+    const myPlanCount = confirmedCount + watchlistCount + feasibleCount + goalCount;
 
-    const elAll = document.getElementById('statusCountAll');
-    if (elAll) elAll.textContent = meetings.length;
-    const elPlan = document.getElementById('statusCountMyPlan');
-    if (elPlan) elPlan.textContent = myPlanCount;
-    const elConf = document.getElementById('statusCountConfirmed');
-    if (elConf) elConf.textContent = confirmedCount;
-    const elWatch = document.getElementById('statusCountWatchlist');
-    if (elWatch) elWatch.textContent = watchlistCount;
-    const elGoal = document.getElementById('statusCountGoal');
-    if (elGoal) elGoal.textContent = goalCount;
-    const elHid = document.getElementById('statusCountHidden');
-    if (elHid) elHid.textContent = hiddenCount;
+    const setEl = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+    setEl('statusCountAll', meetings.length);
+    setEl('statusCountMyPlan', myPlanCount);
+    setEl('statusCountConfirmed', confirmedCount);
+    setEl('statusCountWatchlist', watchlistCount);
+    setEl('statusCountFeasible', feasibleCount);
+    setEl('statusCountGoal', goalCount);
+    setEl('statusCountUnsorted', unsortedCount);
+    setEl('statusCountHidden', hiddenCount);
+  }
+
+  function renderTriageButtonsHtml(meetingId, curStatus, compact = false) {
+    const pad = compact ? 'px-1.5 py-0.5 text-[9px]' : 'px-1.5 py-0.5 text-[9.5px]';
+    return `
+      <div class="inline-flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 flex-wrap">
+        <button title="Ziel & Rahmen (WM/EM/DM)" onclick="VenuesModule.toggleMeetingStatus('${meetingId}', 'goal')" class="${pad} rounded font-bold font-mono transition-all" style="${curStatus === 'goal' ? 'background:#ffffff;color:#0f172a;font-weight:900' : 'color:#cbd5e1'}">⚪ Ziel</button>
+        <button title="Sicherer Start (Grün)" onclick="VenuesModule.toggleMeetingStatus('${meetingId}', 'confirmed')" class="${pad} rounded font-bold font-mono transition-all" style="${curStatus === 'confirmed' ? 'background:#10b981;color:#0f172a;font-weight:900' : 'color:#34d399'}">🟢 Sicher</button>
+        <button title="Option / Anfrage stellen (Gelb)" onclick="VenuesModule.toggleMeetingStatus('${meetingId}', 'watchlist')" class="${pad} rounded font-bold font-mono transition-all" style="${curStatus === 'watchlist' ? 'background:#eab308;color:#0f172a;font-weight:900' : 'color:#fde047'}">🟡 Option</button>
+        <button title="Machbar / Geografisch nah (Blau)" onclick="VenuesModule.toggleMeetingStatus('${meetingId}', 'feasible')" class="${pad} rounded font-bold font-mono transition-all" style="${curStatus === 'feasible' ? 'background:#38bdf8;color:#0f172a;font-weight:900' : 'color:#7dd3fc'}">🔵 Machbar</button>
+        <button title="Irrelevant / Ausblenden (Rot)" onclick="VenuesModule.toggleMeetingStatus('${meetingId}', 'hidden')" class="${pad} rounded font-bold font-mono transition-all" style="${curStatus === 'hidden' ? 'background:#ef4444;color:#ffffff;font-weight:900' : 'color:#f87171'}">🔴 Irrelevant</button>
+      </div>
+    `;
   }
 
   // --- Weekly Competition & Scraper Briefing ---
@@ -371,6 +415,44 @@ const VenuesModule = (() => {
       ? `<div class="text-[10px] text-amber-300">🆕 Kalender-Diff: +${calDiff.added_count || 0} neu (${calDiff.notable_added.slice(0, 3).map(x => `${x.name} [${x.category}]`).join(', ')}) • -${calDiff.removed_count || 0} entfernt • ${calDiff.category_changed_count || 0} Kat.-Updates</div>`
       : `<div class="text-[10px] text-slate-400">${calDiff.summary_text || `Bereinigter Kalender (${calDiff.total_kept || upcoming.length} Events)`}</div>`;
 
+    // Interactive Weekly Meeting Triage Checklist (newly scraped + top unsorted meetings)
+    const allMeetings = (state.calendarData && state.calendarData.meetings) || [];
+    const statuses = getUserStatuses();
+    const addedList = (calDiff.notable_added || []).filter(x => x.id);
+    const addedIds = new Set(addedList.map(x => x.id));
+    const unsortedMeetings = allMeetings.filter(m => getEffectiveStatus(m, statuses) === 'none' && !addedIds.has(m.id));
+    const triageAddedDone = addedList.filter(x => getEffectiveStatus(allMeetings.find(m => m.id === x.id) || x, statuses) !== 'none').length;
+
+    const addedTriageRowsHtml = addedList.length > 0
+      ? addedList.map(m => {
+          const full = allMeetings.find(x => x.id === m.id) || m;
+          const st = getEffectiveStatus(full, statuses);
+          const done = st !== 'none';
+          return `
+            <div class="bg-slate-950 border ${done ? 'border-emerald-700/60' : 'border-amber-500/60'} rounded-lg p-2 flex flex-col lg:flex-row lg:items-center justify-between gap-2 text-[11px]">
+              <div class="flex items-center gap-2 min-w-0">
+                <span>${done ? '✅' : '🆕'}</span>
+                ${getCategoryBadgeHtml(m.category, m.tier, m.name, true)}
+                <strong class="text-white truncate">${m.name}</strong>
+                <span class="text-slate-400 shrink-0">${m.displayDate || fmtIso(m.date)} • ${m.city || ''} (${m.country || ''})</span>
+              </div>
+              <div onclick="event.stopPropagation()">${renderTriageButtonsHtml(m.id, st, true)}</div>
+            </div>
+          `;
+        }).join('')
+      : `<div class="text-[11px] text-slate-400 font-sans">Diese Woche keine neu hinzugefügten Meetings seit dem letzten Diff (${unsortedMeetings.length} unsortierte Meetings noch offen im Kalender).</div>`;
+
+    const quickUnsortedRowsHtml = unsortedMeetings.slice(0, 10).map(m => `
+      <div class="bg-slate-950/80 border border-slate-800 rounded-lg p-2 flex flex-col lg:flex-row lg:items-center justify-between gap-2 text-[11px]">
+        <div class="flex items-center gap-2 min-w-0">
+          ${getCategoryBadgeHtml(m.category, m.tier, m.name, true)}
+          <strong class="text-slate-200 truncate">${m.name}</strong>
+          <span class="text-slate-400 shrink-0">${m.displayDate || fmtIso(m.date)} • ${m.city || ''} (${m.country || ''})</span>
+        </div>
+        <div onclick="event.stopPropagation()">${renderTriageButtonsHtml(m.id, 'none', true)}</div>
+      </div>
+    `).join('');
+
     el.innerHTML = `
       <details class="w-full" open>
         <summary class="cursor-pointer list-none flex items-center justify-between gap-2">
@@ -381,6 +463,9 @@ const VenuesModule = (() => {
             </span>
             <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-700">
               Luka: #${luka.rank || 69} Welt (${(luka.score || 1144).toLocaleString('de-DE')} Pkt) • #${luka.eu_rank || 26} Europa • #${luka.ger_rank || 4} GER
+            </span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${unsortedMeetings.length > 0 ? 'bg-amber-950 text-amber-300 border border-amber-700' : 'bg-slate-900 text-slate-400 border border-slate-700'}">
+              📥 ${addedList.length} neu • ${unsortedMeetings.length} unsortiert
             </span>
           </div>
           <span class="text-[10px] text-slate-400 font-mono">Ein-/Ausklappen ▾</span>
@@ -393,6 +478,34 @@ const VenuesModule = (() => {
             <div class="flex flex-wrap items-center gap-1.5">${moversHtml}</div>
             ${calChangesHtml}
           </div>
+
+          <!-- Interactive Weekly Meeting Triage Checklist -->
+          <div class="bg-slate-950/80 border border-amber-500/40 rounded-xl p-3 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[11px] font-black text-amber-300 uppercase">✅ WÖCHENTLICHE MEETING-CHECKLISTE (NEU &amp; UNSORTIERT)</span>
+                ${addedList.length > 0 ? `<span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-900 border border-slate-700 text-emerald-300">${triageAddedDone}/${addedList.length} neue abgehakt</span>` : ''}
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button onclick="VenuesModule.hideOverseasNonChampionship()" class="px-2.5 py-1 rounded bg-rose-950 hover:bg-rose-900 border border-rose-700 text-rose-200 text-[10px] font-bold">
+                  🌎 Übersee (ohne WM/EM/DL) = 🔴 Irrelevant
+                </button>
+                <button onclick="VenuesModule.setStatusFilter('UNSORTED')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-cyan-300 text-[10px] font-bold">
+                  📥 Alle ${unsortedMeetings.length} Unsortierten im Kalender anzeigen
+                </button>
+              </div>
+            </div>
+            <div class="space-y-1.5">${addedTriageRowsHtml}</div>
+            ${unsortedMeetings.length > 0 ? `
+              <details class="pt-1 border-t border-slate-800/80">
+                <summary class="cursor-pointer text-[10px] text-cyan-300 font-bold hover:underline">
+                  ⚡ Schnell-Checkliste: nächste ${Math.min(10, unsortedMeetings.length)} unsortierte Kalender-Meetings direkt einsortieren (gesamt ${unsortedMeetings.length}) ▾
+                </summary>
+                <div class="mt-2 space-y-1.5">${quickUnsortedRowsHtml}</div>
+              </details>
+            ` : ''}
+          </div>
+
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <div class="space-y-1.5">
               <span class="text-[10px] font-bold text-amber-400 uppercase block">🏆 Letzte Top-100-Ergebnisse (≥ 7,70 m):</span>
@@ -418,11 +531,12 @@ const VenuesModule = (() => {
               <span class="px-1.5 py-0.5 rounded font-bold" style="background:rgba(100,116,139,0.22);color:#94a3b8;border:1px solid #64748b">E/F=Grau</span>
             </div>
             <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-slate-400 font-bold uppercase">Planungs-Farben:</span>
-              <span class="px-1.5 py-0.5 rounded font-black" style="background:#10b981;color:#0f172a">🟢 Sicher=Grün</span>
-              <span class="px-1.5 py-0.5 rounded font-black" style="background:#eab308;color:#0f172a">🟡 Option=Gelb</span>
-              <span class="px-1.5 py-0.5 rounded font-black" style="background:#ef4444;color:#ffffff">🔴 Weg=Rot</span>
-              <span class="px-1.5 py-0.5 rounded font-black" style="background:#ffffff;color:#0f172a">⚪ Ziel/Rahmen (EM/WM/DM)=Weiß</span>
+              <span class="text-slate-400 font-bold uppercase">Triage:</span>
+              <span class="px-1.5 py-0.5 rounded font-black" style="background:#ffffff;color:#0f172a">⚪ Ziel</span>
+              <span class="px-1.5 py-0.5 rounded font-black" style="background:#10b981;color:#0f172a">🟢 Sicher</span>
+              <span class="px-1.5 py-0.5 rounded font-black" style="background:#eab308;color:#0f172a">🟡 Option</span>
+              <span class="px-1.5 py-0.5 rounded font-black" style="background:#38bdf8;color:#0f172a">🔵 Machbar</span>
+              <span class="px-1.5 py-0.5 rounded font-black" style="background:#ef4444;color:#ffffff">🔴 Irrelevant</span>
             </div>
           </div>
         </div>
@@ -438,20 +552,22 @@ const VenuesModule = (() => {
       .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
     const watchlistMeets = meetings.filter(m => getEffectiveStatus(m, statuses) === 'watchlist')
       .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+    const feasibleMeets = meetings.filter(m => getEffectiveStatus(m, statuses) === 'feasible')
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
     const goalMeets = meetings.filter(m => getEffectiveStatus(m, statuses) === 'goal')
       .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-    const allPlanMeets = [...confirmedMeets, ...watchlistMeets, ...goalMeets]
+    const allPlanMeets = [...confirmedMeets, ...watchlistMeets, ...feasibleMeets, ...goalMeets]
       .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
 
-    if (confirmedMeets.length === 0 && watchlistMeets.length === 0) {
+    if (confirmedMeets.length === 0 && watchlistMeets.length === 0 && feasibleMeets.length === 0) {
       container.innerHTML = `
         <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/30 border border-emerald-900/50 rounded-xl p-3 sm:p-4 text-xs font-mono shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div class="flex items-center gap-2.5">
             <span class="text-xl">💡</span>
             <div>
-              <strong class="text-emerald-300 uppercase tracking-wide">Saisonplanung 2027 (${goalMeets.length} Ziel-/Rahmen-Meisterschaften in ⚪ Weiß vorselektiert):</strong>
+              <strong class="text-emerald-300 uppercase tracking-wide">Saisonplanung 2027 (${goalMeets.length} Ziel-Meisterschaften in ⚪ Weiß vorselektiert):</strong>
               <p class="text-slate-300 text-[11px] font-sans mt-0.5">
-                Markiere deine Meetings mit <span class="text-emerald-400 font-bold font-mono">🟢 Sicher (Grün)</span>, <span class="text-yellow-400 font-bold font-mono">🟡 Option (Gelb)</span>, <span class="text-red-400 font-bold font-mono">🔴 Weg (Rot)</span> oder <span class="text-white font-bold font-mono">⚪ Ziel/Rahmen (Weiß)</span>.
+                Sortiere Meetings mit <span class="text-white font-bold font-mono">⚪ Ziel</span>, <span class="text-emerald-400 font-bold font-mono">🟢 Sicher</span>, <span class="text-yellow-400 font-bold font-mono">🟡 Option</span>, <span class="text-sky-400 font-bold font-mono">🔵 Machbar</span> oder <span class="text-red-400 font-bold font-mono">🔴 Irrelevant</span>.
               </p>
             </div>
           </div>
@@ -469,9 +585,10 @@ const VenuesModule = (() => {
           <div class="flex items-center gap-2 flex-wrap">
             <span class="text-lg">🏆</span>
             <span class="text-xs sm:text-sm font-black text-white uppercase tracking-wider">DEIN SAISON-FAHRPLAN 2027</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-white text-slate-950">⚪ ${goalMeets.length} ZIEL</span>
             <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500 text-slate-950">🟢 ${confirmedMeets.length} SICHER</span>
             <span class="px-2 py-0.5 rounded text-[10px] font-black bg-yellow-400 text-slate-950">🟡 ${watchlistMeets.length} OPTION</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-white text-slate-950">⚪ ${goalMeets.length} ZIEL/RAHMEN</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-sky-400 text-slate-950">🔵 ${feasibleMeets.length} MACHBAR</span>
           </div>
           <div class="flex items-center gap-2">
             <button onclick="event.stopPropagation(); VenuesModule.copySeasonPlanText()" class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black text-[10px] rounded-lg">
@@ -488,9 +605,12 @@ const VenuesModule = (() => {
             if (st === 'watchlist') {
               cardStyle = 'border:#eab308;background:rgba(234,179,8,0.16);color:#fef08a';
               stLabel = '🟡 OPTION';
+            } else if (st === 'feasible') {
+              cardStyle = 'border:#38bdf8;background:rgba(56,189,248,0.15);color:#bae6fd';
+              stLabel = '🔵 MACHBAR';
             } else if (st === 'goal') {
               cardStyle = 'border:#ffffff;background:rgba(255,255,255,0.14);color:#ffffff';
-              stLabel = '⚪ ZIEL/RAHMEN';
+              stLabel = '⚪ ZIEL';
             }
             return `
               <div onclick="VenuesModule.openMeetingInfoModal('${m.id}')" class="shrink-0 cursor-pointer p-2 rounded-lg border transition-all hover:scale-[1.02]" style="${cardStyle}">
@@ -554,7 +674,7 @@ const VenuesModule = (() => {
     const statuses = getUserStatuses();
     const planned = meetings.filter(m => {
       const st = getEffectiveStatus(m, statuses);
-      return st === 'confirmed' || st === 'watchlist' || st === 'goal';
+      return st === 'confirmed' || st === 'watchlist' || st === 'feasible' || st === 'goal';
     }).sort((a, b) => (a.date || '').localeCompare(b.date || ''));
 
     if (planned.length === 0) {
@@ -567,7 +687,7 @@ const VenuesModule = (() => {
 
     planned.forEach((m, i) => {
       const st = getEffectiveStatus(m, statuses);
-      const statusIcon = st === 'confirmed' ? '🟢 [SICHER]' : (st === 'goal' ? '⚪ [ZIEL / RAHMEN]' : '🟡 [OPTION]');
+      const statusIcon = st === 'confirmed' ? '🟢 [SICHER]' : (st === 'goal' ? '⚪ [ZIEL]' : (st === 'feasible' ? '🔵 [MACHBAR]' : '🟡 [OPTION]'));
       text += `${i + 1}. ${m.displayDate || m.date}: ${m.name}\n`;
       text += `   ${statusIcon} • ${m.city} (${m.country}) • Kat. ${m.category} (${m.tier})\n\n`;
     });
@@ -611,8 +731,10 @@ const VenuesModule = (() => {
       }
       if (selectedStatusFilter === 'CONFIRMED' && status !== 'confirmed') return false;
       if (selectedStatusFilter === 'WATCHLIST' && status !== 'watchlist') return false;
+      if (selectedStatusFilter === 'FEASIBLE' && status !== 'feasible') return false;
       if (selectedStatusFilter === 'GOAL' && status !== 'goal') return false;
-      if (selectedStatusFilter === 'MY_PLAN' && status !== 'confirmed' && status !== 'watchlist' && status !== 'goal') return false;
+      if (selectedStatusFilter === 'UNSORTED' && status !== 'none') return false;
+      if (selectedStatusFilter === 'MY_PLAN' && status !== 'confirmed' && status !== 'watchlist' && status !== 'feasible' && status !== 'goal') return false;
       if (selectedStatusFilter === 'HIDDEN' && status !== 'hidden') return false;
 
       if (searchQuery) {
@@ -660,7 +782,7 @@ const VenuesModule = (() => {
                 <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
                   <th class="py-2 px-2.5 whitespace-nowrap">Datum</th>
                   <th class="py-2 px-2.5">Meeting & Ort</th>
-                  <th class="py-2 px-2 text-center whitespace-nowrap">Planung (Sicher / Option / Weg / Ziel)</th>
+                  <th class="py-2 px-2 text-center whitespace-nowrap">Triage (Ziel / Sicher / Option / Machbar / Irrel.)</th>
                   <th class="py-2 px-2 text-center whitespace-nowrap">Kategorie</th>
                   <th class="py-2 px-2 whitespace-nowrap">Historie (2023–2026) & Anlage</th>
                   <th class="py-2 px-2.5 text-right whitespace-nowrap">Details</th>
@@ -682,6 +804,7 @@ const VenuesModule = (() => {
     const status = getEffectiveStatus(m, statuses);
     const isConfirmed = status === 'confirmed';
     const isWatchlist = status === 'watchlist';
+    const isFeasible = status === 'feasible';
     const isGoal = status === 'goal';
     const isHidden = status === 'hidden';
 
@@ -689,7 +812,7 @@ const VenuesModule = (() => {
     const histEds = m.historicalEditions || [];
     const bestHistMark = histEds.length > 0 ? Math.max(...histEds.map(h => Number(h.best_mark || 0))) : 0;
 
-    // Exact Season Planning Status Visuals (Sicher=Grün, Option=Gelb, Weg=Rot, Ziel/Rahmen=Weiß)
+    // Exact Season Planning Status Visuals (Ziel=Weiß, Sicher=Grün, Option=Gelb, Machbar=Blau, Irrelevant=Rot)
     let rowStatusStyle = '';
     let statusPillHtml = '';
 
@@ -699,12 +822,15 @@ const VenuesModule = (() => {
     } else if (isWatchlist) {
       rowStatusStyle = 'border-left: 4px solid #eab308; background: rgba(234, 179, 8, 0.10);';
       statusPillHtml = '<span class="px-2 py-0.5 rounded-full text-[9px] font-black font-mono shrink-0" style="background:#eab308;color:#0f172a">🟡 OPTION</span>';
+    } else if (isFeasible) {
+      rowStatusStyle = 'border-left: 4px solid #38bdf8; background: rgba(56, 189, 248, 0.10);';
+      statusPillHtml = '<span class="px-2 py-0.5 rounded-full text-[9px] font-black font-mono shrink-0" style="background:#38bdf8;color:#0f172a">🔵 MACHBAR</span>';
     } else if (isGoal) {
       rowStatusStyle = 'border-left: 4px solid #ffffff; background: rgba(255, 255, 255, 0.08);';
-      statusPillHtml = '<span class="px-2 py-0.5 rounded-full text-[9px] font-black font-mono shrink-0" style="background:#ffffff;color:#0f172a">⚪ ZIEL / RAHMEN</span>';
+      statusPillHtml = '<span class="px-2 py-0.5 rounded-full text-[9px] font-black font-mono shrink-0" style="background:#ffffff;color:#0f172a">⚪ ZIEL</span>';
     } else if (isHidden) {
       rowStatusStyle = 'border-left: 4px solid #ef4444; background: rgba(239, 68, 68, 0.08); opacity: 0.45;';
-      statusPillHtml = '<span class="px-2 py-0.5 rounded-full text-[9px] font-black font-mono shrink-0" style="background:#ef4444;color:#ffffff">🔴 WEG</span>';
+      statusPillHtml = '<span class="px-2 py-0.5 rounded-full text-[9px] font-black font-mono shrink-0" style="background:#ef4444;color:#ffffff">🔴 IRRELEVANT</span>';
     }
 
     let mainRow = `
@@ -729,22 +855,9 @@ const VenuesModule = (() => {
           </div>
         </td>
 
-        <!-- 4-Button Planning Status Selector: Sicher (Grün) | Option (Gelb) | Ziel/Rahmen (Weiß) | Weg (Rot) -->
+        <!-- 5-Button Triage Status Selector -->
         <td class="py-2 px-2 text-center whitespace-nowrap" onclick="event.stopPropagation()">
-          <div class="inline-flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
-            <button title="Sicherer Start (Grün)" onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'confirmed')" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold font-mono transition-all" style="${
-              isConfirmed ? 'background:#10b981;color:#0f172a;font-weight:900' : 'color:#94a3b8'
-            }">🟢 Sicher</button>
-            <button title="Option / Merkliste (Gelb)" onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'watchlist')" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold font-mono transition-all" style="${
-              isWatchlist ? 'background:#eab308;color:#0f172a;font-weight:900' : 'color:#94a3b8'
-            }">🟡 Option</button>
-            <button title="Ziel & Rahmen wie EM/WM/DM (Weiß)" onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'goal')" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold font-mono transition-all" style="${
-              isGoal ? 'background:#ffffff;color:#0f172a;font-weight:900' : 'color:#94a3b8'
-            }">⚪ Ziel</button>
-            <button title="Weg / Ausblenden (Rot)" onclick="VenuesModule.toggleMeetingStatus('${m.id}', 'hidden')" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold font-mono transition-all" style="${
-              isHidden ? 'background:#ef4444;color:#ffffff;font-weight:900' : 'color:#94a3b8'
-            }">🔴 Weg</button>
-          </div>
+          ${renderTriageButtonsHtml(m.id, status, false)}
         </td>
 
         <!-- Exact Category Color Coding -->
@@ -958,6 +1071,7 @@ const VenuesModule = (() => {
     const status = getEffectiveStatus(m, getUserStatuses());
     const isConfirmed = status === 'confirmed';
     const isWatchlist = status === 'watchlist';
+    const isFeasible = status === 'feasible';
     const isGoal = status === 'goal';
     const isHidden = status === 'hidden';
 
@@ -981,16 +1095,17 @@ const VenuesModule = (() => {
       const statusControlHtml = `
         <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shadow-sm">
           <div>
-            <span class="text-[10px] uppercase font-bold text-slate-400 font-mono block">Saison-Planungsstatus (Farbmarkierung):</span>
+            <span class="text-[10px] uppercase font-bold text-slate-400 font-mono block">Meeting-Triage:</span>
             <span class="text-xs font-black font-mono text-white">
-              ${isConfirmed ? '🟢 SICHERER START (GRÜN)' : isWatchlist ? '🟡 OPTION / MERKLISTE (GELB)' : isGoal ? '⚪ ZIEL & RAHMEN (WEISS)' : isHidden ? '🔴 AUSGEBLENDET (ROT)' : 'OFFEN'}
+              ${isConfirmed ? '🟢 SICHER (GRÜN)' : isWatchlist ? '🟡 OPTION / ANFRAGE (GELB)' : isFeasible ? '🔵 MACHBAR (BLAU)' : isGoal ? '⚪ ZIEL (WEISS)' : isHidden ? '🔴 IRRELEVANT (ROT)' : '📥 UNSORTIERT'}
             </span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap font-mono text-xs">
-            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'confirmed')" class="px-2.5 py-1 rounded-lg font-bold" style="${isConfirmed ? 'background:#10b981;color:#0f172a;font-weight:900' : 'background:#0f172a;color:#10b981;border:1px solid #10b981'}">🟢 Sicher</button>
-            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'watchlist')" class="px-2.5 py-1 rounded-lg font-bold" style="${isWatchlist ? 'background:#eab308;color:#0f172a;font-weight:900' : 'background:#0f172a;color:#eab308;border:1px solid #eab308'}">🟡 Option</button>
-            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'goal')" class="px-2.5 py-1 rounded-lg font-bold" style="${isGoal ? 'background:#ffffff;color:#0f172a;font-weight:900' : 'background:#0f172a;color:#ffffff;border:1px solid #ffffff'}">⚪ Ziel/Rahmen</button>
-            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'hidden')" class="px-2.5 py-1 rounded-lg font-bold" style="${isHidden ? 'background:#ef4444;color:#ffffff;font-weight:900' : 'background:#0f172a;color:#ef4444;border:1px solid #ef4444'}">🔴 Weg</button>
+            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'goal')" class="px-2 py-1 rounded-lg font-bold" style="${isGoal ? 'background:#ffffff;color:#0f172a;font-weight:900' : 'background:#0f172a;color:#ffffff;border:1px solid #ffffff'}">⚪ Ziel</button>
+            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'confirmed')" class="px-2 py-1 rounded-lg font-bold" style="${isConfirmed ? 'background:#10b981;color:#0f172a;font-weight:900' : 'background:#0f172a;color:#10b981;border:1px solid #10b981'}">🟢 Sicher</button>
+            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'watchlist')" class="px-2 py-1 rounded-lg font-bold" style="${isWatchlist ? 'background:#eab308;color:#0f172a;font-weight:900' : 'background:#0f172a;color:#eab308;border:1px solid #eab308'}">🟡 Option</button>
+            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'feasible')" class="px-2 py-1 rounded-lg font-bold" style="${isFeasible ? 'background:#38bdf8;color:#0f172a;font-weight:900' : 'background:#0f172a;color:#38bdf8;border:1px solid #38bdf8'}">🔵 Machbar</button>
+            <button onclick="VenuesModule.setMeetingStatusAndRefreshModal('${m.id}', 'hidden')" class="px-2 py-1 rounded-lg font-bold" style="${isHidden ? 'background:#ef4444;color:#ffffff;font-weight:900' : 'background:#0f172a;color:#ef4444;border:1px solid #ef4444'}">🔴 Irrelevant</button>
           </div>
         </div>
       `;
@@ -1246,6 +1361,7 @@ const VenuesModule = (() => {
                 let borderStyle = 'border:1px solid #334155;background:#0f172a';
                 if (st === 'confirmed') borderStyle = 'border:2px solid #10b981;background:rgba(16,185,129,0.18)';
                 else if (st === 'watchlist') borderStyle = 'border:2px solid #eab308;background:rgba(234,179,8,0.16)';
+                else if (st === 'feasible') borderStyle = 'border:2px solid #38bdf8;background:rgba(56,189,248,0.16)';
                 else if (st === 'goal') borderStyle = 'border:2px solid #ffffff;background:rgba(255,255,255,0.15)';
                 else if (st === 'hidden') borderStyle = 'border:1px solid #ef4444;background:rgba(239,68,68,0.12);opacity:0.45';
 
@@ -1303,7 +1419,8 @@ const VenuesModule = (() => {
     toggleHideExcluded,
     handleSearchInput,
     copySeasonPlanText,
-    loadDefaultLukaSchedule
+    loadDefaultLukaSchedule,
+    hideOverseasNonChampionship
   };
 })();
 
