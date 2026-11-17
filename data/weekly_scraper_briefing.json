@@ -11,19 +11,19 @@
     "ger_rank": 4,
     "rank_date": "2026-11-10"
   },
-  "summary_note": "WA Ranking-Stand (2026-11-10): Luka auf #69 Welt (1144 Pkt • #27 Europa • #4 GER, Δ +0 Plätze). 0 Top-100 Änderungen seit 2026-11-03 (Off-Season). Kalender: 117 Meetings (+1 neu / -75 entfernt / 1 Kat.-Updates).",
+  "summary_note": "WA Ranking-Stand (2026-11-10): Luka auf #69 Welt (1144 Pkt • #27 Europa • #4 GER, Δ +0 Plätze). 0 Top-100 Änderungen seit 2026-11-03 (Off-Season). Kalender: 120 Meetings (+3 neu / -0 entfernt / 0 Kat.-Updates).",
   "ranking_diff_summary": "0 Top-100 Änderungen seit 2026-11-03 (Off-Season)",
   "calendar_diff": {
-    "total_kept": 117,
-    "removed_unrelevant": 0,
-    "added_count": 1,
-    "removed_count": 75,
-    "category_changed_count": 1,
+    "total_kept": 120,
+    "removed_unrelevant": 99,
+    "added_count": 3,
+    "removed_count": 0,
+    "category_changed_count": 0,
     "category_counts": {
-      "D": 35,
+      "D": 36,
       "F": 10,
       "B": 22,
-      "C": 28,
+      "C": 30,
       "A": 12,
       "GL": 2,
       "GW": 4,
@@ -33,26 +33,38 @@
     },
     "notable_added": [
       {
-        "id": "wa-7248968",
-        "date": "2027-07-22",
-        "displayDate": "22. JUL 2027",
-        "name": "Meeting Madrid",
-        "city": "Madrid",
-        "country": "ESP",
+        "id": "wa-7247884",
+        "date": "2027-01-23",
+        "displayDate": "23. JAN 2027",
+        "name": "VI Memorial Alessio Giovannini",
+        "city": "Ancona",
+        "country": "ITA",
+        "category": "D",
+        "tier": "Challenger"
+      },
+      {
+        "id": "wa-7249194",
+        "date": "2027-07-06",
+        "displayDate": "06. JUL 2027",
+        "name": "Folksam Grand Prix Karlstad",
+        "city": "Karlstad",
+        "country": "SWE",
+        "category": "C",
+        "tier": "Bronze"
+      },
+      {
+        "id": "wa-7249239",
+        "date": "2027-07-10",
+        "displayDate": "10. JUL 2027",
+        "name": "Moore-Guldensporenmeeting",
+        "city": "Kortrijk",
+        "country": "BEL",
         "category": "C",
         "tier": "Bronze"
       }
     ],
-    "category_changes": [
-      {
-        "id": "dlv-weinheim-kurpfalz-2027",
-        "name": "Kurpfalz-Gala Weinheim 2027",
-        "date": "2027-05-15",
-        "from": "D",
-        "to": "F"
-      }
-    ],
-    "summary_text": "Kalender: 117 Meetings (+1 neu / -75 entfernt / 1 Kat.-Updates)"
+    "category_changes": [],
+    "summary_text": "Kalender: 120 Meetings (+3 neu / -0 entfernt / 0 Kat.-Updates)"
   },
   "ranking_movers": [],
   "recent_relevant_results": [
@@ -249,6 +261,17 @@
       "promisingRunway": false
     },
     {
+      "date": "2027-01-23",
+      "displayDate": "23. JAN 2027",
+      "name": "VI Memorial Alessio Giovannini",
+      "city": "Ancona",
+      "country": "ITA",
+      "category": "D",
+      "tier": "Challenger",
+      "tour": "World Athletics Indoor Tour 2027",
+      "promisingRunway": true
+    },
+    {
       "date": "2027-01-26",
       "displayDate": "26. JAN 2027",
       "name": "Tampere Indoor Meeting",
@@ -258,17 +281,6 @@
       "tier": "Bronze",
       "tour": "World Athletics Indoor Tour 2027",
       "promisingRunway": false
-    },
-    {
-      "date": "2027-01-27",
-      "displayDate": "27. JAN 2027",
-      "name": "Belgrade Indoor Meeting",
-      "city": "Beograd",
-      "country": "SRB",
-      "category": "A",
-      "tier": "Gold",
-      "tour": "World Athletics Indoor Tour 2027",
-      "promisingRunway": true
     }
   ]
 }
