@@ -29,6 +29,7 @@ jobs:
       - name: Ranking-Scraper mit Klick-Simulation ausführen
         run: |
           python scraper.py --all-comps
+          python python/build_universal_calendar_and_briefing.py
 
       - name: Neue Daten committen und pushen
         run: |
