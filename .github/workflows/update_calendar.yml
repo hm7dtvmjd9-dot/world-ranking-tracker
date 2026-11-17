@@ -25,10 +25,11 @@ jobs:
       - name: Run 2027 Calendar Scraper
         run: |
           python python/scrape_calendar_2027.py
+          python python/build_universal_calendar_and_briefing.py
 
       - name: Commit and push updated calendar
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/calendar_2027.json
+          git add data/calendar_2027.json data/competitions_database.json data/weekly_scraper_briefing.json
           git diff --staged --quiet || (git commit -m "Auto-update: World Athletics 2027 Tour & Championships Calendar" && git push)
