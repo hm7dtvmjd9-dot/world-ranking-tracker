@@ -13,15 +13,22 @@
  */
 const VenuesModule = (() => {
   const STATUS_STORAGE_KEY = 'athletics_intel_user_meeting_statuses';
+  const STATUS_UPDATED_AT_KEY = 'athletics_intel_user_meeting_statuses_updated_at';
+  const GH_SYNC_TOKEN_KEY = 'luka_gh_triage_pat_v1';
+  const GH_AUTO_SYNC_KEY = 'luka_gh_triage_autosync_v1';
+  const GH_REPO_API = 'https://api.github.com/repos/hm7dtvmjd9-dot/world-ranking-tracker/contents/data/meeting_triage_state.json';
+  const GH_RAW_URL = 'https://raw.githubusercontent.com/hm7dtvmjd9-dot/world-ranking-tracker/main/data/meeting_triage_state.json';
 
   let selectedTier = 'ALL';
-  let selectedStatusFilter = 'ALL'; // 'ALL' | 'MY_PLAN' | 'CONFIRMED' | 'WATCHLIST' | 'GOAL' | 'HIDDEN'
+  let selectedStatusFilter = 'ALL';
   let hideExcludedMeetings = true;
-  let currentViewMode = 'list'; // 'list' (2027 Plan + Historie) | 'calendar' (Monatsraster) | 'results' (1.020 relevante Ergebnisse 2023-2026)
+  let currentViewMode = 'list';
   let mensOnly = true;
   let initializedListeners = false;
   let searchQuery = '';
   let expandedMeetingId = null;
+  let autoPushTimer = null;
+  let lastSyncBannerNote = '';
 
   // Historical Results View filters (inside Universal Calendar)
   let histCategoryFilter = 'ALL';
@@ -164,6 +171,155 @@ const VenuesModule = (() => {
     return getEffectiveStatus(m, getUserStatuses());
   }
 
+  function saveStatusesLocally(statuses, timestampIso = null) {
+    const ts = timestampIso || new Date().toISOString();
+    try {
+      localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(statuses));
+      localStorage.setItem(STATUS_UPDATED_AT_KEY, ts);
+    } catch (e) {}
+    return ts;
+  }
+
+  async function syncTriageFromCloud(force = false) {
+    let remote = null;
+    // Try raw GitHub first (live within ~1s after a push), fallback to local static data file
+    const urls = [GH_RAW_URL + '?t=' + Date.now(), './data/meeting_triage_state.json?t=' + Date.now()];
+    for (const u of urls) {
+      try {
+        const res = await fetch(u, { cache: 'no-store' });
+        if (res.ok) {
+          const parsed = await res.json();
+          if (parsed && parsed.statuses) {
+            if (!remote || (parsed.updated_at || '') > (remote.updated_at || '')) {
+              remote = parsed;
+            }
+          }
+        }
+      } catch (e) {}
+    }
+    if (!remote || !remote.statuses) return false;
+
+    const localStatuses = getUserStatuses();
+    const localTs = localStorage.getItem(STATUS_UPDATED_AT_KEY) || '';
+    const hasLocal = Object.keys(localStatuses).length > 0;
+    const remoteNewer = !localTs || ((remote.updated_at || '') > localTs);
+
+    if (force || !hasLocal || remoteNewer) {
+      // If local already had custom entries without timestamp, merge remote onto local; otherwise adopt remote cleanly
+      const merged = force ? remote.statuses : (hasLocal && !localTs ? { ...remote.statuses, ...localStatuses } : remote.statuses);
+      saveStatusesLocally(merged, remote.updated_at || new Date().toISOString());
+      lastSyncBannerNote = `☁️ Synchronisiert (${new Date(remote.updated_at || Date.now()).toLocaleDateString('de-DE')})`;
+      if (window.App && window.App.state && window.App.state.calendarData) {
+        render(window.App.state);
+        if (currentViewMode === 'calendar') renderCalendarMonthGrid(window.App.state);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  async function pushTriageToGitHub(quiet = false) {
+    const pat = (localStorage.getItem(GH_SYNC_TOKEN_KEY) || '').trim();
+    if (!pat) {
+      if (!quiet) configureGitHubSyncToken();
+      return false;
+    }
+    try {
+      const ts = localStorage.getItem(STATUS_UPDATED_AT_KEY) || new Date().toISOString();
+      const payloadObj = {
+        updated_at: ts,
+        source: 'Web-App Live Triage Sync',
+        statuses: getUserStatuses()
+      };
+      const jsonStr = JSON.stringify(payloadObj, null, 2) + '\n';
+      const contentB64 = btoa(unescape(encodeURIComponent(jsonStr)));
+
+      let sha = null;
+      const getRes = await fetch(GH_REPO_API + '?t=' + Date.now(), {
+        headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github+json' }
+      });
+      if (getRes.ok) {
+        const meta = await getRes.json();
+        sha = meta.sha;
+      }
+      const putRes = await fetch(GH_REPO_API, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${pat}`,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `Sync Meeting Triage (${Object.keys(payloadObj.statuses).length} Einträge)`,
+          content: contentB64,
+          ...(sha ? { sha } : {})
+        })
+      });
+      if (!putRes.ok) {
+        const errTxt = await putRes.text();
+        if (!quiet) alert('GitHub Sync Fehler (' + putRes.status + '): ' + errTxt.slice(0, 180));
+        return false;
+      }
+      lastSyncBannerNote = `✅ Auf GitHub gespeichert (${new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })})`;
+      if (window.App && window.App.state) render(window.App.state);
+      if (!quiet) alert('✅ Triage auf GitHub gespeichert! Auf anderen Geräten jetzt automatisch synchronisiert.');
+      return true;
+    } catch (e) {
+      if (!quiet) alert('Sync-Fehler: ' + e.message);
+      return false;
+    }
+  }
+
+  function configureGitHubSyncToken() {
+    const cur = localStorage.getItem(GH_SYNC_TOKEN_KEY) || '';
+    const token = prompt(
+      '🔑 Geräteübergreifender Live-Sync (iPhone ↔ Mac):\n\nFüge einmalig dein GitHub Fine-Grained Token (nur Contents: Read & Write auf world-ranking-tracker) ein.\nEs wird NUR lokal auf diesem Gerät gespeichert (niemals im Repo). Leer lassen zum Abbrechen:',
+      cur
+    );
+    if (token === null) return;
+    if (token.trim()) {
+      localStorage.setItem(GH_SYNC_TOKEN_KEY, token.trim());
+      localStorage.setItem(GH_AUTO_SYNC_KEY, 'true');
+      pushTriageToGitHub(false);
+    } else {
+      localStorage.removeItem(GH_SYNC_TOKEN_KEY);
+      localStorage.removeItem(GH_AUTO_SYNC_KEY);
+      if (window.App && window.App.state) render(window.App.state);
+    }
+  }
+
+  function copySyncCode() {
+    const payload = { updated_at: new Date().toISOString(), statuses: getUserStatuses() };
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+    navigator.clipboard.writeText(code).then(() => {
+      alert('✅ Sync-Code in die Zwischenablage kopiert! Auf dem anderen Gerät auf „📥 Code einfügen“ tippen.');
+    });
+  }
+
+  function importSyncCode() {
+    const code = prompt('📥 Füge hier den Sync-Code vom anderen Gerät ein:');
+    if (!code || !code.trim()) return;
+    try {
+      const parsed = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+      if (!parsed || !parsed.statuses) throw new Error('Ungültiges Format');
+      saveStatusesLocally(parsed.statuses, parsed.updated_at || new Date().toISOString());
+      lastSyncBannerNote = '✅ Sync-Code importiert!';
+      if (window.App && window.App.state) {
+        render(window.App.state);
+        if (currentViewMode === 'calendar') renderCalendarMonthGrid(window.App.state);
+      }
+    } catch (e) {
+      alert('Sync-Code konnte nicht gelesen werden: ' + e.message);
+    }
+  }
+
+  function scheduleAutoPushIfConfigured() {
+    if (localStorage.getItem(GH_AUTO_SYNC_KEY) === 'true' && localStorage.getItem(GH_SYNC_TOKEN_KEY)) {
+      clearTimeout(autoPushTimer);
+      autoPushTimer = setTimeout(() => { pushTriageToGitHub(true); }, 1500);
+    }
+  }
+
   function setMeetingStatus(meetingId, status) {
     const statuses = getUserStatuses();
     if (!status || status === 'none') {
@@ -171,9 +327,8 @@ const VenuesModule = (() => {
     } else {
       statuses[meetingId] = status;
     }
-    try {
-      localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(statuses));
-    } catch (e) {}
+    saveStatusesLocally(statuses);
+    scheduleAutoPushIfConfigured();
 
     if (window.App && window.App.state) {
       render(window.App.state);
@@ -297,12 +452,39 @@ const VenuesModule = (() => {
         changed++;
       }
     });
-    try { localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(statuses)); } catch (e) {}
+    saveStatusesLocally(statuses);
+    scheduleAutoPushIfConfigured();
     if (window.App && window.App.state) {
       render(window.App.state);
       if (currentViewMode === 'calendar') renderCalendarMonthGrid(window.App.state);
     }
     alert(`✅ ${changed} außereuropäische Meetings (Kat. A–F, ohne WM/EM/DL) als „🔴 Irrelevant“ ausgeblendet!`);
+  }
+
+  function renderFacilityResultsBadge(m) {
+    const histEds = m.historicalEditions || [];
+    const topMarks = (m.topHistoricalMarks || []).map(x => Number(x)).filter(x => x > 5);
+    const edMarks = histEds.map(h => Number(h.best_mark || 0)).filter(x => x > 5);
+    const allBest = Math.max(0, ...(topMarks.length ? topMarks : [0]), ...(edMarks.length ? edMarks : [0]));
+    const over8Count = Math.max(
+      topMarks.filter(v => v >= 8.0).length,
+      histEds.reduce((s, h) => s + Number(h.marks_over_8m || 0), 0)
+    );
+    const topList = (topMarks.length ? topMarks : edMarks.sort((a, b) => b - a)).slice(0, 3).map(v => v.toFixed(2) + 'm');
+
+    if (allBest <= 0 && !m.promisingRunway) {
+      return '<span class="text-[10px] text-slate-500">🏟️ Noch keine 7,70m+ Anlagen-Historie</span>';
+    }
+    const isSpringboard = allBest >= 8.05 || over8Count >= 2 || Boolean(m.promisingRunway);
+    const icon = isSpringboard ? '🔥' : '🏟️';
+    const tag = isSpringboard ? '<span class="px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/50 font-black text-[9px]">SPRUNGSCHANZE</span>' : '';
+    const bestStr = allBest > 0 ? `<b class="${allBest >= 8.0 ? 'text-emerald-300' : 'text-cyan-300'}">Best ${allBest.toFixed(2)}m</b>` : '<b class="text-amber-300">Schnelle Anlage</b>';
+    const metaParts = [];
+    if (over8Count > 0) metaParts.push(`${over8Count}x ≥8m`);
+    if (histEds.length > 0) metaParts.push(`${histEds.length}x DB`);
+    if (topList.length > 1) metaParts.push(`Top: ${topList.slice(0, 2).join(' / ')}`);
+    const lukaHit = (m.lukaHistory && m.lukaHistory.length > 0) ? ` • <b class="text-cyan-300">Luka ${m.lukaHistory[0].mark}m</b>` : '';
+    return `<div class="text-[10px] text-slate-300 flex flex-wrap items-center gap-1">${icon} ${tag} ${bestStr}${metaParts.length ? ` <span class="text-slate-400">(${metaParts.join(' • ')})</span>` : ''}${lukaHit}</div>`;
   }
 
   function updateStatusFilterButtonsUI() {
@@ -432,11 +614,14 @@ const VenuesModule = (() => {
           const done = st !== 'none';
           return `
             <div class="bg-slate-950 border ${done ? 'border-emerald-700/60' : 'border-amber-500/60'} rounded-lg p-2 flex flex-col lg:flex-row lg:items-center justify-between gap-2 text-[11px]">
-              <div class="flex items-center gap-2 min-w-0">
-                <span>${done ? '✅' : '🆕'}</span>
-                ${getCategoryBadgeHtml(m.category, m.tier, m.name, true)}
-                <strong class="text-white truncate">${m.name}</strong>
-                <span class="text-slate-400 shrink-0">${m.displayDate || fmtIso(m.date)} • ${m.city || ''} (${m.country || ''})</span>
+              <div class="min-w-0 space-y-0.5">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span>${done ? '✅' : '🆕'}</span>
+                  ${getCategoryBadgeHtml(m.category, m.tier, m.name, true)}
+                  <strong class="text-white truncate">${m.name}</strong>
+                  <span class="text-slate-400 shrink-0">${m.displayDate || fmtIso(m.date)} • ${m.city || ''} (${m.country || ''})</span>
+                </div>
+                ${renderFacilityResultsBadge(full)}
               </div>
               <div onclick="event.stopPropagation()">${renderTriageButtonsHtml(m.id, st, true)}</div>
             </div>
@@ -444,12 +629,15 @@ const VenuesModule = (() => {
         }).join('')
       : `<div class="text-[11px] text-slate-400 font-sans">Diese Woche keine neu hinzugefügten Meetings seit dem letzten Diff (${unsortedMeetings.length} unsortierte Meetings noch offen im Kalender).</div>`;
 
-    const quickUnsortedRowsHtml = unsortedMeetings.slice(0, 10).map(m => `
+    const quickUnsortedRowsHtml = unsortedMeetings.slice(0, 12).map(m => `
       <div class="bg-slate-950/80 border border-slate-800 rounded-lg p-2 flex flex-col lg:flex-row lg:items-center justify-between gap-2 text-[11px]">
-        <div class="flex items-center gap-2 min-w-0">
-          ${getCategoryBadgeHtml(m.category, m.tier, m.name, true)}
-          <strong class="text-slate-200 truncate">${m.name}</strong>
-          <span class="text-slate-400 shrink-0">${m.displayDate || fmtIso(m.date)} • ${m.city || ''} (${m.country || ''})</span>
+        <div class="min-w-0 space-y-0.5">
+          <div class="flex items-center gap-2 flex-wrap">
+            ${getCategoryBadgeHtml(m.category, m.tier, m.name, true)}
+            <strong class="text-slate-200 truncate">${m.name}</strong>
+            <span class="text-slate-400 shrink-0">${m.displayDate || fmtIso(m.date)} • ${m.city || ''} (${m.country || ''})</span>
+          </div>
+          ${renderFacilityResultsBadge(m)}
         </div>
         <div onclick="event.stopPropagation()">${renderTriageButtonsHtml(m.id, 'none', true)}</div>
       </div>
@@ -518,29 +706,70 @@ const VenuesModule = (() => {
               ${upcomingHtml}
             </div>
           </div>
-          <!-- Farb-Legende -->
-          <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[10px]">
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-slate-400 font-bold uppercase">Kategorie-Farben:</span>
-              <span class="px-1.5 py-0.5 rounded font-black" style="background:#ffffff;color:#0f172a">Olympia=Weiß</span>
-              <span class="px-1.5 py-0.5 rounded font-bold" style="background:rgba(239,68,68,0.22);color:#fca5a5;border:1px solid #ef4444">WM=Rot</span>
-              <span class="px-1.5 py-0.5 rounded font-bold" style="background:rgba(59,130,246,0.24);color:#93c5fd;border:1px solid #3b82f6">EM=Blau</span>
-              <span class="px-1.5 py-0.5 rounded font-bold" style="background:rgba(6,182,212,0.22);color:#67e8f9;border:1px solid #06b6d4">DL=Türkis</span>
-              <span class="px-1.5 py-0.5 rounded font-bold" style="background:rgba(234,179,8,0.22);color:#fde047;border:1px solid #eab308">A=Gold</span>
-              <span class="px-1.5 py-0.5 rounded font-bold" style="background:rgba(203,213,225,0.2);color:#e2e8f0;border:1px solid #cbd5e1">B=Silber</span>
-              <span class="px-1.5 py-0.5 rounded font-bold" style="background:rgba(217,119,6,0.24);color:#fdba74;border:1px solid #d97706">C=Bronze</span>
-              <span class="px-1.5 py-0.5 rounded font-bold" style="background:rgba(133,77,14,0.36);color:#fbbf24;border:1px solid #a16207">D=Holz/Braun</span>
-              <span class="px-1.5 py-0.5 rounded font-bold" style="background:rgba(100,116,139,0.22);color:#94a3b8;border:1px solid #64748b">E/F=Grau</span>
-            </div>
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-slate-400 font-bold uppercase">Triage:</span>
-              <span class="px-1.5 py-0.5 rounded font-black" style="background:#ffffff;color:#0f172a">⚪ Ziel</span>
-              <span class="px-1.5 py-0.5 rounded font-black" style="background:#10b981;color:#0f172a">🟢 Sicher</span>
-              <span class="px-1.5 py-0.5 rounded font-black" style="background:#eab308;color:#0f172a">🟡 Option</span>
-              <span class="px-1.5 py-0.5 rounded font-black" style="background:#38bdf8;color:#0f172a">🔵 Machbar</span>
-              <span class="px-1.5 py-0.5 rounded font-black" style="background:#ef4444;color:#ffffff">🔴 Irrelevant</span>
-            </div>
+        </div>
+      </details>
+    `;
+  }
+
+  function renderSyncControlsBarHtml() {
+    const hasPat = Boolean((localStorage.getItem(GH_SYNC_TOKEN_KEY) || '').trim());
+    return `
+      <div class="mt-2.5 pt-2.5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-cyan-300 font-bold">🔄 GERÄTE-SYNC (iPhone ↔ Mac):</span>
+          <span class="px-1.5 py-0.5 rounded ${hasPat ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-slate-900 text-slate-400 border border-slate-700'}">
+            ${hasPat ? '✅ GitHub Auto-Sync aktiv' : '⚪ Token nicht hinterlegt'}
+          </span>
+          ${lastSyncBannerNote ? `<span class="text-slate-400">${lastSyncBannerNote}</span>` : ''}
+        </div>
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button onclick="event.stopPropagation(); VenuesModule.syncTriageFromCloud(true)" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-cyan-300 font-bold">⬇️ Abrufen</button>
+          ${hasPat
+            ? `<button onclick="event.stopPropagation(); VenuesModule.pushTriageToGitHub(false)" class="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black">☁️ Jetzt pushen</button>`
+            : ''
+          }
+          <button onclick="event.stopPropagation(); VenuesModule.configureGitHubSyncToken()" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-300 font-bold">🔑 ${hasPat ? 'Token ändern' : 'Auto-Sync einrichten'}</button>
+          <button onclick="event.stopPropagation(); VenuesModule.copySyncCode()" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300">📋 Sync-Code</button>
+          <button onclick="event.stopPropagation(); VenuesModule.importSyncCode()" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300">📥 Einfügen</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderPeriodizationRoadmapCard() {
+    const el = document.getElementById('seasonPeriodizationCard');
+    if (!el) return;
+    const blocks = [
+      { dates: '18.11.–04.12.26', title: 'Aufbau 1 (OSP)', desc: 'Nach KW 47 Deload: Kraft/FCT schwer, Kordi & 120–150m Basis', badge: 'bg-slate-800 text-slate-200 border-slate-700' },
+      { dates: '05.12.–19.12.26', title: '🇿🇦 TL Stellenbosch', desc: '14d Warmwetter: Haupt-Anlauf-, Schwungbein (≤95°) & Schnelligkeits-Block', badge: 'bg-emerald-950 text-emerald-300 border-emerald-700' },
+      { dates: '20.12.–09.01.27', title: 'Übergang & Halle', desc: 'Weihnachts-Entlastung + Übergang auf Brett & Hallenboden', badge: 'bg-cyan-950 text-cyan-300 border-cyan-800' },
+      { dates: '~10.01.2027', title: '🏥 Kaderlehrgang', desc: 'Testung & ärztliche Untersuchung (kein voller Peak, geringer Reiz)', badge: 'bg-slate-900 text-slate-300 border-slate-700' },
+      { dates: '17.01.2027', title: '🟢 CMCM Luxemburg', desc: 'Saison-Einstieg (7d nach Lehrgang • 48h vorab leicht)', badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-600' },
+      { dates: '30.01.2027', title: '🚀 Gorzów (Peak 1)', desc: '13d Abstand! Wie 2026 (8,18m): Mo Trapbar -17%, Do/Fr frei ➔ Rec >85%', badge: 'bg-amber-500/20 text-amber-300 border-amber-500' },
+      { dates: '01.02.–14.02.27', title: 'Reload (kein WK!)', desc: 'ZNS aus Gorzów-Loch erholen (7d locker) ➔ kurzer Max-Speed-Impuls', badge: 'bg-sky-950 text-sky-300 border-sky-700' },
+      { dates: '~20.–21.02.27', title: '⚪ DM Halle Dortmund', desc: 'Taper max. 350–400 min/Woche (vs. 774 min 2026) für Titel-Peak', badge: 'bg-white/15 text-white border-white/60' },
+      { dates: '04.–07.03.27', title: '🏆 Hallen-EM Valencia', desc: '2-Wochen-Exponential-Taper (-50% Umfang, 48h frei vor Quali) • Peak 2', badge: 'bg-purple-950 text-purple-300 border-purple-500' }
+    ];
+    el.innerHTML = `
+      <details class="bg-slate-900 border border-cyan-500/40 rounded-xl p-3.5 shadow-sm font-mono" open>
+        <summary class="cursor-pointer list-none flex items-center justify-between gap-2 flex-wrap">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-base">🗓️</span>
+            <span class="text-xs sm:text-sm font-black text-white uppercase tracking-wider">PERIODISIERUNG HALLENSAISON 2026/27</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-700 font-bold">Stellenbosch 05.–19.12. ➔ Gorzów 30.01. ➔ Valencia 04.–07.03.</span>
           </div>
+          <span class="text-[10px] text-slate-400">Ein-/Ausklappen ▾</span>
+        </summary>
+        <div class="mt-3 pt-2.5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+          ${blocks.map(b => `
+            <div class="bg-slate-950/90 border border-slate-800 rounded-lg p-2.5 space-y-1">
+              <div class="flex items-center justify-between gap-1.5">
+                <span class="px-1.5 py-0.5 rounded border text-[9.5px] font-black ${b.badge}">${b.title}</span>
+                <span class="text-[10px] text-cyan-400 font-bold">${b.dates}</span>
+              </div>
+              <p class="text-[11px] text-slate-300 font-sans leading-snug">${b.desc}</p>
+            </div>
+          `).join('')}
         </div>
       </details>
     `;
@@ -563,19 +792,22 @@ const VenuesModule = (() => {
 
     if (confirmedMeets.length === 0 && watchlistMeets.length === 0 && feasibleMeets.length === 0) {
       container.innerHTML = `
-        <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/30 border border-emerald-900/50 rounded-xl p-3 sm:p-4 text-xs font-mono shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5">
-            <span class="text-xl">💡</span>
-            <div>
-              <strong class="text-emerald-300 uppercase tracking-wide">Saisonplanung 2027 (${goalMeets.length} Ziel-Meisterschaften in ⚪ Weiß vorselektiert):</strong>
-              <p class="text-slate-300 text-[11px] font-sans mt-0.5">
-                Sortiere Meetings mit <span class="text-white font-bold font-mono">⚪ Ziel</span>, <span class="text-emerald-400 font-bold font-mono">🟢 Sicher</span>, <span class="text-yellow-400 font-bold font-mono">🟡 Option</span>, <span class="text-sky-400 font-bold font-mono">🔵 Machbar</span> oder <span class="text-red-400 font-bold font-mono">🔴 Irrelevant</span>.
-              </p>
+        <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/30 border border-emerald-900/50 rounded-xl p-3 sm:p-4 text-xs font-mono shadow-sm">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-xl">💡</span>
+              <div>
+                <strong class="text-emerald-300 uppercase tracking-wide">Saisonplanung 2027 (${goalMeets.length} Ziel-Meisterschaften vorselektiert):</strong>
+                <p class="text-slate-300 text-[11px] font-sans mt-0.5">
+                  Triage direkt im Browser &amp; per GitHub/Sync-Code zwischen iPhone und Mac abgleichen.
+                </p>
+              </div>
             </div>
+            <button onclick="VenuesModule.loadDefaultLukaSchedule()" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs font-mono transition-all shadow-sm shrink-0">
+              ⚡ Lukas Kern-Saisonplan 2027 laden
+            </button>
           </div>
-          <button onclick="VenuesModule.loadDefaultLukaSchedule()" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs font-mono transition-all shadow-sm shrink-0">
-            ⚡ Lukas Kern-Saisonplan 2027 laden
-          </button>
+          ${renderSyncControlsBarHtml()}
         </div>
       `;
       return;
@@ -599,6 +831,7 @@ const VenuesModule = (() => {
             <span class="text-[10px] text-slate-400">Timeline ausklappen ▾</span>
           </div>
         </summary>
+        ${renderSyncControlsBarHtml()}
         <div class="mt-3 pt-3 border-t border-slate-800 flex items-center gap-2 overflow-x-auto pb-1.5 no-scrollbar">
           ${allPlanMeets.map(m => {
             const st = getEffectiveStatus(m, statuses);
@@ -661,9 +894,8 @@ const VenuesModule = (() => {
       'champ-wm-outdoor-2027': 'goal'      // WM Peking (Weiß: Ziel/Rahmen)
     };
 
-    try {
-      localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(defaults));
-    } catch (e) {}
+    saveStatusesLocally(defaults);
+    scheduleAutoPushIfConfigured();
 
     if (window.App && window.App.state) {
       render(window.App.state);
@@ -713,6 +945,7 @@ const VenuesModule = (() => {
 
     updateStatusFilterCounts(meetings, statuses);
     renderSeasonPlanCockpit(meetings, statuses);
+    renderPeriodizationRoadmapCard();
 
     if (currentViewMode === 'results') {
       renderHistoricalResultsUniversalView(state, container);
@@ -846,15 +1079,16 @@ const VenuesModule = (() => {
         </td>
 
         <td class="py-2 px-2.5">
-          <div class="flex flex-col">
+          <div class="flex flex-col gap-0.5">
             <div class="flex items-center gap-1.5 flex-wrap">
               ${statusPillHtml}
               <span class="font-bold text-slate-100 font-sans text-xs">${m.name}</span>
               <span class="px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 text-[10px] text-slate-400 font-mono">${m.country}</span>
             </div>
-            <span class="text-[10px] text-slate-400 font-sans mt-0.5">
+            <span class="text-[10px] text-slate-400 font-sans">
               📍 ${m.venue ? `${m.venue}, ` : ''}${m.city}
             </span>
+            ${renderFacilityResultsBadge(m)}
           </div>
         </td>
 
@@ -1423,7 +1657,12 @@ const VenuesModule = (() => {
     handleSearchInput,
     copySeasonPlanText,
     loadDefaultLukaSchedule,
-    hideOverseasNonChampionship
+    hideOverseasNonChampionship,
+    syncTriageFromCloud,
+    pushTriageToGitHub,
+    configureGitHubSyncToken,
+    copySyncCode,
+    importSyncCode
   };
 })();
 

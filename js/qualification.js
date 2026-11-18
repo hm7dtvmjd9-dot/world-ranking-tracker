@@ -193,12 +193,47 @@ const QualificationModule = (() => {
       let hasDirectStandard = false;
       let bestStandardMark = 0;
 
-      // DLV-Richtwert check (7.90m Hallen-EM / 8.05m WM, counts at any official meeting)
+      // DLV-Richtwert check (7.90m Hallen-EM / 8.05m WM) ONLY from performances inside the active period!
       const dlvThreshold = state.isHallenEmPreset ? 7.90 : 8.05;
       let hasDlvStandard = false;
       let bestDlvMark = 0;
 
-      (ath.countingMeetings || []).forEach(m => {
+      // Combine athlete's WA countingMeetings + any newer season results from competitionsDatabase within the period
+      const seenKeys = new Set();
+      const rawMeetings = [...(ath.countingMeetings || [])];
+      rawMeetings.forEach(m => {
+        const dt = parseSafeDate(m.date);
+        seenKeys.add(`${dt ? dt.toISOString().slice(0, 10) : (m.date || '')}_${parseFloat(m.mark) || 0}`);
+      });
+
+      const dbComps = (state.competitionsDatabase && state.competitionsDatabase.competitions) || [];
+      const athNorm = (ath.name || '').toLowerCase().trim();
+      if (athNorm && dbComps.length > 0) {
+        dbComps.forEach(comp => {
+          const cIso = comp.iso_date || '';
+          if (!cIso || cIso < state.periodStartDate) return;
+          (comp.results || []).forEach(r => {
+            if ((r.athlete || '').toLowerCase().trim() === athNorm) {
+              const mk = parseFloat(String(r.mark || '0').replace(',', '.')) || 0;
+              const k = `${cIso}_${mk}`;
+              if (mk > 5.0 && !seenKeys.has(k)) {
+                seenKeys.add(k);
+                rawMeetings.push({
+                  date: cIso,
+                  competition: comp.name,
+                  category: comp.category || 'F',
+                  mark: mk,
+                  wind: r.wind || comp.wind || '',
+                  place: r.place || '-',
+                  performance_score: r.performance_score || 0
+                });
+              }
+            }
+          });
+        });
+      }
+
+      rawMeetings.forEach(m => {
         const mDate = parseSafeDate(m.date);
         const cat = (m.category || '').toUpperCase().trim();
         const markVal = parseFloat(m.mark) || 0;
@@ -210,8 +245,8 @@ const QualificationModule = (() => {
           if (markVal > bestStandardMark) bestStandardMark = markVal;
         }
 
-        // DLV-Richtwert (Germany national standard, independent of category)
-        if (ath.nation === 'GER' && markVal >= dlvThreshold) {
+        // DLV-Richtwert ONLY counts inside the active qualifying window (no old pre-cutoff SB!)
+        if (ath.nation === 'GER' && mDate && mDate >= toplistStartDate && markVal >= dlvThreshold) {
           hasDlvStandard = true;
           if (markVal > bestDlvMark) bestDlvMark = markVal;
         }
@@ -223,27 +258,22 @@ const QualificationModule = (() => {
             validPeriodMeetings.push({ ...m, parsedDate: mDate, isMajorProtected: mDate < toplistStartDate });
           }
         } else {
-          // Toplist: Events from cutoff date
+          // Toplist: strictly only events on or after toplistStartDate (no old SB fallback!)
           if (mDate && mDate >= toplistStartDate) {
             validPeriodMeetings.push({ ...m, parsedDate: mDate });
           }
         }
       });
 
-      // Also check athlete SB for DLV standard
-      if (ath.nation === 'GER' && ath.sb && ath.sb >= dlvThreshold) {
-        hasDlvStandard = true;
-        if (ath.sb > bestDlvMark) bestDlvMark = ath.sb;
-      }
-
       const periodMeetsCount = validPeriodMeetings.length;
-      const isCountComplete = periodMeetsCount >= 5;
+      const isCountComplete = state.periodMode === 'toplist' ? periodMeetsCount >= 1 : periodMeetsCount >= 5;
 
       const scores = validPeriodMeetings.map(m => parseInt(m.performance_score) || 0);
       const marks = validPeriodMeetings.map(m => parseFloat(m.mark) || 0);
 
       const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
-      const maxMark = marks.length > 0 ? Math.max(...marks) : (ath.sb || 0);
+      // Strict period-only maxMark: never leak pre-cutoff ath.sb (like Jan 2026 8.18m into Nov 2026+ Hallen-EM!)
+      const maxMark = marks.length > 0 ? Math.max(...marks) : 0;
       const maxScore = scores.length > 0 ? Math.max(...scores) : 0;
 
       const displayMark = Math.max(maxMark, bestStandardMark);
@@ -304,6 +334,11 @@ const QualificationModule = (() => {
       return { ...ath, periodRank: idx + 1, quotaRank, quotaStatus, nationSlot: slot, isNewEntrant: isNew };
     });
 
+    const valCol = document.getElementById('periodValueHeaderCol');
+    if (valCol) valCol.textContent = state.periodMode === 'ranking' ? 'Ø Score (Zeitraum)' : 'Bestweite ab Startdatum';
+    const cntCol = document.getElementById('periodMeetsHeaderCol');
+    if (cntCol) cntCol.textContent = state.periodMode === 'toplist' ? 'Toplist-Status (1 WK)' : 'Gültige Meetings (5)';
+
     renderKpiTiles(state, processedList);
     renderTableRows(state, processedList, tbody);
   }
@@ -319,7 +354,11 @@ const QualificationModule = (() => {
       document.getElementById('kpiPeriodMeScore').textContent = state.periodMode === 'ranking'
         ? (mePeriod.periodAvgScore > 0 ? mePeriod.periodAvgScore + ' Pkt' : '-')
         : (mePeriod.periodMaxMark > 0 ? mePeriod.periodMaxMark.toFixed(2) + 'm' : '-');
-      document.getElementById('kpiPeriodMeCount').textContent = mePeriod.hasDirectStandard ? 'NORM ERFÜLLT' : `${mePeriod.periodMeetings.length} Meets`;
+      document.getElementById('kpiPeriodMeCount').textContent = mePeriod.hasDirectStandard
+        ? 'NORM ERFÜLLT'
+        : (state.periodMode === 'toplist'
+            ? (mePeriod.periodMeetings.length >= 1 ? `${mePeriod.periodMeetings.length} WK (Toplist)` : '0 WK im Zeitraum')
+            : `${mePeriod.periodMeetings.length}/5 Meets`);
 
       if (cutoffPeriodAth) {
         if (state.periodMode === 'ranking') {
@@ -400,10 +439,14 @@ const QualificationModule = (() => {
       };
 
       const meetsBadge = ath.hasDirectStandard
-        ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-950 text-purple-300 border border-purple-800 font-mono">NORM 8.17m (Kat. C+)</span>'
-        : `<span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono ${ath.isCountComplete ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'}">
-            ${ath.totalCountedMeetings}/5 ${ath.isCountComplete ? 'Vollständig' : 'Provisorisch'}
-          </span>`;
+        ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-950 text-purple-300 border border-purple-800 font-mono">NORM ${state.periodEntryStandard.toFixed(2)}m (Kat. C+)</span>`
+        : state.periodMode === 'toplist'
+          ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono ${ath.totalCountedMeetings >= 1 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-slate-900 text-slate-400 border border-slate-700'}">
+              ${ath.totalCountedMeetings >= 1 ? `${ath.totalCountedMeetings} WK (Top-Mark zählt)` : '0 WK ab ' + (state.periodStartDate || '01.11.')}
+            </span>`
+          : `<span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono ${ath.isCountComplete ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'}">
+              ${ath.totalCountedMeetings}/5 ${ath.isCountComplete ? 'Vollständig' : 'Provisorisch'}
+            </span>`;
 
       tr.innerHTML = `
         <td class="py-2 px-3 text-center font-bold text-slate-300">#${idx + 1}</td>

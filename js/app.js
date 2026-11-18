@@ -284,6 +284,15 @@ const App = (() => {
       console.warn('Weekly briefing auto-load fallback', e);
     }
 
+    // 12. Cross-Device Meeting Triage State Sync
+    if (window.VenuesModule && VenuesModule.syncTriageFromCloud) {
+      try {
+        await VenuesModule.syncTriageFromCloud(false);
+      } catch (e) {
+        console.warn('Meeting triage cloud sync skipped', e);
+      }
+    }
+
     showSyncBadge('Live WA (' + state.athletes.length + ')', 'text-emerald-400');
     updateDataFreshnessCockpit(state);
     renderCurrentTab();
