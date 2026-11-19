@@ -1596,31 +1596,38 @@ const NextSessionModule = (() => {
       ${dlvSubTab === 'sprint1080' ? `
         <div class="space-y-2.5">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <input type="text" value="${filter1080Query}" oninput="NextSessionModule.on1080FilterInput(this.value)" placeholder="Suche nach Datum (z.B. 2025-10-08, 2026-10-28, 2025-06-11), ZUL, Assisted, Resisted, 12kg..." class="w-full sm:w-96 bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-purple-500" />
-            <span class="text-[10px] font-mono text-purple-300">✅ Inkl. Datums-Korrektur 08.10.2025 (alle 12 Läufe) & 11.06.2025</span>
+            <input type="text" value="${filter1080Query}" oninput="NextSessionModule.on1080FilterInput(this.value)" placeholder="Suche nach Datum (z.B. 2026-11-19, 2026-11-12), ZUL, Assisted, Resisted, 12kg..." class="w-full sm:w-96 bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-purple-500" />
+            <span class="text-[10px] font-mono text-purple-300">🎯 Primärwert = <b>1080 Konsole (1 Dez.)</b> • Darunter App Step-Peak &amp; Raw • Neueste Läufe oben</span>
           </div>
           <div class="overflow-x-auto max-h-96 border border-slate-800 rounded-xl">
             <table class="w-full text-left border-collapse text-xs font-mono">
               <thead>
                 <tr class="sticky top-0 bg-slate-950 text-slate-400 border-b border-slate-800 text-[10px] uppercase">
-                  <th class="py-2 px-2.5">Session / Datum</th>
+                  <th class="py-2 px-2.5">Datum (Lauf)</th>
                   <th class="py-2 px-2">Uhrzeit</th>
-                  <th class="py-2 px-2">Klassifikation / Modus</th>
+                  <th class="py-2 px-2">Klassifikation / Start</th>
                   <th class="py-2 px-2 text-center">Last</th>
-                  <th class="py-2 px-2 text-right text-cyan-300">Vmax (m/s)</th>
+                  <th class="py-2 px-2 text-right text-cyan-300">1080 Vmax</th>
                   <th class="py-2 px-2 text-right text-emerald-300">Pmax (W)</th>
                   <th class="py-2 px-2 text-right text-amber-300">Fmax (N)</th>
+                  <th class="py-2 px-2 text-center">L / R Schrittlänge</th>
                   <th class="py-2 px-2 text-center">10m / 20m / 30m</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800/50">
-                ${bundle.runs_1080.filter(r => {
+                ${bundle.runs_1080.slice().reverse().filter(r => {
                   if (!filter1080Query) return true;
                   const q = filter1080Query.toLowerCase();
                   return `${r.folder} ${r.rep_date} ${r.direction} ${r.mode} ${r.set_load_kg}kg ${r.auto_class}`.toLowerCase().includes(q);
-                }).map(r => `
+                }).map(r => {
+                  const vConsole = r.v_console_ms != null ? Number(r.v_console_ms).toFixed(1) : Number(r.v_max_ms).toFixed(1);
+                  const hasLR = r.sl_left_m != null && r.sl_right_m != null;
+                  const lrCell = hasLR
+                    ? `<span class="text-slate-200 font-bold">L ${Number(r.sl_left_m).toFixed(2)} / R ${Number(r.sl_right_m).toFixed(2)}m</span> <span class="text-[10px] ${Math.abs(r.lr_sl_diff_pct || 0) >= 8 ? 'text-amber-300' : 'text-emerald-300'}">(${r.lr_sl_diff_pct > 0 ? '+' : ''}${r.lr_sl_diff_pct}%)</span>`
+                    : `<span class="text-slate-500 text-[10px]">${r.n_steps ? r.n_steps + ' Schr.' : '—'}</span>`;
+                  return `
                   <tr class="hover:bg-slate-800/40">
-                    <td class="py-1.5 px-2.5 font-bold text-white">${r.folder} <span class="text-[10px] text-slate-400">(${r.rep_date})</span></td>
+                    <td class="py-1.5 px-2.5 font-bold text-white">${r.rep_date} <span class="text-[10px] text-slate-400">(${r.folder})</span></td>
                     <td class="py-1.5 px-2 text-slate-400">${r.rep_clock}</td>
                     <td class="py-1.5 px-2">
                       <span class="px-1.5 py-0.2 rounded text-[10px] font-bold ${
@@ -1628,12 +1635,17 @@ const NextSessionModule = (() => {
                       }">${r.auto_class || r.direction}</span>
                     </td>
                     <td class="py-1.5 px-2 text-center text-slate-200 font-bold">${r.set_load_kg} kg</td>
-                    <td class="py-1.5 px-2 text-right font-black text-cyan-300">${r.v_max_ms} m/s</td>
+                    <td class="py-1.5 px-2 text-right">
+                      <div class="font-black text-cyan-300">${vConsole} m/s</div>
+                      <div class="text-[9px] text-slate-400">Step ${r.v_step_peak_ms ?? r.v_max_ms} • Raw ${r.v_max_ms}</div>
+                    </td>
                     <td class="py-1.5 px-2 text-right font-bold text-emerald-300">${r.p_max_W} W</td>
                     <td class="py-1.5 px-2 text-right text-amber-300">${r.f_max_N} N</td>
+                    <td class="py-1.5 px-2 text-center">${lrCell}</td>
                     <td class="py-1.5 px-2 text-center text-slate-300">${r.t_10m || '-'} / ${r.t_20m || '-'} / ${r.t_30m || '-'}</td>
                   </tr>
-                `).join('')}
+                `;
+                }).join('')}
               </tbody>
             </table>
           </div>
