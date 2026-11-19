@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-17",
-  "rank_date": "2026-11-10",
-  "prev_rank_date": "2026-11-03",
+  "generated_at": "2026-11-19",
+  "rank_date": "2026-11-17",
+  "prev_rank_date": "2026-11-10",
   "luka": {
     "rank": 69,
     "score": 1144,
@@ -9,16 +9,16 @@
     "delta_score": 0,
     "eu_rank": 27,
     "ger_rank": 4,
-    "rank_date": "2026-11-10"
+    "rank_date": "2026-11-17"
   },
-  "summary_note": "WA Ranking-Stand (2026-11-10): Luka auf #69 Welt (1144 Pkt • #27 Europa • #4 GER, Δ +0 Plätze). 0 Top-100 Änderungen seit 2026-11-03 (Off-Season). Kalender: 750 Meetings (+631 neu / -1 entfernt / 1 Kat.-Updates).",
-  "ranking_diff_summary": "0 Top-100 Änderungen seit 2026-11-03 (Off-Season)",
+  "summary_note": "WA Ranking-Stand (2026-11-17): Luka auf #69 Welt (1144 Pkt • #27 Europa • #4 GER, Δ +0 Plätze). 0 Top-100 Änderungen seit 2026-11-10 (Off-Season). Kalender: 750 Meetings (+750 neu / -0 entfernt / 0 Kat.-Updates).",
+  "ranking_diff_summary": "0 Top-100 Änderungen seit 2026-11-10 (Off-Season)",
   "calendar_diff": {
     "total_kept": 750,
     "removed_unrelevant": 0,
-    "added_count": 631,
-    "removed_count": 1,
-    "category_changed_count": 1,
+    "added_count": 750,
+    "removed_count": 0,
+    "category_changed_count": 0,
     "category_counts": {
       "F": 630,
       "D": 37,
@@ -191,6 +191,26 @@
         "country": "USA",
         "category": "F",
         "tier": "National Permit"
+      },
+      {
+        "id": "wa-7248674",
+        "date": "2026-12-05",
+        "displayDate": "05. DEZ 2026",
+        "name": "Premier Track Classic",
+        "city": "KY",
+        "country": "USA",
+        "category": "D",
+        "tier": "Challenger"
+      },
+      {
+        "id": "wa-7247355",
+        "date": "2026-12-05",
+        "displayDate": "05. DEZ 2026",
+        "name": "Visit Winston-Salem College Kickoff",
+        "city": "NC",
+        "country": "USA",
+        "category": "D",
+        "tier": "Challenger"
       },
       {
         "id": "wa-7246825",
@@ -411,38 +431,10 @@
         "country": "CAN",
         "category": "F",
         "tier": "National Permit"
-      },
-      {
-        "id": "wa-7248162",
-        "date": "2026-12-05",
-        "displayDate": "05. DEZ 2026",
-        "name": "Commodore Winter Challenge",
-        "city": "TN",
-        "country": "USA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7248411",
-        "date": "2026-12-06",
-        "displayDate": "06. DEZ 2026",
-        "name": "Meeting Zone FC C/J/E/S",
-        "city": "Vittel",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
       }
     ],
-    "category_changes": [
-      {
-        "id": "champ-dm-halle-2027",
-        "name": "Deutsche Hallenmeisterschaften 2027 (DM Halle)",
-        "date": "2027-02-20",
-        "from": "B",
-        "to": "D"
-      }
-    ],
-    "summary_text": "Kalender: 750 Meetings (+631 neu / -1 entfernt / 1 Kat.-Updates)"
+    "category_changes": [],
+    "summary_text": "Kalender: 750 Meetings (+750 neu / -0 entfernt / 0 Kat.-Updates)"
   },
   "ranking_movers": [],
   "recent_relevant_results": [

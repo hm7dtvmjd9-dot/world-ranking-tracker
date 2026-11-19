@@ -1,6 +1,6 @@
 {
   "event": "Men's Long Jump",
-  "total_competitions": 1020,
+  "total_competitions": 1021,
   "separated_by_year": true,
   "competitions": [
     {
@@ -1885,6 +1885,97 @@
       "total_results_count": 1,
       "has_top100": true,
       "is_tour_or_major": true
+    },
+    {
+      "wa_id": 7245294,
+      "name": "Athletics League, Izhevsk (RUS)",
+      "raw_name": "Athletics League",
+      "tour": "World Athletics Master Calendar",
+      "round": "Finale",
+      "year": 2026,
+      "iso_date": "2026-08-29",
+      "category": "F",
+      "venue": "Izhevsk (RUS)",
+      "indoor": false,
+      "dates_seen": [
+        "29 AUG 2026"
+      ],
+      "results": [
+        {
+          "athlete": "Ihar TIMIRYAZEV",
+          "country": "BLR",
+          "date": "29 AUG 2026",
+          "mark": "7.89",
+          "place": "1.",
+          "performance_score": 1156,
+          "round": "Final",
+          "remark": "",
+          "wind": "+0.6"
+        },
+        {
+          "athlete": "Rodion SEVASTYANOV",
+          "country": "RUS",
+          "date": "29 AUG 2026",
+          "mark": "7.88",
+          "place": "2.",
+          "performance_score": 1154,
+          "round": "Final",
+          "remark": "",
+          "wind": "+0.5"
+        },
+        {
+          "athlete": "Yuriy OZHGIBESOV",
+          "country": "RUS",
+          "date": "29 AUG 2026",
+          "mark": "7.77",
+          "place": "3.",
+          "performance_score": 1130,
+          "round": "Final",
+          "remark": "",
+          "wind": "+0.8"
+        },
+        {
+          "athlete": "Kiril LARKIN",
+          "country": "RUS",
+          "date": "29 AUG 2026",
+          "mark": "7.42",
+          "place": "4.",
+          "performance_score": 1054,
+          "round": "Final",
+          "remark": "",
+          "wind": "+0.5"
+        },
+        {
+          "athlete": "Vladislav MATYUSHIN",
+          "country": "RUS",
+          "date": "29 AUG 2026",
+          "mark": "7.15",
+          "place": "5.",
+          "performance_score": 995,
+          "round": "Final",
+          "remark": "",
+          "wind": "-0.6"
+        },
+        {
+          "athlete": "Daniyar MAZITOV",
+          "country": "RUS",
+          "date": "29 AUG 2026",
+          "mark": "6.97",
+          "place": "6.",
+          "performance_score": 955,
+          "round": "Final",
+          "remark": "",
+          "wind": "-0.3"
+        }
+      ],
+      "results_count": 6,
+      "total_results_count": 6,
+      "best_mark": 7.89,
+      "avg_mark": 7.51,
+      "marks_over_8m": 0,
+      "luka_mark": null,
+      "has_top100": true,
+      "is_tour_or_major": false
     },
     {
       "name": "Weltklasse Zürich 2026, Letzigrund, Zürich",
@@ -71658,6 +71749,6 @@
       "is_tour_or_major": true
     }
   ],
-  "updated_at": "2026-11-17T18:20:03.435660",
+  "updated_at": "2026-11-19T00:41:12.013727",
   "filter_rule": "World Tour (OW/DF/GW/GL/A/B/C/D) + Top-100 Athlete + Siegerweite >= 7.70m (keine irrelevanten Kat. F Wettkämpfe)"
 }
