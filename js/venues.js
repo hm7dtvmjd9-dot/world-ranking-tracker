@@ -252,6 +252,7 @@ const VenuesModule = (() => {
         body: JSON.stringify({
           message: `Sync Meeting Triage (${Object.keys(payloadObj.statuses).length} Einträge)`,
           content: contentB64,
+          branch: 'main',
           ...(sha ? { sha } : {})
         })
       });
@@ -814,57 +815,59 @@ const VenuesModule = (() => {
     }
 
     container.innerHTML = `
-      <details class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-500/50 rounded-xl p-3.5 shadow-lg font-mono">
-        <summary class="cursor-pointer list-none flex flex-col md:flex-row md:items-center justify-between gap-2">
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-lg">🏆</span>
-            <span class="text-xs sm:text-sm font-black text-white uppercase tracking-wider">DEIN SAISON-FAHRPLAN 2027</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-white text-slate-950">⚪ ${goalMeets.length} ZIEL</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500 text-slate-950">🟢 ${confirmedMeets.length} SICHER</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-yellow-400 text-slate-950">🟡 ${watchlistMeets.length} OPTION</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-sky-400 text-slate-950">🔵 ${feasibleMeets.length} MACHBAR</span>
+      <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-500/50 rounded-xl p-3.5 shadow-lg font-mono">
+        <details>
+          <summary class="cursor-pointer list-none flex flex-col md:flex-row md:items-center justify-between gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-lg">🏆</span>
+              <span class="text-xs sm:text-sm font-black text-white uppercase tracking-wider">DEIN SAISON-FAHRPLAN 2027</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-black bg-white text-slate-950">⚪ ${goalMeets.length} ZIEL</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500 text-slate-950">🟢 ${confirmedMeets.length} SICHER</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-black bg-yellow-400 text-slate-950">🟡 ${watchlistMeets.length} OPTION</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-black bg-sky-400 text-slate-950">🔵 ${feasibleMeets.length} MACHBAR</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="event.stopPropagation(); VenuesModule.copySeasonPlanText()" class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black text-[10px] rounded-lg">
+                📋 Plan kopieren
+              </button>
+              <span class="text-[10px] text-slate-400">Timeline ausklappen ▾</span>
+            </div>
+          </summary>
+          <div class="mt-3 pt-3 border-t border-slate-800 flex items-center gap-2 overflow-x-auto pb-1.5 no-scrollbar">
+            ${allPlanMeets.map(m => {
+              const st = getEffectiveStatus(m, statuses);
+              let cardStyle = 'border:#10b981;background:rgba(16,185,129,0.16);color:#d1fae5';
+              let stLabel = '🟢 SICHER';
+              if (st === 'watchlist') {
+                cardStyle = 'border:#eab308;background:rgba(234,179,8,0.16);color:#fef08a';
+                stLabel = '🟡 OPTION';
+              } else if (st === 'feasible') {
+                cardStyle = 'border:#38bdf8;background:rgba(56,189,248,0.15);color:#bae6fd';
+                stLabel = '🔵 MACHBAR';
+              } else if (st === 'goal') {
+                cardStyle = 'border:#ffffff;background:rgba(255,255,255,0.14);color:#ffffff';
+                stLabel = '⚪ ZIEL';
+              }
+              return `
+                <div onclick="VenuesModule.openMeetingInfoModal('${m.id}')" class="shrink-0 cursor-pointer p-2 rounded-lg border transition-all hover:scale-[1.02]" style="${cardStyle}">
+                  <div class="flex items-center justify-between gap-2 text-[9px] font-black mb-0.5">
+                    <span>${stLabel}</span>
+                    <span class="opacity-80">${m.displayDate || m.date}</span>
+                  </div>
+                  <div class="text-[11px] font-bold text-white truncate max-w-[160px]" title="${m.name}">
+                    ${m.shortName || m.name}
+                  </div>
+                  <div class="flex items-center justify-between gap-1 text-[9px] mt-1">
+                    <span>📍 ${m.city}</span>
+                    ${getCategoryBadgeHtml(m.category, m.tier, m.name, true)}
+                  </div>
+                </div>
+              `;
+            }).join('')}
           </div>
-          <div class="flex items-center gap-2">
-            <button onclick="event.stopPropagation(); VenuesModule.copySeasonPlanText()" class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black text-[10px] rounded-lg">
-              📋 Plan kopieren
-            </button>
-            <span class="text-[10px] text-slate-400">Timeline ausklappen ▾</span>
-          </div>
-        </summary>
+        </details>
         ${renderSyncControlsBarHtml()}
-        <div class="mt-3 pt-3 border-t border-slate-800 flex items-center gap-2 overflow-x-auto pb-1.5 no-scrollbar">
-          ${allPlanMeets.map(m => {
-            const st = getEffectiveStatus(m, statuses);
-            let cardStyle = 'border:#10b981;background:rgba(16,185,129,0.16);color:#d1fae5';
-            let stLabel = '🟢 SICHER';
-            if (st === 'watchlist') {
-              cardStyle = 'border:#eab308;background:rgba(234,179,8,0.16);color:#fef08a';
-              stLabel = '🟡 OPTION';
-            } else if (st === 'feasible') {
-              cardStyle = 'border:#38bdf8;background:rgba(56,189,248,0.15);color:#bae6fd';
-              stLabel = '🔵 MACHBAR';
-            } else if (st === 'goal') {
-              cardStyle = 'border:#ffffff;background:rgba(255,255,255,0.14);color:#ffffff';
-              stLabel = '⚪ ZIEL';
-            }
-            return `
-              <div onclick="VenuesModule.openMeetingInfoModal('${m.id}')" class="shrink-0 cursor-pointer p-2 rounded-lg border transition-all hover:scale-[1.02]" style="${cardStyle}">
-                <div class="flex items-center justify-between gap-2 text-[9px] font-black mb-0.5">
-                  <span>${stLabel}</span>
-                  <span class="opacity-80">${m.displayDate || m.date}</span>
-                </div>
-                <div class="text-[11px] font-bold text-white truncate max-w-[160px]" title="${m.name}">
-                  ${m.shortName || m.name}
-                </div>
-                <div class="flex items-center justify-between gap-1 text-[9px] mt-1">
-                  <span>📍 ${m.city}</span>
-                  ${getCategoryBadgeHtml(m.category, m.tier, m.name, true)}
-                </div>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      </details>
+      </div>
     `;
   }
 
