@@ -1561,12 +1561,18 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono pt-1 border-t border-slate-800/80">
+          <span id="bioContainerFpsBadge" class="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-slate-300">Datei: — fps</span>
           <label class="flex items-center gap-1 text-slate-300">
-            <span>FPS:</span>
-            <select id="bioFpsSelect" class="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white">
+            <span>Kamera-FPS:</span>
+            <select id="bioFpsSelect" onchange="refreshBioFpsSetting()" class="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white">
+              <option value="auto" selected>Auto (DLV/Datei)</option>
+              <option value="50">50 fps</option>
               <option value="60">60 fps</option>
-              <option value="120" selected>120 fps (iPhone Slo-Mo)</option>
+              <option value="100">100 fps</option>
+              <option value="120">120 fps (iPhone Slo-Mo)</option>
+              <option value="200">200 fps (DLV 4x @ 50)</option>
               <option value="240">240 fps</option>
+              <option value="unknown">❓ Unbekannt (ohne ms)</option>
             </select>
           </label>
           <label class="flex items-center gap-1 text-slate-300">
@@ -1579,9 +1585,9 @@
           <label class="flex items-center gap-1 text-slate-300">
             <span>Modell:</span>
             <select id="bioModelSelect" class="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white" onchange="reinitPoseModel()">
-              <option value="full" selected>Full (M3 Pro Optimal)</option>
+              <option value="full" selected>Full (M3 Pro)</option>
               <option value="heavy">Heavy (Max Präzision)</option>
-              <option value="lite">Lite (Ultra-Fast)</option>
+              <option value="lite">Lite (Fast)</option>
             </select>
           </label>
           <div class="flex items-center gap-1 ml-auto flex-wrap">
@@ -1596,12 +1602,32 @@
           </div>
         </div>
 
+        <!-- Meter-Aufsteller Kalibrierung Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono bg-slate-950/70 border border-slate-800 rounded-lg px-2.5 py-1.5">
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="bioScaleBtn" onclick="toggleMeterCalibration()" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-cyan-700 text-cyan-300 font-bold">📏 2-Punkt Meter-Aufsteller</button>
+            <label class="flex items-center gap-1 text-slate-300">
+              <span>Abstand:</span>
+              <select id="bioScaleMeters" class="bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-white">
+                <option value="1">1 m</option>
+                <option value="2">2 m</option>
+                <option value="3">3 m</option>
+                <option value="4">4 m</option>
+                <option value="5" selected>5 m (z.B. Brett → 5m-Hütchen)</option>
+                <option value="10">10 m</option>
+              </select>
+            </label>
+            <button onclick="resetMeterCalibration()" class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-400 hover:text-white">↺ Auto 1,85m</button>
+          </div>
+          <span id="bioScaleStatusBadge" class="text-amber-300">📐 Maßstab: Auto (Körpergröße 1,85m • 2-Punkt für m/s &amp; m empfohlen)</span>
+        </div>
+
         <!-- Video Canvas + Overlay -->
         <div class="relative w-full bg-slate-950 border border-slate-800 rounded-xl overflow-hidden flex items-center justify-center min-h-[260px]">
           <div id="bioPlaceholder" class="p-8 text-center text-slate-400 text-xs font-sans space-y-1">
             <div class="text-3xl mb-1">🏃‍♂️💨</div>
-            <div class="font-bold text-slate-200">Lade ein Sprung-, Hürden- oder DLV-Diagnose-Video vom Mac/iPhone.</div>
-            <div>Grün = Sprungbein Links • Blau = Schwungbein Rechts • Gelb = Rumpf-Rücklage (DLV-konform).</div>
+            <div class="font-bold text-slate-200">Lade ein Sprung- oder DLV-Diagnose-Video vom Mac/iPhone (0 AI-Tokens).</div>
+            <div>Grün = Sprungbein L • Blau = Schwungbein R • Gelb = Rumpf • Rot/Cyan = Meter-Aufsteller.</div>
           </div>
           <video id="bioVideo" playsinline muted style="width:100%;max-height:540px;display:none;background:#000"></video>
           <canvas id="bioCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none"></canvas>
@@ -1610,10 +1636,13 @@
         <!-- Phase Markers & Status -->
         <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
           <div class="flex flex-wrap items-center gap-1.5">
-            <button onclick="markTakeoffPhase('TD')" class="px-2.5 py-1.5 rounded-lg bg-emerald-950 hover:bg-emerald-900 border border-emerald-700 text-emerald-300 font-bold">📌 1. Touchdown (TD)</button>
-            <button onclick="markTakeoffPhase('MKF')" class="px-2.5 py-1.5 rounded-lg bg-amber-950 hover:bg-amber-900 border border-amber-700 text-amber-300 font-bold">📐 2. Max. Beugung (MKF)</button>
-            <button onclick="markTakeoffPhase('TO')" class="px-2.5 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-700 text-cyan-300 font-bold">🚀 3. Take-off (TO)</button>
-            <button onclick="exportBioSnapshot()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold">📸 PNG-Frame</button>
+            <button onclick="markTakeoffPhase('2L')" class="px-2 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold" title="Optional: Vorletzter Stütz">👣 2L TD</button>
+            <button onclick="markTakeoffPhase('1L')" class="px-2 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold" title="Optional: Letzter Anlaufschritt">👣 1L TD</button>
+            <button onclick="markTakeoffPhase('TD')" class="px-2.5 py-1.5 rounded-lg bg-emerald-950 hover:bg-emerald-900 border border-emerald-700 text-emerald-300 font-bold">📌 1. TD (Brett)</button>
+            <button onclick="markTakeoffPhase('MKF')" class="px-2.5 py-1.5 rounded-lg bg-amber-950 hover:bg-amber-900 border border-amber-700 text-amber-300 font-bold">📐 2. MKF</button>
+            <button onclick="markTakeoffPhase('TO')" class="px-2.5 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-700 text-cyan-300 font-bold">🚀 3. TO (Abflug)</button>
+            <button onclick="markTakeoffPhase('LAND')" class="px-2.5 py-1.5 rounded-lg bg-purple-950 hover:bg-purple-900 border border-purple-700 text-purple-300 font-bold">🏖️ 4. Landung</button>
+            <button onclick="exportBioSnapshot()" class="px-2 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold">📸 PNG</button>
           </div>
           <div class="flex items-center gap-2">
             <span id="calcContactBadge" class="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-slate-300 font-bold">⏱ Kontaktzeit: TD &amp; TO markieren</span>
@@ -1621,44 +1650,56 @@
           </div>
         </div>
 
-        <!-- Live DLV Telemetry Tiles -->
+        <!-- Live OSP/DLV Telemetry Tiles -->
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 font-mono text-center">
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
-            <div class="text-[9px] text-slate-400 uppercase">Stemmwinkel (DLV)</div>
+            <div class="text-[9px] text-slate-400 uppercase">Stemmwinkel (TD)</div>
             <div id="angPlantAngle" class="text-base font-black text-cyan-400">—°</div>
-            <div class="text-[9px] text-slate-500">Norm: 22–28° (Rom 23°)</div>
+            <div class="text-[9px] text-slate-500">OSP Norm: 22–28°</div>
           </div>
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
-            <div class="text-[9px] text-slate-400 uppercase">Rumpfwinkel (DLV)</div>
+            <div class="text-[9px] text-slate-400 uppercase">Rumpfwinkel (OSP)</div>
             <div id="angTrunkTilt" class="text-base font-black text-amber-400">—°</div>
-            <div class="text-[9px] text-slate-500">Norm: 95–102° (Rom 97°)</div>
+            <div class="text-[9px] text-slate-500">Norm: 95–102° TD</div>
           </div>
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
-            <div class="text-[9px] text-slate-400 uppercase">Sprungbein L Knie</div>
+            <div class="text-[9px] text-slate-400 uppercase">Amortisation (Stütz L)</div>
             <div id="angLeftKnee" class="text-base font-black text-emerald-400">—°</div>
-            <div class="text-[9px] text-slate-500">Min Norm: &gt;134° (Rom 145°)</div>
+            <div class="text-[9px] text-slate-500">Min Norm: &gt;134°</div>
           </div>
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
-            <div class="text-[9px] text-slate-400 uppercase">Schwungbein R Knie</div>
-            <div id="angRightKnee" class="text-base font-black text-sky-400">—°</div>
-            <div class="text-[9px] text-slate-500">Eng-Ziel: ≤95° blockiert</div>
+            <div class="text-[9px] text-slate-400 uppercase">Schwung-Obersch. Horiz.</div>
+            <div id="angSwingThigh" class="text-base font-black text-sky-400">—°</div>
+            <div id="angRightKnee" class="text-[9px] text-slate-500">Zusatz Knie: —° (≤95°)</div>
           </div>
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
-            <div class="text-[9px] text-slate-400 uppercase">Schwungbein ω / Abflug</div>
+            <div class="text-[9px] text-slate-400 uppercase">Schwung ω / Abflug</div>
             <div id="angSwingVel" class="text-base font-black text-purple-400">— °/s</div>
-            <div class="text-[9px] text-slate-500">DLV &gt;730 °/s • Abflug &gt;19°</div>
+            <div class="text-[9px] text-slate-500">DLV &gt;730 °/s • &gt;19°</div>
           </div>
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
-            <div class="text-[9px] text-slate-400 uppercase">Hüftöffnung / Knie-Linie</div>
-            <div id="angHipSep" class="text-base font-black text-rose-300">—°</div>
-            <div id="angKneeValgus" class="text-[9px] text-slate-500">Frontal-Abw.: —°</div>
+            <div class="text-[9px] text-slate-400 uppercase">Landung (R / K / H)</div>
+            <div id="angLandingLive" class="text-sm font-black text-rose-300">— / — / —</div>
+            <div id="angHipSep" class="text-[9px] text-slate-500">Norm R 64–104° • H 70–114°</div>
           </div>
+        </div>
+
+        <!-- OSP Anlaufbahn-Kinogramm Strip -->
+        <div class="space-y-1.5 bg-slate-950/90 border border-slate-800 rounded-xl p-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono">
+            <span class="text-amber-300 font-bold uppercase">🛣️ OSP Anlaufbahn-Kinogramm (automatisch aus markierten Phasen-Bildern)</span>
+            <div class="flex items-center gap-1.5">
+              <button onclick="clearBioKinogram()" class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-400 hover:text-white">↺ Leeren</button>
+              <button onclick="exportKinogramPng()" class="px-2.5 py-0.5 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-black">⬇ Kinogramm PNG</button>
+            </div>
+          </div>
+          <canvas id="bioKinogramCanvas" width="1200" height="230" class="w-full h-44 bg-slate-900 border border-slate-800 rounded-lg"></canvas>
         </div>
 
         <!-- Live Plot -->
         <div class="space-y-1">
           <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
-            <span>📈 Winkel-Kurve: <span class="text-emerald-400">■ Stützbein L</span> • <span class="text-sky-400">■ Schwungbein R</span> • <span class="text-amber-400">■ Rumpf-Rücklage (skaliert)</span></span>
+            <span>📈 Winkel-Kurve: <span class="text-emerald-400">■ Stützbein L</span> • <span class="text-sky-400">■ Schwung-Knie (Zusatz)</span> • <span class="text-amber-400">■ Rumpf</span></span>
             <button onclick="clearAngleHistory()" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 hover:border-slate-600 text-slate-300">Kurve leeren</button>
           </div>
           <canvas id="bioPlotCanvas" width="900" height="145" class="w-full h-32 bg-slate-950 border border-slate-800 rounded-lg"></canvas>
@@ -2428,7 +2469,7 @@
   <script src="js/video_biomechanics.js?v=9.1.0"></script>
   <script src="js/app.js?v=9.1.0"></script>
 
-  <!-- Local M3 Pro GPU MediaPipe PoseLandmarker Engine (Calibrated to OSP / DLV Convention) -->
+  <!-- Local M3 Pro GPU MediaPipe PoseLandmarker Engine (Calibrated to OSP / DLV Convention Info 1–6) -->
   <script type="module">
     import {
       PoseLandmarker,
@@ -2441,13 +2482,181 @@
     let currentMetrics = null;
     let prevSwingState = null;
     let prevComState = null;
-    let phaseMarks = { TD: null, MKF: null, TO: null };
+    let phaseMarks = { '2L': null, '1L': null, TD: null, MKF: null, TO: null, LAND: null };
+    let phaseSnaps = {};
     let angleHistory = [];
+
+    // Video FPS & 2-Point Meter Scale State
+    let detectedContainerFps = null;
+    let currentVideoFname = '';
+    let isCalibratingScale = false;
+    let scalePoints = [];
+    let manualPxPerMeter = null;
+    let autoBodyPxPerMeter = null;
 
     const videoEl = document.getElementById("bioVideo");
     const canvasEl = document.getElementById("bioCanvas");
     const ctx = canvasEl ? canvasEl.getContext("2d") : null;
     const badgeEl = document.getElementById("gpuStatusBadge");
+
+    async function parseMp4ContainerFps(file) {
+      try {
+        // Read head (128KB) & tail (512KB) to locate moov atom in MP4/MOV without loading whole video
+        const sz = file.size;
+        const chunks = [await file.slice(0, Math.min(sz, 196608)).arrayBuffer()];
+        if (sz > 196608) {
+          const tailStart = Math.max(196608, sz - 786432);
+          chunks.push(await file.slice(tailStart, sz).arrayBuffer());
+        }
+        for (const ab of chunks) {
+          const u8 = new Uint8Array(ab);
+          const dv = new DataView(ab);
+          // Scan for mdhd + stts pairs in video track (skip audio timescales 44100 / 48000)
+          for (let i = 0; i < u8.length - 32; i++) {
+            if (u8[i] === 0x6d && u8[i + 1] === 0x64 && u8[i + 2] === 0x68 && u8[i + 3] === 0x64) { // 'mdhd'
+              const ver = u8[i + 4];
+              if (ver === 0 && i + 24 < u8.length) {
+                const ts = dv.getUint32(i + 16);
+                const dur = dv.getUint32(i + 20);
+                if (ts > 100 && dur > 0 && ts !== 44100 && ts !== 48000) {
+                  // Search forward up to 64KB for 'stts'
+                  const lim = Math.min(u8.length - 20, i + 65536);
+                  for (let j = i + 20; j < lim; j++) {
+                    if (u8[j] === 0x73 && u8[j + 1] === 0x74 && u8[j + 2] === 0x74 && u8[j + 3] === 0x73) { // 'stts'
+                      const cnt = dv.getUint32(j + 8);
+                      if (cnt >= 1 && cnt < 20 && j + 20 <= u8.length) {
+                        const sCnt = dv.getUint32(j + 12);
+                        const durS = dur / ts;
+                        const fps = sCnt / durS;
+                        if (fps >= 15 && fps <= 480) {
+                          return { containerFps: Number(fps.toFixed(2)), durS: Number(durS.toFixed(2)), frames: sCnt };
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    function resolveFpsConfig() {
+      const sel = document.getElementById("bioFpsSelect")?.value || "auto";
+      const cFps = detectedContainerFps || 50;
+      if (sel === "unknown") {
+        return { containerFps: cFps, cameraFps: null, timeScale: 1, fpsKnown: false };
+      }
+      if (sel === "auto") {
+        const low = currentVideoFname.toLowerCase();
+        // OSP DLV wm...mp4 long slow-mo clips at 50fps container are recorded at 200fps (4x Slo-Mo)
+        if (detectedContainerFps && detectedContainerFps >= 45 && detectedContainerFps <= 55 && low.startsWith("wm") && (videoEl?.duration || 0) >= 9.0) {
+          return { containerFps: detectedContainerFps, cameraFps: 200, timeScale: detectedContainerFps / 200, fpsKnown: true };
+        }
+        if (detectedContainerFps) {
+          return { containerFps: detectedContainerFps, cameraFps: detectedContainerFps, timeScale: 1, fpsKnown: true };
+        }
+        return { containerFps: 50, cameraFps: null, timeScale: 1, fpsKnown: false };
+      }
+      const cam = parseFloat(sel);
+      return { containerFps: detectedContainerFps || cam, cameraFps: cam, timeScale: (detectedContainerFps || cam) / cam, fpsKnown: true };
+    }
+
+    function updateScaleStatusBadge() {
+      const el = document.getElementById("bioScaleStatusBadge");
+      if (!el) return;
+      if (isCalibratingScale) {
+        el.textContent = `🎯 Klicke Punkt ${scalePoints.length + 1} / 2 im Video an (Meter-Aufsteller / Brett)!`;
+        el.className = "text-cyan-300 font-bold animate-pulse";
+        return;
+      }
+      if (manualPxPerMeter) {
+        el.textContent = `📏 Kalibriert: ${manualPxPerMeter.toFixed(1)} px/m (Aufsteller/Brett)`;
+        el.className = "text-emerald-400 font-bold";
+      } else if (autoBodyPxPerMeter) {
+        el.textContent = `📐 Auto-Skala (1,85m): ~${autoBodyPxPerMeter.toFixed(1)} px/m (für exakte m/s 2-Punkt kalibrieren)`;
+        el.className = "text-amber-300";
+      } else {
+        el.textContent = "📐 Maßstab: Auto (1,85m sobald Pose erkannt)";
+        el.className = "text-slate-400";
+      }
+    }
+
+    window.toggleMeterCalibration = function() {
+      if (!videoEl || videoEl.readyState < 2) {
+        alert("Bitte zuerst ein Video laden.");
+        return;
+      }
+      isCalibratingScale = !isCalibratingScale;
+      scalePoints = [];
+      if (canvasEl) canvasEl.style.pointerEvents = isCalibratingScale ? "auto" : "none";
+      canvasEl.style.cursor = isCalibratingScale ? "crosshair" : "default";
+      updateScaleStatusBadge();
+      processCurrentFrame();
+    };
+
+    window.resetMeterCalibration = function() {
+      isCalibratingScale = false;
+      scalePoints = [];
+      manualPxPerMeter = null;
+      if (canvasEl) {
+        canvasEl.style.pointerEvents = "none";
+        canvasEl.style.cursor = "default";
+      }
+      updateScaleStatusBadge();
+      processCurrentFrame();
+      if (window.VideoBiomechanicsModule) VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
+    };
+
+    window.refreshBioFpsSetting = function() {
+      const cfg = resolveFpsConfig();
+      const b = document.getElementById("bioContainerFpsBadge");
+      if (b) {
+        const contTxt = detectedContainerFps ? `${detectedContainerFps}` : "—";
+        const camTxt = cfg.fpsKnown ? `${Math.round(cfg.cameraFps)} fps` : "Unbekannt";
+        b.textContent = `Datei: ${contTxt} fps • Kamera: ${camTxt}`;
+      }
+      if (phaseMarks.TD && phaseMarks.TO) {
+        const badge = document.getElementById("calcContactBadge");
+        if (badge) {
+          if (cfg.fpsKnown) {
+            const ms = Math.round((phaseMarks.TO.t - phaseMarks.TD.t) * cfg.timeScale * 1000);
+            badge.textContent = `⏱ Kontaktzeit (TD➔TO): ${ms} ms`;
+            badge.style.color = ms <= 125 ? "#10b981" : "#f59e0b";
+          } else {
+            badge.textContent = "⏱ Kontaktzeit: k.A. (Kamera-FPS unbekannt)";
+            badge.style.color = "#94a3b8";
+          }
+        }
+      }
+      if (videoEl && videoEl.readyState >= 2) processCurrentFrame();
+      if (window.VideoBiomechanicsModule) VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
+    };
+
+    if (canvasEl) {
+      canvasEl.addEventListener("click", (e) => {
+        if (!isCalibratingScale) return;
+        const rect = canvasEl.getBoundingClientRect();
+        const px = ((e.clientX - rect.left) / rect.width) * canvasEl.width;
+        const py = ((e.clientY - rect.top) / rect.height) * canvasEl.height;
+        scalePoints.push({ x: px, y: py });
+        if (scalePoints.length >= 2) {
+          const distPx = Math.hypot(scalePoints[1].x - scalePoints[0].x, scalePoints[1].y - scalePoints[0].y);
+          const meters = parseFloat(document.getElementById("bioScaleMeters")?.value || "5");
+          if (distPx > 10 && meters > 0) {
+            manualPxPerMeter = distPx / meters;
+          }
+          isCalibratingScale = false;
+          canvasEl.style.pointerEvents = "none";
+          canvasEl.style.cursor = "default";
+        }
+        updateScaleStatusBadge();
+        processCurrentFrame();
+        if (window.VideoBiomechanicsModule) VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
+      });
+    }
 
     async function initPoseEngine() {
       if (poseLandmarker || isInitializing) return poseLandmarker;
@@ -2561,28 +2770,91 @@
       pctx.stroke();
       pctx.fillStyle = "#64748b";
       pctx.font = "10px monospace";
-      pctx.fillText("134° (Min. Amortisation Stützbein L)", 6, Math.max(11, y134 - 3));
-      pctx.fillText("95° (Enges Schwungbein-Ziel R)", 6, Math.max(11, y95 - 3));
+      pctx.fillText("134° (Amortisation Stütz L)", 6, Math.max(11, y134 - 3));
+      pctx.fillText("95° (Zusatz Schwung-Knie)", 6, Math.max(11, y95 - 3));
 
       if (angleHistory.length < 2) return;
       const recent = angleHistory.slice(-240);
-      const drawSeries = (key, color, scaleFn) => {
+      const drawSeries = (key, color) => {
         pctx.beginPath();
         pctx.strokeStyle = color;
         pctx.lineWidth = 2;
         recent.forEach((pt, idx) => {
           const x = (idx / Math.max(1, recent.length - 1)) * (W - 12) + 6;
-          const val = scaleFn(pt[key] ?? 0);
+          const val = pt[key] ?? 0;
           const y = H - ((val - 40) / 150) * (H - 12) - 6;
           if (idx === 0) pctx.moveTo(x, y);
           else pctx.lineTo(x, y);
         });
         pctx.stroke();
       };
-      drawSeries("leftKnee", "#10b981", v => v);
-      drawSeries("rightKnee", "#38bdf8", v => v);
-      drawSeries("dlvRumpf", "#f59e0b", v => v);
+      drawSeries("leftKnee", "#10b981");
+      drawSeries("rightKnee", "#38bdf8");
+      drawSeries("dlvRumpf", "#f59e0b");
     }
+
+    function renderKinogramStrip() {
+      const kc = document.getElementById("bioKinogramCanvas");
+      if (!kc) return;
+      const kctx = kc.getContext("2d");
+      const W = kc.width, H = kc.height;
+      kctx.clearRect(0, 0, W, H);
+
+      // OSP Tartan runway background + white board marker near TD
+      kctx.fillStyle = "#0f172a";
+      kctx.fillRect(0, 0, W, H);
+      kctx.fillStyle = "#7f1d1d";
+      kctx.fillRect(0, H - 36, W, 36);
+      kctx.fillStyle = "#f8fafc";
+      kctx.fillRect(0, H - 38, W, 2);
+
+      const order = ['2L', '1L', 'TD', 'MKF', 'TO', 'LAND'];
+      const present = order.filter(ph => phaseSnaps[ph]);
+      if (present.length === 0) {
+        kctx.fillStyle = "#94a3b8";
+        kctx.font = "bold 13px monospace";
+        kctx.fillText("Markiere oben Phasen-Bilder (2L / 1L / TD / MKF / TO / Landung) ➔ OSP Anlaufbahn-Kinogramm erscheint automatisch hier.", 24, H / 2 - 6);
+        return;
+      }
+
+      const slotW = Math.floor((W - 24) / Math.max(4, present.length));
+      const pad = 12;
+      present.forEach((ph, idx) => {
+        const snap = phaseSnaps[ph];
+        const x = pad + idx * slotW;
+        const boxW = slotW - 8;
+        const boxH = H - 46;
+        if (snap.img) {
+          kctx.drawImage(snap.img, x, 6, boxW, boxH);
+        }
+        // Phase pill + metrics bar on Tartan strip
+        kctx.fillStyle = ph === 'TD' ? "#10b981" : ph === 'TO' ? "#06b6d4" : ph === 'LAND' ? "#a855f7" : "#f59e0b";
+        kctx.fillRect(x, 6, 46, 17);
+        kctx.fillStyle = "#020617";
+        kctx.font = "bold 11px monospace";
+        kctx.fillText(ph, x + 6, 18);
+
+        kctx.fillStyle = "#f8fafc";
+        kctx.font = "bold 11px monospace";
+        kctx.fillText(snap.caption || "", x + 4, H - 15);
+      });
+    }
+
+    window.clearBioKinogram = function() {
+      phaseSnaps = {};
+      phaseMarks = { '2L': null, '1L': null, TD: null, MKF: null, TO: null, LAND: null };
+      renderKinogramStrip();
+      if (window.VideoBiomechanicsModule) VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
+    };
+
+    window.exportKinogramPng = function() {
+      const kc = document.getElementById("bioKinogramCanvas");
+      if (!kc) return;
+      const a = document.createElement("a");
+      a.download = `Luka_OSP_Anlaufbahn_Kinogramm_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.png`;
+      a.href = kc.toDataURL("image/png");
+      a.click();
+    };
 
     async function processCurrentFrame() {
       if (!videoEl || videoEl.readyState < 2) return;
@@ -2596,19 +2868,41 @@
         canvasEl.height = vh;
       }
 
-      const fps = parseFloat(document.getElementById("bioFpsSelect")?.value || "120");
+      const fpsCfg = resolveFpsConfig();
       const dirSign = (document.getElementById("bioRunDirSelect")?.value || "ltr") === "rtl" ? -1 : 1;
       const curT = videoEl.currentTime;
-      const frameNo = Math.round(curT * fps);
+      const frameNo = Math.round(curT * fpsCfg.containerFps);
       const ro = document.getElementById("bioTimeReadout");
-      if (ro) ro.textContent = `t = ${curT.toFixed(3)} s (F${frameNo} @ ${fps}fps)`;
+      if (ro) {
+        const realSecStr = fpsCfg.fpsKnown ? `${(curT * fpsCfg.timeScale).toFixed(3)}s real` : `FPS ?`;
+        ro.textContent = `F${frameNo} (${curT.toFixed(3)}s Datei • ${realSecStr})`;
+      }
 
       const nowMs = performance.now();
       const res = lm.detectForVideo(videoEl, nowMs);
       ctx.clearRect(0, 0, vw, vh);
 
+      // Draw meter calibration points/line if present
+      if (scalePoints.length > 0) {
+        ctx.strokeStyle = "#22d3ee";
+        ctx.lineWidth = 2.5;
+        scalePoints.forEach((pt, idx) => {
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+          ctx.fillStyle = idx === 0 ? "#ef4444" : "#22d3ee";
+          ctx.fill();
+        });
+        if (scalePoints.length >= 2) {
+          ctx.beginPath();
+          ctx.moveTo(scalePoints[0].x, scalePoints[0].y);
+          ctx.lineTo(scalePoints[1].x, scalePoints[1].y);
+          ctx.stroke();
+        }
+      }
+
       if (res && res.landmarks && res.landmarks.length > 0) {
         const pts = res.landmarks[0];
+        const pNose = pts[0];
         const pLS = pts[11], pRS = pts[12], pLE = pts[13], pRE = pts[14], pLW = pts[15], pRW = pts[16];
         const pLH = pts[23], pRH = pts[24], pLK = pts[25], pRK = pts[26], pLA = pts[27], pRA = pts[28];
         const pLHeel = pts[29], pRHeel = pts[30], pLFoot = pts[31], pRFoot = pts[32];
@@ -2637,43 +2931,66 @@
         [pLH, pLK, pLA, pLFoot].forEach(p => drawJoint(p, vw, vh, "#10b981", 5));
 
         const sPt = p => ({ x: p.x * vw, y: p.y * vh });
+        const midHip = { x: 0.5 * (pLH.x + pRH.x) * vw, y: 0.5 * (pLH.y + pRH.y) * vh };
+        const midSh = { x: 0.5 * (pLS.x + pRS.x) * vw, y: 0.5 * (pLS.y + pRS.y) * vh };
+
+        // Estimate body height scale fallback (1.85m Lukas -> ~1.65m nose to lowest ankle)
+        const lowAnkY = Math.max(pLA.y, pRA.y) * vh;
+        const bodyPixH = lowAnkY - (pNose.y * vh);
+        if (bodyPixH > 35) {
+          autoBodyPxPerMeter = bodyPixH / 1.65;
+          updateScaleStatusBadge();
+        }
+
         const leftKnee = calcAngle2D(sPt(pLH), sPt(pLK), sPt(pLA));
         const rightKnee = calcAngle2D(sPt(pRH), sPt(pRK), sPt(pRA));
 
-        // DLV Rumpfwinkel (>90° = Rücklage in Laufrichtung: dirSign * (midHip - midSh) > 0 => behind hip)
-        const midHip = { x: 0.5 * (pLH.x + pRH.x) * vw, y: 0.5 * (pLH.y + pRH.y) * vh };
-        const midSh = { x: 0.5 * (pLS.x + pRS.x) * vw, y: 0.5 * (pLS.y + pRS.y) * vh };
+        // 1. OSP Rumpfwinkel beim Absprung (>90° = Rücklage)
         const backLeanRad = Math.atan2(dirSign * (midHip.x - midSh.x), Math.max(1e-5, midHip.y - midSh.y));
         const dlvRumpf = 90 + backLeanRad * (180 / Math.PI);
 
-        // DLV Stemmwinkel (Auslage des Sprungbeins vs. Vertikale: Knöchel vor Hüfte in Laufrichtung)
+        // 2. OSP Stemmwinkel (Sprungbein L Auslage vs Vertikale)
         const dxFootAhead = dirSign * (pLA.x - pLH.x) * vw;
         const dyLeg = Math.max(1e-5, (pLA.y - pLH.y) * vh);
         const dlvStemm = Math.atan2(dxFootAhead, dyLeg) * (180 / Math.PI);
 
-        // Schwungbein-Winkel (Hüfte -> Knie vs. Vertikale) & Winkelgeschwindigkeit [°/s]
-        const swingAngleVert = Math.atan2(dirSign * (pRK.x - pRH.x) * vw, Math.max(1e-5, (pRK.y - pRH.y) * vh)) * (180 / Math.PI);
-        let swingVelDegS = 0;
-        if (prevSwingState && curT > prevSwingState.t && (curT - prevSwingState.t) < 0.12) {
-          swingVelDegS = Math.abs((swingAngleVert - prevSwingState.ang) / (curT - prevSwingState.t));
-        }
-        prevSwingState = { t: curT, ang: swingAngleVert };
+        // 3. OSP Info 3: Schwungbein-Oberschenkelwinkel gegenüber der Horizontalen! (+ = über Horiz., - = darunter, z.B. -4°)
+        const dxThigh = dirSign * (pRK.x - pRH.x) * vw;
+        const dyThighUp = (pRH.y - pRK.y) * vh;
+        const swingThighHorizDeg = Math.atan2(dyThighUp, Math.max(1e-4, Math.abs(dxThigh) > 2 ? dxThigh : dirSign * 0.1)) * (180 / Math.PI);
 
-        // KSP / Hüft-Abflugwinkel beim Take-off
+        let swingVelDegS = 0;
+        if (fpsCfg.fpsKnown && prevSwingState && curT > prevSwingState.t && (curT - prevSwingState.t) < 0.2) {
+          const dtReal = (curT - prevSwingState.t) * fpsCfg.timeScale;
+          if (dtReal > 0.002) swingVelDegS = Math.abs((swingThighHorizDeg - prevSwingState.ang) / dtReal);
+        }
+        prevSwingState = { t: curT, ang: swingThighHorizDeg };
+
+        // 4. KSP Abflugwinkel
         let takeoffAngle = null;
-        if (prevComState && curT > prevComState.t && (curT - prevComState.t) < 0.12) {
+        if (prevComState && curT > prevComState.t && (curT - prevComState.t) < 0.2) {
           const vx = dirSign * (midHip.x - prevComState.x);
-          const vyUp = prevComState.y - midHip.y; // y grows down
+          const vyUp = prevComState.y - midHip.y;
           if (vx > 0.2) takeoffAngle = Math.atan2(vyUp, vx) * (180 / Math.PI);
         }
         prevComState = { t: curT, x: midHip.x, y: midHip.y };
 
-        const vLT = { x: (pLK.x - pLH.x) * vw, y: (pLK.y - pLH.y) * vh };
-        const vRT = { x: (pRK.x - pRH.x) * vw, y: (pRK.y - pRH.y) * vh };
-        const dotThigh = vLT.x * vRT.x + vLT.y * vRT.y;
-        const mLT = Math.hypot(vLT.x, vLT.y), mRT = Math.hypot(vRT.x, vRT.y);
-        const hipSep = (mLT > 1e-4 && mRT > 1e-4) ? Math.acos(Math.max(-1, Math.min(1, dotThigh / (mLT * mRT)))) * (180 / Math.PI) : 0;
-        const kneeValgus = leftKnee !== null ? Math.abs(180 - leftKnee) : 0;
+        // 5. OSP Info 4 & 5: Landungswinkel (vorderstes Landebein automatisch gewählt!)
+        const useLeftLead = (dirSign * pLHeel.x) >= (dirSign * pRHeel.x);
+        const pLeadH = useLeftLead ? pLH : pRH;
+        const pLeadK = useLeftLead ? pLK : pRK;
+        const pLeadA = useLeftLead ? pLA : pRA;
+        const pLeadHeel = useLeftLead ? pLHeel : pRHeel;
+
+        const landeRumpfDeg = Math.atan2(Math.max(1e-5, midHip.y - midSh.y), dirSign * (midSh.x - midHip.x)) * (180 / Math.PI);
+        const landeKnieDeg = calcAngle2D(sPt(pLeadH), sPt(pLeadK), sPt(pLeadA));
+        const landeHuefteDeg = calcAngle2D(midSh, sPt(pLeadH), sPt(pLeadK));
+        const landeReachPx = Math.max(0, dirSign * (pLeadHeel.x * vw - midHip.x));
+        const hipOverHeelPx = Math.max(10, pLeadHeel.y * vh - midHip.y);
+        const landeIndex = Number((hipOverHeelPx / Math.max(20, landeReachPx)).toFixed(2));
+
+        // 6. OSP Info 6: Knie-zu-Knie Abstand im vorletzten Stütz (px; + wenn Schwungknie vor Stützknie)
+        const kneeGapPx = dirSign * (pRK.x - pLK.x) * vw;
 
         const calOff = (window.VideoBiomechanicsModule && VideoBiomechanicsModule.getActiveOffsets)
           ? VideoBiomechanicsModule.getActiveOffsets()
@@ -2681,31 +2998,48 @@
         const showStemm = dlvStemm + (calOff.stemmwinkel_deg || 0);
         const showRumpf = dlvRumpf + (calOff.rumpfwinkel_td_deg || 0);
         const showLeftKnee = leftKnee !== null ? (leftKnee + (calOff.kniewinkel_min_deg || 0)) : null;
-        const showSwingVel = swingVelDegS + (calOff.schwungbein_deg_s || 0);
+        const showSwingThigh = swingThighHorizDeg + (calOff.schwungbein_winkel_deg || 0);
+        const showSwingVel = fpsCfg.fpsKnown ? (swingVelDegS + (calOff.schwungbein_deg_s || 0)) : null;
         const showTakeoff = takeoffAngle !== null ? (takeoffAngle + (calOff.abflugwinkel_deg || 0)) : null;
 
-        if (showLeftKnee !== null) drawAngleLabel(pLK, vw, vh, `L: ${showLeftKnee.toFixed(0)}°`, "rgba(16,185,129,0.9)", "#020617", -48, -6);
-        if (rightKnee !== null) drawAngleLabel(pRK, vw, vh, `R: ${rightKnee.toFixed(0)}°`, "rgba(56,189,248,0.9)", "#020617", 10, -6);
+        if (showLeftKnee !== null) drawAngleLabel(pLK, vw, vh, `Stütz: ${showLeftKnee.toFixed(0)}°`, "rgba(16,185,129,0.9)", "#020617", -54, -6);
+        drawAngleLabel(pRK, vw, vh, `Obersch: ${showSwingThigh.toFixed(0)}°`, "rgba(56,189,248,0.9)", "#020617", 10, -6);
         drawAngleLabel({ x: midSh.x / vw, y: midSh.y / vh }, vw, vh, `Rumpf: ${showRumpf.toFixed(1)}°`, "rgba(245,158,11,0.9)", "#020617", 8, -10);
 
         document.getElementById("angPlantAngle").textContent = `${showStemm.toFixed(1)}°`;
         document.getElementById("angTrunkTilt").textContent = `${showRumpf.toFixed(1)}°`;
         document.getElementById("angLeftKnee").textContent = showLeftKnee !== null ? `${showLeftKnee.toFixed(1)}°` : "—°";
-        document.getElementById("angRightKnee").textContent = rightKnee !== null ? `${rightKnee.toFixed(1)}°` : "—°";
-        document.getElementById("angSwingVel").textContent = `${Math.round(showSwingVel)} °/s${showTakeoff !== null ? ` / ${showTakeoff.toFixed(1)}°` : ''}`;
-        document.getElementById("angHipSep").textContent = `${hipSep.toFixed(1)}°`;
-        document.getElementById("angKneeValgus").textContent = `Frontal-Abw.: ${kneeValgus.toFixed(1)}°`;
+        document.getElementById("angSwingThigh").textContent = `${showSwingThigh.toFixed(1)}°`;
+        document.getElementById("angRightKnee").textContent = `Zusatz Knie: ${rightKnee !== null ? rightKnee.toFixed(0) : '—'}° (≤95°)`;
+        document.getElementById("angSwingVel").textContent = `${showSwingVel !== null ? Math.round(showSwingVel) + ' °/s' : 'FPS ?'}${showTakeoff !== null ? ` / ${showTakeoff.toFixed(1)}°` : ''}`;
+        document.getElementById("angLandingLive").textContent = `${landeRumpfDeg.toFixed(0)}° / ${landeKnieDeg?.toFixed(0) ?? '—'}° / ${landeHuefteDeg?.toFixed(0) ?? '—'}°`;
 
         currentMetrics = {
           t: curT,
           frame: frameNo,
+          dirSign,
           leftKnee: leftKnee || 0,
           rightKnee: rightKnee || 0,
           dlvRumpf,
           dlvStemm,
+          swingThighHorizDeg,
           swingVelDegS,
           takeoffAngle,
-          hipSep
+          landeRumpfDeg,
+          landeKnieDeg,
+          landeHuefteDeg,
+          landeIndex,
+          landeReachPx,
+          kneeGapPx,
+          hipPx: midHip,
+          hipHeightPx: Math.max(0, lowAnkY - midHip.y),
+          supportFootPx: { x: pLFoot.x * vw, y: pLFoot.y * vh },
+          bbox: {
+            x: Math.max(0, Math.min(pLS.x, pLH.x, pLK.x, pLA.x, pRK.x, pLFoot.x, pRFoot.x) * vw - 35),
+            y: Math.max(0, Math.min(pNose.y, pLS.y, pRS.y) * vh - 25),
+            w: Math.max(90, Math.abs(Math.max(pLFoot.x, pRFoot.x, pLS.x, pRK.x) - Math.min(pLFoot.x, pRFoot.x, pLH.x, pLS.x)) * vw + 70),
+            h: Math.max(120, (lowAnkY - Math.min(pNose.y, pLS.y) * vh) + 45)
+          }
         };
         angleHistory.push(currentMetrics);
         renderAnglePlot();
@@ -2725,6 +3059,7 @@
     window.loadLocalBioVideo = async function(input) {
       const file = input.files && input.files[0];
       if (!file) return;
+      currentVideoFname = file.name;
       const url = URL.createObjectURL(file);
       document.getElementById("bioPlaceholder").style.display = "none";
       videoEl.style.display = "block";
@@ -2733,13 +3068,24 @@
       angleHistory = [];
       prevSwingState = null;
       prevComState = null;
-      phaseMarks = { TD: null, MKF: null, TO: null };
+      phaseMarks = { '2L': null, '1L': null, TD: null, MKF: null, TO: null, LAND: null };
+      phaseSnaps = {};
+      manualPxPerMeter = null;
+      scalePoints = [];
+      isCalibratingScale = false;
+      renderKinogramStrip();
+
+      const mp4Meta = await parseMp4ContainerFps(file);
+      detectedContainerFps = mp4Meta ? mp4Meta.containerFps : null;
+
       if (window.VideoBiomechanicsModule && VideoBiomechanicsModule.autoDetectTrialByFilename) {
         VideoBiomechanicsModule.autoDetectTrialByFilename(file.name);
       }
       await initPoseEngine();
       videoEl.onloadeddata = () => {
         videoEl.currentTime = 0;
+        refreshBioFpsSetting();
+        updateScaleStatusBadge();
         setTimeout(() => processCurrentFrame(), 120);
       };
       videoEl.onseeked = () => processCurrentFrame();
@@ -2764,25 +3110,42 @@
       videoEl.pause();
       const btn = document.getElementById("bioPlayBtn");
       if (btn) btn.textContent = "▶ Play";
-      const fps = parseFloat(document.getElementById("bioFpsSelect")?.value || "120");
-      videoEl.currentTime = Math.max(0, Math.min(videoEl.duration || 999, videoEl.currentTime + framesDelta / fps));
+      const cfg = resolveFpsConfig();
+      videoEl.currentTime = Math.max(0, Math.min(videoEl.duration || 999, videoEl.currentTime + framesDelta / cfg.containerFps));
     };
 
     window.setVideoSpeed = function(rate) {
       if (videoEl) videoEl.playbackRate = rate;
     };
 
+    function capturePhaseSnap(phase, metrics) {
+      if (!videoEl || !videoEl.videoWidth || !canvasEl) return;
+      const off = document.createElement("canvas");
+      const bb = metrics.bbox || { x: 0, y: 0, w: canvasEl.width, h: canvasEl.height };
+      const scaleX = videoEl.videoWidth / Math.max(1, canvasEl.width);
+      const scaleY = videoEl.videoHeight / Math.max(1, canvasEl.height);
+      const cw = 180, ch = 184;
+      off.width = cw;
+      off.height = ch;
+      const octx = off.getContext("2d");
+      octx.drawImage(videoEl, bb.x * scaleX, bb.y * scaleY, bb.w * scaleX, bb.h * scaleY, 0, 0, cw, ch);
+      octx.drawImage(canvasEl, bb.x, bb.y, bb.w, bb.h, 0, 0, cw, ch);
+
+      let cap = '';
+      if (phase === 'TD') cap = `Stemm ${metrics.dlvStemm?.toFixed(0)}° | R ${metrics.dlvRumpf?.toFixed(0)}°`;
+      else if (phase === 'MKF') cap = `Amort ${metrics.leftKnee?.toFixed(0)}°`;
+      else if (phase === 'TO') cap = `Schw ${metrics.swingThighHorizDeg?.toFixed(0)}°`;
+      else if (phase === 'LAND') cap = `L-R ${metrics.landeRumpfDeg?.toFixed(0)}° | K ${metrics.landeKnieDeg?.toFixed(0)}°`;
+      else cap = `F${metrics.frame}`;
+      phaseSnaps[phase] = { img: off, caption: cap };
+      renderKinogramStrip();
+    }
+
     window.markTakeoffPhase = function(phase) {
       if (!currentMetrics) return;
       phaseMarks[phase] = { ...currentMetrics };
-      if (phaseMarks.TD && phaseMarks.TO) {
-        const contactMs = Math.round((phaseMarks.TO.t - phaseMarks.TD.t) * 1000);
-        const badge = document.getElementById("calcContactBadge");
-        if (badge) {
-          badge.textContent = `⏱ Kontaktzeit (TD➔TO): ${contactMs} ms`;
-          badge.style.color = contactMs <= 125 ? "#10b981" : "#f59e0b";
-        }
-      }
+      capturePhaseSnap(phase, currentMetrics);
+      refreshBioFpsSetting();
       if (window.VideoBiomechanicsModule) {
         VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
       }
@@ -2811,7 +3174,16 @@
       VideoBiomechanicsModule.registerEngineBridge({
         getCurrentMetrics: () => currentMetrics,
         getPhaseMarks: () => phaseMarks,
+        getPhaseSnaps: () => phaseSnaps,
         getAngleHistory: () => angleHistory,
+        getVideoScaleInfo: () => {
+          const cfg = resolveFpsConfig();
+          return {
+            ...cfg,
+            pxPerMeter: manualPxPerMeter || autoBodyPxPerMeter || null,
+            isManualScale: Boolean(manualPxPerMeter)
+          };
+        },
         getCaptureThumbnail: () => {
           if (!videoEl || !videoEl.videoWidth) return null;
           const tCanvas = document.createElement("canvas");
@@ -2827,22 +3199,24 @@
         },
         loadSavedAnalysisToView: (item) => {
           angleHistory = Array.isArray(item.angleHistory) ? [...item.angleHistory] : [];
-          phaseMarks = item.phaseMarks ? { ...item.phaseMarks } : { TD: null, MKF: null, TO: null };
+          phaseMarks = item.phaseMarks ? { ...item.phaseMarks } : { '2L': null, '1L': null, TD: null, MKF: null, TO: null, LAND: null };
           renderAnglePlot();
-          if (phaseMarks.TD && phaseMarks.TO) {
-            const ms = Math.round((phaseMarks.TO.t - phaseMarks.TD.t) * 1000);
+          if (phaseMarks.TD && phaseMarks.TO && item.summary?.kontaktzeit_ms != null) {
             const badge = document.getElementById("calcContactBadge");
-            if (badge) badge.textContent = `⏱ Kontaktzeit (TD➔TO): ${ms} ms (Archiv)`;
+            if (badge) badge.textContent = `⏱ Kontaktzeit (TD➔TO): ${item.summary.kontaktzeit_ms} ms (Archiv)`;
           }
           const m = item.summary || {};
           document.getElementById("angPlantAngle").textContent = m.stemmwinkel_deg != null ? `${m.stemmwinkel_deg}°` : "—°";
           document.getElementById("angTrunkTilt").textContent = m.rumpfwinkel_td_deg != null ? `${m.rumpfwinkel_td_deg}°` : "—°";
           document.getElementById("angLeftKnee").textContent = m.kniewinkel_min_deg != null ? `${m.kniewinkel_min_deg}°` : "—°";
-          document.getElementById("angRightKnee").textContent = m.schwungbein_knie_kompakt_deg != null ? `${m.schwungbein_knie_kompakt_deg}°` : "—°";
+          document.getElementById("angSwingThigh").textContent = m.schwungbein_winkel_deg != null ? `${m.schwungbein_winkel_deg}°` : "—°";
+          document.getElementById("angRightKnee").textContent = `Zusatz Knie: ${m.schwungbein_knie_kompakt_deg ?? '—'}° (≤95°)`;
           document.getElementById("angSwingVel").textContent = m.schwungbein_deg_s != null ? `${m.schwungbein_deg_s} °/s` : "— °/s";
+          document.getElementById("angLandingLive").textContent = `${m.lande_rumpfwinkel_deg ?? '—'}° / ${m.lande_kniewinkel_deg ?? '—'}° / ${m.lande_hueftwinkel_deg ?? '—'}°`;
         }
       });
     }
+    renderKinogramStrip();
   </script>
 </body>
 </html>

@@ -271,7 +271,7 @@ const NextSessionModule = (() => {
       s_2L: 2.55,
       s_1L: 2.25,
       entf_4L: 9.60,
-      abstand_knie_2L: 0.00,
+      abstand_knie_2L: -0.03,
       stemmwinkel: 27,
       rumpfwinkel_abspr: 100,
       rumpfrotation: 9,
