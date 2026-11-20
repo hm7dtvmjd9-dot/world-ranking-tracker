@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-19T13:34:45.576Z",
+  "updated_at": "2026-11-20T12:01:34.293Z",
   "source": "Web-App Live Triage Sync",
   "statuses": {
     "wa-7244492": "confirmed",
@@ -168,6 +168,7 @@
     "wa-7248663": "hidden",
     "wa-7236763": "hidden",
     "wa-7245733": "hidden",
-    "wa-7241249": "hidden"
+    "wa-7241249": "hidden",
+    "wa-7247082": "hidden"
   }
 }
