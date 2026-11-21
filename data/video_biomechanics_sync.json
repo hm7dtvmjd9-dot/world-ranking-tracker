@@ -1,8 +1,49 @@
 {
-  "updated_at": "2026-11-21T13:46:39.830Z",
+  "updated_at": "2026-11-21T13:49:53.242Z",
   "source": "Web-App Video-Bio & OSP Kalibrierung",
   "deleted_ids": [],
   "calibration_pairs": [
+    {
+      "trialId": "herden-2023-07-09-v2",
+      "label": "2023-07-09_Kassel • V2 (7.91m | eff. 7.97m)",
+      "display_ref": "09.07.2023 / Versuch 2",
+      "videoFilename": "wm23 KS Herden (2).mp4",
+      "calibratedAt": "2026-11-21T13:49:48.237Z",
+      "rawSummary": {
+        "stemmwinkel_deg": 35.1,
+        "rumpfwinkel_td_deg": 101.4,
+        "rumpfrotation_deg": 8.6,
+        "kniewinkel_min_deg": 94.2,
+        "abflugwinkel_deg": null,
+        "schwungbein_winkel_deg": -4.3,
+        "schwungbein_deg_s": 857,
+        "lande_rumpfwinkel_deg": 88.8,
+        "lande_kniewinkel_deg": 135.3,
+        "lande_hueftwinkel_deg": 98.8,
+        "landeweite_m": 1.49,
+        "landeindex": 0.45,
+        "knie_abstand_vorletzter_m": 0.12,
+        "step_2L_m": 0.07,
+        "step_1L_m": 2.21,
+        "v_1L_ms": 0.02,
+        "v_flug_ms": 2.85,
+        "ksp_absenkung_m": -0.37,
+        "schwungbein_knie_kompakt_deg": 46.6,
+        "kontaktzeit_ms": 100
+      },
+      "groundTruth": {
+        "stemmwinkel_deg": 26,
+        "rumpfwinkel_td_deg": 99,
+        "rumpfrotation_deg": 4,
+        "kniewinkel_min_deg": 140,
+        "abflugwinkel_deg": 19.4,
+        "schwungbein_winkel_deg": -8,
+        "schwungbein_deg_s": 746,
+        "lande_rumpfwinkel_deg": 95,
+        "lande_kniewinkel_deg": 135,
+        "lande_hueftwinkel_deg": 99
+      }
+    },
     {
       "trialId": "herden-2026-07-25-v5",
       "label": "2026-07-25 Bochum • V5 (7.86m | eff. 8.07m)",
