@@ -317,7 +317,7 @@ const VenuesModule = (() => {
   function scheduleAutoPushIfConfigured() {
     if (localStorage.getItem(GH_AUTO_SYNC_KEY) === 'true' && localStorage.getItem(GH_SYNC_TOKEN_KEY)) {
       clearTimeout(autoPushTimer);
-      autoPushTimer = setTimeout(() => { pushTriageToGitHub(true); }, 1500);
+      autoPushTimer = setTimeout(() => { pushTriageToGitHub(true); }, 8000);
     }
   }
 

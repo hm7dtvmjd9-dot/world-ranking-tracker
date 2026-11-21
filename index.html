@@ -1578,9 +1578,11 @@
           <label class="flex items-center gap-1 text-slate-300">
             <span>Anlauf:</span>
             <select id="bioRunDirSelect" class="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-cyan-300 font-bold" onchange="refreshBioCurrentFrame()">
-              <option value="ltr" selected>Links ➔ Rechts</option>
+              <option value="auto" selected>Auto (aus Pose)</option>
               <option value="rtl">Rechts ➔ Links</option>
+              <option value="ltr">Links ➔ Rechts</option>
             </select>
+            <span id="bioAutoDirBadge" class="text-[10px] text-cyan-400"></span>
           </label>
           <label class="flex items-center gap-1 text-slate-300">
             <span>Modell:</span>
@@ -1684,16 +1686,23 @@
           </div>
         </div>
 
-        <!-- OSP Anlaufbahn-Kinogramm Strip -->
+        <!-- OSP Anlaufbahn-Panorama-Kinogramm (Durchgehendes Bahn + Grube Panorama wie DLV) -->
         <div class="space-y-1.5 bg-slate-950/90 border border-slate-800 rounded-xl p-2.5">
           <div class="flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono">
-            <span class="text-amber-300 font-bold uppercase">🛣️ OSP Anlaufbahn-Kinogramm (automatisch aus markierten Phasen-Bildern)</span>
-            <div class="flex items-center gap-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-amber-300 font-bold uppercase">🛣️ OSP Anlaufbahn-Panorama-Kinogramm (wie DLV)</span>
+              <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
+                <input id="bioKinoSkeletonChk" type="checkbox" onchange="refreshKinogramStrip()" class="rounded bg-slate-900 border-slate-700 text-cyan-400">
+                <span>🦴 Skelett-Overlay</span>
+              </label>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button id="bioAutoPanoBtn" onclick="buildAutoPanorama()" class="px-2.5 py-0.5 rounded bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black">🎞️ Auto-Panorama (TD−0,5s → Landung)</button>
               <button onclick="clearBioKinogram()" class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-400 hover:text-white">↺ Leeren</button>
-              <button onclick="exportKinogramPng()" class="px-2.5 py-0.5 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-black">⬇ Kinogramm PNG</button>
+              <button onclick="exportKinogramPng()" class="px-2.5 py-0.5 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-black">⬇ Panorama PNG</button>
             </div>
           </div>
-          <canvas id="bioKinogramCanvas" width="1200" height="230" class="w-full h-44 bg-slate-900 border border-slate-800 rounded-lg"></canvas>
+          <canvas id="bioKinogramCanvas" width="1600" height="280" class="w-full h-48 sm:h-56 bg-slate-900 border border-slate-800 rounded-lg object-contain"></canvas>
         </div>
 
         <!-- Live Plot -->
@@ -1742,13 +1751,14 @@
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 space-y-3">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div class="flex items-center gap-2 flex-wrap">
-            <h3 class="text-xs sm:text-sm font-black text-white font-mono uppercase">🗂️ PERSISTENTES VIDEO-ANALYSE-ARCHIV (LOKAL)</h3>
+            <h3 class="text-xs sm:text-sm font-black text-white font-mono uppercase">🗂️ PERSISTENTES VIDEO-ANALYSE-ARCHIV (SYNC: iPhone ↔ Mac)</h3>
             <span id="videoArchiveCountBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">0 Analysen</span>
           </div>
-          <div class="flex items-center gap-1.5 font-mono text-[10px]">
-            <button onclick="VideoBiomechanicsModule.exportArchiveJson()" class="px-2.5 py-1 rounded bg-slate-950 border border-slate-700 hover:border-cyan-500 text-cyan-300 font-bold">⬇ Archiv JSON</button>
+          <div class="flex flex-wrap items-center gap-1.5 font-mono text-[10px]">
+            <div id="videoSyncStatusBar" class="flex flex-wrap items-center gap-1.5"></div>
+            <button onclick="VideoBiomechanicsModule.exportArchiveJson()" class="px-2.5 py-1 rounded bg-slate-950 border border-slate-700 hover:border-cyan-500 text-cyan-300 font-bold">⬇ JSON</button>
             <label class="cursor-pointer px-2.5 py-1 rounded bg-slate-950 border border-slate-700 hover:border-emerald-500 text-emerald-300 font-bold">
-              ⬆ Import JSON
+              ⬆ Import
               <input type="file" accept=".json,application/json" style="display:none" onchange="VideoBiomechanicsModule.importArchiveJson(this)">
             </label>
           </div>
@@ -2477,6 +2487,7 @@
     } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
 
     let poseLandmarker = null;
+    let segLandmarker = null;
     let isInitializing = false;
     let lastVideoTime = -1;
     let currentMetrics = null;
@@ -2484,11 +2495,14 @@
     let prevComState = null;
     let phaseMarks = { '2L': null, '1L': null, TD: null, MKF: null, TO: null, LAND: null };
     let phaseSnaps = {};
+    let autoPanoSnaps = [];
     let angleHistory = [];
 
-    // Video FPS & 2-Point Meter Scale State
+    // Video FPS, Run Direction Auto-Detect & 2-Point Meter Scale State
     let detectedContainerFps = null;
     let currentVideoFname = '';
+    let autoDirVotes = [];
+    let autoDirSign = -1;
     let isCalibratingScale = false;
     let scalePoints = [];
     let manualPxPerMeter = null;
@@ -2793,55 +2807,216 @@
       drawSeries("dlvRumpf", "#f59e0b");
     }
 
+    async function ensureSegLandmarker() {
+      if (segLandmarker) return segLandmarker;
+      try {
+        const vision = await FilesetResolver.forVisionTasks(
+          "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
+        );
+        const modelUrl = "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/1/pose_landmarker_full.task";
+        segLandmarker = await PoseLandmarker.createFromOptions(vision, {
+          baseOptions: { modelAssetPath: modelUrl, delegate: "GPU" },
+          runningMode: "IMAGE",
+          numPoses: 1,
+          outputSegmentationMasks: true,
+          minPoseDetectionConfidence: 0.4,
+          minPosePresenceConfidence: 0.4
+        });
+      } catch (e) {
+        console.warn("SegLandmarker fallback:", e);
+      }
+      return segLandmarker;
+    }
+
+    function resolveDirSign(pts = null) {
+      const sel = document.getElementById("bioRunDirSelect")?.value || "auto";
+      const badge = document.getElementById("bioAutoDirBadge");
+      if (sel === "rtl") {
+        if (badge) badge.textContent = "";
+        return -1;
+      }
+      if (sel === "ltr") {
+        if (badge) badge.textContent = "";
+        return 1;
+      }
+      if (pts) {
+        const pNose = pts[0], pLS = pts[11], pRS = pts[12];
+        const pLHeel = pts[29], pRHeel = pts[30], pLFoot = pts[31], pRFoot = pts[32];
+        const midShX = 0.5 * (pLS.x + pRS.x);
+        const score = (pLFoot.x - pLHeel.x) + (pRFoot.x - pRHeel.x) + 0.35 * (pNose.x - midShX);
+        if (Math.abs(score) > 0.012) {
+          autoDirVotes.push(score > 0 ? 1 : -1);
+          if (autoDirVotes.length > 25) autoDirVotes.shift();
+          const sum = autoDirVotes.reduce((a, b) => a + b, 0);
+          if (sum !== 0) autoDirSign = sum > 0 ? 1 : -1;
+        }
+      }
+      if (badge) {
+        badge.textContent = autoDirSign < 0 ? "(Rechts ➔ Links)" : "(Links ➔ Rechts)";
+      }
+      return autoDirSign;
+    }
+
+    function buildLumaStrip(canvas, maskCols = null) {
+      const tw = 160, th = 90;
+      const tmp = document.createElement("canvas");
+      tmp.width = tw; tmp.height = th;
+      const tctx = tmp.getContext("2d");
+      tctx.drawImage(canvas, 0, 0, tw, th);
+      const idata = tctx.getImageData(0, 0, tw, th).data;
+      const gray = new Float32Array(tw * th);
+      for (let i = 0; i < tw * th; i++) {
+        gray[i] = 0.299 * idata[i * 4] + 0.587 * idata[i * 4 + 1] + 0.114 * idata[i * 4 + 2];
+      }
+      return { tw, th, gray, maskCols };
+    }
+
+    function estimatePanShiftPx(snapPrev, snapCurr, dirSign) {
+      // Returns positive pixel shift d >= 0 in full-frame pixels when camera pans along run direction dirSign.
+      const fw = snapPrev.fullCanvas.width;
+      const lA = snapPrev.luma || (snapPrev.luma = buildLumaStrip(snapPrev.fullCanvas, snapPrev.bodyNormCols));
+      const lB = snapCurr.luma || (snapCurr.luma = buildLumaStrip(snapCurr.fullCanvas, snapCurr.bodyNormCols));
+      const tw = lA.tw, th = lA.th;
+      const maxShift = Math.floor(tw * 0.42);
+      const minA = lA.maskCols ? Math.floor(lA.maskCols[0] * tw) : 999;
+      const maxA = lA.maskCols ? Math.ceil(lA.maskCols[1] * tw) : -1;
+      const minB = lB.maskCols ? Math.floor(lB.maskCols[0] * tw) : 999;
+      const maxB = lB.maskCols ? Math.ceil(lB.maskCols[1] * tw) : -1;
+
+      let bestD = 0;
+      let bestErr = 1e9;
+      // Search shifts d in [0..maxShift] where static mark moves xB = xA - dirSign * d
+      for (let d = 0; d <= maxShift; d++) {
+        let sum = 0, cnt = 0;
+        for (let y = 2; y < th - 2; y += 2) {
+          // Focus on track/pit bands & upper stadium background, skipping athlete silhouettes
+          for (let x = 2; x < tw - 2; x += 2) {
+            if (x >= minA && x <= maxA) continue;
+            const xB = x - dirSign * d;
+            if (xB < 1 || xB >= tw - 1) continue;
+            if (xB >= minB && xB <= maxB) continue;
+            sum += Math.abs(lA.gray[y * tw + x] - lB.gray[y * tw + xB]);
+            cnt++;
+          }
+        }
+        if (cnt > 120) {
+          const mae = sum / cnt;
+          if (mae < bestErr) {
+            bestErr = mae;
+            bestD = d;
+          }
+        }
+      }
+      return (bestD / tw) * fw;
+    }
+
     function renderKinogramStrip() {
       const kc = document.getElementById("bioKinogramCanvas");
       if (!kc) return;
       const kctx = kc.getContext("2d");
       const W = kc.width, H = kc.height;
       kctx.clearRect(0, 0, W, H);
-
-      // OSP Tartan runway background + white board marker near TD
       kctx.fillStyle = "#0f172a";
       kctx.fillRect(0, 0, W, H);
-      kctx.fillStyle = "#7f1d1d";
-      kctx.fillRect(0, H - 36, W, 36);
-      kctx.fillStyle = "#f8fafc";
-      kctx.fillRect(0, H - 38, W, 2);
 
-      const order = ['2L', '1L', 'TD', 'MKF', 'TO', 'LAND'];
-      const present = order.filter(ph => phaseSnaps[ph]);
-      if (present.length === 0) {
+      const snaps = [...autoPanoSnaps];
+      Object.entries(phaseSnaps).forEach(([ph, s]) => {
+        if (s && !snaps.some(a => Math.abs(a.t - s.t) < 0.015)) {
+          snaps.push({ ...s, phase: ph });
+        } else if (s) {
+          const hit = snaps.find(a => Math.abs(a.t - s.t) < 0.015);
+          if (hit) { hit.phase = ph; hit.caption = s.caption; }
+        }
+      });
+      snaps.sort((a, b) => a.t - b.t);
+
+      if (snaps.length === 0) {
         kctx.fillStyle = "#94a3b8";
-        kctx.font = "bold 13px monospace";
-        kctx.fillText("Markiere oben Phasen-Bilder (2L / 1L / TD / MKF / TO / Landung) ➔ OSP Anlaufbahn-Kinogramm erscheint automatisch hier.", 24, H / 2 - 6);
+        kctx.font = "bold 14px monospace";
+        kctx.fillText("Markiere Phasen (2L / 1L / TD / MKF / TO / Landung) oder klicke „🎞️ Auto-Panorama“ ➔ echtes OSP Bahn- & Gruben-Panorama.", 26, H / 2);
         return;
       }
 
-      const slotW = Math.floor((W - 24) / Math.max(4, present.length));
-      const pad = 12;
-      present.forEach((ph, idx) => {
-        const snap = phaseSnaps[ph];
-        const x = pad + idx * slotW;
-        const boxW = slotW - 8;
-        const boxH = H - 46;
-        if (snap.img) {
-          kctx.drawImage(snap.img, x, 6, boxW, boxH);
-        }
-        // Phase pill + metrics bar on Tartan strip
-        kctx.fillStyle = ph === 'TD' ? "#10b981" : ph === 'TO' ? "#06b6d4" : ph === 'LAND' ? "#a855f7" : "#f59e0b";
-        kctx.fillRect(x, 6, 46, 17);
-        kctx.fillStyle = "#020617";
-        kctx.font = "bold 11px monospace";
-        kctx.fillText(ph, x + 6, 18);
+      const dirSign = snaps[snaps.length - 1].dirSign || resolveDirSign();
+      const fw = snaps[0].fullCanvas.width;
+      const fh = snaps[0].fullCanvas.height;
 
-        kctx.fillStyle = "#f8fafc";
-        kctx.font = "bold 11px monospace";
-        kctx.fillText(snap.caption || "", x + 4, H - 15);
+      // Compute continuous world X coordinate for each frame
+      snaps[0].worldX = 0;
+      for (let i = 1; i < snaps.length; i++) {
+        const shiftPx = estimatePanShiftPx(snaps[i - 1], snaps[i], dirSign);
+        snaps[i].worldX = snaps[i - 1].worldX + dirSign * shiftPx;
+      }
+      const minWX = Math.min(...snaps.map(s => s.worldX));
+      const maxWX = Math.max(...snaps.map(s => s.worldX + fw));
+      const worldSpan = Math.max(fw, maxWX - minWX);
+
+      const availH = H - 24;
+      const drawScale = Math.min(W / worldSpan, availH / fh);
+      const dispW = worldSpan * drawScale;
+      const dispH = fh * drawScale;
+      const offX = (W - dispW) * 0.5;
+      const offY = 2;
+
+      // Step 1: Paint continuous runway & pit background sorted left-to-right
+      const bgSorted = [...snaps].sort((a, b) => a.worldX - b.worldX);
+      bgSorted.forEach((s, idx) => {
+        const dx = offX + (s.worldX - minWX) * drawScale;
+        const dw = fw * drawScale;
+        if (idx === 0) {
+          kctx.drawImage(s.fullCanvas, dx, offY, dw, dispH);
+        } else {
+          // Paint outer band away from center athlete to stitch seamlessly without ghosting
+          const maskRange = s.bodyNormCols || [0.35, 0.65];
+          const holeL = maskRange[0] * dw;
+          const holeR = maskRange[1] * dw;
+          if (holeL > 4) {
+            kctx.drawImage(s.fullCanvas, 0, 0, maskRange[0] * fw, fh, dx, offY, holeL, dispH);
+          }
+          if (dw - holeR > 4) {
+            kctx.drawImage(s.fullCanvas, maskRange[1] * fw, 0, (1 - maskRange[1]) * fw, fh, dx + holeR, offY, dw - holeR, dispH);
+          }
+        }
+      });
+
+      // Fallback infill: draw clean slices underneath if any frame seam remained narrow, then overlay crisp cutouts!
+      const showSkel = Boolean(document.getElementById("bioKinoSkeletonChk")?.checked);
+      snaps.forEach(s => {
+        const dx = offX + (s.worldX - minWX) * drawScale;
+        const dw = fw * drawScale;
+        if (s.cutoutCanvas) {
+          kctx.drawImage(s.cutoutCanvas, dx, offY, dw, dispH);
+        } else {
+          // Graceful fallback if segmentation wasn't available: thin crop around athlete
+          const b = s.bodyNormCols || [0.36, 0.64];
+          kctx.drawImage(s.fullCanvas, b[0] * fw, 0, (b[1] - b[0]) * fw, fh, dx + b[0] * dw, offY, (b[1] - b[0]) * dw, dispH);
+        }
+        if (showSkel && s.skelCanvas) {
+          kctx.drawImage(s.skelCanvas, dx, offY, dw, dispH);
+        }
+      });
+
+      // Bottom legend bar with true direction indicator + marked phase labels
+      kctx.fillStyle = "#020617";
+      kctx.fillRect(0, H - 22, W, 22);
+      kctx.fillStyle = "#38bdf8";
+      kctx.font = "bold 11px monospace";
+      const dirTxt = dirSign < 0 ? "⬅ Anlauf Rechts ➔ Grube Links (OSP Bochum Format)" : "Anlauf Links ➔ Grube Rechts ➡";
+      kctx.fillText(dirTxt, 10, H - 7);
+
+      snaps.filter(s => s.phase).forEach(s => {
+        const dx = offX + (s.worldX - minWX) * drawScale + ((s.hipNormX ?? 0.5) * fw * drawScale);
+        const col = s.phase === 'TD' ? "#10b981" : s.phase === 'TO' ? "#06b6d4" : s.phase === 'LAND' ? "#a855f7" : "#f59e0b";
+        kctx.fillStyle = col;
+        kctx.fillText(`${s.phase}${s.caption ? ': ' + s.caption : ''}`, Math.max(290, Math.min(W - 140, dx - 38)), H - 7);
       });
     }
 
+    window.refreshKinogramStrip = renderKinogramStrip;
+
     window.clearBioKinogram = function() {
       phaseSnaps = {};
+      autoPanoSnaps = [];
       phaseMarks = { '2L': null, '1L': null, TD: null, MKF: null, TO: null, LAND: null };
       renderKinogramStrip();
       if (window.VideoBiomechanicsModule) VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
@@ -2851,7 +3026,7 @@
       const kc = document.getElementById("bioKinogramCanvas");
       if (!kc) return;
       const a = document.createElement("a");
-      a.download = `Luka_OSP_Anlaufbahn_Kinogramm_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.png`;
+      a.download = `Luka_OSP_Panorama_Kinogramm_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.png`;
       a.href = kc.toDataURL("image/png");
       a.click();
     };
@@ -2869,7 +3044,6 @@
       }
 
       const fpsCfg = resolveFpsConfig();
-      const dirSign = (document.getElementById("bioRunDirSelect")?.value || "ltr") === "rtl" ? -1 : 1;
       const curT = videoEl.currentTime;
       const frameNo = Math.round(curT * fpsCfg.containerFps);
       const ro = document.getElementById("bioTimeReadout");
@@ -2902,6 +3076,7 @@
 
       if (res && res.landmarks && res.landmarks.length > 0) {
         const pts = res.landmarks[0];
+        const dirSign = resolveDirSign(pts);
         const pNose = pts[0];
         const pLS = pts[11], pRS = pts[12], pLE = pts[13], pRE = pts[14], pLW = pts[15], pRW = pts[16];
         const pLH = pts[23], pRH = pts[24], pLK = pts[25], pRK = pts[26], pLA = pts[27], pRA = pts[28];
@@ -3068,8 +3243,11 @@
       angleHistory = [];
       prevSwingState = null;
       prevComState = null;
+      autoDirVotes = [];
+      autoDirSign = -1;
       phaseMarks = { '2L': null, '1L': null, TD: null, MKF: null, TO: null, LAND: null };
       phaseSnaps = {};
+      autoPanoSnaps = [];
       manualPxPerMeter = null;
       scalePoints = [];
       isCalibratingScale = false;
@@ -3118,37 +3296,157 @@
       if (videoEl) videoEl.playbackRate = rate;
     };
 
-    function capturePhaseSnap(phase, metrics) {
-      if (!videoEl || !videoEl.videoWidth || !canvasEl) return;
-      const off = document.createElement("canvas");
-      const bb = metrics.bbox || { x: 0, y: 0, w: canvasEl.width, h: canvasEl.height };
-      const scaleX = videoEl.videoWidth / Math.max(1, canvasEl.width);
-      const scaleY = videoEl.videoHeight / Math.max(1, canvasEl.height);
-      const cw = 180, ch = 184;
-      off.width = cw;
-      off.height = ch;
-      const octx = off.getContext("2d");
-      octx.drawImage(videoEl, bb.x * scaleX, bb.y * scaleY, bb.w * scaleX, bb.h * scaleY, 0, 0, cw, ch);
-      octx.drawImage(canvasEl, bb.x, bb.y, bb.w, bb.h, 0, 0, cw, ch);
+    async function buildFullFrameSnap(phaseLabel, metrics, caption = '') {
+      if (!videoEl || !videoEl.videoWidth) return null;
+      const fw = 480;
+      const fh = Math.max(160, Math.round(fw * (videoEl.videoHeight / Math.max(1, videoEl.videoWidth))));
+      const fullCanvas = document.createElement("canvas");
+      fullCanvas.width = fw; fullCanvas.height = fh;
+      fullCanvas.getContext("2d").drawImage(videoEl, 0, 0, fw, fh);
 
+      let skelCanvas = null;
+      if (canvasEl && canvasEl.width) {
+        skelCanvas = document.createElement("canvas");
+        skelCanvas.width = fw; skelCanvas.height = fh;
+        skelCanvas.getContext("2d").drawImage(canvasEl, 0, 0, fw, fh);
+      }
+
+      let cutoutCanvas = null;
+      let bodyNormCols = [0.38, 0.62];
+      let hipNormX = 0.5;
+      if (metrics?.bbox && canvasEl?.width) {
+        bodyNormCols = [
+          Math.max(0.02, metrics.bbox.x / canvasEl.width),
+          Math.min(0.98, (metrics.bbox.x + metrics.bbox.w) / canvasEl.width)
+        ];
+      }
+      if (metrics?.hipPx && canvasEl?.width) {
+        hipNormX = Math.max(0.05, Math.min(0.95, metrics.hipPx.x / canvasEl.width));
+      }
+
+      try {
+        const sl = await ensureSegLandmarker();
+        if (sl) {
+          const segRes = sl.detect(fullCanvas);
+          if (segRes?.segmentationMasks?.length > 0) {
+            const mask = segRes.segmentationMasks[0];
+            const mw = mask.width, mh = mask.height;
+            const probs = mask.hasFloat32Array() ? mask.getAsFloat32Array() : mask.getAsUint8Array();
+            const isU8 = !(probs instanceof Float32Array);
+
+            // Render alpha-masked cutout in mask resolution, then draw onto fw x fh cutoutCanvas
+            const mCan = document.createElement("canvas");
+            mCan.width = mw; mCan.height = mh;
+            const mctx = mCan.getContext("2d");
+            mctx.drawImage(fullCanvas, 0, 0, mw, mh);
+            const imgD = mctx.getImageData(0, 0, mw, mh);
+            const d = imgD.data;
+            let minCol = mw, maxCol = 0;
+            for (let y = 0; y < mh; y++) {
+              for (let x = 0; x < mw; x++) {
+                const idx = y * mw + x;
+                const p = isU8 ? (probs[idx] / 255) : probs[idx];
+                // Smooth alpha ramp (0.25 .. 0.65)
+                const alpha = p <= 0.25 ? 0 : (p >= 0.65 ? 255 : Math.round(((p - 0.25) / 0.40) * 255));
+                d[idx * 4 + 3] = alpha;
+                if (alpha > 90) {
+                  if (x < minCol) minCol = x;
+                  if (x > maxCol) maxCol = x;
+                }
+              }
+            }
+            mctx.putImageData(imgD, 0, 0);
+            mask.close();
+
+            if (maxCol > minCol) {
+              bodyNormCols = [Math.max(0.02, minCol / mw - 0.02), Math.min(0.98, maxCol / mw + 0.02)];
+            }
+            cutoutCanvas = document.createElement("canvas");
+            cutoutCanvas.width = fw; cutoutCanvas.height = fh;
+            cutoutCanvas.getContext("2d").drawImage(mCan, 0, 0, fw, fh);
+          }
+        }
+      } catch (err) {
+        console.warn("Panorama cutout fallback:", err);
+      }
+
+      return {
+        t: videoEl.currentTime,
+        phase: phaseLabel,
+        caption,
+        dirSign: metrics?.dirSign || resolveDirSign(),
+        fullCanvas,
+        skelCanvas,
+        cutoutCanvas,
+        bodyNormCols,
+        hipNormX
+      };
+    }
+
+    async function capturePhaseSnap(phase, metrics) {
       let cap = '';
       if (phase === 'TD') cap = `Stemm ${metrics.dlvStemm?.toFixed(0)}° | R ${metrics.dlvRumpf?.toFixed(0)}°`;
       else if (phase === 'MKF') cap = `Amort ${metrics.leftKnee?.toFixed(0)}°`;
       else if (phase === 'TO') cap = `Schw ${metrics.swingThighHorizDeg?.toFixed(0)}°`;
       else if (phase === 'LAND') cap = `L-R ${metrics.landeRumpfDeg?.toFixed(0)}° | K ${metrics.landeKnieDeg?.toFixed(0)}°`;
       else cap = `F${metrics.frame}`;
-      phaseSnaps[phase] = { img: off, caption: cap };
-      renderKinogramStrip();
+      const snap = await buildFullFrameSnap(phase, metrics, cap);
+      if (snap) {
+        phaseSnaps[phase] = snap;
+        renderKinogramStrip();
+      }
     }
 
-    window.markTakeoffPhase = function(phase) {
+    window.buildAutoPanorama = async function() {
+      if (!videoEl || !videoEl.duration) {
+        alert("Bitte zuerst ein Video laden.");
+        return;
+      }
+      const btn = document.getElementById("bioAutoPanoBtn");
+      const oldTxt = btn ? btn.textContent : "";
+      if (btn) btn.textContent = "⏳ Panorama wird gerendert...";
+      videoEl.pause();
+
+      const cfg = resolveFpsConfig();
+      const invScale = 1 / Math.max(0.1, cfg.timeScale || 1);
+      let tStart, tEnd;
+      if (phaseMarks.TD && phaseMarks.LAND) {
+        tStart = Math.max(0.05, phaseMarks.TD.t - 0.50 * invScale);
+        tEnd = Math.min(videoEl.duration - 0.05, phaseMarks.LAND.t + 0.04 * invScale);
+      } else if (phaseMarks.TD && phaseMarks.TO) {
+        tStart = Math.max(0.05, phaseMarks.TD.t - 0.55 * invScale);
+        tEnd = Math.min(videoEl.duration - 0.05, phaseMarks.TO.t + 0.85 * invScale);
+      } else {
+        // Fallback: middle span around current playback cursor
+        tStart = Math.max(0.05, videoEl.currentTime - 1.5);
+        tEnd = Math.min(videoEl.duration - 0.05, Math.max(tStart + 1.5, videoEl.currentTime + 1.5));
+      }
+
+      const numSamples = 10;
+      autoPanoSnaps = [];
+      for (let i = 0; i < numSamples; i++) {
+        const ts = tStart + (i / (numSamples - 1)) * (tEnd - tStart);
+        await new Promise(resolve => {
+          const onS = () => { videoEl.removeEventListener('seeked', onS); resolve(); };
+          videoEl.addEventListener('seeked', onS);
+          videoEl.currentTime = ts;
+        });
+        await processCurrentFrame();
+        const s = await buildFullFrameSnap(null, currentMetrics, '');
+        if (s) autoPanoSnaps.push(s);
+      }
+      renderKinogramStrip();
+      if (btn) btn.textContent = oldTxt;
+    };
+
+    window.markTakeoffPhase = async function(phase) {
       if (!currentMetrics) return;
       phaseMarks[phase] = { ...currentMetrics };
-      capturePhaseSnap(phase, currentMetrics);
       refreshBioFpsSetting();
       if (window.VideoBiomechanicsModule) {
         VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
       }
+      await capturePhaseSnap(phase, currentMetrics);
     };
 
     window.clearAngleHistory = function() {

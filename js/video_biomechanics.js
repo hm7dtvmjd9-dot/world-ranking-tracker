@@ -9,6 +9,12 @@ const VideoBiomechanicsModule = (() => {
   const STORE_NAME = 'analyses';
   const CAL_STORAGE_KEY = 'luka_dlv_calibration_pairs_v2';
   const CAL_ENABLED_KEY = 'luka_dlv_calibration_enabled_v1';
+  const GH_SYNC_TOKEN_KEY = 'luka_gh_triage_pat_v1';
+  const VIDEO_SYNC_API = 'https://api.github.com/repos/hm7dtvmjd9-dot/world-ranking-tracker/contents/data/video_biomechanics_sync.json';
+  const VIDEO_SYNC_RAW = 'https://raw.githubusercontent.com/hm7dtvmjd9-dot/world-ranking-tracker/main/data/video_biomechanics_sync.json';
+  const DELETED_IDS_KEY = 'luka_video_deleted_ids_v1';
+  let videoAutoPushTimer = null;
+  let lastVideoSyncNote = '';
 
   const CALIBRATABLE_KEYS = [
     'stemmwinkel_deg',
@@ -434,6 +440,7 @@ const VideoBiomechanicsModule = (() => {
     updateComparisonTable(marks, hist);
     if (runtime.onCalibrationChange) runtime.onCalibrationChange(getActiveOffsets());
     renderCalibrationModelPanel();
+    scheduleVideoAutoPush();
   }
 
   function removeCalibrationPair(trialId) {
@@ -444,6 +451,7 @@ const VideoBiomechanicsModule = (() => {
     updateComparisonTable(marks, hist);
     if (runtime.onCalibrationChange) runtime.onCalibrationChange(getActiveOffsets());
     renderCalibrationModelPanel();
+    scheduleVideoAutoPush();
   }
 
   function renderCalibrationModelPanel() {
@@ -840,11 +848,165 @@ const VideoBiomechanicsModule = (() => {
     if (markEl) markEl.value = '';
     if (notesEl) notesEl.value = '';
     await refreshArchiveList();
+    scheduleVideoAutoPush();
     const btn = document.getElementById('saveArchiveBtn');
     if (btn) {
       const old = btn.textContent;
       btn.textContent = '✅ Gespeichert!';
       setTimeout(() => { btn.textContent = old; }, 1800);
+    }
+  }
+
+  function getDeletedIds() {
+    try { return JSON.parse(localStorage.getItem(DELETED_IDS_KEY) || '[]'); } catch (e) { return []; }
+  }
+
+  function recordDeletedId(id) {
+    try {
+      const cur = new Set(getDeletedIds());
+      cur.add(id);
+      localStorage.setItem(DELETED_IDS_KEY, JSON.stringify([...cur].slice(-100)));
+    } catch (e) {}
+  }
+
+  function renderVideoSyncStatusBar() {
+    const el = document.getElementById('videoSyncStatusBar');
+    if (!el) return;
+    const hasPat = Boolean((localStorage.getItem(GH_SYNC_TOKEN_KEY) || '').trim());
+    el.innerHTML = `
+      <span class="px-1.5 py-0.5 rounded ${hasPat ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-slate-900 text-slate-400 border border-slate-700'}">
+        ${hasPat ? '✅ Cloud-Sync aktiv (wie Meetings)' : '⚪ Token unter Meetings einrichten'}
+      </span>
+      ${lastVideoSyncNote ? `<span class="text-slate-400">${lastVideoSyncNote}</span>` : ''}
+      <button onclick="VideoBiomechanicsModule.syncVideoBioFromCloud(true)" class="px-2 py-1 rounded bg-slate-950 border border-slate-700 hover:border-cyan-500 text-cyan-300 font-bold">⬇️ Abrufen</button>
+      <button onclick="VideoBiomechanicsModule.pushVideoBioToGitHub(false)" class="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black">☁️ Jetzt pushen</button>
+    `;
+  }
+
+  function compactRecordForCloud(rec) {
+    const hist = Array.isArray(rec.angleHistory) ? rec.angleHistory : [];
+    const step = Math.max(1, Math.ceil(hist.length / 120));
+    const sampled = hist.filter((_, idx) => idx % step === 0);
+    // Strip heavy fullFrame / bbox snapshots before pushing JSON to GitHub
+    return {
+      ...rec,
+      angleHistory: sampled
+    };
+  }
+
+  async function syncVideoBioFromCloud(forceAlert = false) {
+    let remote = null;
+    for (const u of [VIDEO_SYNC_RAW + '?t=' + Date.now(), './data/video_biomechanics_sync.json?t=' + Date.now()]) {
+      try {
+        const res = await fetch(u, { cache: 'no-store' });
+        if (res.ok) {
+          const parsed = await res.json();
+          if (parsed && (Array.isArray(parsed.analyses) || Array.isArray(parsed.calibration_pairs))) {
+            if (!remote || (parsed.updated_at || '') >= (remote.updated_at || '')) remote = parsed;
+          }
+        }
+      } catch (e) {}
+    }
+    if (!remote) return false;
+
+    const deletedSet = new Set([...getDeletedIds(), ...(remote.deleted_ids || [])]);
+    const localPairs = getCalibrationPairs();
+    const pairMap = new Map();
+    [...(remote.calibration_pairs || []), ...localPairs].forEach(p => {
+      if (p && p.trialId) pairMap.set(p.trialId, p);
+    });
+    const mergedPairs = [...pairMap.values()];
+    if (mergedPairs.length > 0) saveCalibrationPairs(mergedPairs);
+
+    const localItems = await dbGetAll();
+    const localIds = new Set(localItems.map(x => x.id));
+    let added = 0;
+    for (const rec of (remote.analyses || [])) {
+      if (rec && rec.id && !deletedSet.has(rec.id) && !localIds.has(rec.id)) {
+        await dbPut(rec);
+        added++;
+      }
+    }
+    // Also remove locally any item explicitly tombstoned remotely
+    for (const loc of localItems) {
+      if ((remote.deleted_ids || []).includes(loc.id)) {
+        await dbDelete(loc.id);
+      }
+    }
+
+    lastVideoSyncNote = `☁️ Sync ${new Date(remote.updated_at || Date.now()).toLocaleDateString('de-DE')} (${added > 0 ? `+${added} neu` : 'aktuell'})`;
+    renderCalibrationModelPanel();
+    await refreshArchiveList();
+    renderVideoSyncStatusBar();
+    if (forceAlert) alert(`✅ Video-Archiv & Kalibrierung synchronisiert! (${mergedPairs.length} Kalibrier-Paare, +${added} Analysen übernommen)`);
+    return true;
+  }
+
+  async function pushVideoBioToGitHub(quiet = false) {
+    const pat = (localStorage.getItem(GH_SYNC_TOKEN_KEY) || '').trim();
+    if (!pat) {
+      if (!quiet) {
+        if (window.VenuesModule && VenuesModule.configureGitHubSyncToken) {
+          VenuesModule.configureGitHubSyncToken();
+        } else {
+          alert('Bitte hinterlege zuerst unter „📅 Meetings ➔ 🔑 Auto-Sync einrichten“ dein GitHub Token.');
+        }
+      }
+      return false;
+    }
+    try {
+      const allLocal = await dbGetAll();
+      const payloadObj = {
+        updated_at: new Date().toISOString(),
+        source: 'Web-App Video-Bio & OSP Kalibrierung',
+        deleted_ids: getDeletedIds(),
+        calibration_pairs: getCalibrationPairs(),
+        analyses: allLocal.map(compactRecordForCloud)
+      };
+      const jsonStr = JSON.stringify(payloadObj, null, 2) + '\n';
+      const contentB64 = btoa(unescape(encodeURIComponent(jsonStr)));
+
+      let sha = null;
+      const getRes = await fetch(VIDEO_SYNC_API + '?t=' + Date.now(), {
+        headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github+json' }
+      });
+      if (getRes.ok) {
+        const meta = await getRes.json();
+        sha = meta.sha;
+      }
+      const putRes = await fetch(VIDEO_SYNC_API, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${pat}`,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `Sync Video-Biomechanik (${payloadObj.calibration_pairs.length} Cal, ${payloadObj.analyses.length} Analysen)`,
+          content: contentB64,
+          branch: 'main',
+          ...(sha ? { sha } : {})
+        })
+      });
+      if (!putRes.ok) {
+        const err = await putRes.text();
+        if (!quiet) alert('Video-Sync Fehler (' + putRes.status + '): ' + err.slice(0, 180));
+        return false;
+      }
+      lastVideoSyncNote = `✅ Gepusht (${new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })})`;
+      renderVideoSyncStatusBar();
+      if (!quiet) alert(`✅ Video-Kalibrierung (${payloadObj.calibration_pairs.length}x) & Analysen (${payloadObj.analyses.length}x) auf GitHub gespeichert! Auf deinen anderen Geräten jetzt abrufbar.`);
+      return true;
+    } catch (e) {
+      if (!quiet) alert('Video-Sync Fehler: ' + e.message);
+      return false;
+    }
+  }
+
+  function scheduleVideoAutoPush() {
+    if ((localStorage.getItem(GH_SYNC_TOKEN_KEY) || '').trim()) {
+      clearTimeout(videoAutoPushTimer);
+      videoAutoPushTimer = setTimeout(() => { pushVideoBioToGitHub(true); }, 5000);
     }
   }
 
@@ -857,10 +1019,12 @@ const VideoBiomechanicsModule = (() => {
 
   async function deleteFromArchive(id) {
     if (!confirm('Diese Video-Analyse dauerhaft aus dem lokalen Archiv löschen?')) return;
+    recordDeletedId(id);
     await dbDelete(id);
     if (compareIdA === id) compareIdA = null;
     if (compareIdB === id) compareIdB = null;
     await refreshArchiveList();
+    scheduleVideoAutoPush();
   }
 
   function setCompareSlot(slot, id) {
@@ -919,10 +1083,12 @@ const VideoBiomechanicsModule = (() => {
       renderBenchmarkSelector();
     }
     renderCalibrationModelPanel();
+    renderVideoSyncStatusBar();
     const marks = runtime.getPhaseMarks ? runtime.getPhaseMarks() : {};
     const hist = runtime.getAngleHistory ? runtime.getAngleHistory() : [];
     updateComparisonTable(marks, hist);
     await refreshArchiveList();
+    syncVideoBioFromCloud(false);
   }
 
   return {
@@ -934,6 +1100,8 @@ const VideoBiomechanicsModule = (() => {
     saveCalibrationPairFromCurrent,
     removeCalibrationPair,
     setCalibrationEnabled,
+    syncVideoBioFromCloud,
+    pushVideoBioToGitHub,
     onBenchmarkChange: (id) => {
       selectedTrialId = id;
       renderSelectedTrialHint();
