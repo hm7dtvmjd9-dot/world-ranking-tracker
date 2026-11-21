@@ -1629,7 +1629,7 @@
           <div id="bioPlaceholder" class="p-8 text-center text-slate-400 text-xs font-sans space-y-1">
             <div class="text-3xl mb-1">🏃‍♂️💨</div>
             <div class="font-bold text-slate-200">Lade ein Sprung- oder DLV-Diagnose-Video vom Mac/iPhone (0 AI-Tokens).</div>
-            <div>Grün = Sprungbein L • Blau = Schwungbein R • Gelb = Rumpf • Rot/Cyan = Meter-Aufsteller.</div>
+            <div>Voll-Körpermodell (v2): Kopf &amp; Blickachse • Schulter/Ellenbogen/Handgelenk • Becken/KSP • Grün = Stützbein (Auto-L/R-Lock) • Blau = Schwungbein.</div>
           </div>
           <video id="bioVideo" playsinline muted style="width:100%;max-height:540px;display:none;background:#000"></video>
           <canvas id="bioCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none"></canvas>
@@ -1653,7 +1653,7 @@
         </div>
 
         <!-- Live OSP/DLV Telemetry Tiles -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 font-mono text-center">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 font-mono text-center">
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
             <div class="text-[9px] text-slate-400 uppercase">Stemmwinkel (TD)</div>
             <div id="angPlantAngle" class="text-base font-black text-cyan-400">—°</div>
@@ -1665,7 +1665,7 @@
             <div class="text-[9px] text-slate-500">Norm: 95–102° TD</div>
           </div>
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
-            <div class="text-[9px] text-slate-400 uppercase">Amortisation (Stütz L)</div>
+            <div class="text-[9px] text-slate-400 uppercase">Amortisation (Stütz)</div>
             <div id="angLeftKnee" class="text-base font-black text-emerald-400">—°</div>
             <div class="text-[9px] text-slate-500">Min Norm: &gt;134°</div>
           </div>
@@ -1678,6 +1678,11 @@
             <div class="text-[9px] text-slate-400 uppercase">Schwung ω / Abflug</div>
             <div id="angSwingVel" class="text-base font-black text-purple-400">— °/s</div>
             <div class="text-[9px] text-slate-500">DLV &gt;730 °/s • &gt;19°</div>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
+            <div class="text-[9px] text-slate-400 uppercase">Kopf / Blickachse</div>
+            <div id="angHeadPitch" class="text-base font-black text-pink-400">—°</div>
+            <div class="text-[9px] text-slate-500">≥0° stabil • &lt;-12° ↓</div>
           </div>
           <div class="bg-slate-950 border border-slate-800 rounded-lg p-2">
             <div class="text-[9px] text-slate-400 uppercase">Landung (R / K / H)</div>
@@ -1708,7 +1713,7 @@
         <!-- Live Plot -->
         <div class="space-y-1">
           <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
-            <span>📈 Winkel-Kurve: <span class="text-emerald-400">■ Stützbein L</span> • <span class="text-sky-400">■ Schwung-Knie (Zusatz)</span> • <span class="text-amber-400">■ Rumpf</span></span>
+            <span>📈 Winkel-Kurve: <span class="text-emerald-400">■ Stützbein (Auto-Lock)</span> • <span class="text-sky-400">■ Schwung-Knie</span> • <span class="text-amber-400">■ Rumpf</span> • <span class="text-pink-400">■ Kopf-Blickachse (+90°)</span></span>
             <button onclick="clearAngleHistory()" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 hover:border-slate-600 text-slate-300">Kurve leeren</button>
           </div>
           <canvas id="bioPlotCanvas" width="900" height="145" class="w-full h-32 bg-slate-950 border border-slate-800 rounded-lg"></canvas>
@@ -1745,6 +1750,9 @@
             <tbody id="dlvComparisonBody"></tbody>
           </table>
         </div>
+
+        <!-- OSP/DLV Grafische Gesamt-Auswertung (Trend V-Anlauf, Schrittlänge, Geschwindigkeit, KSP-Höhe, V-vertikal/Verlust) -->
+        <div id="dlvGraphicalChartsBox" class="pt-2 space-y-3"></div>
       </div>
 
       <!-- Persistent Video Archive (IndexedDB) -->
@@ -2784,27 +2792,28 @@
       pctx.stroke();
       pctx.fillStyle = "#64748b";
       pctx.font = "10px monospace";
-      pctx.fillText("134° (Amortisation Stütz L)", 6, Math.max(11, y134 - 3));
+      pctx.fillText("134° (Amortisation Stütz)", 6, Math.max(11, y134 - 3));
       pctx.fillText("95° (Zusatz Schwung-Knie)", 6, Math.max(11, y95 - 3));
 
       if (angleHistory.length < 2) return;
       const recent = angleHistory.slice(-240);
-      const drawSeries = (key, color) => {
+      const drawSeries = (key, color, offset = 0, scale = 1) => {
         pctx.beginPath();
         pctx.strokeStyle = color;
         pctx.lineWidth = 2;
         recent.forEach((pt, idx) => {
           const x = (idx / Math.max(1, recent.length - 1)) * (W - 12) + 6;
-          const val = pt[key] ?? 0;
+          const val = ((pt[key] ?? 0) * scale) + offset;
           const y = H - ((val - 40) / 150) * (H - 12) - 6;
           if (idx === 0) pctx.moveTo(x, y);
           else pctx.lineTo(x, y);
         });
         pctx.stroke();
       };
-      drawSeries("leftKnee", "#10b981");
-      drawSeries("rightKnee", "#38bdf8");
+      drawSeries("supportKnee", "#10b981");
+      drawSeries("swingKnee", "#38bdf8");
       drawSeries("dlvRumpf", "#f59e0b");
+      drawSeries("kopfBlickDeg", "#f472b6", 90, 1); // 0° Blickhöhe entspricht 90°-Linie
     }
 
     async function ensureSegLandmarker() {
@@ -2858,7 +2867,7 @@
     }
 
     function buildLumaStrip(canvas, maskCols = null) {
-      const tw = 160, th = 90;
+      const tw = 320, th = 140;
       const tmp = document.createElement("canvas");
       tmp.width = tw; tmp.height = th;
       const tctx = tmp.getContext("2d");
@@ -2871,25 +2880,29 @@
       return { tw, th, gray, maskCols };
     }
 
-    function estimatePanShiftPx(snapPrev, snapCurr, dirSign) {
-      // Returns positive pixel shift d >= 0 in full-frame pixels when camera pans along run direction dirSign.
+    function estimatePanShift2D(snapPrev, snapCurr, dirSign) {
+      // Sub-pixel background tracking across static track/pit/boards (returns positive dxFullPx when camera pans along run dirSign).
       const fw = snapPrev.fullCanvas.width;
+      const fh = snapPrev.fullCanvas.height;
       const lA = snapPrev.luma || (snapPrev.luma = buildLumaStrip(snapPrev.fullCanvas, snapPrev.bodyNormCols));
       const lB = snapCurr.luma || (snapCurr.luma = buildLumaStrip(snapCurr.fullCanvas, snapCurr.bodyNormCols));
       const tw = lA.tw, th = lA.th;
-      const maxShift = Math.floor(tw * 0.42);
+      const minD = -Math.floor(tw * 0.12);
+      const maxD = Math.floor(tw * 0.52);
       const minA = lA.maskCols ? Math.floor(lA.maskCols[0] * tw) : 999;
       const maxA = lA.maskCols ? Math.ceil(lA.maskCols[1] * tw) : -1;
       const minB = lB.maskCols ? Math.floor(lB.maskCols[0] * tw) : 999;
       const maxB = lB.maskCols ? Math.ceil(lB.maskCols[1] * tw) : -1;
+      const yStart = Math.floor(th * 0.14);
+      const yEnd = Math.floor(th * 0.90);
 
+      const errs = new Float64Array(maxD - minD + 1);
+      errs.fill(1e9);
       let bestD = 0;
       let bestErr = 1e9;
-      // Search shifts d in [0..maxShift] where static mark moves xB = xA - dirSign * d
-      for (let d = 0; d <= maxShift; d++) {
+      for (let d = minD; d <= maxD; d++) {
         let sum = 0, cnt = 0;
-        for (let y = 2; y < th - 2; y += 2) {
-          // Focus on track/pit bands & upper stadium background, skipping athlete silhouettes
+        for (let y = yStart; y < yEnd; y += 2) {
           for (let x = 2; x < tw - 2; x += 2) {
             if (x >= minA && x <= maxA) continue;
             const xB = x - dirSign * d;
@@ -2899,15 +2912,92 @@
             cnt++;
           }
         }
-        if (cnt > 120) {
+        if (cnt > 140) {
           const mae = sum / cnt;
+          errs[d - minD] = mae;
           if (mae < bestErr) {
             bestErr = mae;
             bestD = d;
           }
         }
       }
-      return (bestD / tw) * fw;
+
+      // Parabolic sub-pixel refinement around bestD
+      let bestDSub = bestD;
+      const idx = bestD - minD;
+      if (idx > 0 && idx < errs.length - 1 && errs[idx - 1] < 1e8 && errs[idx + 1] < 1e8) {
+        const denom = 2 * (errs[idx - 1] - 2 * errs[idx] + errs[idx + 1]);
+        if (Math.abs(denom) > 1e-4) {
+          const delta = Math.max(-0.5, Math.min(0.5, (errs[idx - 1] - errs[idx + 1]) / denom));
+          bestDSub = bestD + delta;
+        }
+      }
+
+      // Vertical camera tilt estimate (dy in [-5..+5] at bestD)
+      let bestDy = 0;
+      let bestYErr = 1e9;
+      for (let dy = -5; dy <= 5; dy++) {
+        let sum = 0, cnt = 0;
+        for (let y = yStart + 5; y < yEnd - 5; y += 2) {
+          const yB = y - dy;
+          for (let x = 4; x < tw - 4; x += 3) {
+            if (x >= minA && x <= maxA) continue;
+            const xB = x - dirSign * bestD;
+            if (xB < 1 || xB >= tw - 1) continue;
+            if (xB >= minB && xB <= maxB) continue;
+            sum += Math.abs(lA.gray[y * tw + x] - lB.gray[yB * tw + xB]);
+            cnt++;
+          }
+        }
+        if (cnt > 120) {
+          const mae = sum / cnt;
+          if (mae < bestYErr) { bestYErr = mae; bestDy = dy; }
+        }
+      }
+
+      return {
+        dxFullPx: (bestDSub / tw) * fw,
+        dyFullPx: (bestDy / th) * fh
+      };
+    }
+
+    function recomputeWorldPanOffsets() {
+      const allSnaps = [...autoPanoSnaps];
+      Object.entries(phaseSnaps).forEach(([ph, s]) => {
+        if (s && !allSnaps.some(a => Math.abs(a.t - s.t) < 0.015)) {
+          allSnaps.push({ ...s, phase: ph });
+        } else if (s) {
+          const hit = allSnaps.find(a => Math.abs(a.t - s.t) < 0.015);
+          if (hit) { hit.phase = ph; hit.caption = s.caption; }
+        }
+      });
+      allSnaps.sort((a, b) => a.t - b.t);
+      if (allSnaps.length === 0) return allSnaps;
+
+      const dirSign = allSnaps[allSnaps.length - 1].dirSign || resolveDirSign();
+      allSnaps[0].worldX = 0;
+      allSnaps[0].worldY = 0;
+      for (let i = 1; i < allSnaps.length; i++) {
+        const sh = estimatePanShift2D(allSnaps[i - 1], allSnaps[i], dirSign);
+        allSnaps[i].worldX = allSnaps[i - 1].worldX + dirSign * sh.dxFullPx;
+        allSnaps[i].worldY = allSnaps[i - 1].worldY + sh.dyFullPx;
+      }
+
+      // Project cumulative pan offset back into phaseMarks in canvas (vw/vh) pixels!
+      Object.keys(phaseMarks).forEach(ph => {
+        const mk = phaseMarks[ph];
+        if (!mk) return;
+        const match = allSnaps.find(s => s.phase === ph) || allSnaps.find(s => Math.abs(s.t - mk.t) < 0.02);
+        if (match && match.fullCanvas?.width) {
+          const fw = match.fullCanvas.width;
+          const fh = match.fullCanvas.height;
+          const vxScale = (mk.vw || canvasEl?.width || 960) / fw;
+          const vyScale = (mk.vh || canvasEl?.height || 540) / fh;
+          mk.panWorldPx = Number((match.worldX * vxScale).toFixed(2));
+          mk.panWorldPy = Number((match.worldY * vyScale).toFixed(2));
+        }
+      });
+      return allSnaps;
     }
 
     function renderKinogramStrip() {
@@ -2919,16 +3009,7 @@
       kctx.fillStyle = "#0f172a";
       kctx.fillRect(0, 0, W, H);
 
-      const snaps = [...autoPanoSnaps];
-      Object.entries(phaseSnaps).forEach(([ph, s]) => {
-        if (s && !snaps.some(a => Math.abs(a.t - s.t) < 0.015)) {
-          snaps.push({ ...s, phase: ph });
-        } else if (s) {
-          const hit = snaps.find(a => Math.abs(a.t - s.t) < 0.015);
-          if (hit) { hit.phase = ph; hit.caption = s.caption; }
-        }
-      });
-      snaps.sort((a, b) => a.t - b.t);
+      const snaps = recomputeWorldPanOffsets();
 
       if (snaps.length === 0) {
         kctx.fillStyle = "#94a3b8";
@@ -2940,13 +3021,6 @@
       const dirSign = snaps[snaps.length - 1].dirSign || resolveDirSign();
       const fw = snaps[0].fullCanvas.width;
       const fh = snaps[0].fullCanvas.height;
-
-      // Compute continuous world X coordinate for each frame
-      snaps[0].worldX = 0;
-      for (let i = 1; i < snaps.length; i++) {
-        const shiftPx = estimatePanShiftPx(snaps[i - 1], snaps[i], dirSign);
-        snaps[i].worldX = snaps[i - 1].worldX + dirSign * shiftPx;
-      }
       const minWX = Math.min(...snaps.map(s => s.worldX));
       const maxWX = Math.max(...snaps.map(s => s.worldX + fw));
       const worldSpan = Math.max(fw, maxWX - minWX);
@@ -3077,37 +3151,124 @@
       if (res && res.landmarks && res.landmarks.length > 0) {
         const pts = res.landmarks[0];
         const dirSign = resolveDirSign(pts);
-        const pNose = pts[0];
+        const pNose = pts[0], pLEye = pts[2], pREye = pts[5], pLEar = pts[7], pREar = pts[8];
         const pLS = pts[11], pRS = pts[12], pLE = pts[13], pRE = pts[14], pLW = pts[15], pRW = pts[16];
+        const pLIdx = pts[19], pRIdx = pts[20];
         const pLH = pts[23], pRH = pts[24], pLK = pts[25], pRK = pts[26], pLA = pts[27], pRA = pts[28];
         const pLHeel = pts[29], pRHeel = pts[30], pLFoot = pts[31], pRFoot = pts[32];
 
-        drawBone(pLS, pRS, vw, vh, "#a855f7", 3);
-        drawBone(pLH, pRH, vw, vh, "#a855f7", 3);
-        drawBone(pLS, pLH, vw, vh, "#f59e0b", 3.5);
-        drawBone(pRS, pRH, vw, vh, "#f59e0b", 3.5);
-        drawBone(pLS, pLE, vw, vh, "#94a3b8", 2.5);
-        drawBone(pLE, pLW, vw, vh, "#94a3b8", 2.5);
-        drawBone(pRS, pRE, vw, vh, "#94a3b8", 2.5);
-        drawBone(pRE, pRW, vw, vh, "#94a3b8", 2.5);
-
-        drawBone(pRH, pRK, vw, vh, "#38bdf8", 4.5);
-        drawBone(pRK, pRA, vw, vh, "#38bdf8", 4.5);
-        drawBone(pRA, pRHeel, vw, vh, "#38bdf8", 3);
-        drawBone(pRHeel, pRFoot, vw, vh, "#38bdf8", 3);
-
-        drawBone(pLH, pLK, vw, vh, "#10b981", 5);
-        drawBone(pLK, pLA, vw, vh, "#10b981", 5);
-        drawBone(pLA, pLHeel, vw, vh, "#10b981", 3.5);
-        drawBone(pLHeel, pLFoot, vw, vh, "#10b981", 3.5);
-
-        [pLS, pRS, pLE, pRE, pLW, pRW].forEach(p => drawJoint(p, vw, vh, "#f59e0b", 3.5));
-        [pRH, pRK, pRA, pRFoot].forEach(p => drawJoint(p, vw, vh, "#38bdf8", 4.5));
-        [pLH, pLK, pLA, pLFoot].forEach(p => drawJoint(p, vw, vh, "#10b981", 5));
-
         const sPt = p => ({ x: p.x * vw, y: p.y * vh });
-        const midHip = { x: 0.5 * (pLH.x + pRH.x) * vw, y: 0.5 * (pLH.y + pRH.y) * vh };
-        const midSh = { x: 0.5 * (pLS.x + pRS.x) * vw, y: 0.5 * (pLS.y + pRS.y) * vh };
+        const leftKnee = calcAngle2D(sPt(pLH), sPt(pLK), sPt(pLA));
+        const rightKnee = calcAngle2D(sPt(pRH), sPt(pRK), sPt(pRA));
+
+        // Anatomische Stützbein-Erkennung (Schutz gegen L/R-Vertauschung in Seitenansicht):
+        // Bei deutlichem Bodenkontakt entscheidet der tiefere Knöchel; falls auf gleicher Höhe oder gekreuzt, das gestrecktere Bein.
+        const ankDiffY = pLA.y - pRA.y;
+        let isLeftSupport = true;
+        if (Math.abs(ankDiffY) > 0.025) {
+          isLeftSupport = ankDiffY > 0;
+        } else if (leftKnee !== null && rightKnee !== null) {
+          isLeftSupport = leftKnee >= rightKnee;
+        }
+        // Plausibilitätsschutz: Bei Stütz/Amortisation ist Stützbein i.d.R. >112°, während angefersetzes Schwungbein <105° hat
+        if (isLeftSupport && leftKnee !== null && rightKnee !== null && leftKnee < 105 && rightKnee > 118) {
+          isLeftSupport = false;
+        } else if (!isLeftSupport && leftKnee !== null && rightKnee !== null && rightKnee < 105 && leftKnee > 118) {
+          isLeftSupport = true;
+        }
+
+        const pSupH = isLeftSupport ? pLH : pRH, pSupK = isLeftSupport ? pLK : pRK, pSupA = isLeftSupport ? pLA : pRA, pSupHeel = isLeftSupport ? pLHeel : pRHeel, pSupFoot = isLeftSupport ? pLFoot : pRFoot;
+        const pSwH = isLeftSupport ? pRH : pLH, pSwK = isLeftSupport ? pRK : pLK, pSwA = isLeftSupport ? pRA : pLA, pSwHeel = isLeftSupport ? pRHeel : pLHeel, pSwFoot = isLeftSupport ? pRFoot : pLFoot;
+        const supportKnee = isLeftSupport ? leftKnee : rightKnee;
+        const swingKnee = isLeftSupport ? rightKnee : leftKnee;
+
+        // Virtuelle Körperzentren: Hüftmitte, Schultermitte, KSP, Ohrmitte, Augen/Nasen-Referenz
+        const midHipNorm = { x: 0.5 * (pLH.x + pRH.x), y: 0.5 * (pLH.y + pRH.y), visibility: 1 };
+        const midShNorm = { x: 0.5 * (pLS.x + pRS.x), y: 0.5 * (pLS.y + pRS.y), visibility: 1 };
+        const earCandidates = [pLEar, pREar].filter(p => p && (p.visibility === undefined || p.visibility > 0.2));
+        const midEarNorm = earCandidates.length
+          ? {
+              x: earCandidates.reduce((s, p) => s + p.x, 0) / earCandidates.length,
+              y: earCandidates.reduce((s, p) => s + p.y, 0) / earCandidates.length,
+              visibility: 1
+            }
+          : { x: pNose.x - dirSign * 0.018, y: pNose.y - 0.005, visibility: pNose.visibility ?? 0.9 };
+        const eyeCandidates = [pLEye, pREye].filter(p => p && (p.visibility === undefined || p.visibility > 0.2));
+        const gazePtNorm = eyeCandidates.length
+          ? {
+              x: 0.5 * pNose.x + 0.5 * (eyeCandidates.reduce((s, p) => s + p.x, 0) / eyeCandidates.length),
+              y: 0.45 * pNose.y + 0.55 * (eyeCandidates.reduce((s, p) => s + p.y, 0) / eyeCandidates.length),
+              visibility: 1
+            }
+          : pNose;
+
+        const midHip = sPt(midHipNorm);
+        const midSh = sPt(midShNorm);
+        const kspPx = { x: 0.90 * midHip.x + 0.10 * midSh.x, y: 0.90 * midHip.y + 0.10 * midSh.y };
+        const kspNorm = { x: kspPx.x / vw, y: kspPx.y / vh, visibility: 1 };
+
+        // Geometrische Hilfsachsen: Lot durch Stütz-Knöchel & Horizontal-Referenz auf Schwunghüfte
+        ctx.save();
+        ctx.setLineDash([4, 4]);
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = "rgba(34, 211, 238, 0.45)";
+        ctx.beginPath();
+        ctx.moveTo(pSupA.x * vw, Math.max(10, pSupA.y * vh - 140));
+        ctx.lineTo(pSupA.x * vw, Math.min(vh - 6, pSupA.y * vh + 24));
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(244, 114, 182, 0.45)";
+        ctx.beginPath();
+        ctx.moveTo(midEarNorm.x * vw, midEarNorm.y * vh);
+        ctx.lineTo(midEarNorm.x * vw + dirSign * 56, midEarNorm.y * vh);
+        ctx.stroke();
+        ctx.restore();
+
+        // Becken-, Schulter-, Wirbelsäulen-, Hals- & Kopfmodell
+        drawBone(pLS, pRS, vw, vh, "#a855f7", 3.5);
+        drawBone(pLH, pRH, vw, vh, "#a855f7", 3.5);
+        drawBone(pLS, pLH, vw, vh, "#f59e0b", 3);
+        drawBone(pRS, pRH, vw, vh, "#f59e0b", 3);
+        drawBone(midHipNorm, midShNorm, vw, vh, "#fbbf24", 3.5); // Rumpf-Mittelachse
+        drawBone(midShNorm, midEarNorm, vw, vh, "#f472b6", 3.2); // Halsachse
+        drawBone(midEarNorm, gazePtNorm, vw, vh, "#f472b6", 2.8); // Kopf-/Blickachse
+
+        // Kopf-Kreis (Schädel-Kontur um Ohr/Auge-Zentrum)
+        const headCenterX = 0.65 * midEarNorm.x * vw + 0.35 * gazePtNorm.x * vw;
+        const headCenterY = (midEarNorm.y - 0.015) * vh;
+        const headR = Math.max(9, Math.min(28, Math.hypot((gazePtNorm.x - midEarNorm.x) * vw, (gazePtNorm.y - midEarNorm.y) * vh) * 1.45));
+        ctx.beginPath();
+        ctx.arc(headCenterX, headCenterY, headR, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(244, 114, 182, 0.9)";
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+
+        // Bilaterale Arme (Links Amber, Rechts Rose-Orange für Sichtbarkeit des Schwungarms!)
+        drawBone(pLS, pLE, vw, vh, "#fbbf24", 2.8);
+        drawBone(pLE, pLW, vw, vh, "#fbbf24", 2.8);
+        drawBone(pLW, pLIdx, vw, vh, "#fbbf24", 2);
+        drawBone(pRS, pRE, vw, vh, "#fb7185", 3.2);
+        drawBone(pRE, pRW, vw, vh, "#fb7185", 3.2);
+        drawBone(pRW, pRIdx, vw, vh, "#fb7185", 2);
+
+        // Schwungbein (Cyan) & Stützbein (Smaragd — dynamisch erkannt!)
+        drawBone(pSwH, pSwK, vw, vh, "#38bdf8", 4.5);
+        drawBone(pSwK, pSwA, vw, vh, "#38bdf8", 4.5);
+        drawBone(pSwA, pSwHeel, vw, vh, "#38bdf8", 3);
+        drawBone(pSwHeel, pSwFoot, vw, vh, "#38bdf8", 3);
+
+        drawBone(pSupH, pSupK, vw, vh, "#10b981", 5);
+        drawBone(pSupK, pSupA, vw, vh, "#10b981", 5);
+        drawBone(pSupA, pSupHeel, vw, vh, "#10b981", 3.5);
+        drawBone(pSupHeel, pSupFoot, vw, vh, "#10b981", 3.5);
+
+        // Gelenkpunkte inkl. Kopf, Hände & KSP-Fadenkreuz
+        [pNose, pLEye, pREye, pLEar, pREar].forEach(p => drawJoint(p, vw, vh, "#f472b6", 3.5));
+        [pLS, pLE, pLW].forEach(p => drawJoint(p, vw, vh, "#fbbf24", 3.8));
+        [pRS, pRE, pRW].forEach(p => drawJoint(p, vw, vh, "#fb7185", 4));
+        [pSwH, pSwK, pSwA, pSwHeel, pSwFoot].forEach(p => drawJoint(p, vw, vh, "#38bdf8", 4.5));
+        [pSupH, pSupK, pSupA, pSupHeel, pSupFoot].forEach(p => drawJoint(p, vw, vh, "#10b981", 5));
+        drawJoint(midShNorm, vw, vh, "#fbbf24", 4);
+        drawJoint(kspNorm, vw, vh, "#ef4444", 5.5);
 
         // Estimate body height scale fallback (1.85m Lukas -> ~1.65m nose to lowest ankle)
         const lowAnkY = Math.max(pLA.y, pRA.y) * vh;
@@ -3117,22 +3278,28 @@
           updateScaleStatusBadge();
         }
 
-        const leftKnee = calcAngle2D(sPt(pLH), sPt(pLK), sPt(pLA));
-        const rightKnee = calcAngle2D(sPt(pRH), sPt(pRK), sPt(pRA));
+        // 0. Kopf-Blickwinkel (° vs Horizontale in Laufrichtung: + = hoch/stabil, - = Kinn/Kopf sinkt ab)
+        const dxHead = dirSign * (gazePtNorm.x - midEarNorm.x) * vw;
+        const dyHeadUp = (midEarNorm.y - gazePtNorm.y) * vh;
+        const kopfBlickDeg = Math.atan2(dyHeadUp, Math.max(4, dxHead)) * (180 / Math.PI);
 
         // 1. OSP Rumpfwinkel beim Absprung (>90° = Rücklage)
         const backLeanRad = Math.atan2(dirSign * (midHip.x - midSh.x), Math.max(1e-5, midHip.y - midSh.y));
         const dlvRumpf = 90 + backLeanRad * (180 / Math.PI);
 
-        // 2. OSP Stemmwinkel (Sprungbein L Auslage vs Vertikale)
-        const dxFootAhead = dirSign * (pLA.x - pLH.x) * vw;
-        const dyLeg = Math.max(1e-5, (pLA.y - pLH.y) * vh);
+        // 2. OSP Stemmwinkel (KSP-Projektion über mittlerer Stützfuß-Auflage vs Vertikale)
+        const supFootMidPx = {
+          x: (0.65 * pSupA.x + 0.35 * pSupHeel.x) * vw,
+          y: (0.65 * pSupA.y + 0.35 * pSupHeel.y) * vh
+        };
+        const dxFootAhead = dirSign * (supFootMidPx.x - kspPx.x);
+        const dyLeg = Math.max(1e-5, supFootMidPx.y - kspPx.y);
         const dlvStemm = Math.atan2(dxFootAhead, dyLeg) * (180 / Math.PI);
 
         // 3. OSP Info 3: Schwungbein-Oberschenkelwinkel gegenüber der Horizontalen! (+ = über Horiz., - = darunter, z.B. -4°)
-        const dxThigh = dirSign * (pRK.x - pRH.x) * vw;
-        const dyThighUp = (pRH.y - pRK.y) * vh;
-        const swingThighHorizDeg = Math.atan2(dyThighUp, Math.max(1e-4, Math.abs(dxThigh) > 2 ? dxThigh : dirSign * 0.1)) * (180 / Math.PI);
+        const dxThigh = dirSign * (pSwK.x - pSwH.x) * vw;
+        const dyThighUp = (pSwH.y - pSwK.y) * vh;
+        const swingThighHorizDeg = Math.atan2(dyThighUp, Math.abs(dxThigh) > 2 ? dxThigh : 2) * (180 / Math.PI);
 
         let swingVelDegS = 0;
         if (fpsCfg.fpsKnown && prevSwingState && curT > prevSwingState.t && (curT - prevSwingState.t) < 0.2) {
@@ -3141,14 +3308,14 @@
         }
         prevSwingState = { t: curT, ang: swingThighHorizDeg };
 
-        // 4. KSP Abflugwinkel
+        // 4. KSP Abflugwinkel (Fallback Live-Schätzer; exakter Welt-Wert folgt über Pan-Kompensation MKF->TO!)
         let takeoffAngle = null;
         if (prevComState && curT > prevComState.t && (curT - prevComState.t) < 0.2) {
-          const vx = dirSign * (midHip.x - prevComState.x);
-          const vyUp = prevComState.y - midHip.y;
+          const vx = dirSign * (kspPx.x - prevComState.x);
+          const vyUp = prevComState.y - kspPx.y;
           if (vx > 0.2) takeoffAngle = Math.atan2(vyUp, vx) * (180 / Math.PI);
         }
-        prevComState = { t: curT, x: midHip.x, y: midHip.y };
+        prevComState = { t: curT, x: kspPx.x, y: kspPx.y };
 
         // 5. OSP Info 4 & 5: Landungswinkel (vorderstes Landebein automatisch gewählt!)
         const useLeftLead = (dirSign * pLHeel.x) >= (dirSign * pRHeel.x);
@@ -3160,41 +3327,53 @@
         const landeRumpfDeg = Math.atan2(Math.max(1e-5, midHip.y - midSh.y), dirSign * (midSh.x - midHip.x)) * (180 / Math.PI);
         const landeKnieDeg = calcAngle2D(sPt(pLeadH), sPt(pLeadK), sPt(pLeadA));
         const landeHuefteDeg = calcAngle2D(midSh, sPt(pLeadH), sPt(pLeadK));
-        const landeReachPx = Math.max(0, dirSign * (pLeadHeel.x * vw - midHip.x));
-        const hipOverHeelPx = Math.max(10, pLeadHeel.y * vh - midHip.y);
+        const landeReachPx = Math.max(0, dirSign * (pLeadHeel.x * vw - kspPx.x));
+        const hipOverHeelPx = Math.max(10, pLeadHeel.y * vh - kspPx.y);
         const landeIndex = Number((hipOverHeelPx / Math.max(20, landeReachPx)).toFixed(2));
 
         // 6. OSP Info 6: Knie-zu-Knie Abstand im vorletzten Stütz (px; + wenn Schwungknie vor Stützknie)
-        const kneeGapPx = dirSign * (pRK.x - pLK.x) * vw;
+        const kneeGapPx = dirSign * (pSwK.x - pSupK.x) * vw;
 
         const calOff = (window.VideoBiomechanicsModule && VideoBiomechanicsModule.getActiveOffsets)
           ? VideoBiomechanicsModule.getActiveOffsets()
           : {};
         const showStemm = dlvStemm + (calOff.stemmwinkel_deg || 0);
         const showRumpf = dlvRumpf + (calOff.rumpfwinkel_td_deg || 0);
-        const showLeftKnee = leftKnee !== null ? (leftKnee + (calOff.kniewinkel_min_deg || 0)) : null;
+        const showSupportKnee = supportKnee !== null ? (supportKnee + (calOff.kniewinkel_min_deg || 0)) : null;
         const showSwingThigh = swingThighHorizDeg + (calOff.schwungbein_winkel_deg || 0);
         const showSwingVel = fpsCfg.fpsKnown ? (swingVelDegS + (calOff.schwungbein_deg_s || 0)) : null;
         const showTakeoff = takeoffAngle !== null ? (takeoffAngle + (calOff.abflugwinkel_deg || 0)) : null;
 
-        if (showLeftKnee !== null) drawAngleLabel(pLK, vw, vh, `Stütz: ${showLeftKnee.toFixed(0)}°`, "rgba(16,185,129,0.9)", "#020617", -54, -6);
-        drawAngleLabel(pRK, vw, vh, `Obersch: ${showSwingThigh.toFixed(0)}°`, "rgba(56,189,248,0.9)", "#020617", 10, -6);
-        drawAngleLabel({ x: midSh.x / vw, y: midSh.y / vh }, vw, vh, `Rumpf: ${showRumpf.toFixed(1)}°`, "rgba(245,158,11,0.9)", "#020617", 8, -10);
+        if (showSupportKnee !== null) drawAngleLabel(pSupK, vw, vh, `Stütz (${isLeftSupport ? 'L' : 'R'}): ${showSupportKnee.toFixed(0)}°`, "rgba(16,185,129,0.92)", "#020617", -64, -6);
+        drawAngleLabel(pSwK, vw, vh, `Obersch: ${showSwingThigh.toFixed(0)}°`, "rgba(56,189,248,0.92)", "#020617", 10, -6);
+        drawAngleLabel(midShNorm, vw, vh, `Rumpf: ${showRumpf.toFixed(1)}°`, "rgba(245,158,11,0.92)", "#020617", 8, -10);
+        drawAngleLabel(midEarNorm, vw, vh, `Kopf: ${kopfBlickDeg >= 0 ? '+' : ''}${kopfBlickDeg.toFixed(0)}°`, kopfBlickDeg < -10 ? "rgba(244,63,94,0.92)" : "rgba(244,114,182,0.92)", "#020617", -22, -22);
 
         document.getElementById("angPlantAngle").textContent = `${showStemm.toFixed(1)}°`;
         document.getElementById("angTrunkTilt").textContent = `${showRumpf.toFixed(1)}°`;
-        document.getElementById("angLeftKnee").textContent = showLeftKnee !== null ? `${showLeftKnee.toFixed(1)}°` : "—°";
+        document.getElementById("angLeftKnee").textContent = showSupportKnee !== null ? `${showSupportKnee.toFixed(1)}°` : "—°";
         document.getElementById("angSwingThigh").textContent = `${showSwingThigh.toFixed(1)}°`;
-        document.getElementById("angRightKnee").textContent = `Zusatz Knie: ${rightKnee !== null ? rightKnee.toFixed(0) : '—'}° (≤95°)`;
+        document.getElementById("angRightKnee").textContent = `Zusatz Knie: ${swingKnee !== null ? swingKnee.toFixed(0) : '—'}° (≤95°)`;
         document.getElementById("angSwingVel").textContent = `${showSwingVel !== null ? Math.round(showSwingVel) + ' °/s' : 'FPS ?'}${showTakeoff !== null ? ` / ${showTakeoff.toFixed(1)}°` : ''}`;
+        const hpEl = document.getElementById("angHeadPitch");
+        if (hpEl) {
+          hpEl.textContent = `${kopfBlickDeg >= 0 ? '+' : ''}${kopfBlickDeg.toFixed(1)}°`;
+          hpEl.className = `text-base font-black ${kopfBlickDeg < -10 ? 'text-rose-400' : 'text-pink-400'}`;
+        }
         document.getElementById("angLandingLive").textContent = `${landeRumpfDeg.toFixed(0)}° / ${landeKnieDeg?.toFixed(0) ?? '—'}° / ${landeHuefteDeg?.toFixed(0) ?? '—'}°`;
 
         currentMetrics = {
           t: curT,
           frame: frameNo,
+          vw,
+          vh,
           dirSign,
+          supSide: isLeftSupport ? 'L' : 'R',
           leftKnee: leftKnee || 0,
           rightKnee: rightKnee || 0,
+          supportKnee: supportKnee || 0,
+          swingKnee: swingKnee || 0,
+          kopfBlickDeg: Number(kopfBlickDeg.toFixed(1)),
           dlvRumpf,
           dlvStemm,
           swingThighHorizDeg,
@@ -3206,14 +3385,16 @@
           landeIndex,
           landeReachPx,
           kneeGapPx,
-          hipPx: midHip,
-          hipHeightPx: Math.max(0, lowAnkY - midHip.y),
-          supportFootPx: { x: pLFoot.x * vw, y: pLFoot.y * vh },
+          hipPx: kspPx,
+          kspPx,
+          supAnklePx: sPt(pSupA),
+          hipHeightPx: Math.max(0, lowAnkY - kspPx.y),
+          supportFootPx: sPt(pSupFoot),
           bbox: {
-            x: Math.max(0, Math.min(pLS.x, pLH.x, pLK.x, pLA.x, pRK.x, pLFoot.x, pRFoot.x) * vw - 35),
-            y: Math.max(0, Math.min(pNose.y, pLS.y, pRS.y) * vh - 25),
-            w: Math.max(90, Math.abs(Math.max(pLFoot.x, pRFoot.x, pLS.x, pRK.x) - Math.min(pLFoot.x, pRFoot.x, pLH.x, pLS.x)) * vw + 70),
-            h: Math.max(120, (lowAnkY - Math.min(pNose.y, pLS.y) * vh) + 45)
+            x: Math.max(0, Math.min(pLS.x, pRS.x, pLH.x, pRH.x, pSupK.x, pSwK.x, pSupFoot.x, pSwFoot.x) * vw - 35),
+            y: Math.max(0, Math.min(pNose.y, pLEye.y, pREye.y, pLS.y, pRS.y) * vh - 28),
+            w: Math.max(90, Math.abs(Math.max(pLFoot.x, pRFoot.x, pLS.x, pRS.x, pSupK.x, pSwK.x) - Math.min(pLFoot.x, pRFoot.x, pLH.x, pRH.x, pLS.x, pRS.x)) * vw + 70),
+            h: Math.max(120, (lowAnkY - Math.min(pNose.y, pLS.y, pRS.y) * vh) + 45)
           }
         };
         angleHistory.push(currentMetrics);
@@ -3374,6 +3555,8 @@
         t: videoEl.currentTime,
         phase: phaseLabel,
         caption,
+        vw: canvasEl?.width || videoEl.videoWidth || fw,
+        vh: canvasEl?.height || videoEl.videoHeight || fh,
         dirSign: metrics?.dirSign || resolveDirSign(),
         fullCanvas,
         skelCanvas,
@@ -3386,7 +3569,7 @@
     async function capturePhaseSnap(phase, metrics) {
       let cap = '';
       if (phase === 'TD') cap = `Stemm ${metrics.dlvStemm?.toFixed(0)}° | R ${metrics.dlvRumpf?.toFixed(0)}°`;
-      else if (phase === 'MKF') cap = `Amort ${metrics.leftKnee?.toFixed(0)}°`;
+      else if (phase === 'MKF') cap = `Amort ${(metrics.supportKnee || metrics.leftKnee)?.toFixed(0)}°`;
       else if (phase === 'TO') cap = `Schw ${metrics.swingThighHorizDeg?.toFixed(0)}°`;
       else if (phase === 'LAND') cap = `L-R ${metrics.landeRumpfDeg?.toFixed(0)}° | K ${metrics.landeKnieDeg?.toFixed(0)}°`;
       else cap = `F${metrics.frame}`;
@@ -3394,6 +3577,9 @@
       if (snap) {
         phaseSnaps[phase] = snap;
         renderKinogramStrip();
+        if (window.VideoBiomechanicsModule) {
+          VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
+        }
       }
     }
 
@@ -3436,6 +3622,9 @@
         if (s) autoPanoSnaps.push(s);
       }
       renderKinogramStrip();
+      if (window.VideoBiomechanicsModule) {
+        VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
+      }
       if (btn) btn.textContent = oldTxt;
     };
 
@@ -3510,6 +3699,8 @@
           document.getElementById("angSwingThigh").textContent = m.schwungbein_winkel_deg != null ? `${m.schwungbein_winkel_deg}°` : "—°";
           document.getElementById("angRightKnee").textContent = `Zusatz Knie: ${m.schwungbein_knie_kompakt_deg ?? '—'}° (≤95°)`;
           document.getElementById("angSwingVel").textContent = m.schwungbein_deg_s != null ? `${m.schwungbein_deg_s} °/s` : "— °/s";
+          const hp = document.getElementById("angHeadPitch");
+          if (hp) hp.textContent = m.kopf_blickwinkel_to_deg != null ? `${m.kopf_blickwinkel_to_deg >= 0 ? '+' : ''}${m.kopf_blickwinkel_to_deg}°` : "—°";
           document.getElementById("angLandingLive").textContent = `${m.lande_rumpfwinkel_deg ?? '—'}° / ${m.lande_kniewinkel_deg ?? '—'}° / ${m.lande_hueftwinkel_deg ?? '—'}°`;
         }
       });

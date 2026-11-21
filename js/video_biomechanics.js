@@ -9,12 +9,14 @@ const VideoBiomechanicsModule = (() => {
   const STORE_NAME = 'analyses';
   const CAL_STORAGE_KEY = 'luka_dlv_calibration_pairs_v2';
   const CAL_ENABLED_KEY = 'luka_dlv_calibration_enabled_v1';
+  const CAL_MODEL_VERSION = 2;
   const GH_SYNC_TOKEN_KEY = 'luka_gh_triage_pat_v1';
   const VIDEO_SYNC_API = 'https://api.github.com/repos/hm7dtvmjd9-dot/world-ranking-tracker/contents/data/video_biomechanics_sync.json';
   const VIDEO_SYNC_RAW = 'https://raw.githubusercontent.com/hm7dtvmjd9-dot/world-ranking-tracker/main/data/video_biomechanics_sync.json';
   const DELETED_IDS_KEY = 'luka_video_deleted_ids_v1';
   let videoAutoPushTimer = null;
   let lastVideoSyncNote = '';
+  const dlvChartInstances = {};
 
   const CALIBRATABLE_KEYS = [
     'stemmwinkel_deg',
@@ -134,28 +136,50 @@ const VideoBiomechanicsModule = (() => {
     renderCalibrationModelPanel();
   }
 
+  function median(arr) {
+    if (!arr.length) return 0;
+    const s = [...arr].sort((a, b) => a - b);
+    const mid = Math.floor(s.length / 2);
+    return s.length % 2 ? s[mid] : 0.5 * (s[mid - 1] + s[mid]);
+  }
+
   function computeOffsetsFromPairs(pairs) {
     const offsets = {};
     const counts = {};
+    const allPairs = Array.isArray(pairs) ? pairs : [];
+    const v2Pairs = allPairs.filter(p => (p.modelVersion || 1) >= CAL_MODEL_VERSION);
+    const activePairs = v2Pairs.length > 0 ? v2Pairs : allPairs;
+    const usingLegacyV1 = v2Pairs.length === 0 && allPairs.length > 0;
+
     CALIBRATABLE_KEYS.forEach(k => {
       const deltas = [];
-      (pairs || []).forEach(p => {
+      activePairs.forEach(p => {
         const rawVal = p.rawSummary?.[k];
         const gtVal = p.groundTruth?.[k];
         if (typeof rawVal === 'number' && !Number.isNaN(rawVal) && typeof gtVal === 'number' && !Number.isNaN(gtVal)) {
-          deltas.push(gtVal - rawVal);
+          const d = gtVal - rawVal;
+          // Schutz vor alten v1-L/R-Ausreißern (z.B. kniewinkel_min -80° oder schwungbein_deg_s >400)
+          if (usingLegacyV1 && k !== 'schwungbein_deg_s' && Math.abs(d) > 20) return;
+          if (usingLegacyV1 && k === 'schwungbein_deg_s' && Math.abs(d) > 350) return;
+          deltas.push(d);
         }
       });
       if (deltas.length > 0) {
-        const avg = deltas.reduce((s, x) => s + x, 0) / deltas.length;
+        // Robuster Schätzer: Median bei n>=3 mit Outlier-Filter, sonst Mittelwert
+        const med = median(deltas);
+        const filtered = deltas.length >= 3
+          ? deltas.filter(d => k === 'schwungbein_deg_s' ? Math.abs(d - med) <= 220 : Math.abs(d - med) <= 15)
+          : deltas;
+        const used = filtered.length ? filtered : deltas;
+        const avg = used.reduce((s, x) => s + x, 0) / used.length;
         offsets[k] = Number(avg.toFixed(2));
-        counts[k] = deltas.length;
+        counts[k] = used.length;
       } else {
         offsets[k] = 0;
         counts[k] = 0;
       }
     });
-    return { offsets, counts };
+    return { offsets, counts, usingLegacyV1, v2Count: v2Pairs.length };
   }
 
   function getActiveOffsets() {
@@ -275,6 +299,62 @@ const VideoBiomechanicsModule = (() => {
     `;
   }
 
+  function predictExpectedDistanceFromSpeed(vApproach) {
+    if (!vApproach || Number.isNaN(vApproach)) return null;
+    const trials = getAllReferenceTrials();
+    const pts = trials
+      .map(t => {
+        const vmax = Math.max(t.v_3L_ms || 0, t.v_2L_ms || 0, t.v_1L_ms || 0);
+        return (vmax > 7 && t.erwartet_m > 5) ? { x: vmax, y: t.erwartet_m } : null;
+      })
+      .filter(Boolean);
+    if (pts.length >= 3) {
+      const mx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+      const my = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+      const num = pts.reduce((s, p) => s + (p.x - mx) * (p.y - my), 0);
+      const den = pts.reduce((s, p) => s + (p.x - mx) ** 2, 0);
+      if (den > 1e-4) {
+        const slope = num / den;
+        const intercept = my - slope * mx;
+        return Number((slope * vApproach + intercept).toFixed(2));
+      }
+    }
+    return Number((0.2656 * vApproach + 5.2304).toFixed(2));
+  }
+
+  function extractSupportKnee(p) {
+    if (!p) return null;
+    if (typeof p.supportKnee === 'number' && p.supportKnee > 105) return p.supportKnee;
+    const l = p.leftKnee, r = p.rightKnee;
+    if (typeof l === 'number' && typeof r === 'number') {
+      if (l < 105 && r > 115) return r;
+      if (r < 105 && l > 115) return l;
+      return Math.max(l, r);
+    }
+    return l ?? r ?? null;
+  }
+
+  function extractSwingKnee(p) {
+    if (!p) return null;
+    if (typeof p.swingKnee === 'number' && p.swingKnee > 20) return p.swingKnee;
+    const l = p.leftKnee, r = p.rightKnee;
+    if (typeof l === 'number' && typeof r === 'number') {
+      if (r > 125 && l < 105) return l;
+      return Math.min(l, r);
+    }
+    return r ?? l ?? null;
+  }
+
+  function getWorldPt(mk, pointKey = 'hipPx') {
+    if (!mk) return null;
+    const pt = mk[pointKey] || mk.hipPx;
+    if (!pt) return null;
+    return {
+      x: pt.x + (mk.panWorldPx || 0),
+      y: pt.y + (mk.panWorldPy || 0)
+    };
+  }
+
   function computeRawSummaryFromState(phaseMarks, angleHistory) {
     const m2L = phaseMarks?.['2L'] || null;
     const m1L = phaseMarks?.['1L'] || null;
@@ -285,33 +365,49 @@ const VideoBiomechanicsModule = (() => {
     const hist = Array.isArray(angleHistory) ? angleHistory : [];
     const scaleInfo = runtime.getVideoScaleInfo ? runtime.getVideoScaleInfo() : { pxPerMeter: null, timeScale: 1, fpsKnown: false };
     const tScale = scaleInfo.timeScale || 1;
+    const pxM = scaleInfo.pxPerMeter || null;
 
     const contactSlice = (td && to)
       ? hist.filter(p => p.t >= td.t - 0.01 && p.t <= to.t + 0.01)
       : hist;
 
-    const kneeValues = contactSlice.map(p => p.leftKnee).filter(v => v > 40);
-    const minSupportKnee = kneeValues.length ? Math.min(...kneeValues) : (mkf?.leftKnee ?? null);
+    // Auto-Stützbein-Schutz: filtere Schwungbein-Fehlzuordnungen (<105°) zuverlässig raus
+    const supKneeVals = contactSlice.map(extractSupportKnee).filter(v => typeof v === 'number' && v >= 105);
+    let minSupportKnee = supKneeVals.length ? Math.min(...supKneeVals) : null;
+    const mkfSupKnee = extractSupportKnee(mkf);
+    if (minSupportKnee === null && mkfSupKnee !== null) minSupportKnee = mkfSupKnee;
+    else if (mkfSupKnee !== null && minSupportKnee !== null && mkfSupKnee >= 105) {
+      minSupportKnee = Math.min(minSupportKnee, mkfSupKnee);
+    }
 
-    // Bonus metric (separately tracked from OSP swing thigh angle!)
-    const swingKnValues = contactSlice.map(p => p.rightKnee).filter(v => v > 25);
-    const minSwingKnee = swingKnValues.length ? Math.min(...swingKnValues) : (to?.rightKnee ?? mkf?.rightKnee ?? null);
+    // Bonus metric (Swing Knee Kompaktheit)
+    const swingKnValues = contactSlice.map(extractSwingKnee).filter(v => typeof v === 'number' && v > 25 && v < 145);
+    const minSwingKnee = swingKnValues.length ? Math.min(...swingKnValues) : extractSwingKnee(to || mkf);
 
     const stemmTd = td?.dlvStemm ?? null;
     const rumpfTd = td?.dlvRumpf ?? null;
     const rumpfTo = to?.dlvRumpf ?? null;
     const rumpfRot = (rumpfTd !== null && rumpfTo !== null) ? Number((rumpfTd - rumpfTo).toFixed(1)) : null;
 
-    // OSP Info 3: Swing thigh angle relative to horizontal at TO (e.g. -4° when just below horizontal, +° when above)
+    // OSP Info 3: Schwungbein-Oberschenkelwinkel gegenüber Horizontaler bei TO
     const swingThighDeg = to?.swingThighHorizDeg ?? null;
 
-    // Real-time contact duration using container-to-camera timeScale!
+    // Kopf-Blickachse bei TO & kurz nach Abflug (0..150 ms real)
+    let kopfBlickTo = to?.kopfBlickDeg ?? null;
+    if (to && hist.length) {
+      const postSlice = hist.filter(p => p.t >= to.t - 0.005 && p.t <= to.t + 0.16 / Math.max(0.1, tScale) && typeof p.kopfBlickDeg === 'number');
+      if (postSlice.length) {
+        kopfBlickTo = Number(Math.min(...postSlice.map(p => p.kopfBlickDeg)).toFixed(1));
+      }
+    }
+
+    // Bodenkontaktzeit (rein informativ / FPS-abhängig!)
     const realContactSec = (td && to && scaleInfo.fpsKnown) ? (to.t - td.t) * tScale : null;
-    const kontaktMs = (realContactSec !== null && realContactSec > 0.02 && realContactSec < 0.6)
+    const kontaktMs = (realContactSec !== null && realContactSec > 0.03 && realContactSec < 0.45)
       ? Math.round(realContactSec * 1000)
       : null;
 
-    // OSP Definition: Mean angular velocity of swing thigh across takeoff movement (TD -> TO)
+    // Schwungbein-Geschwindigkeit Ø (TD -> TO)
     let swingVel = null;
     if (td && to && td.swingThighHorizDeg != null && to.swingThighHorizDeg != null && realContactSec && realContactSec > 0.02) {
       swingVel = Math.round(Math.abs(to.swingThighHorizDeg - td.swingThighHorizDeg) / realContactSec);
@@ -320,12 +416,19 @@ const VideoBiomechanicsModule = (() => {
       if (velValues.length) swingVel = Math.round(velValues.reduce((s, x) => s + x, 0) / velValues.length);
     }
 
-    // Take-off COM vector from MKF -> TO (more stable than 1-frame velocity!)
+    // KSP Abflugwinkel in WELT-Koordinaten (inkl. Kamera-Pan-Kompensation MKF -> TO!)
     let abflugTo = to?.takeoffAngle ?? null;
-    if (mkf && to && mkf.hipPx && to.hipPx) {
-      const dx = (to.dirSign || 1) * (to.hipPx.x - mkf.hipPx.x);
-      const dyUp = mkf.hipPx.y - to.hipPx.y;
-      if (dx > 2) abflugTo = Number((Math.atan2(dyUp, dx) * (180 / Math.PI)).toFixed(1));
+    if (mkf && to) {
+      const wMkf = getWorldPt(mkf, 'kspPx');
+      const wTo = getWorldPt(to, 'kspPx');
+      if (wMkf && wTo) {
+        const dirS = to.dirSign || mkf.dirSign || 1;
+        const dxW = dirS * (wTo.x - wMkf.x);
+        const dyUp = wMkf.y - wTo.y;
+        if (dxW > 4) {
+          abflugTo = Number((Math.atan2(dyUp, dxW) * (180 / Math.PI)).toFixed(1));
+        }
+      }
     }
 
     // Landing (OSP Info 4 & 5)
@@ -333,44 +436,111 @@ const VideoBiomechanicsModule = (() => {
     const landeKnie = land?.landeKnieDeg ?? null;
     const landeHuefte = land?.landeHuefteDeg ?? null;
     const landeIndex = land?.landeIndex ?? null;
-    let landeWeite = null;
-    if (land && land.landeReachPx != null && scaleInfo.pxPerMeter) {
-      landeWeite = Number((land.landeReachPx / scaleInfo.pxPerMeter).toFixed(2));
+    const landeWeite = (land && land.landeReachPx != null && pxM)
+      ? Number((land.landeReachPx / pxM).toFixed(2))
+      : null;
+
+    // OSP Info 6: Knie-Knie-Abstand im vorletzten Stütz (2L Mid-Stance wenn in AngleHistory vorhanden!)
+    let knieAbstand2L = (m2L && m2L.kneeGapPx != null && pxM)
+      ? Number((m2L.kneeGapPx / pxM).toFixed(2))
+      : null;
+    if (m2L && m1L && hist.length && pxM) {
+      const midSlice = hist.filter(p => p.t >= m2L.t && p.t <= m1L.t && typeof p.kneeGapPx === 'number');
+      if (midSlice.length >= 2 && m2L.supAnklePx) {
+        let bestMid = midSlice[0], bestDist = 1e9;
+        midSlice.forEach(p => {
+          const d = Math.abs((p.hipPx?.x || 0) - m2L.supAnklePx.x);
+          if (d < bestDist) { bestDist = d; bestMid = p; }
+        });
+        // Oder wo Knieabstand im 2L-Durchschwung nahe 0 liegt (~Mittelteil 25–65% von 2L->1L)
+        const midIdx = midSlice[Math.floor(midSlice.length * 0.35)];
+        const cand = Math.abs(bestMid.kneeGapPx) < 0.65 * pxM ? bestMid : midIdx;
+        if (cand) knieAbstand2L = Number((cand.kneeGapPx / pxM).toFixed(2));
+      }
     }
 
-    // Approach & penultimate step (OSP Info 6)
-    let knieAbstand2L = null;
-    if (m2L && m2L.kneeGapPx != null && scaleInfo.pxPerMeter) {
-      knieAbstand2L = Number((m2L.kneeGapPx / scaleInfo.pxPerMeter).toFixed(2));
-    }
+    // Welt-basierte Schrittlängen, Geschwindigkeiten & KSP-Höhen (Pan-Kompensiert!)
+    let step2Lm = null, step1Lm = null, step1Lpct = null;
+    let v2Lms = null, v1Lms = null, vFlugMs = null, vVertikalMs = null, vVerlustMs = null, geschwBilanz = null;
+    let ksp2Lm = null, ksp1Lm = null, kspTdM = null, kspAbsenkungM = null;
+    let erwartetM = null, effektivM = null;
 
-    let step2Lm = null;
-    let step1Lm = null;
-    let v1Lms = null;
-    let vFlugMs = null;
-    let kspAbsenkungM = null;
-    if (m2L && m1L && td && scaleInfo.pxPerMeter) {
-      if (m2L.supportFootPx && m1L.supportFootPx) {
-        step2Lm = Number((Math.abs(m1L.supportFootPx.x - m2L.supportFootPx.x) / scaleInfo.pxPerMeter).toFixed(2));
-      }
-      if (m1L.supportFootPx && td.supportFootPx) {
-        step1Lm = Number((Math.abs(td.supportFootPx.x - m1L.supportFootPx.x) / scaleInfo.pxPerMeter).toFixed(2));
-      }
-      if (scaleInfo.fpsKnown && m1L.hipPx && td.hipPx && td.t > m1L.t) {
-        const dt1L = (td.t - m1L.t) * tScale;
-        if (dt1L > 0.05) {
-          v1Lms = Number((Math.abs(td.hipPx.x - m1L.hipPx.x) / scaleInfo.pxPerMeter / dt1L).toFixed(2));
+    if (pxM) {
+      if (m2L && m1L) {
+        const wF2 = getWorldPt(m2L, 'supportFootPx'), wF1 = getWorldPt(m1L, 'supportFootPx');
+        if (wF2 && wF1 && (m2L.panWorldPx !== undefined || m1L.panWorldPx !== undefined || Math.abs(wF1.x - wF2.x) > pxM * 0.8)) {
+          step2Lm = Number((Math.abs(wF1.x - wF2.x) / pxM).toFixed(2));
+        }
+        if (scaleInfo.fpsKnown && m1L.t > m2L.t) {
+          const wK2 = getWorldPt(m2L, 'kspPx'), wK1 = getWorldPt(m1L, 'kspPx');
+          const dt2 = (m1L.t - m2L.t) * tScale;
+          if (wK2 && wK1 && dt2 > 0.05) {
+            const v2 = Math.abs(wK1.x - wK2.x) / pxM / dt2;
+            if (v2 > 5 && v2 < 12.5) v2Lms = Number(v2.toFixed(2));
+          }
         }
       }
-    }
-    if (to && land && scaleInfo.fpsKnown && to.hipPx && land.hipPx && land.t > to.t && scaleInfo.pxPerMeter) {
-      const dtF = (land.t - to.t) * tScale;
-      if (dtF > 0.15) {
-        vFlugMs = Number((Math.abs(land.hipPx.x - to.hipPx.x) / scaleInfo.pxPerMeter / dtF).toFixed(2));
+      if (m1L && td) {
+        const wF1 = getWorldPt(m1L, 'supportFootPx'), wFTd = getWorldPt(td, 'supportFootPx');
+        if (wF1 && wFTd && (m1L.panWorldPx !== undefined || td.panWorldPx !== undefined || Math.abs(wFTd.x - wF1.x) > pxM * 0.8)) {
+          step1Lm = Number((Math.abs(wFTd.x - wF1.x) / pxM).toFixed(2));
+          if (step2Lm && step2Lm > 1.2) {
+            step1Lpct = Math.round(((step1Lm - step2Lm) / step2Lm) * 100);
+          }
+        }
+        if (scaleInfo.fpsKnown && td.t > m1L.t) {
+          const wK1 = getWorldPt(m1L, 'kspPx'), wKTd = getWorldPt(td, 'kspPx');
+          const dt1 = (td.t - m1L.t) * tScale;
+          if (wK1 && wKTd && dt1 > 0.05) {
+            const v1 = Math.abs(wKTd.x - wK1.x) / pxM / dt1;
+            if (v1 > 5 && v1 < 12.5) v1Lms = Number(v1.toFixed(2));
+          }
+        }
       }
-    }
-    if (m2L && td && m2L.hipHeightPx && td.hipHeightPx && scaleInfo.pxPerMeter) {
-      kspAbsenkungM = Number(((m2L.hipHeightPx - td.hipHeightPx) / scaleInfo.pxPerMeter).toFixed(2));
+      if (to && land && scaleInfo.fpsKnown && land.t > to.t) {
+        const wKTo = getWorldPt(to, 'kspPx'), wKLand = getWorldPt(land, 'kspPx');
+        const dtF = (land.t - to.t) * tScale;
+        if (wKTo && wKLand && dtF > 0.15) {
+          const vf = Math.abs(wKLand.x - wKTo.x) / pxM / dtF;
+          if (vf > 5.5 && vf < 11.5) vFlugMs = Number(vf.toFixed(2));
+        }
+      }
+      // Fallback vFlug & vVertikal aus MKF->TO falls Flugphase bekannt
+      if (vFlugMs && abflugTo && abflugTo > 5 && abflugTo < 40) {
+        vVertikalMs = Number((vFlugMs * Math.tan((abflugTo * Math.PI) / 180)).toFixed(2));
+      } else if (mkf && to && scaleInfo.fpsKnown && to.t > mkf.t) {
+        const wMkf = getWorldPt(mkf, 'kspPx'), wTo = getWorldPt(to, 'kspPx');
+        const dtUp = (to.t - mkf.t) * tScale;
+        if (wMkf && wTo && dtUp > 0.02) {
+          const vv = (wMkf.y - wTo.y) / pxM / dtUp;
+          if (vv > 1.2 && vv < 4.5) vVertikalMs = Number(vv.toFixed(2));
+        }
+      }
+      if (v1Lms && vFlugMs) {
+        vVerlustMs = Number((v1Lms - vFlugMs).toFixed(2));
+        if (vVertikalMs) geschwBilanz = Number((vVertikalMs - vVerlustMs).toFixed(2));
+      }
+      if (v1Lms || v2Lms) {
+        erwartetM = predictExpectedDistanceFromSpeed(Math.max(v1Lms || 0, v2Lms || 0));
+      }
+      if (vFlugMs && vVertikalMs) {
+        const g = 9.81;
+        const dh = 0.42; // Abflug-KSP (~1.16m) über Lande-KSP (~0.74m)
+        const flightR = (vFlugMs / g) * (vVertikalMs + Math.sqrt(vVertikalMs * vVertikalMs + 2 * g * dh));
+        effektivM = Number((flightR + (landeWeite || 0.58) + 0.15).toFixed(2));
+      }
+
+      if (m2L?.hipHeightPx) ksp2Lm = Number((m2L.hipHeightPx / pxM).toFixed(2));
+      if (m1L?.hipHeightPx) ksp1Lm = Number((m1L.hipHeightPx / pxM).toFixed(2));
+      if (td?.hipHeightPx) kspTdM = Number((td.hipHeightPx / pxM).toFixed(2));
+      if (m2L?.hipHeightPx && td?.hipHeightPx) {
+        const panDiffY = (td.panWorldPy || 0) - (m2L.panWorldPy || 0);
+        const h2 = m2L.hipPx ? (m2L.hipHeightPx) : null;
+        const hTd = td.hipHeightPx;
+        if (h2 !== null) {
+          kspAbsenkungM = Number(((h2 - hTd - 0.15 * panDiffY) / pxM).toFixed(2));
+        }
+      }
     }
 
     return {
@@ -381,6 +551,7 @@ const VideoBiomechanicsModule = (() => {
       abflugwinkel_deg: abflugTo,
       schwungbein_winkel_deg: swingThighDeg !== null ? Number(swingThighDeg.toFixed(1)) : null,
       schwungbein_deg_s: swingVel,
+      kopf_blickwinkel_to_deg: kopfBlickTo,
       lande_rumpfwinkel_deg: landeRumpf !== null ? Number(landeRumpf.toFixed(1)) : null,
       lande_kniewinkel_deg: landeKnie !== null ? Number(landeKnie.toFixed(1)) : null,
       lande_hueftwinkel_deg: landeHuefte !== null ? Number(landeHuefte.toFixed(1)) : null,
@@ -389,8 +560,18 @@ const VideoBiomechanicsModule = (() => {
       knie_abstand_vorletzter_m: knieAbstand2L,
       step_2L_m: step2Lm,
       step_1L_m: step1Lm,
+      step_1L_pct: step1Lpct,
+      v_2L_ms: v2Lms,
       v_1L_ms: v1Lms,
       v_flug_ms: vFlugMs,
+      v_vertikal_ms: vVertikalMs,
+      v_verlust_absprung_ms: vVerlustMs,
+      geschw_bilanz: geschwBilanz,
+      erwartet_m: erwartetM,
+      effektiv_m: effektivM,
+      ksp_2L_m: ksp2Lm,
+      ksp_1L_m: ksp1Lm,
+      ksp_td_m: kspTdM,
       ksp_absenkung_m: kspAbsenkungM,
       schwungbein_knie_kompakt_deg: minSwingKnee !== null ? Number(minSwingKnee.toFixed(1)) : null,
       kontaktzeit_ms: kontaktMs
@@ -427,6 +608,7 @@ const VideoBiomechanicsModule = (() => {
 
     pairs.unshift({
       trialId: bm.id,
+      modelVersion: CAL_MODEL_VERSION,
       label: bm.label,
       display_ref: bm.display_ref || bm.date,
       videoFilename: currentVideoFilename || bm.video_match?.recommended_video || 'manuell',
@@ -459,13 +641,13 @@ const VideoBiomechanicsModule = (() => {
     if (!box) return;
     const pairs = getCalibrationPairs();
     const enabled = isCalibrationEnabled();
-    const { offsets, counts } = computeOffsetsFromPairs(pairs);
+    const { offsets, counts, usingLegacyV1, v2Count } = computeOffsetsFromPairs(pairs);
 
     if (pairs.length === 0) {
       box.innerHTML = `
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
           <div>
-            <span class="font-bold text-amber-300 font-mono">🔬 Noch keine DLV-Kalibrierungs-Paare hinterlegt (Roh-Modell aktiv).</span>
+            <span class="font-bold text-amber-300 font-mono">🔬 Noch keine DLV-Kalibrierungs-Paare hinterlegt (Roh-Modell v2 aktiv).</span>
             <p class="text-[11px] text-slate-400 mt-0.5">
               1️⃣ Wähle rechts deinen DLV-Referenzsprung (Start: <b>25.07.2026 / V5 Bochum</b>) &amp; lade das <code>wm...mp4</code>.<br>
               2️⃣ Optional <b>📏 Meter-Aufsteller</b> kalibrieren (oder 1,85m Auto-Skala) • Markiere <b>(2L / 1L →) TD → MKF → TO → Landung</b> ➔ Klicke <b>„🎯 Auf diesen DLV-Sprung kalibrieren“</b>.
@@ -494,6 +676,7 @@ const VideoBiomechanicsModule = (() => {
     }).join(' ');
 
     const pairsHtml = pairs.map(p => {
+      const isV2 = (p.modelVersion || 1) >= CAL_MODEL_VERSION;
       const angKeys = CALIBRATABLE_KEYS.filter(k => k !== 'schwungbein_deg_s');
       const errs = angKeys.map(k => {
         const r = p.rawSummary?.[k];
@@ -505,8 +688,9 @@ const VideoBiomechanicsModule = (() => {
       const maeRaw = errs.length ? (errs.reduce((s, e) => s + e.rawErr, 0) / errs.length) : null;
       const maeCal = errs.length ? (errs.reduce((s, e) => s + e.calErr, 0) / errs.length) : null;
       return `
-        <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[10px] font-mono">
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 border ${isV2 ? 'border-emerald-800/70' : 'border-amber-800/60'} rounded-lg px-2.5 py-1.5 text-[10px] font-mono">
           <div>
+            <span class="px-1 py-0.5 rounded mr-1 text-[9px] font-bold ${isV2 ? 'bg-emerald-950 text-emerald-300' : 'bg-amber-950 text-amber-300'}">${isV2 ? 'v2' : 'v1-Alt'}</span>
             <strong class="text-white">${p.display_ref}</strong>
             <span class="text-cyan-300 ml-1">(${p.videoFilename})</span>
             ${maeRaw !== null ? `<span class="text-slate-400 ml-2">Winkel-MAE: Roh ${maeRaw.toFixed(1)}° ➔ Kalibriert <b class="text-emerald-400">${maeCal.toFixed(1)}°</b></span>` : ''}
@@ -521,7 +705,7 @@ const VideoBiomechanicsModule = (() => {
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-2 flex-wrap">
             <span class="px-2 py-0.5 rounded text-[10px] font-mono font-black ${enabled ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-300'}">
-              ${enabled ? `✅ OSP/DLV-KALIBRIERUNG AKTIV (${pairs.length} Referenz-Sprünge)` : '⏸️ DLV-Kalibrierung pausiert (Rohwerte)'}
+              ${enabled ? `✅ OSP/DLV-KALIBRIERUNG v2 (${v2Count > 0 ? v2Count + 'x v2' : pairs.length + 'x v1'})` : '⏸️ DLV-Kalibrierung pausiert (Rohwerte)'}
             </span>
             <label class="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-300 cursor-pointer">
               <input type="checkbox" ${enabled ? 'checked' : ''} onchange="VideoBiomechanicsModule.setCalibrationEnabled(this.checked)" class="rounded bg-slate-900 border-slate-700 text-emerald-500">
@@ -529,6 +713,7 @@ const VideoBiomechanicsModule = (() => {
             </label>
           </div>
         </div>
+        ${usingLegacyV1 ? `<div class="text-[11px] text-amber-300 bg-amber-950/40 border border-amber-700/50 rounded px-2.5 py-1.5 font-sans">⚠️ Diese ${pairs.length} Paare wurden noch mit <b>Modell v1</b> erfasst (vor Auto-Stützbein-Lock, Pan-Welt-Kompensation &amp; Kopf-Achse). Bitte beim nächsten Video-Durchgang einmalig neu auf <b>„🎯 Auf diesen DLV-Sprung kalibrieren“</b> klicken — danach greift präzises v2-Lernen!</div>` : ''}
         <div class="flex flex-wrap gap-1.5 text-[10px] font-mono">${offsetBadges}</div>
         <div class="space-y-1">${pairsHtml}</div>
       </div>
@@ -565,30 +750,35 @@ const VideoBiomechanicsModule = (() => {
           { key: 'stemmwinkel_deg', label: 'Stemmwinkel beim TD', raw: rawSummary.stemmwinkel_deg, val: summary.stemmwinkel_deg, bm: bm?.stemmwinkel_deg, unit: '°', norm: '22 – 28°' },
           { key: 'rumpfwinkel_td_deg', label: 'Rumpfwinkel TD (>90° = Rücklage)', raw: rawSummary.rumpfwinkel_td_deg, val: summary.rumpfwinkel_td_deg, bm: bm?.rumpfwinkel_td_deg, unit: '°', norm: '95 – 102°' },
           { key: 'rumpfrotation_deg', label: 'Rumpfrotation (TD → TO)', raw: rawSummary.rumpfrotation_deg, val: summary.rumpfrotation_deg, bm: bm?.rumpfrotation_deg, unit: '°', norm: '4 – 12°' },
-          { key: 'kniewinkel_min_deg', label: 'Amortisation Sprungbein-Knie min.', raw: rawSummary.kniewinkel_min_deg, val: summary.kniewinkel_min_deg, bm: bm?.kniewinkel_min_deg, unit: '°', norm: '> 134°' },
-          { key: 'abflugwinkel_deg', label: 'Abflugwinkel des KSP', raw: rawSummary.abflugwinkel_deg, val: summary.abflugwinkel_deg, bm: bm?.abflugwinkel_deg, unit: '°', norm: '> 19°' },
+          { key: 'kniewinkel_min_deg', label: 'Amortisation Stützbein-Knie min.', raw: rawSummary.kniewinkel_min_deg, val: summary.kniewinkel_min_deg, bm: bm?.kniewinkel_min_deg, unit: '°', norm: '> 134°' },
+          { key: 'abflugwinkel_deg', label: 'Abflugwinkel des KSP (Welt-Pan)', raw: rawSummary.abflugwinkel_deg, val: summary.abflugwinkel_deg, bm: bm?.abflugwinkel_deg, unit: '°', norm: '> 19°' },
           { key: 'schwungbein_winkel_deg', label: 'Schwungbein-Oberschenkel vs. Horiz.', raw: rawSummary.schwungbein_winkel_deg, val: summary.schwungbein_winkel_deg, bm: bm?.schwungbein_winkel_deg, unit: '°', norm: '> -13°' },
-          { key: 'schwungbein_deg_s', label: 'Schwungbein-Geschw. Ø (TD → TO)', raw: rawSummary.schwungbein_deg_s, val: summary.schwungbein_deg_s, bm: bm?.schwungbein_deg_s, unit: '°/s', norm: '> 730 °/s' }
+          { key: 'schwungbein_deg_s', label: 'Schwungbein-Geschw. Ø (TD → TO)', raw: rawSummary.schwungbein_deg_s, val: summary.schwungbein_deg_s, bm: bm?.schwungbein_deg_s, unit: '°/s', norm: '> 730 °/s' },
+          { key: 'kopf_blickwinkel_to_deg', label: 'Kopf-Blickachse nach Abflug (TO+)', raw: rawSummary.kopf_blickwinkel_to_deg, val: summary.kopf_blickwinkel_to_deg, bm: null, unit: '°', norm: '≥ 0° stabil (< -10° ↓)' }
         ]
       },
       {
-        title: '🏖️ LANDUNG (OSP INFO 4 & 5)',
+        title: '⚡ GESCHWINDIGKEIT, SCHRITTLÄNGE & WEITEN-BILANZ (OSP INFO 1 & 6)',
+        rows: [
+          { key: 'erwartet_m', label: 'Erwartete / Eff. Weite (aus V_Anlauf & Flug)', raw: null, val: summary.erwartet_m !== null ? `${summary.erwartet_m} m${summary.effektiv_m ? ` / eff. ~${summary.effektiv_m} m` : ''}` : null, bm: bm?.erwartet_m ? `${bm.erwartet_m} m / eff. ${bm.effektiv_m} m` : null, unit: '', norm: 'DLV-Regression' },
+          { key: 'v_1L_ms', label: 'Anlauf-Speed V_2L / V_1L (Welt-Pan)', raw: null, val: summary.v_1L_ms !== null ? `${summary.v_2L_ms ?? '—'} / ${summary.v_1L_ms}` : null, bm: bm?.v_1L_ms ? `${bm.v_2L_ms ?? '—'} / ${bm.v_1L_ms}` : null, unit: 'm/s', norm: '> 10,30 m/s' },
+          { key: 'v_flug_ms', label: 'Abflugspeed Horizontal (V_Flug) / Vertikal', raw: null, val: summary.v_flug_ms !== null ? `${summary.v_flug_ms} / ${summary.v_vertikal_ms ?? '—'}` : null, bm: bm?.v_flug_ms ? `${bm.v_flug_ms} / ${bm.v_vertikal_ms ?? '—'}` : null, unit: 'm/s', norm: 'V_v > 3,20 m/s' },
+          { key: 'geschw_bilanz', label: 'V-Verlust / Geschw.-Bilanz (V_vert − V_verl)', raw: null, val: summary.v_verlust_absprung_ms !== null ? `${summary.v_verlust_absprung_ms} / ${summary.geschw_bilanz !== null ? (summary.geschw_bilanz >= 0 ? '+' : '') + summary.geschw_bilanz : '—'}` : null, bm: bm?.geschw_bilanz != null ? `${bm.v_verlust_absprung_ms} / ${bm.geschw_bilanz >= 0 ? '+' : ''}${bm.geschw_bilanz}` : null, unit: 'm/s', norm: '> 0,0 m/s' },
+          { key: 'step_2L_m', label: 'Schrittlänge vorletzter (2L) / letzter (1L)', raw: null, val: summary.step_2L_m !== null ? `${summary.step_2L_m} / ${summary.step_1L_m ?? '—'}${summary.step_1L_pct != null ? ` (${summary.step_1L_pct >= 0 ? '+' : ''}${summary.step_1L_pct}%)` : ''}` : null, bm: bm?.step_2L_m ? `${bm.step_2L_m} / ${bm.step_1L_m} (${bm.step_1L_pct ?? '—'}%)` : null, unit: 'm', norm: '2L > 1L' },
+          { key: 'knie_abstand_vorletzter_m', label: 'Knie-Knie-Abstand im vorletzten Stütz (2L)', raw: rawSummary.knie_abstand_vorletzter_m, val: summary.knie_abstand_vorletzter_m, bm: bm?.knie_abstand_vorletzter_m, unit: 'm', norm: '-0,05 – +0,05 m' },
+          { key: 'ksp_absenkung_m', label: 'KSP-Absenkung (2L → TD)', raw: rawSummary.ksp_absenkung_m, val: summary.ksp_absenkung_m, bm: bm?.ksp_absenkung_m, unit: 'm', norm: '0,03 – 0,06 m' }
+        ]
+      },
+      {
+        title: '🏖️ LANDUNG & ZUSATZ-INDIKATOREN (OSP INFO 4 & 5)',
         rows: [
           { key: 'landeweite_m', label: 'Landeweite (Ferse vs. KSP-Projektion)', raw: rawSummary.landeweite_m, val: summary.landeweite_m, bm: bm?.landeweite_m, unit: 'm', norm: '> 0,43 m' },
           { key: 'landeindex', label: 'Landeindex (Körperlage zu Ferse)', raw: rawSummary.landeindex, val: summary.landeindex, bm: bm?.landeindex, unit: '', norm: '1,5 – 2,2' },
           { key: 'lande_rumpfwinkel_deg', label: 'Rumpfwinkel Landung', raw: rawSummary.lande_rumpfwinkel_deg, val: summary.lande_rumpfwinkel_deg, bm: bm?.lande_rumpfwinkel_deg, unit: '°', norm: '64 – 104°' },
           { key: 'lande_kniewinkel_deg', label: 'Kniewinkel Landebein', raw: rawSummary.lande_kniewinkel_deg, val: summary.lande_kniewinkel_deg, bm: bm?.lande_kniewinkel_deg, unit: '°', norm: '> 125°' },
-          { key: 'lande_hueftwinkel_deg', label: 'Hüftwinkel Landebein', raw: rawSummary.lande_hueftwinkel_deg, val: summary.lande_hueftwinkel_deg, bm: bm?.lande_hueftwinkel_deg, unit: '°', norm: '70 – 114°' }
-        ]
-      },
-      {
-        title: '📏 ANLAUF, KSP & ZUSATZ-METRIKEN',
-        rows: [
-          { key: 'knie_abstand_vorletzter_m', label: 'Knie-Knie-Abstand im vorletzten Stütz (2L)', raw: rawSummary.knie_abstand_vorletzter_m, val: summary.knie_abstand_vorletzter_m, bm: bm?.knie_abstand_vorletzter_m, unit: 'm', norm: '-0,05 – +0,05 m' },
-          { key: 'step_2L_m', label: 'Schrittlänge vorletzter (2L) / letzter (1L)', raw: null, val: summary.step_2L_m !== null ? `${summary.step_2L_m} / ${summary.step_1L_m ?? '—'}` : null, bm: bm?.step_2L_m ? `${bm.step_2L_m} / ${bm.step_1L_m}` : null, unit: 'm', norm: '2L > 1L' },
-          { key: 'ksp_absenkung_m', label: 'KSP-Absenkung (2L → TD)', raw: rawSummary.ksp_absenkung_m, val: summary.ksp_absenkung_m, bm: bm?.ksp_absenkung_m, unit: 'm', norm: '0,03 – 0,06 m' },
+          { key: 'lande_hueftwinkel_deg', label: 'Hüftwinkel Landebein', raw: rawSummary.lande_hueftwinkel_deg, val: summary.lande_hueftwinkel_deg, bm: bm?.lande_hueftwinkel_deg, unit: '°', norm: '70 – 114°' },
           { key: 'schwungbein_knie_kompakt_deg', label: 'Zusatz: Schwungbein-Kniewinkel (Kompaktheit)', raw: rawSummary.schwungbein_knie_kompakt_deg, val: summary.schwungbein_knie_kompakt_deg, bm: 88, unit: '°', norm: '60 – 95° (eng)' },
-          { key: 'kontaktzeit_ms', label: `Zusatz: Bodenkontakt TD → TO ${scaleInfo.fpsKnown ? '' : '(FPS ?)'}`, raw: rawSummary.kontaktzeit_ms, val: summary.kontaktzeit_ms, bm: bm?.kontaktzeit_ms ?? 112, unit: 'ms', norm: '100 – 125 ms' }
+          { key: 'kontaktzeit_ms', label: `Zusatz (kein DLV-Vergleich): Bodenkontakt TD → TO ${scaleInfo.fpsKnown ? '' : '(FPS ?)'}`, raw: rawSummary.kontaktzeit_ms, val: summary.kontaktzeit_ms, bm: null, unit: 'ms', norm: 'Informativ (FPS-abh.)', customTag: 'ℹ️ FPS-Richtwert' }
         ]
       }
     ];
@@ -598,7 +788,9 @@ const VideoBiomechanicsModule = (() => {
       html += `<tr class="bg-slate-950/90"><td colspan="6" class="py-1.5 px-2 text-[10px] font-mono font-black text-cyan-400 tracking-wider border-b border-slate-800">${g.title}</td></tr>`;
       g.rows.forEach(r => {
         const isNumericVal = typeof r.val === 'number';
-        const st = isNumericVal ? statusClass(r.key, r.val) : { cls: 'text-cyan-300 border-slate-700', tag: 'Info' };
+        const st = r.customTag
+          ? { cls: 'text-amber-300 border-amber-700/60 bg-amber-950/20', tag: r.customTag }
+          : (isNumericVal ? statusClass(r.key, r.val) : { cls: 'text-cyan-300 border-slate-700', tag: 'Info' });
         const valStr = r.val !== null && r.val !== undefined ? `${r.val}${r.unit ? ' ' + r.unit : ''}` : '—';
         const hasOffset = calActive && (offsets[r.key] || 0) !== 0 && r.raw !== null;
         const rawHint = hasOffset ? ` <span class="text-[9px] text-slate-500">(Roh: ${r.raw})</span>` : '';
@@ -624,6 +816,13 @@ const VideoBiomechanicsModule = (() => {
 
     if (feedbackBox) {
       const notes = [];
+      if (summary.kopf_blickwinkel_to_deg !== null && summary.kopf_blickwinkel_to_deg !== undefined) {
+        if (summary.kopf_blickwinkel_to_deg < -10) {
+          notes.push(`🔴 <b>Kopf / Blickachse sinkt nach Abflug ab (${summary.kopf_blickwinkel_to_deg}°):</b> Blick stabil nach schräg-oben/vorn halten statt Kinn einzuziehen!`);
+        } else {
+          notes.push(`✅ <b>Kopf / Blickachse stabil (${summary.kopf_blickwinkel_to_deg >= 0 ? '+' : ''}${summary.kopf_blickwinkel_to_deg}°):</b> Aufrechte Kopf-Hals-Führung direkt nach dem Take-off.`);
+        }
+      }
       if (summary.schwungbein_winkel_deg !== null) {
         notes.push(`${summary.schwungbein_winkel_deg >= -13 ? '✅' : '⚠️'} <b>Schwungbein-Oberschenkelwinkel (${summary.schwungbein_winkel_deg}° vs. Horiz.):</b> ${bm?.schwungbein_winkel_deg !== undefined ? `Referenz ${bm.schwungbein_winkel_deg}°` : 'Norm > -13°'}.`);
       }
@@ -644,6 +843,9 @@ const VideoBiomechanicsModule = (() => {
       if (summary.rumpfrotation_deg !== null) {
         notes.push(`${summary.rumpfrotation_deg <= 12 ? '✅' : '🔴'} <b>Rumpfrotation (${summary.rumpfrotation_deg}°):</b> ${summary.rumpfrotation_deg > 12 ? 'Überrotation (>12°)! Aufrechte Blockade halten.' : 'Stabil in Norm (4–12°).'}`);
       }
+      if (summary.kontaktzeit_ms !== null) {
+        notes.push(`ℹ️ <b>Bodenkontaktzeit (${summary.kontaktzeit_ms} ms):</b> Rein informativer Richtwert (im DLV-Protokoll nicht gemessen; ±1 Frame entspricht bei 50 fps ≈ 20 ms, bei 200 fps ≈ 5 ms).`);
+      }
       if (!notes.length) {
         notes.push('ℹ️ Lade ein Video, wähle ggf. die Kamera-FPS &amp; <b>📏 Meter-Aufsteller</b> und markiere <b>(2L / 1L →) TD → MKF → TO → Landung</b> für das komplette OSP-Profil + Anlaufbahn-Kinogramm.');
       }
@@ -658,6 +860,193 @@ const VideoBiomechanicsModule = (() => {
         `);
       }
       feedbackBox.innerHTML = notes.map(n => `<div>${n}</div>`).join('');
+    }
+    renderGraphicalDlvCharts(summary, bm);
+  }
+
+  function renderGraphicalDlvCharts(summary, bm) {
+    const box = document.getElementById('dlvGraphicalChartsBox');
+    if (!box || !calibrationProfile || typeof Chart === 'undefined') return;
+    if (!box.querySelector('#dlvChartSpeedDist')) {
+      box.innerHTML = `
+        <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-3 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h4 class="text-xs font-black text-cyan-300 font-mono uppercase">📊 OSP/DLV GRAFISCHE GESAMT-AUSWERTUNG (DEINE 31 DLV-SPRÜNGE + AKTUELLES VIDEO)</h4>
+            <span id="dlvExpectedDistBadge" class="text-[11px] font-mono font-bold text-emerald-300"></span>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-2.5">
+              <div class="text-[11px] font-mono font-bold text-amber-300 mb-1">1. Trend V-Anlauf / Eff. Weite (+ Erwartete Weite)</div>
+              <div class="h-52"><canvas id="dlvChartSpeedDist"></canvas></div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-2.5">
+              <div class="text-[11px] font-mono font-bold text-amber-300 mb-1">2. Trend V-vertikal / V-Verlust (Geschw.-Bilanz)</div>
+              <div class="h-52"><canvas id="dlvChartVertLoss"></canvas></div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-2.5">
+              <div class="text-[11px] font-mono font-bold text-cyan-300 mb-1">3. Geschwindigkeit &amp; Verlust (3L → 2L → 1L → Flug)</div>
+              <div class="h-48"><canvas id="dlvChartVelProfile"></canvas></div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-2.5">
+              <div class="text-[11px] font-mono font-bold text-cyan-300 mb-1">4. Schrittlänge (3L / 2L / 1L) &amp; Knie-Knie 2L</div>
+              <div class="h-48"><canvas id="dlvChartSteps"></canvas></div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-2.5 lg:col-span-2">
+              <div class="text-[11px] font-mono font-bold text-emerald-300 mb-1">5. KSP-Höhe (3L → 2L → 1L → TD) &amp; Absenkung vor Absprung (Norm: 0,03–0,06 m)</div>
+              <div class="h-44"><canvas id="dlvChartKspHeight"></canvas></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    const expBadge = document.getElementById('dlvExpectedDistBadge');
+    if (expBadge) {
+      const refTxt = bm?.erwartet_m ? `Ref Erwartet ${bm.erwartet_m} m / Eff. ${bm.effektiv_m} m` : '';
+      const vidTxt = summary?.erwartet_m ? `Video Erwartet ${summary.erwartet_m} m${summary.effektiv_m ? ` / Eff. ~${summary.effektiv_m} m` : ''}` : 'Video: 2L/1L/TD/LAND markieren für V & Erwartet';
+      expBadge.textContent = refTxt ? `${refTxt} • ${vidTxt}` : vidTxt;
+    }
+
+    const trials = getAllReferenceTrials();
+    const destroyChart = (id) => { if (dlvChartInstances[id]) { dlvChartInstances[id].destroy(); delete dlvChartInstances[id]; } };
+
+    // 1. Scatter: V_Anlauf vs Eff. Weite
+    destroyChart('speedDist');
+    const c1 = document.getElementById('dlvChartSpeedDist');
+    if (c1) {
+      const ptsHist = trials.map(t => {
+        const vx = Math.max(t.v_3L_ms || 0, t.v_2L_ms || 0, t.v_1L_ms || 0);
+        return (vx > 8 && t.effektiv_m > 6.5) ? { x: vx, y: t.effektiv_m, lbl: t.display_ref } : null;
+      }).filter(Boolean);
+      const ptsRef = bm ? (() => {
+        const vx = Math.max(bm.v_3L_ms || 0, bm.v_2L_ms || 0, bm.v_1L_ms || 0);
+        return (vx > 8 && bm.effektiv_m) ? [{ x: vx, y: bm.effektiv_m, lbl: 'Ref: ' + bm.display_ref }] : [];
+      })() : [];
+      const curVx = Math.max(summary?.v_2L_ms || 0, summary?.v_1L_ms || 0);
+      const ptsCur = (curVx > 7 && summary?.effektiv_m) ? [{ x: curVx, y: summary.effektiv_m, lbl: 'Aktuelles Video' }] : [];
+      const linePts = [9.8, 10.2, 10.6, 10.9].map(v => ({ x: v, y: predictExpectedDistanceFromSpeed(v) }));
+      dlvChartInstances.speedDist = new Chart(c1, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            { label: 'Erwartete Weite (DLV-Trend)', type: 'line', data: linePts, borderColor: '#10b981', borderDash: [5, 4], borderWidth: 2, pointRadius: 0 },
+            { label: 'Luka DLV-Historie', data: ptsHist, backgroundColor: 'rgba(148, 163, 184, 0.7)', pointRadius: 4.5 },
+            { label: 'Ausgewählte Ref.', data: ptsRef, backgroundColor: '#f59e0b', borderColor: '#fff', borderWidth: 1.5, pointRadius: 7 },
+            { label: 'Dein Video', data: ptsCur, backgroundColor: '#22d3ee', borderColor: '#fff', borderWidth: 2, pointRadius: 8, pointStyle: 'rectRot' }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } } },
+          scales: {
+            x: { title: { display: true, text: 'V_Anlauf max (m/s)', color: '#94a3b8', font: { size: 10 } }, ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } },
+            y: { title: { display: true, text: 'Eff. Weite (m)', color: '#94a3b8', font: { size: 10 } }, ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } }
+          }
+        }
+      });
+    }
+
+    // 2. Scatter: V_vertikal vs V_Verlust
+    destroyChart('vertLoss');
+    const c2 = document.getElementById('dlvChartVertLoss');
+    if (c2) {
+      const ptsH = trials.filter(t => t.v_verlust_absprung_ms && t.v_vertikal_ms).map(t => ({ x: t.v_verlust_absprung_ms, y: t.v_vertikal_ms }));
+      const ptsR = (bm?.v_verlust_absprung_ms && bm?.v_vertikal_ms) ? [{ x: bm.v_verlust_absprung_ms, y: bm.v_vertikal_ms }] : [];
+      const ptsC = (summary?.v_verlust_absprung_ms && summary?.v_vertikal_ms) ? [{ x: summary.v_verlust_absprung_ms, y: summary.v_vertikal_ms }] : [];
+      const balLine = [1.0, 1.4, 1.8, 2.2, 2.6, 3.0].map(x => ({ x, y: Math.min(3.8, x + 1.6) })); // +1.6 m/s Richt-Band
+      const zeroBal = [1.0, 1.5, 2.0, 2.5, 3.0].map(x => ({ x, y: x }));
+      dlvChartInstances.vertLoss = new Chart(c2, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            { label: 'Top-Bilanz (+1,6)', type: 'line', data: balLine, borderColor: '#10b981', borderDash: [4, 4], borderWidth: 1.5, pointRadius: 0 },
+            { label: 'Bilanz = 0 (Grenze)', type: 'line', data: zeroBal, borderColor: '#f43f5e', borderDash: [3, 3], borderWidth: 1.2, pointRadius: 0 },
+            { label: 'Luka DLV-Historie', data: ptsH, backgroundColor: 'rgba(148, 163, 184, 0.7)', pointRadius: 4.5 },
+            { label: 'Ref.', data: ptsR, backgroundColor: '#f59e0b', pointRadius: 7 },
+            { label: 'Dein Video', data: ptsC, backgroundColor: '#22d3ee', pointRadius: 8, pointStyle: 'rectRot' }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } } },
+          scales: {
+            x: { title: { display: true, text: 'V-Verlust Absprung (m/s)', color: '#94a3b8', font: { size: 10 } }, ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } },
+            y: { title: { display: true, text: 'V-vertikal Abflug (m/s)', color: '#94a3b8', font: { size: 10 } }, ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } }
+          }
+        }
+      });
+    }
+
+    // 3. Velocity Profile 3L -> 2L -> 1L -> Flug
+    destroyChart('velProf');
+    const c3 = document.getElementById('dlvChartVelProfile');
+    if (c3) {
+      dlvChartInstances.velProf = new Chart(c3, {
+        type: 'line',
+        data: {
+          labels: ['3L', '2L', '1L', 'Flug (Horiz)'],
+          datasets: [
+            { label: 'Ref (' + (bm?.display_ref || 'DLV') + ')', data: [bm?.v_3L_ms ?? null, bm?.v_2L_ms ?? null, bm?.v_1L_ms ?? null, bm?.v_flug_ms ?? null], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.15)', tension: 0.25, spanGaps: true, pointRadius: 4 },
+            { label: 'Dein Video (Welt-Pan)', data: [null, summary?.v_2L_ms ?? null, summary?.v_1L_ms ?? null, summary?.v_flug_ms ?? null], borderColor: '#22d3ee', backgroundColor: 'rgba(34,211,238,0.15)', tension: 0.25, spanGaps: true, pointRadius: 5 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } } },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } },
+            y: { min: 7.5, max: 11.4, title: { display: true, text: 'm/s', color: '#94a3b8', font: { size: 10 } }, ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } }
+          }
+        }
+      });
+    }
+
+    // 4. Step lengths 3L / 2L / 1L
+    destroyChart('steps');
+    const c4 = document.getElementById('dlvChartSteps');
+    if (c4) {
+      dlvChartInstances.steps = new Chart(c4, {
+        type: 'bar',
+        data: {
+          labels: ['3L (m)', '2L (m)', '1L (m)', 'Knie-Knie 2L (m)'],
+          datasets: [
+            { label: 'Ref (' + (bm?.display_ref || 'DLV') + ')', data: [bm?.step_3L_m ?? 0, bm?.step_2L_m ?? 0, bm?.step_1L_m ?? 0, bm?.knie_abstand_vorletzter_m ?? 0], backgroundColor: 'rgba(245,158,11,0.75)' },
+            { label: 'Dein Video (Welt-Pan)', data: [0, summary?.step_2L_m ?? 0, summary?.step_1L_m ?? 0, summary?.knie_abstand_vorletzter_m ?? 0], backgroundColor: 'rgba(34,211,238,0.85)' }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } } },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } },
+            y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } }
+          }
+        }
+      });
+    }
+
+    // 5. KSP Height Profile (3L -> 2L -> 1L -> TD)
+    destroyChart('kspH');
+    const c5 = document.getElementById('dlvChartKspHeight');
+    if (c5) {
+      dlvChartInstances.kspH = new Chart(c5, {
+        type: 'line',
+        data: {
+          labels: ['3L', '2L', '1L', 'TD (Brett)'],
+          datasets: [
+            { label: 'Ref KSP-Höhe (' + (bm?.display_ref || 'DLV') + ')', data: [bm?.ksp_3L_m ?? null, bm?.ksp_2L_m ?? null, bm?.ksp_1L_m ?? null, bm?.ksp_td_m ?? null], borderColor: '#f59e0b', tension: 0.25, spanGaps: true, pointRadius: 5 },
+            { label: 'Dein Video KSP-Höhe', data: [null, summary?.ksp_2L_m ?? null, summary?.ksp_1L_m ?? null, summary?.ksp_td_m ?? null], borderColor: '#10b981', tension: 0.25, spanGaps: true, pointRadius: 5 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } } },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } },
+            y: { suggestedMin: 0.80, suggestedMax: 1.05, title: { display: true, text: 'KSP-Höhe (m)', color: '#94a3b8', font: { size: 10 } }, ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } }
+          }
+        }
+      });
     }
   }
 
@@ -913,7 +1302,17 @@ const VideoBiomechanicsModule = (() => {
     const localPairs = getCalibrationPairs();
     const pairMap = new Map();
     [...(remote.calibration_pairs || []), ...localPairs].forEach(p => {
-      if (p && p.trialId) pairMap.set(p.trialId, p);
+      if (!p || !p.trialId) return;
+      const existing = pairMap.get(p.trialId);
+      if (!existing) {
+        pairMap.set(p.trialId, p);
+      } else {
+        const mvNew = p.modelVersion || 1;
+        const mvOld = existing.modelVersion || 1;
+        if (mvNew > mvOld || (mvNew === mvOld && (p.calibratedAt || '') >= (existing.calibratedAt || ''))) {
+          pairMap.set(p.trialId, p);
+        }
+      }
     });
     const mergedPairs = [...pairMap.values()];
     if (mergedPairs.length > 0) saveCalibrationPairs(mergedPairs);
@@ -943,6 +1342,8 @@ const VideoBiomechanicsModule = (() => {
   }
 
   async function pushVideoBioToGitHub(quiet = false) {
+    clearTimeout(videoAutoPushTimer);
+    videoAutoPushTimer = null;
     const pat = (localStorage.getItem(GH_SYNC_TOKEN_KEY) || '').trim();
     if (!pat) {
       if (!quiet) {
@@ -1006,7 +1407,9 @@ const VideoBiomechanicsModule = (() => {
   function scheduleVideoAutoPush() {
     if ((localStorage.getItem(GH_SYNC_TOKEN_KEY) || '').trim()) {
       clearTimeout(videoAutoPushTimer);
-      videoAutoPushTimer = setTimeout(() => { pushVideoBioToGitHub(true); }, 5000);
+      lastVideoSyncNote = '⏳ Auto-Push gebündelt (25s)...';
+      renderVideoSyncStatusBar();
+      videoAutoPushTimer = setTimeout(() => { pushVideoBioToGitHub(true); }, 25000);
     }
   }
 
