@@ -28,7 +28,15 @@ const VideoBiomechanicsModule = (() => {
     'schwungbein_deg_s',
     'lande_rumpfwinkel_deg',
     'lande_kniewinkel_deg',
-    'lande_hueftwinkel_deg'
+    'lande_hueftwinkel_deg',
+    'landeweite_m',
+    'landeindex',
+    'knie_abstand_vorletzter_m',
+    'step_2L_m',
+    'step_1L_m',
+    'v_1L_ms',
+    'v_flug_ms',
+    'ksp_absenkung_m'
   ];
 
   let dbPromise = null;
@@ -143,7 +151,12 @@ const VideoBiomechanicsModule = (() => {
     return s.length % 2 ? s[mid] : 0.5 * (s[mid - 1] + s[mid]);
   }
 
-  function computeOffsetsFromPairs(pairs) {
+  function isMeterOrSpeedKey(k) {
+    return k.endsWith('_m') || k.endsWith('_ms') || k === 'landeindex';
+  }
+
+  function computeCalibrationModels(pairs) {
+    const models = {};
     const offsets = {};
     const counts = {};
     const allPairs = Array.isArray(pairs) ? pairs : [];
@@ -152,34 +165,79 @@ const VideoBiomechanicsModule = (() => {
     const usingLegacyV1 = v2Pairs.length === 0 && allPairs.length > 0;
 
     CALIBRATABLE_KEYS.forEach(k => {
-      const deltas = [];
+      const pts = [];
       activePairs.forEach(p => {
         const rawVal = p.rawSummary?.[k];
         const gtVal = p.groundTruth?.[k];
         if (typeof rawVal === 'number' && !Number.isNaN(rawVal) && typeof gtVal === 'number' && !Number.isNaN(gtVal)) {
           const d = gtVal - rawVal;
-          // Schutz vor alten v1-L/R-Ausreißern (z.B. kniewinkel_min -80° oder schwungbein_deg_s >400)
-          if (usingLegacyV1 && k !== 'schwungbein_deg_s' && Math.abs(d) > 20) return;
+          // Schutz vor kaputten v1-Alt-Ausreißern
+          if (usingLegacyV1 && k !== 'schwungbein_deg_s' && !isMeterOrSpeedKey(k) && Math.abs(d) > 22) return;
           if (usingLegacyV1 && k === 'schwungbein_deg_s' && Math.abs(d) > 350) return;
-          deltas.push(d);
+          if (usingLegacyV1 && isMeterOrSpeedKey(k) && Math.abs(d) > 2.5) return;
+          pts.push({ x: rawVal, y: gtVal, d });
         }
       });
-      if (deltas.length > 0) {
-        // Robuster Schätzer: Median bei n>=3 mit Outlier-Filter, sonst Mittelwert
-        const med = median(deltas);
-        const filtered = deltas.length >= 3
-          ? deltas.filter(d => k === 'schwungbein_deg_s' ? Math.abs(d - med) <= 220 : Math.abs(d - med) <= 15)
-          : deltas;
-        const used = filtered.length ? filtered : deltas;
-        const avg = used.reduce((s, x) => s + x, 0) / used.length;
-        offsets[k] = Number(avg.toFixed(2));
-        counts[k] = used.length;
-      } else {
+
+      if (pts.length === 0) {
+        models[k] = { slope: 1, intercept: 0, mode: 'identity', count: 0 };
         offsets[k] = 0;
         counts[k] = 0;
+        return;
+      }
+
+      // Outlier-Filter über Residuen erst ab >= 5 Paaren, damit bei 3–4 Sprüngen kein echter Winkel-Trend weggeschnitten wird
+      const medD = median(pts.map(p => p.d));
+      const cleanPts = pts.length >= 5
+        ? pts.filter(p => {
+            const tol = k === 'schwungbein_deg_s' ? 240 : (isMeterOrSpeedKey(k) ? 1.8 : 22);
+            return Math.abs(p.d - medD) <= tol;
+          })
+        : pts;
+      const used = cleanPts.length ? cleanPts : pts;
+      const n = used.length;
+      const mx = used.reduce((s, p) => s + p.x, 0) / n;
+      const my = used.reduce((s, p) => s + p.y, 0) / n;
+
+      if (n >= 3) {
+        // Selbstlernende Ridge Regression: passt Steigung + Offset automatisch an Kamera-/DLV-Geometrie an
+        const varX = used.reduce((s, p) => s + (p.x - mx) ** 2, 0);
+        const cov = used.reduce((s, p) => s + (p.x - mx) * (p.y - my), 0);
+        const lamBase = k === 'schwungbein_deg_s' ? 4000 : (isMeterOrSpeedKey(k) ? 0.25 : 4.0);
+        const lam = lamBase / Math.max(1, n / 3);
+        let slope = varX > 1e-6 ? ((cov + lam * 1.0) / (varX + lam)) : 1.0;
+        slope = Math.max(0.20, Math.min(1.80, slope));
+        const intercept = my - slope * mx;
+        models[k] = {
+          slope: Number(slope.toFixed(4)),
+          intercept: Number(intercept.toFixed(3)),
+          mode: 'ridge',
+          count: n
+        };
+        offsets[k] = Number((my - mx).toFixed(2));
+        counts[k] = n;
+      } else {
+        const bias = my - mx;
+        models[k] = { slope: 1, intercept: Number(bias.toFixed(3)), mode: 'offset', count: n };
+        offsets[k] = Number(bias.toFixed(2));
+        counts[k] = n;
       }
     });
-    return { offsets, counts, usingLegacyV1, v2Count: v2Pairs.length };
+    return { models, offsets, counts, usingLegacyV1, v2Count: v2Pairs.length };
+  }
+
+  function computeOffsetsFromPairs(pairs) {
+    return computeCalibrationModels(pairs);
+  }
+
+  function getActiveModels() {
+    const pairs = getCalibrationPairs();
+    if (!isCalibrationEnabled() || pairs.length === 0) {
+      const idModels = {};
+      CALIBRATABLE_KEYS.forEach(k => { idModels[k] = { slope: 1, intercept: 0, mode: 'identity', count: 0 }; });
+      return idModels;
+    }
+    return computeCalibrationModels(pairs).models;
   }
 
   function getActiveOffsets() {
@@ -189,13 +247,16 @@ const VideoBiomechanicsModule = (() => {
       CALIBRATABLE_KEYS.forEach(k => { zero[k] = 0; });
       return zero;
     }
-    return computeOffsetsFromPairs(pairs).offsets;
+    return computeCalibrationModels(pairs).offsets;
   }
 
   function applyCalibrationToScalar(metricKey, rawVal) {
     if (rawVal === null || rawVal === undefined || Number.isNaN(rawVal)) return rawVal;
-    const off = getActiveOffsets()[metricKey] || 0;
-    return Number((rawVal + off).toFixed(1));
+    const mod = getActiveModels()[metricKey];
+    const decimals = isMeterOrSpeedKey(metricKey) ? 2 : (metricKey === 'schwungbein_deg_s' ? 0 : 1);
+    if (!mod) return Number(Number(rawVal).toFixed(decimals));
+    const val = mod.slope * rawVal + mod.intercept;
+    return Number(val.toFixed(decimals));
   }
 
   async function loadCalibration() {
@@ -355,15 +416,100 @@ const VideoBiomechanicsModule = (() => {
     };
   }
 
-  function computeRawSummaryFromState(phaseMarks, angleHistory) {
-    const m2L = phaseMarks?.['2L'] || null;
-    const m1L = phaseMarks?.['1L'] || null;
-    const td = phaseMarks?.TD || null;
-    const mkf = phaseMarks?.MKF || null;
-    const to = phaseMarks?.TO || null;
-    const land = phaseMarks?.LAND || null;
+  function calcAngleArr2D(a, b, c) {
+    if (!a || !b || !c) return null;
+    const v1x = a.x - b.x, v1y = a.y - b.y;
+    const v2x = c.x - b.x, v2y = c.y - b.y;
+    const m1 = Math.hypot(v1x, v1y), m2 = Math.hypot(v2x, v2y);
+    if (m1 < 1e-5 || m2 < 1e-5) return null;
+    return Math.acos(Math.max(-1, Math.min(1, (v1x * v2x + v1y * v2y) / (m1 * m2)))) * (180 / Math.PI);
+  }
+
+  function recomputePhaseFromRawPts(mk) {
+    if (!mk || !Array.isArray(mk.rawPts) || mk.rawPts.length < 33) return mk;
+    const vw = mk.vw || 960, vh = mk.vh || 540, dirSign = mk.dirSign || 1;
+    const gPt = idx => ({ x: mk.rawPts[idx][0], y: mk.rawPts[idx][1], visibility: mk.rawPts[idx][2] ?? 1 });
+    const sPt = idx => ({ x: mk.rawPts[idx][0] * vw, y: mk.rawPts[idx][1] * vh });
+
+    const pNose = gPt(0), pLEye = gPt(2), pREye = gPt(5), pLEar = gPt(7), pREar = gPt(8);
+    const pLS = gPt(11), pRS = gPt(12), pLH = gPt(23), pRH = gPt(24);
+    const pLK = gPt(25), pRK = gPt(26), pLA = gPt(27), pRA = gPt(28);
+    const pLHeel = gPt(29), pRHeel = gPt(30), pLFoot = gPt(31), pRFoot = gPt(32);
+
+    const leftKnee = calcAngleArr2D(sPt(23), sPt(25), sPt(27));
+    const rightKnee = calcAngleArr2D(sPt(24), sPt(26), sPt(28));
+    const ankDiffY = pLA.y - pRA.y;
+    let isLeftSupport = Math.abs(ankDiffY) > 0.025 ? ankDiffY > 0 : (leftKnee >= rightKnee);
+    if (isLeftSupport && leftKnee < 105 && rightKnee > 118) isLeftSupport = false;
+    else if (!isLeftSupport && rightKnee < 105 && leftKnee > 118) isLeftSupport = true;
+
+    const pSupK = isLeftSupport ? pLK : pRK, pSupA = isLeftSupport ? pLA : pRA, pSupHeel = isLeftSupport ? pLHeel : pRHeel, pSupFoot = isLeftSupport ? pLFoot : pRFoot;
+    const pSwH = isLeftSupport ? pRH : pLH, pSwK = isLeftSupport ? pRK : pLK;
+    const supportKnee = isLeftSupport ? leftKnee : rightKnee;
+    const swingKnee = isLeftSupport ? rightKnee : leftKnee;
+
+    const midHip = { x: 0.5 * (pLH.x + pRH.x) * vw, y: 0.5 * (pLH.y + pRH.y) * vh };
+    const midSh = { x: 0.5 * (pLS.x + pRS.x) * vw, y: 0.5 * (pLS.y + pRS.y) * vh };
+    const kspPx = { x: 0.90 * midHip.x + 0.10 * midSh.x, y: 0.90 * midHip.y + 0.10 * midSh.y };
+
+    const supFootMidPx = { x: (0.65 * pSupA.x + 0.35 * pSupHeel.x) * vw, y: (0.65 * pSupA.y + 0.35 * pSupHeel.y) * vh };
+    const dlvStemm = Math.atan2(dirSign * (supFootMidPx.x - kspPx.x), Math.max(1e-5, supFootMidPx.y - kspPx.y)) * (180 / Math.PI);
+    const dlvRumpf = 90 + Math.atan2(dirSign * (midHip.x - midSh.x), Math.max(1e-5, midHip.y - midSh.y)) * (180 / Math.PI);
+    const dxTh = dirSign * (pSwK.x - pSwH.x) * vw;
+    const dyTh = (pSwH.y - pSwK.y) * vh;
+    const swingThighHorizDeg = Math.atan2(dyTh, Math.abs(dxTh) > 2 ? dxTh : 2) * (180 / Math.PI);
+
+    const ear = [pLEar, pREar].filter(p => p.visibility > 0.2);
+    const midEar = ear.length ? { x: ear.reduce((s, p) => s + p.x, 0) / ear.length, y: ear.reduce((s, p) => s + p.y, 0) / ear.length } : { x: pNose.x - dirSign * 0.018, y: pNose.y };
+    const eyes = [pLEye, pREye].filter(p => p.visibility > 0.2);
+    const gaze = eyes.length ? { x: 0.5 * pNose.x + 0.5 * eyes.reduce((s, p) => s + p.x, 0) / eyes.length, y: 0.45 * pNose.y + 0.55 * eyes.reduce((s, p) => s + p.y, 0) / eyes.length } : pNose;
+    const kopfBlickDeg = Math.atan2((midEar.y - gaze.y) * vh, Math.max(4, dirSign * (gaze.x - midEar.x) * vw)) * (180 / Math.PI);
+
+    const useLeftLead = (dirSign * pLHeel.x) >= (dirSign * pRHeel.x);
+    const lH = useLeftLead ? sPt(23) : sPt(24), lK = useLeftLead ? sPt(25) : sPt(26), lA = useLeftLead ? sPt(27) : sPt(28);
+    const lHeel = useLeftLead ? pLHeel : pRHeel;
+    const landeRumpfDeg = Math.atan2(Math.max(1e-5, midHip.y - midSh.y), dirSign * (midSh.x - midHip.x)) * (180 / Math.PI);
+    const landeKnieDeg = calcAngleArr2D(lH, lK, lA);
+    const landeHuefteDeg = calcAngleArr2D(midSh, lH, lK);
+    const landeReachPx = Math.max(0, dirSign * (lHeel.x * vw - kspPx.x));
+    const landeIndex = Number((Math.max(10, lHeel.y * vh - kspPx.y) / Math.max(20, landeReachPx)).toFixed(2));
+    const kneeGapPx = dirSign * (pSwK.x - pSupK.x) * vw;
+    const lowAnkY = Math.max(pLA.y, pRA.y) * vh;
+
+    return {
+      ...mk,
+      supSide: isLeftSupport ? 'L' : 'R',
+      leftKnee,
+      rightKnee,
+      supportKnee,
+      swingKnee,
+      dlvRumpf,
+      dlvStemm,
+      swingThighHorizDeg,
+      kopfBlickDeg: Number(kopfBlickDeg.toFixed(1)),
+      landeRumpfDeg,
+      landeKnieDeg,
+      landeHuefteDeg,
+      landeIndex,
+      landeReachPx,
+      kneeGapPx,
+      hipPx: kspPx,
+      kspPx,
+      supAnklePx: { x: pSupA.x * vw, y: pSupA.y * vh },
+      hipHeightPx: Math.max(0, lowAnkY - kspPx.y),
+      supportFootPx: { x: pSupFoot.x * vw, y: pSupFoot.y * vh }
+    };
+  }
+
+  function computeRawSummaryFromState(rawPhaseMarks, angleHistory, overrideScaleInfo = null) {
+    const m2L = recomputePhaseFromRawPts(rawPhaseMarks?.['2L'] || null);
+    const m1L = recomputePhaseFromRawPts(rawPhaseMarks?.['1L'] || null);
+    const td = recomputePhaseFromRawPts(rawPhaseMarks?.TD || null);
+    const mkf = recomputePhaseFromRawPts(rawPhaseMarks?.MKF || null);
+    const to = recomputePhaseFromRawPts(rawPhaseMarks?.TO || null);
+    const land = recomputePhaseFromRawPts(rawPhaseMarks?.LAND || null);
     const hist = Array.isArray(angleHistory) ? angleHistory : [];
-    const scaleInfo = runtime.getVideoScaleInfo ? runtime.getVideoScaleInfo() : { pxPerMeter: null, timeScale: 1, fpsKnown: false };
+    const scaleInfo = overrideScaleInfo || (runtime.getVideoScaleInfo ? runtime.getVideoScaleInfo() : { pxPerMeter: null, timeScale: 1, fpsKnown: false });
     const tScale = scaleInfo.timeScale || 1;
     const pxM = scaleInfo.pxPerMeter || null;
 
@@ -371,13 +517,19 @@ const VideoBiomechanicsModule = (() => {
       ? hist.filter(p => p.t >= td.t - 0.01 && p.t <= to.t + 0.01)
       : hist;
 
-    // Auto-Stützbein-Schutz: filtere Schwungbein-Fehlzuordnungen (<105°) zuverlässig raus
-    const supKneeVals = contactSlice.map(extractSupportKnee).filter(v => typeof v === 'number' && v >= 105);
-    let minSupportKnee = supKneeVals.length ? Math.min(...supKneeVals) : null;
+    // MKF Priorität: Wenn Luka MKF explizit markiert hat, vertraue MKF (max ±25 ms Nachbarschaft) statt unsauberem Übergangsframe!
+    let minSupportKnee = null;
     const mkfSupKnee = extractSupportKnee(mkf);
-    if (minSupportKnee === null && mkfSupKnee !== null) minSupportKnee = mkfSupKnee;
-    else if (mkfSupKnee !== null && minSupportKnee !== null && mkfSupKnee >= 105) {
-      minSupportKnee = Math.min(minSupportKnee, mkfSupKnee);
+    if (mkf && mkfSupKnee !== null && mkfSupKnee >= 105) {
+      const nearMkf = hist
+        .filter(p => Math.abs(p.t - mkf.t) <= 0.025 / Math.max(0.15, tScale))
+        .map(extractSupportKnee)
+        .filter(v => typeof v === 'number' && v >= 108 && Math.abs(v - mkfSupKnee) <= 8);
+      minSupportKnee = nearMkf.length ? Math.min(mkfSupKnee, ...nearMkf) : mkfSupKnee;
+    } else {
+      const supKneeVals = contactSlice.map(extractSupportKnee).filter(v => typeof v === 'number' && v >= 108);
+      if (supKneeVals.length) minSupportKnee = Math.min(...supKneeVals);
+      else if (mkfSupKnee !== null) minSupportKnee = mkfSupKnee;
     }
 
     // Bonus metric (Swing Knee Kompaktheit)
@@ -452,7 +604,6 @@ const VideoBiomechanicsModule = (() => {
           const d = Math.abs((p.hipPx?.x || 0) - m2L.supAnklePx.x);
           if (d < bestDist) { bestDist = d; bestMid = p; }
         });
-        // Oder wo Knieabstand im 2L-Durchschwung nahe 0 liegt (~Mittelteil 25–65% von 2L->1L)
         const midIdx = midSlice[Math.floor(midSlice.length * 0.35)];
         const cand = Math.abs(bestMid.kneeGapPx) < 0.65 * pxM ? bestMid : midIdx;
         if (cand) knieAbstand2L = Number((cand.kneeGapPx / pxM).toFixed(2));
@@ -505,7 +656,6 @@ const VideoBiomechanicsModule = (() => {
           if (vf > 5.5 && vf < 11.5) vFlugMs = Number(vf.toFixed(2));
         }
       }
-      // Fallback vFlug & vVertikal aus MKF->TO falls Flugphase bekannt
       if (vFlugMs && abflugTo && abflugTo > 5 && abflugTo < 40) {
         vVertikalMs = Number((vFlugMs * Math.tan((abflugTo * Math.PI) / 180)).toFixed(2));
       } else if (mkf && to && scaleInfo.fpsKnown && to.t > mkf.t) {
@@ -525,7 +675,7 @@ const VideoBiomechanicsModule = (() => {
       }
       if (vFlugMs && vVertikalMs) {
         const g = 9.81;
-        const dh = 0.42; // Abflug-KSP (~1.16m) über Lande-KSP (~0.74m)
+        const dh = 0.42;
         const flightR = (vFlugMs / g) * (vVertikalMs + Math.sqrt(vVertikalMs * vVertikalMs + 2 * g * dh));
         effektivM = Number((flightR + (landeWeite || 0.58) + 0.15).toFixed(2));
       }
@@ -535,11 +685,7 @@ const VideoBiomechanicsModule = (() => {
       if (td?.hipHeightPx) kspTdM = Number((td.hipHeightPx / pxM).toFixed(2));
       if (m2L?.hipHeightPx && td?.hipHeightPx) {
         const panDiffY = (td.panWorldPy || 0) - (m2L.panWorldPy || 0);
-        const h2 = m2L.hipPx ? (m2L.hipHeightPx) : null;
-        const hTd = td.hipHeightPx;
-        if (h2 !== null) {
-          kspAbsenkungM = Number(((h2 - hTd - 0.15 * panDiffY) / pxM).toFixed(2));
-        }
+        kspAbsenkungM = Number(((m2L.hipHeightPx - td.hipHeightPx - 0.15 * panDiffY) / pxM).toFixed(2));
       }
     }
 
@@ -578,8 +724,8 @@ const VideoBiomechanicsModule = (() => {
     };
   }
 
-  function computeSummaryFromState(phaseMarks, angleHistory) {
-    const raw = computeRawSummaryFromState(phaseMarks, angleHistory);
+  function computeSummaryFromState(phaseMarks, angleHistory, overrideScaleInfo = null) {
+    const raw = computeRawSummaryFromState(phaseMarks, angleHistory, overrideScaleInfo);
     const cal = { ...raw };
     CALIBRATABLE_KEYS.forEach(k => {
       if (raw[k] !== null && raw[k] !== undefined) {
@@ -589,36 +735,145 @@ const VideoBiomechanicsModule = (() => {
     return cal;
   }
 
-  function saveCalibrationPairFromCurrent() {
-    const bm = getSelectedBenchmark();
-    if (!bm) return;
-    const marks = runtime.getPhaseMarks ? runtime.getPhaseMarks() : {};
-    const hist = runtime.getAngleHistory ? runtime.getAngleHistory() : [];
-    const raw = computeRawSummaryFromState(marks, hist);
-    if (!marks.TD || !marks.TO) {
-      alert('Bitte mindestens Touchdown (TD), Max. Beugung (MKF) und Take-off (TO) — idealerweise auch 🏖️ Landung (LAND) — markieren, um gegen die DLV-Zeile zu kalibrieren.');
-      return;
+  function matchTrialForAnalysis(item) {
+    const trials = getAllReferenceTrials();
+    if (!item || !trials.length) return null;
+    if (item.trialId) {
+      const exact = trials.find(t => t.id === item.trialId);
+      if (exact) return exact;
     }
+    const titleLow = (item.title || '').toLowerCase();
+    // 1. Match Video Filename
+    const byVid = trials.find(t => {
+      const rec = t.video_match?.recommended_video?.toLowerCase();
+      if (rec && titleLow.includes(rec)) return true;
+      return (t.video_match?.all_attempt_videos || []).some(v => titleLow.includes(v.toLowerCase()));
+    });
+    if (byVid) return byVid;
+    // 2. Match DLV display_ref (z.B. "23.05.2026 / Versuch 5")
+    return trials.find(t => t.display_ref && titleLow.includes(t.display_ref.toLowerCase())) || null;
+  }
 
-    const pairs = getCalibrationPairs().filter(p => p.trialId !== bm.id);
+  function compactPhaseMarksForCal(marks) {
+    const out = {};
+    ['2L', '1L', 'TD', 'MKF', 'TO', 'LAND'].forEach(ph => {
+      if (marks && marks[ph]) out[ph] = marks[ph];
+    });
+    return out;
+  }
+
+  function upsertCalibrationPair(bm, marks, hist, scaleInfo, videoName) {
+    if (!bm || !marks || !marks.TD || !marks.TO) return false;
+    const raw = computeRawSummaryFromState(marks, hist, scaleInfo);
     const gt = {};
     CALIBRATABLE_KEYS.forEach(k => {
       if (bm[k] !== null && bm[k] !== undefined) gt[k] = Number(bm[k]);
     });
-
+    const pairs = getCalibrationPairs().filter(p => p.trialId !== bm.id);
     pairs.unshift({
       trialId: bm.id,
       modelVersion: CAL_MODEL_VERSION,
       label: bm.label,
       display_ref: bm.display_ref || bm.date,
-      videoFilename: currentVideoFilename || bm.video_match?.recommended_video || 'manuell',
+      videoFilename: videoName || bm.video_match?.recommended_video || 'manuell',
       calibratedAt: new Date().toISOString(),
+      scaleInfo: scaleInfo || null,
+      phaseMarks: compactPhaseMarksForCal(marks),
+      angleHistory: (hist || []).filter((_, i, a) => i % Math.max(1, Math.ceil(a.length / 80)) === 0),
       rawSummary: raw,
       groundTruth: gt
     });
     saveCalibrationPairs(pairs);
     try { localStorage.setItem(CAL_ENABLED_KEY, 'true'); } catch (e) {}
+    return true;
+  }
 
+  async function retroactivelyUpgradeDatabase() {
+    if (!calibrationProfile) return 0;
+    const items = await dbGetAll();
+    const pairs = getCalibrationPairs();
+    const pairMap = new Map(pairs.map(p => [p.trialId, p]));
+    let upgradedCount = 0;
+
+    // 1. Re-evaluate any saved calibration_pairs that already carry phaseMarks
+    pairMap.forEach((p, tId) => {
+      const bm = getAllReferenceTrials().find(t => t.id === tId);
+      if (p.phaseMarks && p.phaseMarks.TD && p.phaseMarks.TO) {
+        const newRaw = computeRawSummaryFromState(p.phaseMarks, p.angleHistory || [], p.scaleInfo || null);
+        const gt = {};
+        if (bm) CALIBRATABLE_KEYS.forEach(k => { if (bm[k] != null) gt[k] = Number(bm[k]); });
+        pairMap.set(tId, {
+          ...p,
+          modelVersion: CAL_MODEL_VERSION,
+          rawSummary: newRaw,
+          groundTruth: Object.keys(gt).length ? gt : p.groundTruth
+        });
+        upgradedCount++;
+      }
+    });
+
+    // 2. Link & re-extract EVERY archived OSP analysis (so already marked videos NEVER need re-clicking!)
+    for (const item of items) {
+      const bm = matchTrialForAnalysis(item);
+      if (bm && item.phaseMarks && item.phaseMarks.TD && item.phaseMarks.TO) {
+        const newRaw = computeRawSummaryFromState(item.phaseMarks, item.angleHistory || [], item.scaleInfo || null);
+        const gt = {};
+        CALIBRATABLE_KEYS.forEach(k => { if (bm[k] != null) gt[k] = Number(bm[k]); });
+        const prev = pairMap.get(bm.id) || {};
+        pairMap.set(bm.id, {
+          ...prev,
+          trialId: bm.id,
+          modelVersion: CAL_MODEL_VERSION,
+          label: bm.label,
+          display_ref: bm.display_ref || bm.date,
+          videoFilename: prev.videoFilename || item.title || bm.video_match?.recommended_video || 'archiv',
+          calibratedAt: prev.calibratedAt || item.createdAt || new Date().toISOString(),
+          scaleInfo: item.scaleInfo || prev.scaleInfo || null,
+          phaseMarks: compactPhaseMarksForCal(item.phaseMarks),
+          rawSummary: newRaw,
+          groundTruth: gt
+        });
+        upgradedCount++;
+      }
+    }
+
+    const updatedPairs = [...pairMap.values()];
+    if (updatedPairs.length > 0) saveCalibrationPairs(updatedPairs);
+
+    // 3. Refresh all archived summaries with latest calibrated model
+    for (const item of items) {
+      if (item.phaseMarks && (item.phaseMarks.TD || item.phaseMarks.TO)) {
+        const newRaw = computeRawSummaryFromState(item.phaseMarks, item.angleHistory || [], item.scaleInfo || null);
+        const newSum = computeSummaryFromState(item.phaseMarks, item.angleHistory || [], item.scaleInfo || null);
+        const matched = matchTrialForAnalysis(item);
+        const changed = (item.modelVersion || 1) < CAL_MODEL_VERSION || JSON.stringify(item.summary) !== JSON.stringify(newSum);
+        if (changed) {
+          await dbPut({
+            ...item,
+            trialId: item.trialId || matched?.id || null,
+            modelVersion: CAL_MODEL_VERSION,
+            rawSummary: newRaw,
+            summary: newSum,
+            calibrated: updatedPairs.length > 0 && isCalibrationEnabled()
+          });
+        }
+      }
+    }
+    return upgradedCount;
+  }
+
+  function saveCalibrationPairFromCurrent() {
+    const bm = getSelectedBenchmark();
+    if (!bm) return;
+    const marks = runtime.getPhaseMarks ? runtime.getPhaseMarks() : {};
+    const hist = runtime.getAngleHistory ? runtime.getAngleHistory() : [];
+    const scaleInfo = runtime.getVideoScaleInfo ? runtime.getVideoScaleInfo() : {};
+    if (!marks.TD || !marks.TO) {
+      alert('Bitte mindestens Touchdown (TD), Max. Beugung (MKF) und Take-off (TO) — idealerweise auch 🏖️ Landung (LAND) — markieren, um gegen die DLV-Zeile zu kalibrieren.');
+      return;
+    }
+
+    upsertCalibrationPair(bm, marks, hist, scaleInfo, currentVideoFilename);
     updateComparisonTable(marks, hist);
     if (runtime.onCalibrationChange) runtime.onCalibrationChange(getActiveOffsets());
     renderCalibrationModelPanel();
@@ -641,7 +896,7 @@ const VideoBiomechanicsModule = (() => {
     if (!box) return;
     const pairs = getCalibrationPairs();
     const enabled = isCalibrationEnabled();
-    const { offsets, counts, usingLegacyV1, v2Count } = computeOffsetsFromPairs(pairs);
+    const { models, offsets, counts, usingLegacyV1, v2Count } = computeCalibrationModels(pairs);
 
     if (pairs.length === 0) {
       box.innerHTML = `
@@ -649,8 +904,8 @@ const VideoBiomechanicsModule = (() => {
           <div>
             <span class="font-bold text-amber-300 font-mono">🔬 Noch keine DLV-Kalibrierungs-Paare hinterlegt (Roh-Modell v2 aktiv).</span>
             <p class="text-[11px] text-slate-400 mt-0.5">
-              1️⃣ Wähle rechts deinen DLV-Referenzsprung (Start: <b>25.07.2026 / V5 Bochum</b>) &amp; lade das <code>wm...mp4</code>.<br>
-              2️⃣ Optional <b>📏 Meter-Aufsteller</b> kalibrieren (oder 1,85m Auto-Skala) • Markiere <b>(2L / 1L →) TD → MKF → TO → Landung</b> ➔ Klicke <b>„🎯 Auf diesen DLV-Sprung kalibrieren“</b>.
+              1️⃣ Wähle rechts deinen DLV-Referenzsprung &amp; lade das <code>wm...mp4</code>.<br>
+              2️⃣ Markiere <b>(2L / 1L →) TD → MKF → TO → Landung</b> ➔ Speichern oder <b>„🎯 Auf diesen DLV-Sprung kalibrieren“</b> lernt automatisch in die Datenbank!
             </p>
           </div>
         </div>
@@ -670,19 +925,24 @@ const VideoBiomechanicsModule = (() => {
       ['Land-Knie', 'lande_kniewinkel_deg', '°'],
       ['Land-Hüfte', 'lande_hueftwinkel_deg', '°']
     ].map(([lbl, k, u]) => {
+      const mod = models[k] || { slope: 1, intercept: 0, mode: 'identity' };
       const off = offsets[k] || 0;
       const col = Math.abs(off) < 1.0 ? 'text-emerald-400' : 'text-cyan-300';
-      return `<span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800">${lbl}: <b class="${col}">${off >= 0 ? '+' : ''}${off}${u}</b> <span class="text-slate-500">(n=${counts[k]})</span></span>`;
+      const labelTxt = mod.mode === 'ridge'
+        ? `${mod.slope.toFixed(2)}x${mod.intercept >= 0 ? '+' : ''}${mod.intercept.toFixed(1)}`
+        : `${off >= 0 ? '+' : ''}${off}${u}`;
+      return `<span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800">${lbl}: <b class="${col}">${labelTxt}</b> <span class="text-slate-500">(n=${counts[k]})</span></span>`;
     }).join(' ');
 
     const pairsHtml = pairs.map(p => {
       const isV2 = (p.modelVersion || 1) >= CAL_MODEL_VERSION;
-      const angKeys = CALIBRATABLE_KEYS.filter(k => k !== 'schwungbein_deg_s');
+      const angKeys = CALIBRATABLE_KEYS.filter(k => !isMeterOrSpeedKey(k) && k !== 'schwungbein_deg_s');
       const errs = angKeys.map(k => {
         const r = p.rawSummary?.[k];
         const gt = p.groundTruth?.[k];
-        const cal = (typeof r === 'number') ? (r + (offsets[k] || 0)) : null;
         if (typeof r !== 'number' || typeof gt !== 'number') return null;
+        const mod = models[k];
+        const cal = mod ? (mod.slope * r + mod.intercept) : r;
         return { rawErr: Math.abs(gt - r), calErr: Math.abs(gt - cal) };
       }).filter(Boolean);
       const maeRaw = errs.length ? (errs.reduce((s, e) => s + e.rawErr, 0) / errs.length) : null;
@@ -690,10 +950,10 @@ const VideoBiomechanicsModule = (() => {
       return `
         <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 border ${isV2 ? 'border-emerald-800/70' : 'border-amber-800/60'} rounded-lg px-2.5 py-1.5 text-[10px] font-mono">
           <div>
-            <span class="px-1 py-0.5 rounded mr-1 text-[9px] font-bold ${isV2 ? 'bg-emerald-950 text-emerald-300' : 'bg-amber-950 text-amber-300'}">${isV2 ? 'v2' : 'v1-Alt'}</span>
+            <span class="px-1 py-0.5 rounded mr-1 text-[9px] font-bold ${isV2 ? 'bg-emerald-950 text-emerald-300' : 'bg-amber-950 text-amber-300'}">${isV2 ? 'Ridge v2' : 'v1'}</span>
             <strong class="text-white">${p.display_ref}</strong>
             <span class="text-cyan-300 ml-1">(${p.videoFilename})</span>
-            ${maeRaw !== null ? `<span class="text-slate-400 ml-2">Winkel-MAE: Roh ${maeRaw.toFixed(1)}° ➔ Kalibriert <b class="text-emerald-400">${maeCal.toFixed(1)}°</b></span>` : ''}
+            ${maeRaw !== null ? `<span class="text-slate-400 ml-2">Winkel-MAE: Roh ${maeRaw.toFixed(1)}° ➔ Modell <b class="text-emerald-400">${maeCal.toFixed(1)}°</b></span>` : ''}
           </div>
           <button onclick="VideoBiomechanicsModule.removeCalibrationPair('${p.trialId}')" class="text-rose-400 hover:text-rose-300 px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800">✕ Entfernen</button>
         </div>
@@ -713,7 +973,7 @@ const VideoBiomechanicsModule = (() => {
             </label>
           </div>
         </div>
-        ${usingLegacyV1 ? `<div class="text-[11px] text-amber-300 bg-amber-950/40 border border-amber-700/50 rounded px-2.5 py-1.5 font-sans">⚠️ Diese ${pairs.length} Paare wurden noch mit <b>Modell v1</b> erfasst (vor Auto-Stützbein-Lock, Pan-Welt-Kompensation &amp; Kopf-Achse). Bitte beim nächsten Video-Durchgang einmalig neu auf <b>„🎯 Auf diesen DLV-Sprung kalibrieren“</b> klicken — danach greift präzises v2-Lernen!</div>` : ''}
+        ${usingLegacyV1 ? `<div class="text-[11px] text-amber-300 bg-amber-950/40 border border-amber-700/50 rounded px-2.5 py-1.5 font-sans">⚠️ Einzelne Alt-Paare besitzen noch keine gespeicherten Raw-Phasenmarker. Alle neu oder im Archiv mit Phasen markierten OSP-Videos verbessern ab sofort automatisch &amp; rückwirkend das Ridge-Modell.</div>` : ''}
         <div class="flex flex-wrap gap-1.5 text-[10px] font-mono">${offsetBadges}</div>
         <div class="space-y-1">${pairsHtml}</div>
       </div>
@@ -731,17 +991,17 @@ const VideoBiomechanicsModule = (() => {
     return { cls: 'text-rose-400 border-rose-700/70 bg-rose-950/30', tag: '🔴 Fokus' };
   }
 
-  function updateComparisonTable(phaseMarks, angleHistory) {
+  function updateComparisonTable(phaseMarks, angleHistory, overrideScaleInfo = null) {
     const tbody = document.getElementById('dlvComparisonBody');
     const feedbackBox = document.getElementById('dlvAutoDiagnosisBox');
     if (!tbody) return;
 
-    const rawSummary = computeRawSummaryFromState(phaseMarks, angleHistory);
-    const summary = computeSummaryFromState(phaseMarks, angleHistory);
-    const offsets = getActiveOffsets();
+    const rawSummary = computeRawSummaryFromState(phaseMarks, angleHistory, overrideScaleInfo);
+    const summary = computeSummaryFromState(phaseMarks, angleHistory, overrideScaleInfo);
+    const { offsets, models } = computeCalibrationModels(getCalibrationPairs());
     const calActive = isCalibrationEnabled() && getCalibrationPairs().length > 0;
     const bm = getSelectedBenchmark();
-    const scaleInfo = runtime.getVideoScaleInfo ? runtime.getVideoScaleInfo() : { fpsKnown: false, pxPerMeter: null, isManualScale: false };
+    const scaleInfo = overrideScaleInfo || (runtime.getVideoScaleInfo ? runtime.getVideoScaleInfo() : { fpsKnown: false, pxPerMeter: null, isManualScale: false });
 
     const groups = [
       {
@@ -1217,6 +1477,8 @@ const VideoBiomechanicsModule = (() => {
     const record = {
       id: 'vid-' + Date.now(),
       createdAt: new Date().toISOString(),
+      modelVersion: CAL_MODEL_VERSION,
+      trialId: matchTrialForAnalysis({ title: (titleEl?.value || '').trim() })?.id || (currentVideoFilename ? matchTrialForAnalysis({ title: currentVideoFilename })?.id : null) || null,
       title: (titleEl?.value || '').trim() || `Analyse ${new Date().toLocaleDateString('de-DE')}`,
       date: dateEl?.value || new Date().toISOString().slice(0, 10),
       type: typeEl?.value || 'Training Sprung',
@@ -1232,16 +1494,27 @@ const VideoBiomechanicsModule = (() => {
       thumbnail
     };
 
+    // Selbstlernende DB: Wenn Analyse zu einem ausgewerteten DLV-Sprung gehört, Modell direkt erweitern!
+    const matchedBm = matchTrialForAnalysis(record) || ((currentVideoFilename && getSelectedBenchmark()) ? autoDetectTrialByFilename(currentVideoFilename) : null);
+    if (matchedBm && phaseMarks.TD && phaseMarks.TO) {
+      record.trialId = matchedBm.id;
+      upsertCalibrationPair(matchedBm, phaseMarks, angleHistory, scaleInfo, currentVideoFilename || record.title);
+      record.summary = computeSummaryFromState(phaseMarks, angleHistory, scaleInfo);
+      record.calibrated = isCalibrationEnabled();
+    }
+
     await dbPut(record);
     if (titleEl) titleEl.value = '';
     if (markEl) markEl.value = '';
     if (notesEl) notesEl.value = '';
+    renderCalibrationModelPanel();
+    updateComparisonTable(phaseMarks, angleHistory, scaleInfo);
     await refreshArchiveList();
     scheduleVideoAutoPush();
     const btn = document.getElementById('saveArchiveBtn');
     if (btn) {
       const old = btn.textContent;
-      btn.textContent = '✅ Gespeichert!';
+      btn.textContent = matchedBm ? '✅ Gespeichert + Kalibriert!' : '✅ Gespeichert!';
       setTimeout(() => { btn.textContent = old; }, 1800);
     }
   }
@@ -1333,11 +1606,12 @@ const VideoBiomechanicsModule = (() => {
       }
     }
 
+    await retroactivelyUpgradeDatabase();
     lastVideoSyncNote = `☁️ Sync ${new Date(remote.updated_at || Date.now()).toLocaleDateString('de-DE')} (${added > 0 ? `+${added} neu` : 'aktuell'})`;
     renderCalibrationModelPanel();
     await refreshArchiveList();
     renderVideoSyncStatusBar();
-    if (forceAlert) alert(`✅ Video-Archiv & Kalibrierung synchronisiert! (${mergedPairs.length} Kalibrier-Paare, +${added} Analysen übernommen)`);
+    if (forceAlert) alert(`✅ Video-Archiv & Kalibrierung synchronisiert! (${getCalibrationPairs().length} Kalibrier-Paare, +${added} Analysen übernommen)`);
     return true;
   }
 
@@ -1416,8 +1690,15 @@ const VideoBiomechanicsModule = (() => {
   async function loadFromArchive(id) {
     const item = cachedArchive.find(x => x.id === id);
     if (!item) return;
+    const matched = matchTrialForAnalysis(item);
+    if (matched) {
+      selectedTrialId = matched.id;
+      const sel = document.getElementById('dlvBenchmarkSelect');
+      if (sel) sel.value = matched.id;
+      renderSelectedTrialHint();
+    }
     if (runtime.loadSavedAnalysisToView) runtime.loadSavedAnalysisToView(item);
-    updateComparisonTable(item.phaseMarks || {}, item.angleHistory || []);
+    updateComparisonTable(item.phaseMarks || {}, item.angleHistory || [], item.scaleInfo || null);
   }
 
   async function deleteFromArchive(id) {
@@ -1485,6 +1766,7 @@ const VideoBiomechanicsModule = (() => {
       if (dEl && !dEl.value) dEl.value = new Date().toISOString().slice(0, 10);
       renderBenchmarkSelector();
     }
+    await retroactivelyUpgradeDatabase();
     renderCalibrationModelPanel();
     renderVideoSyncStatusBar();
     const marks = runtime.getPhaseMarks ? runtime.getPhaseMarks() : {};
@@ -1500,6 +1782,8 @@ const VideoBiomechanicsModule = (() => {
     autoDetectTrialByFilename,
     updateComparisonTable,
     getActiveOffsets,
+    applyCalibrationToScalar,
+    retroactivelyUpgradeDatabase,
     saveCalibrationPairFromCurrent,
     removeCalibrationPair,
     setCalibrationEnabled,

@@ -2874,31 +2874,59 @@
       tctx.drawImage(canvas, 0, 0, tw, th);
       const idata = tctx.getImageData(0, 0, tw, th).data;
       const gray = new Float32Array(tw * th);
+      const grad = new Float32Array(tw * th);
       for (let i = 0; i < tw * th; i++) {
         gray[i] = 0.299 * idata[i * 4] + 0.587 * idata[i * 4 + 1] + 0.114 * idata[i * 4 + 2];
       }
-      return { tw, th, gray, maskCols };
+      for (let y = 0; y < th; y++) {
+        for (let x = 1; x < tw - 1; x++) {
+          const i = y * tw + x;
+          grad[i] = Math.abs(gray[i + 1] - gray[i - 1]);
+        }
+      }
+      return { tw, th, gray, grad, maskCols };
     }
 
     function estimatePanShift2D(snapPrev, snapCurr, dirSign) {
-      // Sub-pixel background tracking across static track/pit/boards (returns positive dxFullPx when camera pans along run dirSign).
+      // Kanten- + Luma-basiertes Sub-Pixel-Pan-Tracking mit Physik-Korridor (4.5–12.2 m/s), verhindert Sprünge auf 5m-Hütchen/leere Bahn!
       const fw = snapPrev.fullCanvas.width;
       const fh = snapPrev.fullCanvas.height;
       const lA = snapPrev.luma || (snapPrev.luma = buildLumaStrip(snapPrev.fullCanvas, snapPrev.bodyNormCols));
       const lB = snapCurr.luma || (snapCurr.luma = buildLumaStrip(snapCurr.fullCanvas, snapCurr.bodyNormCols));
       const tw = lA.tw, th = lA.th;
-      const minD = -Math.floor(tw * 0.12);
-      const maxD = Math.floor(tw * 0.52);
+
+      let minD = -Math.floor(tw * 0.12);
+      let maxD = Math.floor(tw * 0.52);
+
+      // Physik-Korridor anhand Echtzeit-Delta & Maßstab
+      const cfg = resolveFpsConfig();
+      const pxPerMVw = manualPxPerMeter || autoBodyPxPerMeter || null;
+      if (cfg.fpsKnown && pxPerMVw && snapCurr.t > snapPrev.t) {
+        const dtReal = (snapCurr.t - snapPrev.t) * (cfg.timeScale || 1);
+        const pxPerMTw = pxPerMVw * (tw / (snapPrev.vw || canvasEl?.width || 960));
+        if (dtReal > 0.015 && pxPerMTw > 15) {
+          const hipDeltaTw = dirSign * ((snapCurr.hipNormX ?? 0.5) - (snapPrev.hipNormX ?? 0.5)) * tw;
+          const vMin = (snapCurr.phase === 'LAND' || snapPrev.phase === 'TO') ? 4.2 : 5.8;
+          const vMax = 12.2;
+          const pMin = Math.floor(vMin * dtReal * pxPerMTw - hipDeltaTw);
+          const pMax = Math.ceil(vMax * dtReal * pxPerMTw - hipDeltaTw);
+          if (pMax >= pMin && pMax > -tw * 0.12 && pMin < tw * 0.55) {
+            minD = Math.max(minD, pMin);
+            maxD = Math.min(Math.floor(tw * 0.58), Math.max(minD + 2, pMax));
+          }
+        }
+      }
+
       const minA = lA.maskCols ? Math.floor(lA.maskCols[0] * tw) : 999;
       const maxA = lA.maskCols ? Math.ceil(lA.maskCols[1] * tw) : -1;
       const minB = lB.maskCols ? Math.floor(lB.maskCols[0] * tw) : 999;
       const maxB = lB.maskCols ? Math.ceil(lB.maskCols[1] * tw) : -1;
-      const yStart = Math.floor(th * 0.14);
-      const yEnd = Math.floor(th * 0.90);
+      const yStart = Math.floor(th * 0.10);
+      const yEnd = Math.floor(th * 0.88);
 
       const errs = new Float64Array(maxD - minD + 1);
       errs.fill(1e9);
-      let bestD = 0;
+      let bestD = Math.round(0.5 * (minD + maxD));
       let bestErr = 1e9;
       for (let d = minD; d <= maxD; d++) {
         let sum = 0, cnt = 0;
@@ -2908,11 +2936,12 @@
             const xB = x - dirSign * d;
             if (xB < 1 || xB >= tw - 1) continue;
             if (xB >= minB && xB <= maxB) continue;
-            sum += Math.abs(lA.gray[y * tw + x] - lB.gray[y * tw + xB]);
+            const iA = y * tw + x, iB = y * tw + xB;
+            sum += 0.65 * Math.abs(lA.grad[iA] - lB.grad[iB]) + 0.35 * Math.abs(lA.gray[iA] - lB.gray[iB]);
             cnt++;
           }
         }
-        if (cnt > 140) {
+        if (cnt > 120) {
           const mae = sum / cnt;
           errs[d - minD] = mae;
           if (mae < bestErr) {
@@ -3270,10 +3299,15 @@
         drawJoint(midShNorm, vw, vh, "#fbbf24", 4);
         drawJoint(kspNorm, vw, vh, "#ef4444", 5.5);
 
-        // Estimate body height scale fallback (1.85m Lukas -> ~1.65m nose to lowest ankle)
+        // Aufrechter Körper-Maßstab (1.85m Lukas -> ~1.65m Nase–Knöchel); schützt davor, dass geduckte Lande-Frames den Maßstab schrumpfen!
         const lowAnkY = Math.max(pLA.y, pRA.y) * vh;
         const bodyPixH = lowAnkY - (pNose.y * vh);
-        if (bodyPixH > 35) {
+        const isUprightFrame = bodyPixH > 55 && Math.abs(midHip.x - midSh.x) < 0.32 * bodyPixH && (lowAnkY - midHip.y) > 0.44 * bodyPixH;
+        if (isUprightFrame) {
+          const estPxM = bodyPixH / 1.65;
+          autoBodyPxPerMeter = autoBodyPxPerMeter ? Math.max(autoBodyPxPerMeter, estPxM) : estPxM;
+          updateScaleStatusBadge();
+        } else if (!autoBodyPxPerMeter && bodyPixH > 35) {
           autoBodyPxPerMeter = bodyPixH / 1.65;
           updateScaleStatusBadge();
         }
@@ -3334,15 +3368,20 @@
         // 6. OSP Info 6: Knie-zu-Knie Abstand im vorletzten Stütz (px; + wenn Schwungknie vor Stützknie)
         const kneeGapPx = dirSign * (pSwK.x - pSupK.x) * vw;
 
-        const calOff = (window.VideoBiomechanicsModule && VideoBiomechanicsModule.getActiveOffsets)
-          ? VideoBiomechanicsModule.getActiveOffsets()
-          : {};
-        const showStemm = dlvStemm + (calOff.stemmwinkel_deg || 0);
-        const showRumpf = dlvRumpf + (calOff.rumpfwinkel_td_deg || 0);
-        const showSupportKnee = supportKnee !== null ? (supportKnee + (calOff.kniewinkel_min_deg || 0)) : null;
-        const showSwingThigh = swingThighHorizDeg + (calOff.schwungbein_winkel_deg || 0);
-        const showSwingVel = fpsCfg.fpsKnown ? (swingVelDegS + (calOff.schwungbein_deg_s || 0)) : null;
-        const showTakeoff = takeoffAngle !== null ? (takeoffAngle + (calOff.abflugwinkel_deg || 0)) : null;
+        const applyCal = (k, v) => {
+          if (v === null || v === undefined || Number.isNaN(v)) return v;
+          if (window.VideoBiomechanicsModule && VideoBiomechanicsModule.applyCalibrationToScalar) {
+            return VideoBiomechanicsModule.applyCalibrationToScalar(k, v);
+          }
+          const off = (window.VideoBiomechanicsModule && VideoBiomechanicsModule.getActiveOffsets) ? (VideoBiomechanicsModule.getActiveOffsets()[k] || 0) : 0;
+          return v + off;
+        };
+        const showStemm = applyCal('stemmwinkel_deg', dlvStemm);
+        const showRumpf = applyCal('rumpfwinkel_td_deg', dlvRumpf);
+        const showSupportKnee = supportKnee !== null ? applyCal('kniewinkel_min_deg', supportKnee) : null;
+        const showSwingThigh = applyCal('schwungbein_winkel_deg', swingThighHorizDeg);
+        const showSwingVel = fpsCfg.fpsKnown ? applyCal('schwungbein_deg_s', swingVelDegS) : null;
+        const showTakeoff = takeoffAngle !== null ? applyCal('abflugwinkel_deg', takeoffAngle) : null;
 
         if (showSupportKnee !== null) drawAngleLabel(pSupK, vw, vh, `Stütz (${isLeftSupport ? 'L' : 'R'}): ${showSupportKnee.toFixed(0)}°`, "rgba(16,185,129,0.92)", "#020617", -64, -6);
         drawAngleLabel(pSwK, vw, vh, `Obersch: ${showSwingThigh.toFixed(0)}°`, "rgba(56,189,248,0.92)", "#020617", 10, -6);
@@ -3362,6 +3401,11 @@
         }
         document.getElementById("angLandingLive").textContent = `${landeRumpfDeg.toFixed(0)}° / ${landeKnieDeg?.toFixed(0) ?? '—'}° / ${landeHuefteDeg?.toFixed(0) ?? '—'}°`;
 
+        window.__bioLastRawPts = pts.map(p => [
+          Number(p.x.toFixed(4)),
+          Number(p.y.toFixed(4)),
+          Number((p.visibility ?? 1).toFixed(2))
+        ]);
         currentMetrics = {
           t: curT,
           frame: frameNo,
@@ -3397,7 +3441,15 @@
             h: Math.max(120, (lowAnkY - Math.min(pNose.y, pLS.y, pRS.y) * vh) + 45)
           }
         };
-        angleHistory.push(currentMetrics);
+        // Dedupliziere & halte angleHistory sauber zeitlich sortiert (kein Scrub-Müll)
+        const dupIdx = angleHistory.findIndex(x => x.frame === frameNo || Math.abs(x.t - curT) < 0.004);
+        if (dupIdx >= 0) angleHistory[dupIdx] = currentMetrics;
+        else {
+          angleHistory.push(currentMetrics);
+          if (angleHistory.length > 1 && angleHistory[angleHistory.length - 2].t > curT) {
+            angleHistory.sort((a, b) => a.t - b.t);
+          }
+        }
         renderAnglePlot();
       }
     }
@@ -3630,7 +3682,7 @@
 
     window.markTakeoffPhase = async function(phase) {
       if (!currentMetrics) return;
-      phaseMarks[phase] = { ...currentMetrics };
+      phaseMarks[phase] = { ...currentMetrics, rawPts: window.__bioLastRawPts || null };
       refreshBioFpsSetting();
       if (window.VideoBiomechanicsModule) {
         VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
