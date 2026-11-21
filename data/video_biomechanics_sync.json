@@ -1,10 +1,63 @@
 {
-  "updated_at": "2026-11-21T22:40:41.477Z",
+  "updated_at": "2026-11-21T22:44:04.138Z",
   "source": "Web-App Video-Bio & OSP Kalibrierung",
   "deleted_ids": [
     "vid-1795268794810"
   ],
   "calibration_pairs": [
+    {
+      "trialId": "herden-2026-05-23-v5",
+      "modelVersion": 2,
+      "label": "2026-05-23_Weinheim • V5 (7.74m | eff. 7.75m)",
+      "display_ref": "23.05.2026 / Versuch 5",
+      "videoFilename": "wm26 Herden 5 (7,74).mp4",
+      "calibratedAt": "2026-11-21T22:43:39.108Z",
+      "rawSummary": {
+        "stemmwinkel_deg": 20.7,
+        "rumpfwinkel_td_deg": 106.2,
+        "rumpfrotation_deg": 9.7,
+        "kniewinkel_min_deg": 110.4,
+        "abflugwinkel_deg": 8.6,
+        "schwungbein_winkel_deg": -25,
+        "schwungbein_deg_s": 707,
+        "kopf_blickwinkel_to_deg": -14.2,
+        "lande_rumpfwinkel_deg": 96.4,
+        "lande_kniewinkel_deg": 141.8,
+        "lande_hueftwinkel_deg": 102.1,
+        "landeweite_m": 1.68,
+        "landeindex": 0.43,
+        "knie_abstand_vorletzter_m": -1.34,
+        "step_2L_m": 6.79,
+        "step_1L_m": 4.99,
+        "step_1L_pct": -27,
+        "v_2L_ms": null,
+        "v_1L_ms": null,
+        "v_flug_ms": null,
+        "v_vertikal_ms": 3.42,
+        "v_verlust_absprung_ms": null,
+        "geschw_bilanz": null,
+        "erwartet_m": null,
+        "effektiv_m": null,
+        "ksp_2L_m": 1.64,
+        "ksp_1L_m": 1.68,
+        "ksp_td_m": 1.53,
+        "ksp_absenkung_m": 0.11,
+        "schwungbein_knie_kompakt_deg": 56,
+        "kontaktzeit_ms": 100
+      },
+      "groundTruth": {
+        "stemmwinkel_deg": 24,
+        "rumpfwinkel_td_deg": 101,
+        "rumpfrotation_deg": 6,
+        "kniewinkel_min_deg": 143,
+        "abflugwinkel_deg": 18.8,
+        "schwungbein_winkel_deg": -7,
+        "schwungbein_deg_s": 760,
+        "lande_rumpfwinkel_deg": 103,
+        "lande_kniewinkel_deg": 135,
+        "lande_hueftwinkel_deg": 111
+      }
+    },
     {
       "trialId": "herden-2026-07-25-v5",
       "modelVersion": 2,
@@ -56,47 +109,6 @@
         "lande_rumpfwinkel_deg": 110,
         "lande_kniewinkel_deg": 143,
         "lande_hueftwinkel_deg": 122
-      }
-    },
-    {
-      "trialId": "herden-2026-05-23-v5",
-      "label": "2026-05-23_Weinheim • V5 (7.74m | eff. 7.75m)",
-      "display_ref": "23.05.2026 / Versuch 5",
-      "videoFilename": "wm26 Herden 5 (7,74).mp4",
-      "calibratedAt": "2026-11-21T22:03:10.286Z",
-      "rawSummary": {
-        "stemmwinkel_deg": 14,
-        "rumpfwinkel_td_deg": 106.9,
-        "rumpfrotation_deg": 10.3,
-        "kniewinkel_min_deg": 62.6,
-        "abflugwinkel_deg": null,
-        "schwungbein_winkel_deg": -26.7,
-        "schwungbein_deg_s": 633,
-        "lande_rumpfwinkel_deg": 97.6,
-        "lande_kniewinkel_deg": 140.8,
-        "lande_hueftwinkel_deg": 108.3,
-        "landeweite_m": 1.6,
-        "landeindex": 0.4,
-        "knie_abstand_vorletzter_m": -0.12,
-        "step_2L_m": 1.14,
-        "step_1L_m": 1.1,
-        "v_1L_ms": 0.35,
-        "v_flug_ms": 2.48,
-        "ksp_absenkung_m": 0.16,
-        "schwungbein_knie_kompakt_deg": 54.4,
-        "kontaktzeit_ms": 100
-      },
-      "groundTruth": {
-        "stemmwinkel_deg": 24,
-        "rumpfwinkel_td_deg": 101,
-        "rumpfrotation_deg": 6,
-        "kniewinkel_min_deg": 143,
-        "abflugwinkel_deg": 18.8,
-        "schwungbein_winkel_deg": -7,
-        "schwungbein_deg_s": 760,
-        "lande_rumpfwinkel_deg": 103,
-        "lande_kniewinkel_deg": 135,
-        "lande_hueftwinkel_deg": 111
       }
     },
     {
