@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-22T10:38:44.704Z",
+  "updated_at": "2026-11-22T10:43:17.194Z",
   "source": "Web-App Live Triage Sync",
   "statuses": {
     "wa-7244492": "confirmed",
@@ -75,7 +75,7 @@
     "wa-7245056": "watchlist",
     "wa-7244454": "feasible",
     "wa-7248303": "feasible",
-    "wa-7245058": "watchlist",
+    "wa-7245058": "confirmed",
     "wa-7244523": "watchlist",
     "wa-7242037": "watchlist",
     "wa-7247766": "hidden",
