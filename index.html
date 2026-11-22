@@ -1608,6 +1608,7 @@
         <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono bg-slate-950/70 border border-slate-800 rounded-lg px-2.5 py-1.5">
           <div class="flex flex-wrap items-center gap-2">
             <button id="bioScaleBtn" onclick="toggleMeterCalibration()" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-cyan-700 text-cyan-300 font-bold">📏 2-Punkt Meter-Aufsteller</button>
+            <button id="bioLockAthleteBtn" onclick="toggleAthleteLock()" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-emerald-700 text-emerald-300 font-bold" title="Bei mehreren Personen im Bild (z.B. Kampfrichter an der Grube) direkt auf dich klicken">🎯 Athlet fixieren</button>
             <label class="flex items-center gap-1 text-slate-300">
               <span>Abstand:</span>
               <select id="bioScaleMeters" class="bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-white">
@@ -2484,7 +2485,7 @@
   <script src="js/qualification.js?v=9.1.0"></script>
   <script src="js/venues.js?v=9.1.0"></script>
   <script src="js/training_plan.js?v=9.1.0"></script>
-  <script src="js/video_biomechanics.js?v=9.1.0"></script>
+  <script src="js/video_biomechanics.js?v=9.3.0"></script>
   <script src="js/app.js?v=9.1.0"></script>
 
   <!-- Local M3 Pro GPU MediaPipe PoseLandmarker Engine (Calibrated to OSP / DLV Convention Info 1–6) -->
@@ -2506,12 +2507,14 @@
     let autoPanoSnaps = [];
     let angleHistory = [];
 
-    // Video FPS, Run Direction Auto-Detect & 2-Point Meter Scale State
+    // Video FPS, Run Direction Auto-Detect, Multi-Person Athlete Lock & 2-Point Meter Scale State
     let detectedContainerFps = null;
     let currentVideoFname = '';
     let autoDirVotes = [];
     let autoDirSign = -1;
     let isCalibratingScale = false;
+    let isLockingAthlete = false;
+    let athleteTrack = null; // { nx, ny, bodyH, t, lockedNx, lockedNy }
     let scalePoints = [];
     let manualPxPerMeter = null;
     let autoBodyPxPerMeter = null;
@@ -2657,12 +2660,116 @@
       if (window.VideoBiomechanicsModule) VideoBiomechanicsModule.updateComparisonTable(phaseMarks, angleHistory);
     };
 
+    window.toggleAthleteLock = function() {
+      isLockingAthlete = !isLockingAthlete;
+      if (isLockingAthlete) isCalibratingScale = false;
+      const btn = document.getElementById("bioLockAthleteBtn");
+      if (btn) {
+        btn.textContent = isLockingAthlete ? "🎯 Klick auf dich im Video..." : "🎯 Athlet fixieren";
+        btn.classList.toggle("bg-emerald-500", isLockingAthlete);
+        btn.classList.toggle("text-slate-950", isLockingAthlete);
+      }
+      if (canvasEl) {
+        canvasEl.style.pointerEvents = (isLockingAthlete || isCalibratingScale) ? "auto" : "none";
+        canvasEl.style.cursor = (isLockingAthlete || isCalibratingScale) ? "crosshair" : "default";
+      }
+    };
+
+    function selectTrackedAthlete(allPoses, vw, vh, curT) {
+      if (!allPoses || allPoses.length === 0) return { idx: -1, pts: null };
+      if (allPoses.length === 1) {
+        const pts = allPoses[0];
+        const nx = 0.5 * (pts[23].x + pts[24].x);
+        const ny = 0.5 * (pts[23].y + pts[24].y);
+        const bH = Math.max(pts[27].y, pts[28].y) - pts[0].y;
+        athleteTrack = { nx, ny, bodyH: bH > 0.05 ? bH : (athleteTrack?.bodyH || 0.28), t: curT, lockedNx: null, lockedNy: null };
+        return { idx: 0, pts };
+      }
+
+      let bestIdx = 0;
+      let bestScore = -1e9;
+      allPoses.forEach((pts, idx) => {
+        const nx = 0.5 * (pts[23].x + pts[24].x);
+        const ny = 0.5 * (pts[23].y + pts[24].y);
+        const bH = Math.max(pts[27].y, pts[28].y) - pts[0].y;
+        const lK = calcAngle2D({ x: pts[23].x * vw, y: pts[23].y * vh }, { x: pts[25].x * vw, y: pts[25].y * vh }, { x: pts[27].x * vw, y: pts[27].y * vh }) || 180;
+        const rK = calcAngle2D({ x: pts[24].x * vw, y: pts[24].y * vh }, { x: pts[26].x * vw, y: pts[26].y * vh }, { x: pts[28].x * vw, y: pts[28].y * vh }) || 180;
+        const ankSpread = Math.abs(pts[27].x - pts[28].x);
+        const midShY = 0.5 * (pts[11].y + pts[12].y);
+        const isStandingBystander = lK > 167 && rK > 167 && ankSpread < 0.045 && (ny - midShY) > 0.08;
+
+        let score = 0;
+        // 1. Direkter Nutzer-Klick ("Athlet fixieren") hat absolute Priorität!
+        if (athleteTrack && athleteTrack.lockedNx !== null && athleteTrack.lockedNy !== null) {
+          const distLock = Math.hypot(nx - athleteTrack.lockedNx, ny - athleteTrack.lockedNy);
+          score -= distLock * 80;
+        } else if (athleteTrack && Math.abs(curT - athleteTrack.t) < 1.8) {
+          // 2. Zeitliche Kontinuität zum vorherigen Frame (verhindert Springen auf Kampfrichter/Zuschauer!)
+          const distPrev = Math.hypot(nx - athleteTrack.nx, (ny - athleteTrack.ny) * 1.3);
+          score -= distPrev * 32;
+        }
+        // 3. Kamera-Zentrum-Fokus (Kamera schwenkt mit dir mit -> du bist i.d.R. in der Mitte 0.30..0.75)
+        score -= Math.abs(nx - 0.52) * 8;
+        // 4. Dynamische Sprung-/Lauf-/Landepose bevorzugen, stehende Zuschauer bestrafen
+        if (isStandingBystander) score -= 9;
+        else score += Math.min(6, ankSpread * 35);
+        // 5. Körpergrößen-Konsistenz (winzige Hintergrund-Zuschauer oder riesige Vordergrund-Personen dämpfen)
+        if (athleteTrack && athleteTrack.bodyH > 0.08 && bH > 0.05) {
+          const ratioErr = Math.abs(Math.log(bH / athleteTrack.bodyH));
+          score -= ratioErr * 6;
+        }
+        if (bH < 0.09) score -= 12;
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestIdx = idx;
+        }
+      });
+
+      const chosen = allPoses[bestIdx];
+      const cNx = 0.5 * (chosen[23].x + chosen[24].x);
+      const cNy = 0.5 * (chosen[23].y + chosen[24].y);
+      const cBH = Math.max(chosen[27].y, chosen[28].y) - chosen[0].y;
+      athleteTrack = {
+        nx: cNx,
+        ny: cNy,
+        bodyH: cBH > 0.08 ? cBH : (athleteTrack?.bodyH || 0.28),
+        t: curT,
+        lockedNx: null,
+        lockedNy: null
+      };
+      return { idx: bestIdx, pts: chosen };
+    }
+
     if (canvasEl) {
       canvasEl.addEventListener("click", (e) => {
-        if (!isCalibratingScale) return;
         const rect = canvasEl.getBoundingClientRect();
         const px = ((e.clientX - rect.left) / rect.width) * canvasEl.width;
         const py = ((e.clientY - rect.top) / rect.height) * canvasEl.height;
+
+        if (isLockingAthlete) {
+          athleteTrack = {
+            nx: px / Math.max(1, canvasEl.width),
+            ny: py / Math.max(1, canvasEl.height),
+            bodyH: athleteTrack?.bodyH || 0.28,
+            t: videoEl ? videoEl.currentTime : 0,
+            lockedNx: px / Math.max(1, canvasEl.width),
+            lockedNy: py / Math.max(1, canvasEl.height)
+          };
+          isLockingAthlete = false;
+          const btn = document.getElementById("bioLockAthleteBtn");
+          if (btn) {
+            btn.textContent = "✅ Athlet fixiert";
+            btn.classList.remove("bg-emerald-500", "text-slate-950");
+            setTimeout(() => { btn.textContent = "🎯 Athlet fixieren"; }, 1800);
+          }
+          canvasEl.style.pointerEvents = isCalibratingScale ? "auto" : "none";
+          canvasEl.style.cursor = isCalibratingScale ? "crosshair" : "default";
+          processCurrentFrame();
+          return;
+        }
+
+        if (!isCalibratingScale) return;
         scalePoints.push({ x: px, y: py });
         if (scalePoints.length >= 2) {
           const distPx = Math.hypot(scalePoints[1].x - scalePoints[0].x, scalePoints[1].y - scalePoints[0].y);
@@ -2693,9 +2800,9 @@
         poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
           baseOptions: { modelAssetPath: modelUrl, delegate: "GPU" },
           runningMode: "VIDEO",
-          numPoses: 1,
-          minPoseDetectionConfidence: 0.5,
-          minPosePresenceConfidence: 0.5,
+          numPoses: 4,
+          minPoseDetectionConfidence: 0.45,
+          minPosePresenceConfidence: 0.45,
           minTrackingConfidence: 0.5
         });
         if (badgeEl) {
@@ -2826,10 +2933,10 @@
         segLandmarker = await PoseLandmarker.createFromOptions(vision, {
           baseOptions: { modelAssetPath: modelUrl, delegate: "GPU" },
           runningMode: "IMAGE",
-          numPoses: 1,
+          numPoses: 4,
           outputSegmentationMasks: true,
-          minPoseDetectionConfidence: 0.4,
-          minPosePresenceConfidence: 0.4
+          minPoseDetectionConfidence: 0.35,
+          minPosePresenceConfidence: 0.35
         });
       } catch (e) {
         console.warn("SegLandmarker fallback:", e);
@@ -3178,7 +3285,23 @@
       }
 
       if (res && res.landmarks && res.landmarks.length > 0) {
-        const pts = res.landmarks[0];
+        const picked = selectTrackedAthlete(res.landmarks, vw, vh, curT);
+        // Fremdpersonen (z.B. Kampfrichter an der Grube) schwach grau markieren, damit du siehst, wen das Modell ignoriert
+        if (res.landmarks.length > 1) {
+          ctx.save();
+          ctx.setLineDash([3, 3]);
+          res.landmarks.forEach((otherPts, oIdx) => {
+            if (oIdx === picked.idx) return;
+            drawBone(otherPts[11], otherPts[23], vw, vh, "rgba(148,163,184,0.35)", 2);
+            drawBone(otherPts[23], otherPts[25], vw, vh, "rgba(148,163,184,0.35)", 2);
+            drawBone(otherPts[25], otherPts[27], vw, vh, "rgba(148,163,184,0.35)", 2);
+            drawBone(otherPts[24], otherPts[26], vw, vh, "rgba(148,163,184,0.35)", 2);
+            drawBone(otherPts[26], otherPts[28], vw, vh, "rgba(148,163,184,0.35)", 2);
+            drawAngleLabel(otherPts[0], vw, vh, "Ignoriert (🎯 Klick = wählen)", "rgba(15,23,42,0.7)", "#94a3b8", -28, -12);
+          });
+          ctx.restore();
+        }
+        const pts = picked.pts;
         const dirSign = resolveDirSign(pts);
         const pNose = pts[0], pLEye = pts[2], pREye = pts[5], pLEar = pts[7], pREar = pts[8];
         const pLS = pts[11], pRS = pts[12], pLE = pts[13], pRE = pts[14], pLW = pts[15], pRW = pts[16];
@@ -3331,9 +3454,19 @@
         const dlvStemm = Math.atan2(dxFootAhead, dyLeg) * (180 / Math.PI);
 
         // 3. OSP Info 3: Schwungbein-Oberschenkelwinkel gegenüber der Horizontalen! (+ = über Horiz., - = darunter, z.B. -4°)
-        const dxThigh = dirSign * (pSwK.x - pSwH.x) * vw;
-        const dyThighUp = (pSwH.y - pSwK.y) * vh;
-        const swingThighHorizDeg = Math.atan2(dyThighUp, Math.abs(dxThigh) > 2 ? dxThigh : 2) * (180 / Math.PI);
+        // Schutz gegen TO-Seitenvertauschung: bei zwei gestreckteren Beinen zählt das weiter nach vorn/oben schwingende Knie!
+        const calcThighHoriz = (pH, pK) => {
+          const dxT = dirSign * (pK.x - pH.x) * vw;
+          const dyT = (pH.y - pK.y) * vh;
+          return Math.atan2(dyT, Math.abs(dxT) > 2 ? dxT : 2) * (180 / Math.PI);
+        };
+        const swAngRaw = calcThighHoriz(pSwH, pSwK);
+        const supAngRaw = calcThighHoriz(pSupH, pSupK);
+        const swAhead = dirSign * (pSwK.x - pSwH.x);
+        const supAhead = dirSign * (pSupK.x - pSupH.x);
+        const swingThighHorizDeg = (swAngRaw < -35 && supAngRaw > -25 && supAhead > swAhead + 0.02)
+          ? supAngRaw
+          : swAngRaw;
 
         let swingVelDegS = 0;
         if (fpsCfg.fpsKnown && prevSwingState && curT > prevSwingState.t && (curT - prevSwingState.t) < 0.2) {
@@ -3482,6 +3615,9 @@
       phaseSnaps = {};
       autoPanoSnaps = [];
       manualPxPerMeter = null;
+      autoBodyPxPerMeter = null;
+      athleteTrack = null;
+      isLockingAthlete = false;
       scalePoints = [];
       isCalibratingScale = false;
       renderKinogramStrip();
@@ -3562,7 +3698,19 @@
         if (sl) {
           const segRes = sl.detect(fullCanvas);
           if (segRes?.segmentationMasks?.length > 0) {
-            const mask = segRes.segmentationMasks[0];
+            let bestMaskIdx = 0;
+            if (segRes.landmarks && segRes.landmarks.length > 1) {
+              let bestDist = 1e9;
+              segRes.landmarks.forEach((lPts, lIdx) => {
+                const lx = 0.5 * (lPts[23].x + lPts[24].x);
+                const dX = Math.abs(lx - hipNormX);
+                if (dX < bestDist && lIdx < segRes.segmentationMasks.length) {
+                  bestDist = dX;
+                  bestMaskIdx = lIdx;
+                }
+              });
+            }
+            const mask = segRes.segmentationMasks[bestMaskIdx];
             const mw = mask.width, mh = mask.height;
             const probs = mask.hasFloat32Array() ? mask.getAsFloat32Array() : mask.getAsUint8Array();
             const isU8 = !(probs instanceof Float32Array);
@@ -3589,7 +3737,7 @@
               }
             }
             mctx.putImageData(imgD, 0, 0);
-            mask.close();
+            segRes.segmentationMasks.forEach(m => { try { m.close(); } catch (_) {} });
 
             if (maxCol > minCol) {
               bodyNormCols = [Math.max(0.02, minCol / mw - 0.02), Math.min(0.98, maxCol / mw + 0.02)];

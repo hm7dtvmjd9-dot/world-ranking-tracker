@@ -186,11 +186,11 @@ const VideoBiomechanicsModule = (() => {
         return;
       }
 
-      // Outlier-Filter über Residuen erst ab >= 5 Paaren, damit bei 3–4 Sprüngen kein echter Winkel-Trend weggeschnitten wird
+      // Robuster Residuen-Filter ab >= 4 Paaren: schützt das Ridge-Modell vor Einzel-Tracking-Glitches (z.B. Fremdperson bei Landung oder TO-Bein-Swap)
       const medD = median(pts.map(p => p.d));
-      const cleanPts = pts.length >= 5
+      const cleanPts = pts.length >= 4
         ? pts.filter(p => {
-            const tol = k === 'schwungbein_deg_s' ? 240 : (isMeterOrSpeedKey(k) ? 1.8 : 22);
+            const tol = k === 'schwungbein_deg_s' ? 240 : (isMeterOrSpeedKey(k) ? 1.6 : 22);
             return Math.abs(p.d - medD) <= tol;
           })
         : pts;
@@ -517,17 +517,17 @@ const VideoBiomechanicsModule = (() => {
       ? hist.filter(p => p.t >= td.t - 0.01 && p.t <= to.t + 0.01)
       : hist;
 
-    // MKF Priorität: Wenn Luka MKF explizit markiert hat, vertraue MKF (max ±25 ms Nachbarschaft) statt unsauberem Übergangsframe!
+    // MKF Priorität: Wenn Luka MKF explizit markiert hat, vertraue MKF (auch tiefere 15-Schritt-Amortisation ab 90°, max ±25 ms Nachbarschaft)
     let minSupportKnee = null;
     const mkfSupKnee = extractSupportKnee(mkf);
-    if (mkf && mkfSupKnee !== null && mkfSupKnee >= 105) {
+    if (mkf && mkfSupKnee !== null && mkfSupKnee >= 90) {
       const nearMkf = hist
         .filter(p => Math.abs(p.t - mkf.t) <= 0.025 / Math.max(0.15, tScale))
         .map(extractSupportKnee)
-        .filter(v => typeof v === 'number' && v >= 108 && Math.abs(v - mkfSupKnee) <= 8);
+        .filter(v => typeof v === 'number' && v >= 92 && Math.abs(v - mkfSupKnee) <= 8);
       minSupportKnee = nearMkf.length ? Math.min(mkfSupKnee, ...nearMkf) : mkfSupKnee;
     } else {
-      const supKneeVals = contactSlice.map(extractSupportKnee).filter(v => typeof v === 'number' && v >= 108);
+      const supKneeVals = contactSlice.map(extractSupportKnee).filter(v => typeof v === 'number' && v >= 100);
       if (supKneeVals.length) minSupportKnee = Math.min(...supKneeVals);
       else if (mkfSupKnee !== null) minSupportKnee = mkfSupKnee;
     }
@@ -583,14 +583,27 @@ const VideoBiomechanicsModule = (() => {
       }
     }
 
-    // Landing (OSP Info 4 & 5)
-    const landeRumpf = land?.landeRumpfDeg ?? null;
-    const landeKnie = land?.landeKnieDeg ?? null;
-    const landeHuefte = land?.landeHuefteDeg ?? null;
-    const landeIndex = land?.landeIndex ?? null;
-    const landeWeite = (land && land.landeReachPx != null && pxM)
+    // Landing (OSP Info 4 & 5) + Fremdpersonen-Schutz (stehender Kampfrichter/Zuschauer an der Grube hat Hüfte >148°, Knie >165° & Landeweite <0,25m!)
+    let landeRumpf = land?.landeRumpfDeg ?? null;
+    let landeKnie = land?.landeKnieDeg ?? null;
+    let landeHuefte = land?.landeHuefteDeg ?? null;
+    let landeIndex = land?.landeIndex ?? null;
+    let landeWeite = (land && land.landeReachPx != null && pxM)
       ? Number((land.landeReachPx / pxM).toFixed(2))
       : null;
+    const bystanderLandingDetected = Boolean(
+      land && (
+        (landeHuefte !== null && landeHuefte > 148 && (landeWeite === null || landeWeite < 0.25)) ||
+        (landeKnie !== null && landeKnie > 168 && landeHuefte !== null && landeHuefte > 152)
+      )
+    );
+    if (bystanderLandingDetected) {
+      // Stehende Fremdperson darf die Kalibrierungs-Datenbank niemals verzerren!
+      landeKnie = null;
+      landeHuefte = null;
+      landeWeite = null;
+      landeIndex = null;
+    }
 
     // OSP Info 6: Knie-Knie-Abstand im vorletzten Stütz (2L Mid-Stance wenn in AngleHistory vorhanden!)
     let knieAbstand2L = (m2L && m2L.kneeGapPx != null && pxM)
@@ -720,7 +733,8 @@ const VideoBiomechanicsModule = (() => {
       ksp_td_m: kspTdM,
       ksp_absenkung_m: kspAbsenkungM,
       schwungbein_knie_kompakt_deg: minSwingKnee !== null ? Number(minSwingKnee.toFixed(1)) : null,
-      kontaktzeit_ms: kontaktMs
+      kontaktzeit_ms: kontaktMs,
+      bystanderLandingDetected
     };
   }
 
@@ -1076,6 +1090,9 @@ const VideoBiomechanicsModule = (() => {
 
     if (feedbackBox) {
       const notes = [];
+      if (summary.bystanderLandingDetected) {
+        notes.push(`⚠️ <b>Fremdperson bei Landung erkannt:</b> Im Lande-Frame wurde eine aufrecht stehende Person erkannt (Knie &gt;168° / Hüfte &gt;148° / Reichweite &lt;25 cm) und <b>automatisch aus dem Kalibrierungsmodell gefiltert</b>. Beim nächsten Durchgang einfach oben <b>„🎯 Athlet fixieren“</b> klicken &amp; dich direkt anwählen!`);
+      }
       if (summary.kopf_blickwinkel_to_deg !== null && summary.kopf_blickwinkel_to_deg !== undefined) {
         if (summary.kopf_blickwinkel_to_deg < -10) {
           notes.push(`🔴 <b>Kopf / Blickachse sinkt nach Abflug ab (${summary.kopf_blickwinkel_to_deg}°):</b> Blick stabil nach schräg-oben/vorn halten statt Kinn einzuziehen!`);
