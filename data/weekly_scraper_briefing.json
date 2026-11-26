@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-24",
-  "rank_date": "2026-11-17",
-  "prev_rank_date": "2026-11-10",
+  "generated_at": "2026-11-26",
+  "rank_date": "2026-11-24",
+  "prev_rank_date": "2026-11-17",
   "luka": {
     "rank": 69,
     "score": 1144,
@@ -9,15 +9,15 @@
     "delta_score": 0,
     "eu_rank": 27,
     "ger_rank": 4,
-    "rank_date": "2026-11-17"
+    "rank_date": "2026-11-24"
   },
-  "summary_note": "WA Ranking-Stand (2026-11-17): Luka auf #69 Welt (1144 Pkt • #27 Europa • #4 GER, Δ +0 Plätze). 0 Top-100 Änderungen seit 2026-11-10 (Off-Season). Kalender: 788 Meetings (+125 neu / -87 entfernt / 0 Kat.-Updates).",
-  "ranking_diff_summary": "0 Top-100 Änderungen seit 2026-11-10 (Off-Season)",
+  "summary_note": "WA Ranking-Stand (2026-11-24): Luka auf #69 Welt (1144 Pkt • #27 Europa • #4 GER, Δ +0 Plätze). 5 Top-100 Änderungen seit 2026-11-17. Kalender: 788 Meetings (+788 neu / -0 entfernt / 0 Kat.-Updates).",
+  "ranking_diff_summary": "5 Top-100 Änderungen seit 2026-11-17",
   "calendar_diff": {
     "total_kept": 788,
     "removed_unrelevant": 0,
-    "added_count": 125,
-    "removed_count": 87,
+    "added_count": 788,
+    "removed_count": 0,
     "category_changed_count": 0,
     "category_counts": {
       "D": 44,
@@ -33,12 +33,352 @@
     },
     "notable_added": [
       {
+        "id": "wa-7247355",
+        "date": "2026-12-05",
+        "displayDate": "05. DEZ 2026",
+        "name": "Visit Winston-Salem College Kickoff",
+        "city": "NC",
+        "country": "USA",
+        "category": "D",
+        "tier": "Challenger"
+      },
+      {
+        "id": "wa-7248674",
+        "date": "2026-12-12",
+        "displayDate": "12. DEZ 2026",
+        "name": "Premier Track Classic",
+        "city": "KY",
+        "country": "USA",
+        "category": "D",
+        "tier": "Challenger"
+      },
+      {
+        "id": "wa-7236763",
+        "date": "2026-12-16",
+        "displayDate": "16. DEZ 2026",
+        "name": "LSU Students Open Indoor Athletics Championships, Z. Šveikauskas & A. Stanislovaitis Cup",
+        "city": "Kaunas",
+        "country": "LTU",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
         "id": "wa-7246826",
         "date": "2026-12-18",
         "displayDate": "18. DEZ 2026",
         "name": "Crepuscule Hivernale",
         "city": "Quebec City",
         "country": "CAN",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7245733",
+        "date": "2026-12-18",
+        "displayDate": "18. DEZ 2026",
+        "name": "Strive Program B",
+        "city": "Perth",
+        "country": "AUS",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7248106",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Ogólnopolski halowy mityng POZLA",
+        "city": "Rzeszów",
+        "country": "POL",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7247985",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Sakhalin Region Gouvernor Cup",
+        "city": "Yuzhno-Sakhalinsk",
+        "country": "RUS",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7247979",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Bulatovykh Memorial",
+        "city": "Omsk",
+        "country": "RUS",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7248155",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Capital Athletics Combined Event Championships",
+        "city": "Canberra",
+        "country": "AUS",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7240857",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Campeonato Sergipano Loterias Caixa de Atletismo Sub 23",
+        "city": "Aracaju",
+        "country": "BRA",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7247926",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Beantown Winter Classic",
+        "city": "MA",
+        "country": "USA",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7248167",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Copa Jalisco Etapa de Invierno",
+        "city": "Guadalajara",
+        "country": "MEX",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7247883",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "28º Triátlo Técnico Jovem e Pentátlo",
+        "city": "Viseu",
+        "country": "POR",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7247882",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Joe Gerada Memorial T&F Meeting",
+        "city": "Marsa",
+        "country": "MLT",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7241249",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Festival Pista e Campo - ADPA",
+        "city": "São Luís",
+        "country": "BRA",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7248108",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Bananowy mityng",
+        "city": "Walbrzych",
+        "country": "POL",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7248408",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "WRC meeting VITA",
+        "city": "Gent",
+        "country": "BEL",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7249392",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Meeting des Puys",
+        "city": "Aubière",
+        "country": "FRA",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7249391",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Meeting Limoges Athlé",
+        "city": "Limoges",
+        "country": "FRA",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7249345",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Compétition régionale C/J/E/S BFC",
+        "city": "Dijon",
+        "country": "FRA",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7246840",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "V Trofeu Nadal",
+        "city": "Castellón",
+        "country": "ESP",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7246594",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Criterium LBFA de Pentathlon & de marche OPEN",
+        "city": "Louvain-La-Neuve",
+        "country": "BEL",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7246752",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Xmas-Cup",
+        "city": "Dortmund",
+        "country": "GER",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7248976",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Taça da AASM de Inverno",
+        "city": "Ponta Delgada",
+        "country": "POR",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7247191",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Indoor Track Run Świąteczna Paczka",
+        "city": "Łódź",
+        "country": "POL",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7248970",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Hong Kong Athletics Challenge",
+        "city": "Hong Kong",
+        "country": "HKG",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7248893",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "NTA/NW Interclub Round 6C",
+        "city": "Launceston",
+        "country": "AUS",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7247082",
+        "date": "2026-12-19",
+        "displayDate": "19. DEZ 2026",
+        "name": "Encuentro Atletissimo Christmas",
+        "city": "Ciudad de México",
+        "country": "MEX",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7244751",
+        "date": "2026-12-20",
+        "displayDate": "20. DEZ 2026",
+        "name": "V.P. Kuts Memorial",
+        "city": "Moskva",
+        "country": "RUS",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7247787",
+        "date": "2026-12-20",
+        "displayDate": "20. DEZ 2026",
+        "name": "Windsor Holiday Open",
+        "city": "Windsor",
+        "country": "CAN",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7249395",
+        "date": "2026-12-20",
+        "displayDate": "20. DEZ 2026",
+        "name": "Meeting des Alpes 38-73-74",
+        "city": "Lyon",
+        "country": "FRA",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7247017",
+        "date": "2026-12-20",
+        "displayDate": "20. DEZ 2026",
+        "name": "Try Out Games",
+        "city": "Apeldoorn",
+        "country": "NED",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7249260",
+        "date": "2026-12-20",
+        "displayDate": "20. DEZ 2026",
+        "name": "Trofeo Ambrogi 4^ Edizione",
+        "city": "Roma",
+        "country": "ITA",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7248575",
+        "date": "2026-12-20",
+        "displayDate": "20. DEZ 2026",
+        "name": "X Memorijal Mihajlo MIKA Švraka",
+        "city": "Beograd",
+        "country": "SRB",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7249396",
+        "date": "2026-12-20",
+        "displayDate": "20. DEZ 2026",
+        "name": "Meeting de Noël de l'AC Miramas",
+        "city": "Miramas",
+        "country": "FRA",
         "category": "F",
         "tier": "National Permit"
       },
@@ -63,380 +403,81 @@
         "tier": "National Permit"
       },
       {
-        "id": "wa-7249691",
+        "id": "wa-7247773",
+        "date": "2026-12-21",
+        "displayDate": "21. DEZ 2026",
+        "name": "18. Karel Leetsari mälestusvõistlus",
+        "city": "Pärnu",
+        "country": "EST",
+        "category": "F",
+        "tier": "National Permit"
+      },
+      {
+        "id": "wa-7247995",
         "date": "2026-12-26",
         "displayDate": "26. DEZ 2026",
-        "name": "Selahattin Yıldız Salon Kupası",
-        "city": "Istanbul",
-        "country": "TUR",
+        "name": "Interregional Competitions",
+        "city": "Shchelkovo",
+        "country": "RUS",
         "category": "F",
         "tier": "National Permit"
       },
       {
-        "id": "wa-7249556",
-        "date": "2027-01-03",
-        "displayDate": "03. JAN 2027",
-        "name": "Meeting Efcvo",
-        "city": "Eaubonne",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249442",
-        "date": "2027-01-03",
-        "displayDate": "03. JAN 2027",
-        "name": "Meeting des Volcans",
-        "city": "Aubière",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249557",
-        "date": "2027-01-03",
-        "displayDate": "03. JAN 2027",
-        "name": "Pré-régionaux en salle NOR",
-        "city": "Val-de-Reuil",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249855",
-        "date": "2027-01-06",
-        "displayDate": "06. JAN 2027",
-        "name": "STARTAS Cup open competition",
-        "city": "Kaunas",
-        "country": "LTU",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249760",
-        "date": "2027-01-08",
-        "displayDate": "08. JAN 2027",
-        "name": "Campeonato de Pista de Inverno",
-        "city": "Angra do Heroismo",
-        "country": "POR",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249798",
-        "date": "2027-01-08",
-        "displayDate": "08. JAN 2027",
-        "name": "1st AK Track and Field Weekend Meeting",
-        "city": "Nairobi",
-        "country": "KEN",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249617",
-        "date": "2027-01-09",
-        "displayDate": "09. JAN 2027",
-        "name": "Meeting Régional 77 en salle",
-        "city": "Fontainebleau",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249558",
-        "date": "2027-01-09",
-        "displayDate": "09. JAN 2027",
-        "name": "Randers Indoor",
-        "city": "Randers",
-        "country": "DEN",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249664",
-        "date": "2027-01-09",
-        "displayDate": "09. JAN 2027",
-        "name": "Halowy mityng Podkarpackiego Okręgowego Związku Lekkiej Atletyki",
-        "city": "Rzeszów",
-        "country": "POL",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249517",
-        "date": "2027-01-10",
-        "displayDate": "10. JAN 2027",
-        "name": "Provas Preparação - Triatlo S16",
-        "city": "Lisboa",
-        "country": "POR",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249511",
-        "date": "2027-01-11",
-        "displayDate": "11. JAN 2027",
-        "name": "Wingate #1 Winter",
-        "city": "Wingate",
-        "country": "ISR",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249677",
-        "date": "2027-01-13",
-        "displayDate": "13. JAN 2027",
-        "name": "Meeting du Val de Marne Indoor",
-        "city": "Paris",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249570",
-        "date": "2027-01-15",
-        "displayDate": "15. JAN 2027",
-        "name": "Spokane Sports Showcase",
-        "city": "WA",
-        "country": "USA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249678",
-        "date": "2027-01-15",
-        "displayDate": "15. JAN 2027",
-        "name": "2e soirée du Cdavo",
-        "city": "Eaubonne",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249460",
-        "date": "2027-01-15",
-        "displayDate": "15. JAN 2027",
-        "name": "Campeonatos Regionais e Inverno Sub 14 e Sub 16",
-        "city": "Câmara de Lobos",
-        "country": "POR",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249665",
-        "date": "2027-01-16",
-        "displayDate": "16. JAN 2027",
-        "name": "Halowy mityng Podkarpackiego Okręgowego Związku Lekkiej Atletyki. Mistrzostwa województwa U18",
-        "city": "Rzeszów",
-        "country": "POL",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249427",
-        "date": "2027-01-16",
-        "displayDate": "16. JAN 2027",
-        "name": "GVSU Bob Eubanks Open",
-        "city": "MI",
-        "country": "USA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249503",
-        "date": "2027-01-16",
-        "displayDate": "16. JAN 2027",
-        "name": "Championnats Vaudois et Fribourgeois",
-        "city": "Aigle",
-        "country": "SUI",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249518",
-        "date": "2027-01-16",
-        "displayDate": "16. JAN 2027",
-        "name": "Provas Preparação - Triatlo S14",
-        "city": "Lisboa",
-        "country": "POR",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249674",
-        "date": "2027-01-16",
-        "displayDate": "16. JAN 2027",
-        "name": "Kronborg Games 1",
-        "city": "Snekkersten",
-        "country": "DEN",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249616",
-        "date": "2027-01-16",
-        "displayDate": "16. JAN 2027",
-        "name": "Championnats de Bretagne U18 à + en salle",
-        "city": "St-Brieuc",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249620",
-        "date": "2027-01-16",
-        "displayDate": "16. JAN 2027",
-        "name": "Championnats Vallée du Rhône CJES",
-        "city": "Lyon",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249621",
-        "date": "2027-01-16",
-        "displayDate": "16. JAN 2027",
-        "name": "Régionaux individuels CJES en salle NOR",
-        "city": "Val-de-Reuil",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249690",
-        "date": "2027-01-16",
-        "displayDate": "16. JAN 2027",
-        "name": "Meeting Zone Nord en salle CJES",
-        "city": "Limoges",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249689",
-        "date": "2027-01-16",
-        "displayDate": "16. JAN 2027",
-        "name": "Meeting Zone Sud en salle CJES",
-        "city": "Bordeaux",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249610",
-        "date": "2027-01-17",
-        "displayDate": "17. JAN 2027",
-        "name": "Championnats Alpes CJES",
-        "city": "Lyon",
-        "country": "FRA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249614",
-        "date": "2027-01-17",
-        "displayDate": "17. JAN 2027",
-        "name": "Belgrade Indoor Championships",
-        "city": "Beograd",
-        "country": "SRB",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249676",
-        "date": "2027-01-21",
-        "displayDate": "21. JAN 2027",
-        "name": "Riga Indoor Cup",
-        "city": "Riga",
-        "country": "LAT",
-        "category": "E",
-        "tier": "Area / National"
-      },
-      {
-        "id": "wa-7249512",
-        "date": "2027-01-22",
-        "displayDate": "22. JAN 2027",
-        "name": "Rishon #2 Winter",
-        "city": "Rishon LeZion",
-        "country": "ISR",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249681",
-        "date": "2027-01-22",
-        "displayDate": "22. JAN 2027",
-        "name": "Landeshallenmeisterschaften U14/U18/Senior",
-        "city": "Neubrandenburg",
-        "country": "GER",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249414",
-        "date": "2027-01-22",
-        "displayDate": "22. JAN 2027",
-        "name": "GVSU Bill Clinger Classic",
-        "city": "MI",
-        "country": "USA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249508",
-        "date": "2027-01-22",
-        "displayDate": "22. JAN 2027",
-        "name": "Campeonatos Regionais Absolutos de Inverno",
-        "city": "Funchal",
-        "country": "POR",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249812",
-        "date": "2027-01-22",
-        "displayDate": "22. JAN 2027",
-        "name": "Torneo Atlético Athlos",
-        "city": "Campeche",
-        "country": "MEX",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7249421",
-        "date": "2027-01-22",
-        "displayDate": "22. JAN 2027",
-        "name": "Dr. Martin Luther King Jr. Invitational",
-        "city": "NM",
-        "country": "USA",
-        "category": "F",
-        "tier": "National Permit"
-      },
-      {
-        "id": "wa-7247086",
-        "date": "2027-01-23",
-        "displayDate": "23. JAN 2027",
-        "name": "NYC Indoor Grand Prix",
-        "city": "NY",
-        "country": "USA",
-        "category": "B",
-        "tier": "Silver"
-      },
-      {
-        "id": "wa-7249432",
-        "date": "2027-01-23",
-        "displayDate": "23. JAN 2027",
-        "name": "Meeting IGNIS",
-        "city": "Aubière",
-        "country": "FRA",
+        "id": "wa-7249065",
+        "date": "2026-12-26",
+        "displayDate": "26. DEZ 2026",
+        "name": "2de Kerstmeeting",
+        "city": "Gent",
+        "country": "BEL",
         "category": "F",
         "tier": "National Permit"
       }
     ],
     "category_changes": [],
-    "summary_text": "Kalender: 788 Meetings (+125 neu / -87 entfernt / 0 Kat.-Updates)"
+    "summary_text": "Kalender: 788 Meetings (+788 neu / -0 entfernt / 0 Kat.-Updates)"
   },
-  "ranking_movers": [],
+  "ranking_movers": [
+    {
+      "name": "Heng SHU",
+      "country": "CHN",
+      "rank": 33,
+      "score": 1185,
+      "delta_rank": -4,
+      "delta_score": -12
+    },
+    {
+      "name": "Isaac GRIMES",
+      "country": "USA",
+      "rank": 29,
+      "score": 1197,
+      "delta_rank": 1,
+      "delta_score": 0
+    },
+    {
+      "name": "Gregory FOSTER",
+      "country": "USA",
+      "rank": 30,
+      "score": 1196,
+      "delta_rank": 1,
+      "delta_score": 0
+    },
+    {
+      "name": "Emiliano LASA",
+      "country": "URU",
+      "rank": 31,
+      "score": 1193,
+      "delta_rank": 1,
+      "delta_score": 0
+    },
+    {
+      "name": "Steffin MCCARTER",
+      "country": "USA",
+      "rank": 32,
+      "score": 1188,
+      "delta_rank": 1,
+      "delta_score": 0
+    }
+  ],
   "recent_relevant_results": [
     {
       "date": "2026-10-11",
